@@ -1,20 +1,20 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, Generated } from 'typeorm';
-import { Book } from './Book';
+import { Member } from './Member';
 
-@Entity({ name: 'book' })
-export class BookEntity implements Book {
+@Entity({ name: 'member' })
+export class MemberEntity implements Member {
   @Column({ primary: true, type: 'bigint' })
   @Generated('rowid')
   id!: string;
 
-  @Column({ type: 'text' })
-  code!: string;
+  @Column({ type: 'int8', name: 'book_id' })
+  bookId!: string;
 
   @Column({ type: 'text' })
-  name!: string;
+  nickname!: string;
 
-  @Column({ type: 'timestamp', name: 'date_last_changed', default: null })
-  dateLastChanged: Date | null = null;
+  @Column({ type: 'boolean' })
+  deletable!: boolean;
 
   @Column({ type: 'timestamp', name: 'date_created', default: null })
   dateCreated!: Date;

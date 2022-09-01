@@ -10,8 +10,10 @@ import {
 import { bindings } from 'src/bindings';
 import { BookService } from 'src/logic/BookService';
 import {
+  PostBookMemberRequest,
   PostBookRequest,
   PostBookResponse,
+  PutBookMemberRequest,
   PutBookRequest,
 } from 'src/model/api/Book';
 import { AuthHeaders } from 'src/model/api/Common';
@@ -32,6 +34,12 @@ export async function book(
         break;
       case '/api/book/{id}':
         res = await apiBookId(event, service);
+        break;
+      case '/api/book/{id}/member':
+        res = await apiBookIdMember(event, service);
+        break;
+      case '/api/book/{id}/member/{mid}':
+        res = await apiBookIdMemberId(event, service);
         break;
       default:
         throw new InternalServerError('unknown resource');
@@ -68,6 +76,49 @@ async function apiBookId(event: LambdaEvent, service: BookService) {
       return service.reviseBook(
         event.pathParameters.id,
         JSON.parse(event.body) as PutBookRequest,
+        event.headers as AuthHeaders
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdMember(event: LambdaEvent, service: BookService) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  switch (event.httpMethod) {
+    case 'POST':
+      if (event.body === null)
+        throw new BadRequestError('body should not be empty');
+
+      return service.addMember(
+        event.pathParameters.id,
+        JSON.parse(event.body) as PostBookMemberRequest,
+        event.headers as AuthHeaders
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdMemberId(event: LambdaEvent, service: BookService) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  switch (event.httpMethod) {
+    case 'PUT':
+      if (event.body === null)
+        throw new BadRequestError('body should not be empty');
+
+      return service.reviseMemberNickname(
+        event.pathParameters.id,
+        event.pathParameters.mid,
+        JSON.parse(event.body) as PutBookMemberRequest,
+        event.headers as AuthHeaders
+      );
+    case 'DELETE':
+      return service.deleteMember(
+        event.pathParameters.id,
+        event.pathParameters.mid,
         event.headers as AuthHeaders
       );
     default:

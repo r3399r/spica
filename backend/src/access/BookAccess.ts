@@ -1,3 +1,4 @@
+import { BadRequestError } from '@y-celestial/service';
 import { inject, injectable } from 'inversify';
 import { Book } from 'src/model/entity/Book';
 import { BookEntity } from 'src/model/entity/BookEntity';
@@ -30,7 +31,9 @@ export class BookAccess {
     const entity = new BookEntity();
     Object.assign(entity, book);
 
-    return await qr.manager.update(BookEntity, book.id, entity);
+    const res = await qr.manager.update(BookEntity, book.id, entity);
+
+    if (res.affected === 0) throw new BadRequestError('nothing happened.');
   }
 
   public async cleanup() {
