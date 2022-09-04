@@ -35,6 +35,9 @@ export async function book(
       case '/api/book/{id}':
         res = await apiBookId(event, service);
         break;
+      case '/api/book/{id}/bill':
+        res = await apiBookIdBill(event, service);
+        break;
       case '/api/book/{id}/member':
         res = await apiBookIdMember(event, service);
         break;
@@ -76,6 +79,24 @@ async function apiBookId(event: LambdaEvent, service: BookService) {
       return service.reviseBook(
         event.pathParameters.id,
         JSON.parse(event.body) as PutBookRequest,
+        event.headers as AuthHeaders
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdBill(event: LambdaEvent, service: BookService) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  switch (event.httpMethod) {
+    case 'POST':
+      if (event.body === null)
+        throw new BadRequestError('body should not be empty');
+
+      return service.addMember(
+        event.pathParameters.id,
+        JSON.parse(event.body) as PostBookMemberRequest,
         event.headers as AuthHeaders
       );
     default:

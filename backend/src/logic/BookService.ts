@@ -60,8 +60,8 @@ export class BookService {
     data: PostBookMemberRequest,
     headers: AuthHeaders
   ) {
-    const oldBook = await this.bookAccess.findById(id);
-    if (oldBook.code !== headers['x-api-code']) throw new UnauthorizedError();
+    const book = await this.bookAccess.findById(id);
+    if (book.code !== headers['x-api-code']) throw new UnauthorizedError();
 
     const member = new MemberEntity();
     member.nickname = data.nickname;
