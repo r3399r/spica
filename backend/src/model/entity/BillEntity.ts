@@ -1,0 +1,29 @@
+import { BeforeInsert, Column, Entity, Generated } from 'typeorm';
+import { Bill } from './Bill';
+
+@Entity({ name: 'bill' })
+export class BillEntity implements Bill {
+  @Column({ primary: true, type: 'bigint' })
+  @Generated('rowid')
+  id!: string;
+
+  @Column({ type: 'text' })
+  descr!: string;
+
+  @Column({ type: 'text', default: null })
+  memo: string | null = null;
+
+  @Column({ type: 'timestamp', name: 'date_created', default: null })
+  dateCreated!: Date;
+
+  @Column({ type: 'timestamp', name: 'date_updated', default: null })
+  dateUpdated: Date | null = null;
+
+  @Column({ type: 'timestamp', name: 'date_deleted', default: null })
+  dateDeleted: Date | null = null;
+
+  @BeforeInsert()
+  setDateCreated(): void {
+    this.dateCreated = new Date();
+  }
+}
