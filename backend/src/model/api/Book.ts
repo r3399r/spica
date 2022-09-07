@@ -18,22 +18,23 @@ export type PutBookMemberRequest = {
   nickname: string;
 };
 
-export type PostBookBillRequest =
-  | {
-      date: string;
-      type: 'income' | 'expense';
-      descr: string;
-      amount: number;
-      former: { id: string; weight?: number; amount?: number }[];
-      latter: { id: string; weight?: number; amount: number }[];
-      remainderTaker: string;
-      memo?: string;
-    }
-  | {
-      date: string;
-      type: 'transfer';
-      amount: number;
-      srcMember: string;
-      dstMmeber: string;
-      memo?: string;
-    };
+export type PostBookBillRequest = {
+  date: string;
+  type: 'income' | 'expense';
+  descr: string;
+  amount: number;
+  former: { id: string; weight?: number; amount?: number }[];
+  latter: { id: string; weight?: number; amount?: number }[];
+  formerRemainder: string;
+  latterRemainder: string;
+  memo?: string;
+};
+
+export type PostBookTransferRequest = {
+  date: string;
+  type: 'transfer';
+  amount: number;
+  srcMemberId: string;
+  dstMmeberId: string;
+  memo?: string;
+};

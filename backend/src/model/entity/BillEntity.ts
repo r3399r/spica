@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, Entity, Generated } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, Generated } from 'typeorm';
 import { Bill } from './Bill';
 
 @Entity({ name: 'bill' })
@@ -6,6 +6,15 @@ export class BillEntity implements Bill {
   @Column({ primary: true, type: 'bigint' })
   @Generated('rowid')
   id!: string;
+
+  @Column({ type: 'int8', name: 'book_id' })
+  bookId!: string;
+
+  @Column({ type: 'int8' })
+  ver!: number;
+
+  @Column({ type: 'timestamp' })
+  date!: Date;
 
   @Column({ type: 'text' })
   descr!: string;
@@ -25,5 +34,10 @@ export class BillEntity implements Bill {
   @BeforeInsert()
   setDateCreated(): void {
     this.dateCreated = new Date();
+  }
+
+  @BeforeUpdate()
+  setDateUpdated(): void {
+    this.dateUpdated = new Date();
   }
 }

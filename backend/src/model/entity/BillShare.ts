@@ -1,5 +1,6 @@
 export type BillShare = {
   id: string;
+  ver: number;
   billId: string;
   memberId: string;
   amount: number;

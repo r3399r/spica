@@ -1,8 +1,10 @@
 export type Transfer = {
   id: string;
-  amount: number;
+  ver: number;
+  bookId: string;
+  date: Date;
   srcMemberId: string;
-  destMemberId: string;
+  dstMemberId: string;
   memo: string | null;
   dateCreated: Date | null;
   dateUpdated: Date | null;
