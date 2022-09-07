@@ -32,9 +32,16 @@ export type PostBookBillRequest = {
 
 export type PostBookTransferRequest = {
   date: string;
-  type: 'transfer';
   amount: number;
   srcMemberId: string;
-  dstMmeberId: string;
+  dstMemberId: string;
+  memo?: string;
+};
+
+export type PutBookTransferRequest = {
+  date: string;
+  amount: number;
+  srcMemberId: string;
+  dstMemberId: string;
   memo?: string;
 };

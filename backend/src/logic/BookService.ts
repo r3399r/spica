@@ -257,6 +257,7 @@ export class BookService {
           await this.billShareAccess.save(billShare);
         })
       );
+
       await this.dbAccess.commitTransaction();
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
@@ -277,9 +278,45 @@ export class BookService {
     transfer.date = new Date(data.date);
     transfer.amount = data.amount;
     transfer.srcMemberId = data.srcMemberId;
-    transfer.dstMemberId = data.dstMmeberId;
+    transfer.dstMemberId = data.dstMemberId;
     transfer.memo = data.memo ?? null;
 
     await this.transferAccess.save(transfer);
+  }
+
+  public async updateTransfer(
+    bid: string,
+    tid: string,
+    data: PostBookTransferRequest,
+    headers: AuthHeaders
+  ) {
+    await this.validateBook(bid, headers['x-api-code']);
+
+    try {
+      await this.dbAccess.startTransaction();
+      const oldTransfer = await this.transferAccess.findUndeletedById(tid);
+
+      await this.transferAccess.update({
+        ...oldTransfer,
+        dateDeleted: new Date(),
+      });
+
+      const newTransfer = new TransferEntity();
+      newTransfer.id = tid;
+      newTransfer.ver = bn(oldTransfer.ver).plus(1).toNumber();
+      newTransfer.bookId = bid;
+      newTransfer.date = new Date(data.date);
+      newTransfer.amount = data.amount;
+      newTransfer.srcMemberId = data.srcMemberId;
+      newTransfer.dstMemberId = data.dstMemberId;
+      newTransfer.memo = data.memo ?? null;
+
+      await this.transferAccess.save(newTransfer);
+
+      await this.dbAccess.commitTransaction();
+    } catch (e) {
+      await this.dbAccess.rollbackTransaction();
+      throw e;
+    }
   }
 }
