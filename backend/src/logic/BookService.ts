@@ -12,6 +12,7 @@ import {
   PostBookRequest,
   PostBookResponse,
   PostBookTransferRequest,
+  PutBookBillRequest,
   PutBookMemberRequest,
   PutBookRequest,
 } from 'src/model/api/Book';
@@ -21,6 +22,7 @@ import { BillShareEntity } from 'src/model/entity/BillShareEntity';
 import { BookEntity } from 'src/model/entity/BookEntity';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
+import { BillData } from 'src/model/type/Book';
 import { bn } from 'src/util/bignumber';
 import { randomBase33 } from 'src/util/random';
 
@@ -126,6 +128,127 @@ export class BookService {
     await this.memberAccess.hardDeleteById(mid);
   }
 
+  private validateBill(data: BillData) {
+    const formerAmount = data.former
+      .map((v) => v.amount ?? 0)
+      .reduce((prev, current) => prev + current, 0);
+    const latterAmount = data.latter
+      .map((v) => v.amount ?? 0)
+      .reduce((prev, current) => prev + current, 0);
+
+    if (formerAmount > data.amount || latterAmount > data.amount)
+      throw new BadRequestError('sum of shared amount is too big');
+
+    if (
+      (data.former.length ===
+        data.former.filter((v) => v.amount !== undefined).length &&
+        data.amount !== formerAmount) ||
+      (data.former.length ===
+        data.latter.filter((v) => v.amount !== undefined).length &&
+        data.amount !== latterAmount)
+    )
+      throw new BadRequestError('sum of shared amount cannot afford');
+
+    if (
+      data.former.length ===
+        data.former.filter((v) => v.amount === undefined && v.weight === 0)
+          .length ||
+      data.latter.length ===
+        data.latter.filter((v) => v.amount === undefined && v.weight === 0)
+          .length
+    )
+      throw new BadRequestError('nobody is going to afford');
+
+    if (
+      !data.former.map((v) => v.id).includes(data.formerRemainder) ||
+      !data.latter.map((v) => v.id).includes(data.latterRemainder)
+    )
+      throw new BadRequestError('nobody takes the remainder');
+
+    return { formerAmount, latterAmount };
+  }
+
+  private getShare(
+    data: BillData,
+    formerAmount: number,
+    latterAmount: number,
+    billId: string
+  ) {
+    const formerWeight = data.former
+      .map((v) => (v.amount !== undefined ? 0 : v.weight ?? 1))
+      .reduce((prev, current) => prev + current, 0);
+    const latterWeight = data.latter
+      .map((v) => (v.amount !== undefined ? 0 : v.weight ?? 1))
+      .reduce((prev, current) => prev + current, 0);
+
+    let formerTotal = 0;
+    let latterTotal = 0;
+    const former = data.former.map((v) => {
+      const amount =
+        v.amount !== undefined
+          ? v.amount
+          : bn(data.amount)
+              .minus(formerAmount)
+              .div(formerWeight)
+              .times(v.weight ?? 1)
+              .dp(2, 1)
+              .toNumber();
+      formerTotal += amount;
+
+      return {
+        billId,
+        memberId: v.id,
+        amount: data.type === 'expense' ? amount : amount * -1,
+      };
+    });
+    const latter = data.latter.map((v) => {
+      const amount =
+        v.amount !== undefined
+          ? v.amount
+          : bn(data.amount)
+              .minus(latterAmount)
+              .div(latterWeight)
+              .times(v.weight ?? 1)
+              .dp(2, 1)
+              .toNumber();
+      latterTotal += amount;
+
+      return {
+        billId,
+        memberId: v.id,
+        amount: data.type === 'expense' ? amount * -1 : amount,
+      };
+    });
+
+    const formerRemainder = data.amount - formerTotal;
+    const latterRemainder = data.amount - latterTotal;
+
+    const updatedFormer = former.map((v) =>
+      v.memberId !== data.formerRemainder
+        ? v
+        : {
+            ...v,
+            amount:
+              v.amount > 0
+                ? v.amount + formerRemainder
+                : v.amount - formerRemainder,
+          }
+    );
+    const updatedLatter = latter.map((v) =>
+      v.memberId !== data.latterRemainder
+        ? v
+        : {
+            ...v,
+            amount:
+              v.amount > 0
+                ? v.amount + latterRemainder
+                : v.amount - latterRemainder,
+          }
+    );
+
+    return [...updatedFormer, ...updatedLatter];
+  }
+
   public async addBill(
     id: string,
     data: PostBookBillRequest,
@@ -144,113 +267,77 @@ export class BookService {
       bill.memo = data.memo ?? null;
 
       const newBill = await this.billAccess.save(bill);
-
-      const formerAmount = data.former
-        .map((v) => v.amount ?? 0)
-        .reduce((prev, current) => prev + current, 0);
-      const latterAmount = data.latter
-        .map((v) => v.amount ?? 0)
-        .reduce((prev, current) => prev + current, 0);
-      if (formerAmount > data.amount || latterAmount > data.amount)
-        throw new BadRequestError('sum of shared amount is too big');
-
-      if (
-        (data.former.length ===
-          data.former.filter((v) => v.amount !== undefined).length &&
-          data.amount !== formerAmount) ||
-        (data.former.length ===
-          data.latter.filter((v) => v.amount !== undefined).length &&
-          data.amount !== latterAmount)
-      )
-        throw new BadRequestError('sum of shared amount cannot afford');
-
-      if (
-        data.former.length ===
-          data.former.filter((v) => v.amount === undefined && v.weight === 0)
-            .length ||
-        data.latter.length ===
-          data.latter.filter((v) => v.amount === undefined && v.weight === 0)
-            .length
-      )
-        throw new BadRequestError('nobody is going to afford');
-
-      const formerWeight = data.former
-        .map((v) => (v.amount !== undefined ? 0 : v.weight ?? 1))
-        .reduce((prev, current) => prev + current, 0);
-      const latterWeight = data.latter
-        .map((v) => (v.amount !== undefined ? 0 : v.weight ?? 1))
-        .reduce((prev, current) => prev + current, 0);
-
-      let formerTotal = 0;
-      let latterTotal = 0;
-      const former = data.former.map((v) => {
-        const amount =
-          v.amount !== undefined
-            ? v.amount
-            : bn(data.amount)
-                .minus(formerAmount)
-                .div(formerWeight)
-                .times(v.weight ?? 1)
-                .dp(2, 1)
-                .toNumber();
-        formerTotal += amount;
-
-        return {
-          billId: newBill.id,
-          memberId: v.id,
-          amount: data.type === 'expense' ? amount : amount * -1,
-        };
-      });
-      const latter = data.latter.map((v) => {
-        const amount =
-          v.amount !== undefined
-            ? v.amount
-            : bn(data.amount)
-                .minus(latterAmount)
-                .div(latterWeight)
-                .times(v.weight ?? 1)
-                .dp(2, 1)
-                .toNumber();
-        latterTotal += amount;
-
-        return {
-          billId: newBill.id,
-          memberId: v.id,
-          amount: data.type === 'expense' ? amount * -1 : amount,
-        };
-      });
-
-      const formerRemainder = data.amount - formerTotal;
-      const latterRemainder = data.amount - latterTotal;
-
-      const updatedFormer = former.map((v) =>
-        v.memberId !== data.formerRemainder
-          ? v
-          : {
-              ...v,
-              amount:
-                v.amount > 0
-                  ? v.amount + formerRemainder
-                  : v.amount - formerRemainder,
-            }
-      );
-      const updatedLatter = latter.map((v) =>
-        v.memberId !== data.latterRemainder
-          ? v
-          : {
-              ...v,
-              amount:
-                v.amount > 0
-                  ? v.amount + latterRemainder
-                  : v.amount - latterRemainder,
-            }
-      );
+      const { formerAmount, latterAmount } = this.validateBill(data);
+      const share = this.getShare(data, formerAmount, latterAmount, newBill.id);
 
       await Promise.all(
-        [...updatedFormer, ...updatedLatter].map(async (v) => {
+        share.map(async (v) => {
           const billShare = new BillShareEntity();
           billShare.ver = 1;
           billShare.billId = v.billId;
+          billShare.memberId = v.memberId;
+          billShare.amount = v.amount;
+
+          await this.billShareAccess.save(billShare);
+        })
+      );
+
+      await this.dbAccess.commitTransaction();
+    } catch (e) {
+      await this.dbAccess.rollbackTransaction();
+      throw e;
+    }
+  }
+
+  public async updateBill(
+    bid: string,
+    billId: string,
+    data: PutBookBillRequest,
+    headers: AuthHeaders
+  ) {
+    await this.validateBook(bid, headers['x-api-code']);
+
+    try {
+      await this.dbAccess.startTransaction();
+      const oldBill = await this.billAccess.findUndeletedById(billId);
+
+      await this.billAccess.update({
+        ...oldBill,
+        dateDeleted: new Date(),
+      });
+
+      const bill = new BillEntity();
+      bill.id = billId;
+      bill.ver = bn(oldBill.ver).plus(1).toNumber();
+      bill.bookId = bid;
+      bill.date = new Date(data.date);
+      bill.descr = data.descr;
+      bill.memo = data.memo ?? null;
+
+      await this.billAccess.save(bill);
+
+      const oldBillShares = await this.billShareAccess.findByBill(
+        billId,
+        oldBill.ver
+      );
+
+      await Promise.all(
+        oldBillShares.map(async (v) => {
+          await this.billShareAccess.update({
+            ...v,
+            dateDeleted: new Date(),
+          });
+        })
+      );
+
+      const { formerAmount, latterAmount } = this.validateBill(data);
+      const share = this.getShare(data, formerAmount, latterAmount, billId);
+
+      await Promise.all(
+        share.map(async (v) => {
+          const billShare = new BillShareEntity();
+          billShare.billId = v.billId;
+          billShare.ver = bn(oldBill.ver).plus(1).toNumber();
           billShare.memberId = v.memberId;
           billShare.amount = v.amount;
 

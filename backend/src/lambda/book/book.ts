@@ -15,6 +15,7 @@ import {
   PostBookRequest,
   PostBookResponse,
   PostBookTransferRequest,
+  PutBookBillRequest,
   PutBookMemberRequest,
   PutBookRequest,
   PutBookTransferRequest,
@@ -40,6 +41,9 @@ export async function book(
         break;
       case '/api/book/{id}/bill':
         res = await apiBookIdBill(event, service);
+        break;
+      case '/api/book/{id}/bill/{billId}':
+        res = await apiBookIdBillId(event, service);
         break;
       case '/api/book/{id}/member':
         res = await apiBookIdMember(event, service);
@@ -106,6 +110,25 @@ async function apiBookIdBill(event: LambdaEvent, service: BookService) {
       return service.addBill(
         event.pathParameters.id,
         JSON.parse(event.body) as PostBookBillRequest,
+        event.headers as AuthHeaders
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdBillId(event: LambdaEvent, service: BookService) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  switch (event.httpMethod) {
+    case 'PUT':
+      if (event.body === null)
+        throw new BadRequestError('body should not be empty');
+
+      return service.updateBill(
+        event.pathParameters.id,
+        event.pathParameters.billId,
+        JSON.parse(event.body) as PutBookBillRequest,
         event.headers as AuthHeaders
       );
     default:

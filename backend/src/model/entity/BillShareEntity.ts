@@ -7,11 +7,11 @@ export class BillShareEntity implements BillShare {
   @Generated('rowid')
   id!: string;
 
-  @Column({ type: 'int8' })
-  ver!: number;
-
   @Column({ type: 'int8', name: 'bill_id' })
   billId!: string;
+
+  @Column({ type: 'int8' })
+  ver!: number;
 
   @Column({ type: 'int8', name: 'member_id' })
   memberId!: string;

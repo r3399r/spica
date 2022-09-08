@@ -1,7 +1,7 @@
 CREATE TABLE bill_share (
 	id SERIAL,
-	ver INT8 NOT NULL,
 	bill_id INT8 NOT NULL,
+	ver INT8 NOT NULL,
 	member_id INT8 NOT NULL,
     amount FLOAT NOT NULL,
 	date_created TIMESTAMP NULL,

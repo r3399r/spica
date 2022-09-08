@@ -1,4 +1,5 @@
 import { Book } from 'src/model/entity/Book';
+import { BillData, TransferData } from 'src/model/type/Book';
 
 export type PostBookRequest = {
   name: string;
@@ -18,30 +19,10 @@ export type PutBookMemberRequest = {
   nickname: string;
 };
 
-export type PostBookBillRequest = {
-  date: string;
-  type: 'income' | 'expense';
-  descr: string;
-  amount: number;
-  former: { id: string; weight?: number; amount?: number }[];
-  latter: { id: string; weight?: number; amount?: number }[];
-  formerRemainder: string;
-  latterRemainder: string;
-  memo?: string;
-};
+export type PostBookBillRequest = BillData;
 
-export type PostBookTransferRequest = {
-  date: string;
-  amount: number;
-  srcMemberId: string;
-  dstMemberId: string;
-  memo?: string;
-};
+export type PostBookTransferRequest = TransferData;
 
-export type PutBookTransferRequest = {
-  date: string;
-  amount: number;
-  srcMemberId: string;
-  dstMemberId: string;
-  memo?: string;
-};
+export type PutBookBillRequest = BillData;
+
+export type PutBookTransferRequest = TransferData;

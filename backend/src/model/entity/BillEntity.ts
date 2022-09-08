@@ -7,11 +7,11 @@ export class BillEntity implements Bill {
   @Generated('rowid')
   id!: string;
 
+  @Column({ primary: true, type: 'int8' })
+  ver!: number;
+
   @Column({ type: 'int8', name: 'book_id' })
   bookId!: string;
-
-  @Column({ type: 'int8' })
-  ver!: number;
 
   @Column({ type: 'timestamp' })
   date!: Date;

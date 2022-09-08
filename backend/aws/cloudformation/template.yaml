@@ -204,6 +204,69 @@ Resources:
                 }
               }
             },
+            "/api/book/{id}/bill/{billId}": {
+              "put": {
+                "parameters": [{
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "string"}
+                },{
+                  "name": "billId",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "string"}
+                },{
+                  "name": "x-api-code",
+                  "in": "header",
+                  "required": true,
+                  "schema": {"type": "string"}
+                }],
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/putBookBill"
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "headers": {
+                      "Access-Control-Allow-Origin": {
+                        "schema": {"type": "string"}
+                      }
+                    },
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/Empty"
+                        }
+                      }
+                    }
+                  }
+                },
+                "x-amazon-apigateway-request-validator" : "Validate body, query string parameters, and headers",
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:278497686406:function:${Project}-${TargetEnvr}-book/invocations",
+                  "responses": {
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                      }
+                    }
+                  },
+                  "passthroughBehavior": "when_no_match",
+                  "contentHandling": "CONVERT_TO_TEXT"
+                }
+              }
+            },
             "/api/book/{id}/member": {
               "post": {
                 "parameters": [{
@@ -518,6 +581,43 @@ Resources:
               "required": ["name"]
             },
             "postBookBill": {
+              "type": "object",
+              "properties": {
+                "date": {"type": "string"},
+                "type": {"type": "string", "enum": ["income","expense"]},
+                "descr": {"type": "string"},
+                "amount": {"type": "number", "minimum": 0},
+                "former": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "string"},
+                      "weight": {"type": "number", "minimum": 0},
+                      "amount": {"type": "number", "minimum": 0}
+                    },
+                    "required": ["id"]
+                  }
+                },
+                "latter": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "string"},
+                      "weight": {"type": "number", "minimum": 0},
+                      "amount": {"type": "number", "minimum": 0}
+                    },
+                    "required": ["id"]
+                  }
+                },
+                "formerRemainder": {"type": "string"},
+                "latterRemainder": {"type": "string"},
+                "memo": {"type": "string"}
+              },
+              "required": ["date","type","descr","amount","former","latter","formerRemainder","latterRemainder"]
+            },
+            "putBookBill": {
               "type": "object",
               "properties": {
                 "date": {"type": "string"},
