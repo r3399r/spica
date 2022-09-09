@@ -131,6 +131,12 @@ async function apiBookIdBillId(event: LambdaEvent, service: BookService) {
         JSON.parse(event.body) as PutBookBillRequest,
         event.headers as AuthHeaders
       );
+    case 'DELETE':
+      return service.deleteBill(
+        event.pathParameters.id,
+        event.pathParameters.billId,
+        event.headers as AuthHeaders
+      );
     default:
       throw new InternalServerError('unknown http method');
   }

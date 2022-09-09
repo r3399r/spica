@@ -21,14 +21,6 @@ export class TransferAccess {
     return await qr.manager.save(entity);
   }
 
-  public async findById(id: string) {
-    const qr = await this.database.getQueryRunner();
-
-    return await qr.manager.findBy<Transfer>(TransferEntity.name, {
-      id,
-    });
-  }
-
   public async findUndeletedById(id: string) {
     const qr = await this.database.getQueryRunner();
 

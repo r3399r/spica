@@ -352,6 +352,28 @@ export class BookService {
     }
   }
 
+  public async deleteBill(bid: string, billId: string, headers: AuthHeaders) {
+    await this.validateBook(bid, headers['x-api-code']);
+
+    const bill = await this.billAccess.findUndeletedById(billId);
+
+    await this.billAccess.update({
+      ...bill,
+      dateDeleted: new Date(),
+    });
+
+    const billShares = await this.billShareAccess.findByBill(billId, bill.ver);
+
+    await Promise.all(
+      billShares.map(async (v) => {
+        await this.billShareAccess.update({
+          ...v,
+          dateDeleted: new Date(),
+        });
+      })
+    );
+  }
+
   public async addTransfer(
     id: string,
     data: PostBookTransferRequest,
