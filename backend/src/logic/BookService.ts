@@ -406,4 +406,15 @@ export class BookService {
       throw e;
     }
   }
+
+  public async deleteTransfer(bid: string, tid: string, headers: AuthHeaders) {
+    await this.validateBook(bid, headers['x-api-code']);
+
+    const transfer = await this.transferAccess.findUndeletedById(tid);
+
+    await this.transferAccess.update({
+      ...transfer,
+      dateDeleted: new Date(),
+    });
+  }
 }

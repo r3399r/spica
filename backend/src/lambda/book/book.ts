@@ -211,6 +211,12 @@ async function apiBookIdTransferId(event: LambdaEvent, service: BookService) {
         JSON.parse(event.body) as PutBookTransferRequest,
         event.headers as AuthHeaders
       );
+    case 'DELETE':
+      return service.deleteTransfer(
+        event.pathParameters.id,
+        event.pathParameters.tid,
+        event.headers as AuthHeaders
+      );
     default:
       throw new InternalServerError('unknown http method');
   }
