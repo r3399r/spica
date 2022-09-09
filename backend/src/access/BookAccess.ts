@@ -35,8 +35,4 @@ export class BookAccess {
 
     if (res.affected === 0) throw new BadRequestError('nothing happened.');
   }
-
-  public async cleanup() {
-    await this.database.cleanUp();
-  }
 }
