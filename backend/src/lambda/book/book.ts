@@ -13,7 +13,6 @@ import {
   PostBookBillRequest,
   PostBookMemberRequest,
   PostBookRequest,
-  PostBookResponse,
   PostBookTransferRequest,
   PutBookBillRequest,
   PutBookMemberRequest,
@@ -30,7 +29,7 @@ export async function book(
   try {
     service = bindings.get(BookService);
 
-    let res: void | PostBookResponse;
+    let res: unknown;
 
     switch (event.resource) {
       case '/api/book':
