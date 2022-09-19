@@ -8,13 +8,20 @@ import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
 import {
   PostBookBillRequest,
+  PostBookBillResponse,
   PostBookMemberRequest,
+  PostBookMemberResponse,
   PostBookRequest,
   PostBookResponse,
   PostBookTransferRequest,
+  PostBookTransferResponse,
   PutBookBillRequest,
+  PutBookBillResponse,
   PutBookMemberRequest,
+  PutBookMemberResponse,
   PutBookRequest,
+  PutBookResponse,
+  PutBookTransferResponse,
 } from 'src/model/api/Book';
 import { AuthHeaders } from 'src/model/api/Common';
 import { BillEntity } from 'src/model/entity/BillEntity';
@@ -73,7 +80,7 @@ export class BookService {
     id: string,
     data: PutBookRequest,
     headers: AuthHeaders
-  ) {
+  ): Promise<PutBookResponse> {
     const oldBook = await this.validateBook(id, headers['x-api-code']);
 
     const book = new BookEntity();
@@ -83,21 +90,22 @@ export class BookService {
     book.dateLastChanged = new Date();
 
     await this.bookAccess.update(book);
+
+    return book;
   }
 
   public async addMember(
     id: string,
     data: PostBookMemberRequest,
     headers: AuthHeaders
-  ) {
+  ): Promise<PostBookMemberResponse> {
     await this.validateBook(id, headers['x-api-code']);
 
     const member = new MemberEntity();
     member.nickname = data.nickname;
     member.bookId = id;
-    member.deletable = true;
 
-    await this.memberAccess.save(member);
+    return await this.memberAccess.save(member);
   }
 
   public async reviseMemberNickname(
@@ -105,25 +113,21 @@ export class BookService {
     mid: string,
     data: PutBookMemberRequest,
     headers: AuthHeaders
-  ) {
+  ): Promise<PutBookMemberResponse> {
     await this.validateBook(bid, headers['x-api-code']);
 
-    const oldMember = await this.memberAccess.findById(mid);
     const member = new MemberEntity();
     member.id = mid;
     member.bookId = bid;
     member.nickname = data.nickname;
-    member.deletable = oldMember.deletable;
 
     await this.memberAccess.update(member);
+
+    return member;
   }
 
   public async deleteMember(bid: string, mid: string, headers: AuthHeaders) {
     await this.validateBook(bid, headers['x-api-code']);
-
-    const member = await this.memberAccess.findById(mid);
-    if (member.deletable === false)
-      throw new BadRequestError('the member is not deletable');
 
     await this.memberAccess.hardDeleteById(mid);
   }
@@ -253,7 +257,7 @@ export class BookService {
     id: string,
     data: PostBookBillRequest,
     headers: AuthHeaders
-  ) {
+  ): Promise<PostBookBillResponse> {
     await this.validateBook(id, headers['x-api-code']);
 
     try {
@@ -270,7 +274,7 @@ export class BookService {
       const { formerAmount, latterAmount } = this.validateBill(data);
       const share = this.getShare(data, formerAmount, latterAmount, newBill.id);
 
-      await Promise.all(
+      const detail = await Promise.all(
         share.map(async (v) => {
           const billShare = new BillShareEntity();
           billShare.ver = 1;
@@ -278,11 +282,13 @@ export class BookService {
           billShare.memberId = v.memberId;
           billShare.amount = v.amount;
 
-          await this.billShareAccess.save(billShare);
+          return await this.billShareAccess.save(billShare);
         })
       );
 
       await this.dbAccess.commitTransaction();
+
+      return { ...newBill, detail };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
@@ -294,7 +300,7 @@ export class BookService {
     billId: string,
     data: PutBookBillRequest,
     headers: AuthHeaders
-  ) {
+  ): Promise<PutBookBillResponse> {
     await this.validateBook(bid, headers['x-api-code']);
 
     try {
@@ -314,7 +320,7 @@ export class BookService {
       bill.descr = data.descr;
       bill.memo = data.memo ?? null;
 
-      await this.billAccess.save(bill);
+      const newBill = await this.billAccess.save(bill);
 
       const oldBillShares = await this.billShareAccess.findByBill(
         billId,
@@ -333,7 +339,7 @@ export class BookService {
       const { formerAmount, latterAmount } = this.validateBill(data);
       const share = this.getShare(data, formerAmount, latterAmount, billId);
 
-      await Promise.all(
+      const detail = await Promise.all(
         share.map(async (v) => {
           const billShare = new BillShareEntity();
           billShare.billId = v.billId;
@@ -341,11 +347,13 @@ export class BookService {
           billShare.memberId = v.memberId;
           billShare.amount = v.amount;
 
-          await this.billShareAccess.save(billShare);
+          return await this.billShareAccess.save(billShare);
         })
       );
 
       await this.dbAccess.commitTransaction();
+
+      return { ...newBill, detail };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
@@ -378,7 +386,7 @@ export class BookService {
     id: string,
     data: PostBookTransferRequest,
     headers: AuthHeaders
-  ) {
+  ): Promise<PostBookTransferResponse> {
     await this.validateBook(id, headers['x-api-code']);
 
     const transfer = new TransferEntity();
@@ -390,7 +398,7 @@ export class BookService {
     transfer.dstMemberId = data.dstMemberId;
     transfer.memo = data.memo ?? null;
 
-    await this.transferAccess.save(transfer);
+    return await this.transferAccess.save(transfer);
   }
 
   public async updateTransfer(
@@ -398,7 +406,7 @@ export class BookService {
     tid: string,
     data: PostBookTransferRequest,
     headers: AuthHeaders
-  ) {
+  ): Promise<PutBookTransferResponse> {
     await this.validateBook(bid, headers['x-api-code']);
 
     try {
@@ -420,9 +428,11 @@ export class BookService {
       newTransfer.dstMemberId = data.dstMemberId;
       newTransfer.memo = data.memo ?? null;
 
-      await this.transferAccess.save(newTransfer);
+      const res = await this.transferAccess.save(newTransfer);
 
       await this.dbAccess.commitTransaction();
+
+      return res;
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;

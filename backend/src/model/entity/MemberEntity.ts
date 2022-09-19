@@ -13,9 +13,6 @@ export class MemberEntity implements Member {
   @Column({ type: 'text' })
   nickname!: string;
 
-  @Column({ type: 'boolean' })
-  deletable!: boolean;
-
   @Column({ type: 'timestamp', name: 'date_created', default: null })
   dateCreated!: Date;
 
