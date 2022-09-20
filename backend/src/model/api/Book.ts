@@ -5,6 +5,8 @@ import { Member } from 'src/model/entity/Member';
 import { Transfer } from 'src/model/entity/Transfer';
 import { BillData, TransferData } from 'src/model/type/Book';
 
+export type GetBookResponse = Book[];
+
 export type PostBookRequest = {
   name: string;
 };
