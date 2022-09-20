@@ -17,7 +17,13 @@ export class BillEntity implements Bill {
   date!: Date;
 
   @Column({ type: 'text' })
+  type!: string;
+
+  @Column({ type: 'text' })
   descr!: string;
+
+  @Column({ type: 'float' })
+  amount!: number;
 
   @Column({ type: 'text', default: null })
   memo: string | null = null;

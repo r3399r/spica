@@ -3,7 +3,10 @@ export type BillShare = {
   ver: number;
   billId: string;
   memberId: string;
-  amount: number;
+  side: string;
+  type: string;
+  value: number;
+  takeRemainder: boolean;
   dateCreated: Date | null;
   dateUpdated: Date | null;
   dateDeleted: Date | null;

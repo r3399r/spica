@@ -1,4 +1,5 @@
 import { BadRequestError, UnauthorizedError } from '@y-celestial/service';
+import { BigNumber } from 'bignumber.js';
 import { inject, injectable } from 'inversify';
 import { BillAccess } from 'src/access/BillAccess';
 import { BillShareAccess } from 'src/access/BillShareAccess';
@@ -29,7 +30,7 @@ import { BillShareEntity } from 'src/model/entity/BillShareEntity';
 import { BookEntity } from 'src/model/entity/BookEntity';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
-import { BillData } from 'src/model/type/Book';
+import { BillType, ShareDetail } from 'src/model/type/Book';
 import { bn } from 'src/util/bignumber';
 import { randomBase33 } from 'src/util/random';
 
@@ -132,125 +133,49 @@ export class BookService {
     await this.memberAccess.hardDeleteById(mid);
   }
 
-  private validateBill(data: BillData) {
-    const formerAmount = data.former
-      .map((v) => v.amount ?? 0)
-      .reduce((prev, current) => prev + current, 0);
-    const latterAmount = data.latter
-      .map((v) => v.amount ?? 0)
-      .reduce((prev, current) => prev + current, 0);
-
-    if (formerAmount > data.amount || latterAmount > data.amount)
-      throw new BadRequestError('sum of shared amount is too big');
-
-    if (
-      (data.former.length ===
-        data.former.filter((v) => v.amount !== undefined).length &&
-        data.amount !== formerAmount) ||
-      (data.former.length ===
-        data.latter.filter((v) => v.amount !== undefined).length &&
-        data.amount !== latterAmount)
-    )
-      throw new BadRequestError('sum of shared amount cannot afford');
-
-    if (
-      data.former.length ===
-        data.former.filter((v) => v.amount === undefined && v.weight === 0)
-          .length ||
-      data.latter.length ===
-        data.latter.filter((v) => v.amount === undefined && v.weight === 0)
-          .length
-    )
-      throw new BadRequestError('nobody is going to afford');
-
-    if (
-      !data.former.map((v) => v.id).includes(data.formerRemainder) ||
-      !data.latter.map((v) => v.id).includes(data.latterRemainder)
-    )
-      throw new BadRequestError('nobody takes the remainder');
-
-    return { formerAmount, latterAmount };
-  }
-
-  private getShare(
-    data: BillData,
-    formerAmount: number,
-    latterAmount: number,
-    billId: string
-  ) {
-    const formerWeight = data.former
-      .map((v) => (v.amount !== undefined ? 0 : v.weight ?? 1))
-      .reduce((prev, current) => prev + current, 0);
-    const latterWeight = data.latter
-      .map((v) => (v.amount !== undefined ? 0 : v.weight ?? 1))
-      .reduce((prev, current) => prev + current, 0);
-
-    let formerTotal = 0;
-    let latterTotal = 0;
-    const former = data.former.map((v) => {
-      const amount =
-        v.amount !== undefined
-          ? v.amount
-          : bn(data.amount)
-              .minus(formerAmount)
-              .div(formerWeight)
-              .times(v.weight ?? 1)
-              .dp(2, 1)
-              .toNumber();
-      formerTotal += amount;
-
-      return {
-        billId,
-        memberId: v.id,
-        amount: data.type === 'expense' ? amount : amount * -1,
-      };
-    });
-    const latter = data.latter.map((v) => {
-      const amount =
-        v.amount !== undefined
-          ? v.amount
-          : bn(data.amount)
-              .minus(latterAmount)
-              .div(latterWeight)
-              .times(v.weight ?? 1)
-              .dp(2, 1)
-              .toNumber();
-      latterTotal += amount;
-
-      return {
-        billId,
-        memberId: v.id,
-        amount: data.type === 'expense' ? amount * -1 : amount,
-      };
+  private validateDetail(amount: number, data: ShareDetail[]) {
+    data.forEach((v) => {
+      if (v.type === BillType.Pct && v.value > 100)
+        throw new BadRequestError('% shoulde less than 100');
     });
 
-    const formerRemainder = data.amount - formerTotal;
-    const latterRemainder = data.amount - latterTotal;
+    // avoid multiple remainder taker
+    const numTakeRemainder = data.filter(
+      (v) => v.takeRemainder === true
+    ).length;
+    if (numTakeRemainder > 1)
+      throw new BadRequestError('only 0 or 1 person could take remainder');
 
-    const updatedFormer = former.map((v) =>
-      v.memberId !== data.formerRemainder
-        ? v
-        : {
-            ...v,
-            amount:
-              v.amount > 0
-                ? v.amount + formerRemainder
-                : v.amount - formerRemainder,
-          }
-    );
-    const updatedLatter = latter.map((v) =>
-      v.memberId !== data.latterRemainder
-        ? v
-        : {
-            ...v,
-            amount:
-              v.amount > 0
-                ? v.amount + latterRemainder
-                : v.amount - latterRemainder,
-          }
-    );
+    const memberWeight = data.filter((v) => v.type === BillType.Weight);
+    const memberAmount = data.filter((v) => v.type === BillType.Amount);
+    const memberPct = data.filter((v) => v.type === BillType.Pct);
 
-    return [...updatedFormer, ...updatedLatter];
+    // check input totoal is reasonable
+    let inputTotal = bn(0);
+    memberAmount.forEach((v) => {
+      inputTotal = inputTotal.plus(v.value);
+    });
+    memberPct.forEach((v) => {
+      const splited = bn(amount).times(v.value).div(100).dp(2, 1);
+      inputTotal = inputTotal.plus(splited);
+    });
+
+    if (inputTotal.gt(amount))
+      throw new BadRequestError('input total exceeds amount');
+    if (inputTotal.lt(amount) && memberWeight.length === 0)
+      throw new BadRequestError('may need someone to take the rest amount');
+
+    const restAmount = bn(amount).minus(inputTotal);
+    const totalWeights = BigNumber.sum(...memberWeight.map((v) => bn(v.value)));
+
+    let weightTotal = bn(0);
+    memberWeight.forEach((v) => {
+      const splited = restAmount.div(totalWeights).times(v.value).dp(2, 1);
+      weightTotal = weightTotal.plus(splited);
+    });
+
+    if (!weightTotal.eq(restAmount) && numTakeRemainder === 0)
+      throw new BadRequestError('no one takes the remainder');
   }
 
   public async addBill(
@@ -267,24 +192,41 @@ export class BookService {
       bill.ver = 1;
       bill.bookId = id;
       bill.date = new Date(data.date);
+      bill.type = data.type;
       bill.descr = data.descr;
+      bill.amount = data.amount;
       bill.memo = data.memo ?? null;
 
       const newBill = await this.billAccess.save(bill);
-      const { formerAmount, latterAmount } = this.validateBill(data);
-      const share = this.getShare(data, formerAmount, latterAmount, newBill.id);
+      this.validateDetail(data.amount, data.former);
+      this.validateDetail(data.amount, data.latter);
 
-      const detail = await Promise.all(
-        share.map(async (v) => {
+      const detail = await Promise.all([
+        ...data.former.map(async (v) => {
           const billShare = new BillShareEntity();
+          billShare.billId = newBill.id;
           billShare.ver = 1;
-          billShare.billId = v.billId;
-          billShare.memberId = v.memberId;
-          billShare.amount = v.amount;
+          billShare.memberId = v.id;
+          billShare.side = 'former';
+          billShare.type = v.type;
+          billShare.value = v.value;
+          billShare.takeRemainder = v.takeRemainder ?? false;
 
           return await this.billShareAccess.save(billShare);
-        })
-      );
+        }),
+        ...data.latter.map(async (v) => {
+          const billShare = new BillShareEntity();
+          billShare.billId = newBill.id;
+          billShare.ver = 1;
+          billShare.memberId = v.id;
+          billShare.side = 'latter';
+          billShare.type = v.type;
+          billShare.value = v.value;
+          billShare.takeRemainder = v.takeRemainder ?? false;
+
+          return await this.billShareAccess.save(billShare);
+        }),
+      ]);
 
       await this.dbAccess.commitTransaction();
 
@@ -317,7 +259,9 @@ export class BookService {
       bill.ver = bn(oldBill.ver).plus(1).toNumber();
       bill.bookId = bid;
       bill.date = new Date(data.date);
+      bill.type = data.type;
       bill.descr = data.descr;
+      bill.amount = data.amount;
       bill.memo = data.memo ?? null;
 
       const newBill = await this.billAccess.save(bill);
@@ -336,20 +280,35 @@ export class BookService {
         })
       );
 
-      const { formerAmount, latterAmount } = this.validateBill(data);
-      const share = this.getShare(data, formerAmount, latterAmount, billId);
+      this.validateDetail(data.amount, data.former);
+      this.validateDetail(data.amount, data.latter);
 
-      const detail = await Promise.all(
-        share.map(async (v) => {
+      const detail = await Promise.all([
+        ...data.former.map(async (v) => {
           const billShare = new BillShareEntity();
-          billShare.billId = v.billId;
+          billShare.billId = billId;
           billShare.ver = bn(oldBill.ver).plus(1).toNumber();
-          billShare.memberId = v.memberId;
-          billShare.amount = v.amount;
+          billShare.memberId = v.id;
+          billShare.side = 'former';
+          billShare.type = v.type;
+          billShare.value = v.value;
+          billShare.takeRemainder = v.takeRemainder ?? false;
 
           return await this.billShareAccess.save(billShare);
-        })
-      );
+        }),
+        ...data.latter.map(async (v) => {
+          const billShare = new BillShareEntity();
+          billShare.billId = billId;
+          billShare.ver = bn(oldBill.ver).plus(1).toNumber();
+          billShare.memberId = v.id;
+          billShare.side = 'latter';
+          billShare.type = v.type;
+          billShare.value = v.value;
+          billShare.takeRemainder = v.takeRemainder ?? false;
+
+          return await this.billShareAccess.save(billShare);
+        }),
+      ]);
 
       await this.dbAccess.commitTransaction();
 

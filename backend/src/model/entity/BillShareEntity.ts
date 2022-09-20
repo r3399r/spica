@@ -16,8 +16,17 @@ export class BillShareEntity implements BillShare {
   @Column({ type: 'int8', name: 'member_id' })
   memberId!: string;
 
+  @Column({ type: 'text' })
+  side!: string;
+
+  @Column({ type: 'text' })
+  type!: string;
+
   @Column({ type: 'float' })
-  amount!: number;
+  value!: number;
+
+  @Column({ type: 'bool', name: 'take_remainder' })
+  takeRemainder!: boolean;
 
   @Column({ type: 'timestamp', name: 'date_created', default: null })
   dateCreated!: Date;

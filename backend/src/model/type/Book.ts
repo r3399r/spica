@@ -1,12 +1,23 @@
+export enum BillType {
+  Weight = 'weight',
+  Amount = 'amount',
+  Pct = 'pct',
+}
+
+export type ShareDetail = {
+  id: string;
+  type: BillType;
+  value: number;
+  takeRemainder?: boolean;
+};
+
 export type BillData = {
   date: string;
   type: 'income' | 'expense';
   descr: string;
   amount: number;
-  former: { id: string; weight?: number; amount?: number }[];
-  latter: { id: string; weight?: number; amount?: number }[];
-  formerRemainder: string;
-  latterRemainder: string;
+  former: ShareDetail[];
+  latter: ShareDetail[];
   memo?: string;
 };
 
