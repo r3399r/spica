@@ -1,6 +1,6 @@
 export type Bill = {
   id: string;
-  ver: number;
+  ver: string;
   bookId: string;
   date: Date;
   type: string;

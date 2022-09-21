@@ -7,7 +7,10 @@ import { BookAccess } from 'src/access/BookAccess';
 import { DbAccess } from 'src/access/DbAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
+import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
+import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
 import {
+  GetBookIdResponse,
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
@@ -31,6 +34,10 @@ import { BookEntity } from 'src/model/entity/BookEntity';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
 import { BillType, ShareDetail } from 'src/model/type/Book';
+import {
+  ViewTransactionBill,
+  ViewTransactionTransfer,
+} from 'src/model/viewEntity/ViewTransaction';
 import { bn } from 'src/util/bignumber';
 import { randomBase33 } from 'src/util/random';
 
@@ -57,6 +64,12 @@ export class BookService {
   @inject(TransferAccess)
   private readonly transferAccess!: TransferAccess;
 
+  @inject(ViewBillShareAccess)
+  private readonly viewBillShareAccess!: ViewBillShareAccess;
+
+  @inject(ViewTransactionAccess)
+  private readonly viewTransactionAccess!: ViewTransactionAccess;
+
   public async cleanup() {
     await this.dbAccess.cleanup();
   }
@@ -72,7 +85,7 @@ export class BookService {
 
   private async validateBook(id: string, code: string) {
     const book = await this.bookAccess.findById(id);
-    if (book.code !== code) throw new UnauthorizedError();
+    if (book.code !== code.toLowerCase()) throw new UnauthorizedError();
 
     return book;
   }
@@ -94,6 +107,59 @@ export class BookService {
 
       return true;
     });
+  }
+
+  public async getTransaction(
+    id: string,
+    code: string
+  ): Promise<GetBookIdResponse> {
+    const book = await this.validateBook(id, code);
+
+    const billShares = await this.viewBillShareAccess.findByBookId(id);
+    const transactions = (await this.viewTransactionAccess.findByBookId(
+      id
+    )) as (ViewTransactionBill | ViewTransactionTransfer)[];
+
+    return {
+      ...book,
+      transaction: transactions.map((v) => {
+        if (v.type === 'transfer')
+          return {
+            id: v.id,
+            ver: v.ver,
+            bookId: v.bookId,
+            date: v.date,
+            amount: v.amount,
+            srcMemberId: v.srcMemberId,
+            dstMemberId: v.dstMemberId,
+            memo: v.memo,
+            dateCreated: v.dateCreated,
+            dateUpdated: v.dateUpdated,
+            dateDeleted: v.dateDeleted,
+          };
+        else
+          return {
+            id: v.id,
+            ver: v.ver,
+            bookId: v.bookId,
+            date: v.date,
+            type: v.type,
+            descr: v.descr,
+            amount: v.amount,
+            memo: v.memo,
+            dateCreated: v.dateCreated,
+            dateUpdated: v.dateUpdated,
+            dateDeleted: v.dateDeleted,
+            detail: billShares
+              .filter((o) => o.billId === v.id && o.ver === v.ver)
+              .map((o) => {
+                const { bookId: ignoredBookId, ...rest } = o;
+
+                return rest;
+              }),
+          };
+      }),
+    };
   }
 
   public async reviseBook(
@@ -153,9 +219,12 @@ export class BookService {
   }
 
   private validateDetail(amount: number, data: ShareDetail[]) {
-    data.forEach((v) => {
-      if (v.type === BillType.Pct && v.value > 100)
-        throw new BadRequestError('% shoulde less than 100');
+    const memberWeight = data.filter((v) => v.type === BillType.Weight);
+    const memberAmount = data.filter((v) => v.type === BillType.Amount);
+    const memberPct = data.filter((v) => v.type === BillType.Pct);
+
+    memberPct.forEach((v) => {
+      if (v.value > 100) throw new BadRequestError('% shoulde less than 100');
     });
 
     // avoid multiple remainder taker
@@ -164,10 +233,6 @@ export class BookService {
     ).length;
     if (numTakeRemainder > 1)
       throw new BadRequestError('only 0 or 1 person could take remainder');
-
-    const memberWeight = data.filter((v) => v.type === BillType.Weight);
-    const memberAmount = data.filter((v) => v.type === BillType.Amount);
-    const memberPct = data.filter((v) => v.type === BillType.Pct);
 
     // check input totoal is reasonable
     let inputTotal = bn(0);
@@ -208,7 +273,7 @@ export class BookService {
       await this.dbAccess.startTransaction();
 
       const bill = new BillEntity();
-      bill.ver = 1;
+      bill.ver = '1';
       bill.bookId = id;
       bill.date = new Date(data.date);
       bill.type = data.type;
@@ -224,7 +289,7 @@ export class BookService {
         ...data.former.map(async (v) => {
           const billShare = new BillShareEntity();
           billShare.billId = newBill.id;
-          billShare.ver = 1;
+          billShare.ver = '1';
           billShare.memberId = v.id;
           billShare.side = 'former';
           billShare.type = v.type;
@@ -236,7 +301,7 @@ export class BookService {
         ...data.latter.map(async (v) => {
           const billShare = new BillShareEntity();
           billShare.billId = newBill.id;
-          billShare.ver = 1;
+          billShare.ver = '1';
           billShare.memberId = v.id;
           billShare.side = 'latter';
           billShare.type = v.type;
@@ -275,7 +340,7 @@ export class BookService {
 
       const bill = new BillEntity();
       bill.id = billId;
-      bill.ver = bn(oldBill.ver).plus(1).toNumber();
+      bill.ver = bn(oldBill.ver).plus(1).toString();
       bill.bookId = bid;
       bill.date = new Date(data.date);
       bill.type = data.type;
@@ -306,7 +371,7 @@ export class BookService {
         ...data.former.map(async (v) => {
           const billShare = new BillShareEntity();
           billShare.billId = billId;
-          billShare.ver = bn(oldBill.ver).plus(1).toNumber();
+          billShare.ver = bn(oldBill.ver).plus(1).toString();
           billShare.memberId = v.id;
           billShare.side = 'former';
           billShare.type = v.type;
@@ -318,7 +383,7 @@ export class BookService {
         ...data.latter.map(async (v) => {
           const billShare = new BillShareEntity();
           billShare.billId = billId;
-          billShare.ver = bn(oldBill.ver).plus(1).toNumber();
+          billShare.ver = bn(oldBill.ver).plus(1).toString();
           billShare.memberId = v.id;
           billShare.side = 'latter';
           billShare.type = v.type;
@@ -368,7 +433,7 @@ export class BookService {
     await this.validateBook(id, code);
 
     const transfer = new TransferEntity();
-    transfer.ver = 1;
+    transfer.ver = '1';
     transfer.bookId = id;
     transfer.date = new Date(data.date);
     transfer.amount = data.amount;
@@ -398,7 +463,7 @@ export class BookService {
 
       const newTransfer = new TransferEntity();
       newTransfer.id = tid;
-      newTransfer.ver = bn(oldTransfer.ver).plus(1).toNumber();
+      newTransfer.ver = bn(oldTransfer.ver).plus(1).toString();
       newTransfer.bookId = bid;
       newTransfer.date = new Date(data.date);
       newTransfer.amount = data.amount;

@@ -20,7 +20,7 @@ export class BillShareAccess {
     return await qr.manager.save(entity);
   }
 
-  public async findByBill(billId: string, ver: number) {
+  public async findByBill(billId: string, ver: string) {
     const qr = await this.database.getQueryRunner();
 
     return await qr.manager.findBy<BillShare>(BillShareEntity.name, {

@@ -11,7 +11,7 @@ export class BillShareEntity implements BillShare {
   billId!: string;
 
   @Column({ type: 'int8' })
-  ver!: number;
+  ver!: string;
 
   @Column({ type: 'int8', name: 'member_id' })
   memberId!: string;

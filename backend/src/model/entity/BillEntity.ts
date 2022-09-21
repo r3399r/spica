@@ -8,7 +8,7 @@ export class BillEntity implements Bill {
   id!: string;
 
   @Column({ primary: true, type: 'int8' })
-  ver!: number;
+  ver!: string;
 
   @Column({ type: 'int8', name: 'book_id' })
   bookId!: string;

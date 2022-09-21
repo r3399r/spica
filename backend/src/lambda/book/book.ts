@@ -92,12 +92,17 @@ async function apiBook(event: LambdaEvent, service: BookService) {
 async function apiBookId(event: LambdaEvent, service: BookService) {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
+  if (event.headers === null)
+    throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
+    case 'GET':
+      return service.getTransaction(
+        event.pathParameters.id,
+        event.headers['x-api-code']
+      );
     case 'PUT':
       if (event.body === null)
         throw new BadRequestError('body should not be empty');
-      if (event.headers === null)
-        throw new BadRequestError('headers should not be empty');
 
       return service.reviseBook(
         event.pathParameters.id,

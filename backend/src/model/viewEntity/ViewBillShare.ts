@@ -1,4 +1,4 @@
-export type BillShare = {
+export type ViewBillShare = {
   id: string;
   billId: string;
   ver: string;
@@ -7,7 +7,8 @@ export type BillShare = {
   type: string;
   value: number;
   takeRemainder: boolean;
-  dateCreated: Date | null;
+  dateCreated: Date;
   dateUpdated: Date | null;
   dateDeleted: Date | null;
+  bookId: string;
 };

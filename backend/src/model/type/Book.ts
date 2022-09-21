@@ -1,3 +1,7 @@
+import { Bill } from 'src/model/entity/Bill';
+import { BillShare } from 'src/model/entity/BillShare';
+import { Transfer } from 'src/model/entity/Transfer';
+
 export enum BillType {
   Weight = 'weight',
   Amount = 'amount',
@@ -28,3 +32,9 @@ export type TransferData = {
   dstMemberId: string;
   memo?: string;
 };
+
+export type Transaction = BillTransaction | TransferTransaction;
+
+export type BillTransaction = Bill & { detail: BillShare[] };
+
+export type TransferTransaction = Transfer;

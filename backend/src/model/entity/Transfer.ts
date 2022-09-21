@@ -1,6 +1,6 @@
 export type Transfer = {
   id: string;
-  ver: number;
+  ver: string;
   bookId: string;
   date: Date;
   amount: number;
