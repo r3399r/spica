@@ -115,6 +115,7 @@ export class BookService {
   ): Promise<GetBookIdResponse> {
     const book = await this.validateBook(id, code);
 
+    const members = await this.memberAccess.findByBookId(id);
     const billShares = await this.viewBillShareAccess.findByBookId(id);
     const transactions = (await this.viewTransactionAccess.findByBookId(
       id
@@ -122,7 +123,8 @@ export class BookService {
 
     return {
       ...book,
-      transaction: transactions.map((v) => {
+      members,
+      transactions: transactions.map((v) => {
         if (v.type === 'transfer')
           return {
             id: v.id,

@@ -20,7 +20,10 @@ export type PutBookRequest = {
   name: string;
 };
 
-export type GetBookIdResponse = Book & { transaction: Transaction[] };
+export type GetBookIdResponse = Book & {
+  members: Member[];
+  transactions: Transaction[];
+};
 
 export type PutBookResponse = Book;
 
