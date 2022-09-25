@@ -10,6 +10,7 @@ import {
 import { bindings } from 'src/bindings';
 import { BookService } from 'src/logic/BookService';
 import {
+  GetBookParams,
   PostBookBillRequest,
   PostBookMemberRequest,
   PostBookRequest,
@@ -76,7 +77,7 @@ async function apiBook(event: LambdaEvent, service: BookService) {
         throw new BadRequestError('headers should not be empty');
 
       return service.getBookList(
-        event.queryStringParameters.ids,
+        event.queryStringParameters as GetBookParams,
         event.headers['x-api-code']
       );
     case 'POST':

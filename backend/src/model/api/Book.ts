@@ -8,6 +8,8 @@ import {
   TransferData,
 } from 'src/model/type/Book';
 
+export type GetBookParams = { ids: string };
+
 export type GetBookResponse = Book[];
 
 export type PostBookRequest = {

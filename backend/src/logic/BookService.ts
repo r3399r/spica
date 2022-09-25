@@ -11,6 +11,7 @@ import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
 import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
 import {
   GetBookIdResponse,
+  GetBookParams,
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
@@ -91,10 +92,10 @@ export class BookService {
   }
 
   public async getBookList(
-    ids: string,
+    params: GetBookParams,
     code: string
   ): Promise<GetBookResponse> {
-    const idArray = ids.split(',');
+    const idArray = params.ids.split(',');
     const codeArray = code.split(',');
     if (idArray.length !== codeArray.length)
       throw new BadRequestError('bad request');
