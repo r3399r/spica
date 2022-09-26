@@ -2,6 +2,8 @@ import {
   GetBookIdResponse,
   GetBookParams,
   GetBookResponse,
+  PostBookMemberRequest,
+  PostBookMemberResponse,
   PostBookRequest,
   PostBookResponse,
 } from '@y-celestial/spica-service';
@@ -16,8 +18,15 @@ const postBook = async (data: PostBookRequest) =>
 const getBookId = async (id: string, code: string) =>
   await http.get<GetBookIdResponse>(`book/${id}`, { headers: { 'x-api-code': code } });
 
+const postBookIdMember = async (id: string, data: PostBookMemberRequest, code: string) =>
+  await http.post<PostBookMemberResponse>(`book/${id}/member`, {
+    data,
+    headers: { 'x-api-code': code },
+  });
+
 export default {
   getBook,
   postBook,
   getBookId,
+  postBookIdMember,
 };

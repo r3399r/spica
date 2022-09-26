@@ -29,21 +29,20 @@ const Book = () => {
   const onSubmit = (data: NewBookForm) => {
     setDisabled(true);
     createBook(data.name)
-      .then((res) => {
-        setBookList([...(bookList ?? []), res]);
-      })
+      .then((res) => setBookList([...(bookList ?? []), res]))
       .finally(() => setDisabled(false));
   };
 
   return (
     <div>
+      <h1>新增帳本</h1>
       <form style={{ display: 'flex', gap: 10 }} onSubmit={handleSubmit(onSubmit)}>
-        <div>帳本名稱：</div>
-        <input {...register('name')} />
+        <input {...register('name')} placeholder="帳本名" />
         <Button variant="contained" type="submit" disabled={disabled}>
           新增帳本
         </Button>
       </form>
+      <h1>帳本清單</h1>
       {bookList &&
         bookList.map((v) => (
           <div key={v.id} style={{ display: 'flex', gap: 10, marginTop: 10 }}>
