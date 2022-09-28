@@ -7,7 +7,7 @@ import { Page } from 'src/constant/Page';
 import { NewMemberForm } from 'src/model/Form';
 import { addMember, getBookById } from 'src/service/bookService';
 
-const Setting = () => {
+const BookSetting = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState<boolean>(true);
@@ -56,9 +56,9 @@ const Setting = () => {
       </form>
       <h2>與好友共享</h2>
       <div>通行碼：{book?.code}</div>
-      <div>分享網址：{`${location.origin}/${book?.id}`}</div>
+      <div>分享網址：{`${location.origin}${Page.Share}/${book?.id}`}</div>
     </div>
   );
 };
 
-export default Setting;
+export default BookSetting;

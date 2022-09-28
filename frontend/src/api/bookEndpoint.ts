@@ -1,5 +1,6 @@
 import {
   GetBookIdResponse,
+  GetBookNameResponse,
   GetBookParams,
   GetBookResponse,
   PostBookMemberRequest,
@@ -24,9 +25,12 @@ const postBookIdMember = async (id: string, data: PostBookMemberRequest, code: s
     headers: { 'x-api-code': code },
   });
 
+const getBookIdName = async (id: string) => await http.get<GetBookNameResponse>(`book/${id}/name`);
+
 export default {
   getBook,
   postBook,
   getBookId,
   postBookIdMember,
+  getBookIdName,
 };

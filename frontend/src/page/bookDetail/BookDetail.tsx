@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Page } from 'src/constant/Page';
 import { getBookById } from 'src/service/bookService';
 
-const Detail = () => {
+const BookDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [book, setBook] = useState<Book>();
@@ -34,4 +34,4 @@ const Detail = () => {
   );
 };
 
-export default Detail;
+export default BookDetail;
