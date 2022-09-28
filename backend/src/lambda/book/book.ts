@@ -50,6 +50,9 @@ export async function book(
       case '/api/book/{id}/member/{mid}':
         res = await apiBookIdMemberId(event, service);
         break;
+      case '/api/book/{id}/name':
+        res = await apiBookIdName(event, service);
+        break;
       case '/api/book/{id}/transfer':
         res = await apiBookIdTransfer(event, service);
         break;
@@ -97,7 +100,7 @@ async function apiBookId(event: LambdaEvent, service: BookService) {
     throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
     case 'GET':
-      return service.getTransaction(
+      return service.getBookDetail(
         event.pathParameters.id,
         event.headers['x-api-code']
       );
@@ -204,6 +207,17 @@ async function apiBookIdMemberId(event: LambdaEvent, service: BookService) {
         event.pathParameters.mid,
         event.headers['x-api-code']
       );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdName(event: LambdaEvent, service: BookService) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  switch (event.httpMethod) {
+    case 'GET':
+      return service.getBookNameById(event.pathParameters.id);
     default:
       throw new InternalServerError('unknown http method');
   }

@@ -11,6 +11,7 @@ import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
 import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
 import {
   GetBookIdResponse,
+  GetBookNameResponse,
   GetBookParams,
   GetBookResponse,
   PostBookBillRequest,
@@ -110,7 +111,13 @@ export class BookService {
     });
   }
 
-  public async getTransaction(
+  public async getBookNameById(id: string): Promise<GetBookNameResponse> {
+    const book = await this.bookAccess.findById(id);
+
+    return { id: book.id, name: book.name };
+  }
+
+  public async getBookDetail(
     id: string,
     code: string
   ): Promise<GetBookIdResponse> {
