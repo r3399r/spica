@@ -7,7 +7,7 @@ export type ShareDetail = {
   id: string;
   type: BillShareType;
   value: number;
-  takeRemainder: boolean;
+  takeRemainder?: boolean;
 };
 
 export type BillData = {
