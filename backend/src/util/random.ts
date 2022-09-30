@@ -1,8 +1,6 @@
 import { randomInt } from 'crypto';
 
-// except 0, o, l
-export const randomBase33 = (length: number) =>
-  random('123456789abcdefghijkmnpqrstuvwxyz', length);
+export const randomBase10 = (length: number) => random('0123456789', length);
 
 const random = (chars: string, length: number): string => {
   const n = chars.length;

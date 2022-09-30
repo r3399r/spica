@@ -1,4 +1,5 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, Generated } from 'typeorm';
+import { BillType } from 'src/constant/Book';
 import { Bill } from './Bill';
 
 @Entity({ name: 'bill' })
@@ -17,7 +18,7 @@ export class BillEntity implements Bill {
   date!: Date;
 
   @Column({ type: 'text' })
-  type!: string;
+  type!: BillType;
 
   @Column({ type: 'text' })
   descr!: string;

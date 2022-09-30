@@ -1,23 +1,18 @@
+import { BillShareType, BillType } from 'src/constant/Book';
 import { Bill } from 'src/model/entity/Bill';
 import { BillShare } from 'src/model/entity/BillShare';
 import { Transfer } from 'src/model/entity/Transfer';
 
-export enum BillType {
-  Weight = 'weight',
-  Amount = 'amount',
-  Pct = 'pct',
-}
-
 export type ShareDetail = {
   id: string;
-  type: BillType;
+  type: BillShareType;
   value: number;
-  takeRemainder?: boolean;
+  takeRemainder: boolean;
 };
 
 export type BillData = {
   date: string;
-  type: 'income' | 'expense';
+  type: BillType;
   descr: string;
   amount: number;
   former: ShareDetail[];

@@ -1,4 +1,5 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, Generated } from 'typeorm';
+import { BillShareType } from 'src/constant/Book';
 import { BillShare } from './BillShare';
 
 @Entity({ name: 'bill_share' })
@@ -20,7 +21,7 @@ export class BillShareEntity implements BillShare {
   side!: string;
 
   @Column({ type: 'text' })
-  type!: string;
+  type!: BillShareType;
 
   @Column({ type: 'float' })
   value!: number;

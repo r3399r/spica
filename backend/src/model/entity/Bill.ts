@@ -1,9 +1,11 @@
+import { BillType } from 'src/constant/Book';
+
 export type Bill = {
   id: string;
   ver: string;
   bookId: string;
   date: Date;
-  type: string;
+  type: BillType;
   descr: string;
   amount: number;
   memo: string | null;

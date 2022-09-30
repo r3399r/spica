@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { BillShareType } from 'src/constant/Book';
 import { ViewBillShare } from './ViewBillShare';
 
 @ViewEntity({ name: 'v_bill_share' })
@@ -19,7 +20,7 @@ export class ViewBillShareEntity implements ViewBillShare {
   side!: string;
 
   @ViewColumn()
-  type!: string;
+  type!: BillShareType;
 
   @ViewColumn()
   value!: number;
