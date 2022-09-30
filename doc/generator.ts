@@ -9,6 +9,13 @@ import packageJson from '../backend/package.json';
     specVersion: 3,
     outputDirectory: './',
     controllerPathGlobs: ['./src/**/*Controller.ts'],
+    securityDefinitions: {
+      api_token: {
+        type: 'apiKey',
+        name: 'x-api-token',
+        in: 'header',
+      },
+    },
     noImplicitAdditionalProperties: 'throw-on-extras',
     host: `bi-ll${env === 'prod' ? '' : `-${env}`}.celestialstudio.net`,
     basePath: 'api',
