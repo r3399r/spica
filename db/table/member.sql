@@ -1,6 +1,6 @@
 CREATE TABLE member (
 	id SERIAL,
-    book_id INT8 NOT NULL,
+	book_id INT8 NOT NULL,
 	nickname STRING NOT NULL,
 	balance FLOAT NOT NULL,
 	deletable BOOLEAN NOT NULL,

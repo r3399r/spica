@@ -1,7 +1,7 @@
 CREATE TABLE transfer (
 	id SERIAL,
 	ver INT8 NOT NULL,
-    book_id INT8 NOT NULL,
+	book_id INT8 NOT NULL,
 	date TIMESTAMP NOT NULL,
 	amount FLOAT NOT NULL,
 	src_member_id INT8 NOT NULL,

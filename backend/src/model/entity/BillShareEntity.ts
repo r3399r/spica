@@ -35,9 +35,6 @@ export class BillShareEntity implements BillShare {
   @Column({ type: 'timestamp', name: 'date_updated', default: null })
   dateUpdated: Date | null = null;
 
-  @Column({ type: 'timestamp', name: 'date_deleted', default: null })
-  dateDeleted: Date | null = null;
-
   @BeforeInsert()
   setDateCreated(): void {
     this.dateCreated = new Date();

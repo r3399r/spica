@@ -16,6 +16,7 @@ export class ViewTransactionAccess {
 
     return await qr.manager.find<ViewTransaction>(ViewTransactionEntity.name, {
       where: { bookId },
+      order: { date: 'DESC' },
     });
   }
 }

@@ -11,6 +11,5 @@ export type ViewBillShare = {
   takeRemainder: boolean;
   dateCreated: Date;
   dateUpdated: Date | null;
-  dateDeleted: Date | null;
   bookId: string;
 };

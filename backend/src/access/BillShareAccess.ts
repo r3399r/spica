@@ -1,4 +1,3 @@
-import { BadRequestError } from '@y-celestial/service';
 import { inject, injectable } from 'inversify';
 import { BillShare } from 'src/model/entity/BillShare';
 import { BillShareEntity } from 'src/model/entity/BillShareEntity';
@@ -27,19 +26,5 @@ export class BillShareAccess {
       billId,
       ver,
     });
-  }
-
-  public async update(input: BillShare) {
-    const qr = await this.database.getQueryRunner();
-    const entity = new BillShareEntity();
-    Object.assign(entity, input);
-
-    const res = await qr.manager.update(
-      BillShareEntity,
-      { id: input.id, ver: input.ver },
-      entity
-    );
-
-    if (res.affected === 0) throw new BadRequestError('nothing happened.');
   }
 }

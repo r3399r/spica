@@ -1,6 +1,8 @@
 DROP VIEW IF EXISTS v_transaction;
+
 CREATE VIEW v_transaction AS
-select b.id,
+select
+	b.id,
 	b.ver,
 	b.book_id,
 	b.date,
@@ -13,9 +15,21 @@ select b.id,
 	b.date_created,
 	b.date_updated,
 	b.date_deleted
-from bill b
+from
+	(
+		select
+			id,
+			max(ver) as ver
+		from
+			bill b
+		group by
+			b.id
+	) as tmp_b
+	left join bill b on tmp_b.id = b.id
+	and tmp_b.ver = b.ver
 union all
-select t.id,
+select
+	t.id,
 	t.ver,
 	t.book_id,
 	t.date,
@@ -28,4 +42,15 @@ select t.id,
 	t.date_created,
 	t.date_updated,
 	t.date_updated
-from transfer t;
+from
+	(
+		select
+			id,
+			max(ver) as ver
+		from
+			"transfer" t
+		group by
+			t.id
+	) as tmp_t
+	left join "transfer" t on tmp_t.id = t.id
+	and tmp_t.ver = t.ver;

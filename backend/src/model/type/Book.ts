@@ -30,6 +30,8 @@ export type TransferData = {
 
 export type Transaction = BillTransaction | TransferTransaction;
 
-export type BillTransaction = Bill & { detail: BillShare[] };
+export type BillTransaction = Bill & {
+  detail: Omit<BillShare, 'billId' | 'ver'>[];
+};
 
 export type TransferTransaction = Transfer;

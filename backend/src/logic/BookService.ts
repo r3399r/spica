@@ -165,7 +165,12 @@ export class BookService {
             detail: billShares
               .filter((o) => o.billId === v.id && o.ver === v.ver)
               .map((o) => {
-                const { bookId: ignoredBookId, ...rest } = o;
+                const {
+                  bookId: ignoredBookId,
+                  billId: ignoredBillId,
+                  ver: ignoredVer,
+                  ...rest
+                } = o;
 
                 return rest;
               }),
@@ -265,7 +270,7 @@ export class BookService {
       };
     });
     const splitPct = memberPct.map((v) => {
-      const splited = bn(amount).times(v.value).div(100).dp(2, 1);
+      const splited = bn(amount).times(v.value).div(100).dp(2);
       inputTotal = inputTotal.plus(splited);
 
       return {
@@ -286,7 +291,7 @@ export class BookService {
 
     let weightTotal = bn(0);
     const splitedWeight = memberWeight.map((v) => {
-      const splited = restAmount.div(totalWeights).times(v.value).dp(2, 1);
+      const splited = restAmount.times(v.value).div(totalWeights).dp(2);
       weightTotal = weightTotal.plus(splited);
 
       return { id: v.id, type: v.type, value: v.value, amount: splited };
@@ -354,8 +359,14 @@ export class BookService {
             v.id,
             data.type === BillType.Expense ? v.amount : v.amount.negated()
           );
+          const newBillShare = await this.billShareAccess.save(billShare);
+          const {
+            billId: ignoredBillId,
+            ver: ignoredVer,
+            ...rest
+          } = newBillShare;
 
-          return await this.billShareAccess.save(billShare);
+          return rest;
         })
       );
       const detailLatter = await Promise.all(
@@ -373,8 +384,14 @@ export class BookService {
             v.id,
             data.type === BillType.Expense ? v.amount.negated() : v.amount
           );
+          const newBillShare = await this.billShareAccess.save(billShare);
+          const {
+            billId: ignoredBillId,
+            ver: ignoredVer,
+            ...rest
+          } = newBillShare;
 
-          return await this.billShareAccess.save(billShare);
+          return rest;
         })
       );
 
@@ -400,28 +417,22 @@ export class BookService {
 
     const oldFormer: ShareDetail[] = [];
     const oldLatter: ShareDetail[] = [];
-    await Promise.all(
-      oldBillShares.map(async (v) => {
-        await this.billShareAccess.update({
-          ...v,
-          dateDeleted: new Date(),
+    oldBillShares.forEach((v) => {
+      if (v.side === 'former')
+        oldFormer.push({
+          id: v.memberId,
+          type: v.type,
+          value: v.value,
+          takeRemainder: v.takeRemainder,
         });
-        if (v.side === 'former')
-          oldFormer.push({
-            id: v.memberId,
-            type: v.type,
-            value: v.value,
-            takeRemainder: v.takeRemainder,
-          });
-        else
-          oldLatter.push({
-            id: v.memberId,
-            type: v.type,
-            value: v.value,
-            takeRemainder: v.takeRemainder,
-          });
-      })
-    );
+      else
+        oldLatter.push({
+          id: v.memberId,
+          type: v.type,
+          value: v.value,
+          takeRemainder: v.takeRemainder,
+        });
+    });
 
     const oldSpiltFormer = this.splitDetail(oldBill.amount, oldFormer);
     const oldSpiltLatter = this.splitDetail(oldBill.amount, oldLatter);
@@ -487,8 +498,14 @@ export class BookService {
             v.id,
             data.type === BillType.Expense ? v.amount : v.amount.negated()
           );
+          const newBillShare = await this.billShareAccess.save(billShare);
+          const {
+            billId: ignoredBillId,
+            ver: ignoredVer,
+            ...rest
+          } = newBillShare;
 
-          return await this.billShareAccess.save(billShare);
+          return rest;
         })
       );
       const detailLatter = await Promise.all(
@@ -506,8 +523,14 @@ export class BookService {
             v.id,
             data.type === BillType.Expense ? v.amount.negated() : v.amount
           );
+          const newBillShare = await this.billShareAccess.save(billShare);
+          const {
+            billId: ignoredBillId,
+            ver: ignoredVer,
+            ...rest
+          } = newBillShare;
 
-          return await this.billShareAccess.save(billShare);
+          return rest;
         })
       );
 

@@ -34,9 +34,6 @@ export class ViewBillShareEntity implements ViewBillShare {
   @ViewColumn({ name: 'date_updated' })
   dateUpdated: Date | null = null;
 
-  @ViewColumn({ name: 'date_deleted' })
-  dateDeleted: Date | null = null;
-
   @ViewColumn({ name: 'book_id' })
   bookId!: string;
 }

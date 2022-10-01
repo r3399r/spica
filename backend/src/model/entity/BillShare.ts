@@ -11,5 +11,4 @@ export type BillShare = {
   takeRemainder: boolean;
   dateCreated: Date | null;
   dateUpdated: Date | null;
-  dateDeleted: Date | null;
 };
