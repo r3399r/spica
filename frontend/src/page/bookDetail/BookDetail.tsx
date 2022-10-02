@@ -20,14 +20,18 @@ const BookDetail = () => {
       <Button variant="contained" type="button" onClick={() => navigate(Page.Book)}>
         回到清單
       </Button>
-      <h1>帳本：{book?.name}</h1>
-      <Button
-        variant="contained"
-        type="button"
-        onClick={() => navigate(`${Page.Book}/${id}/setting`)}
-      >
-        前往設定
-      </Button>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h1>{book?.name}</h1>
+        <div>
+          <Button
+            variant="contained"
+            type="button"
+            onClick={() => navigate(`${Page.Book}/${id}/setting`)}
+          >
+            設定
+          </Button>
+        </div>
+      </div>
       <h2>餘額</h2>
       <h2>帳目清單</h2>
     </div>

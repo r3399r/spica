@@ -21,6 +21,16 @@ export const bookSlice = createSlice({
     addBookName: (state: BookState, action: PayloadAction<GetBookResponse[0]>) => {
       state.bookNameList = [...state.bookNameList, action.payload];
     },
+    updateBookName: (state: BookState, action: PayloadAction<GetBookResponse[0]>) => {
+      state.bookNameList = state.bookNameList.map((v) => ({
+        ...v,
+        name: v.id === action.payload.id ? action.payload.name : v.name,
+      }));
+      state.bookList = state.bookList.map((v) => ({
+        ...v,
+        name: v.id === action.payload.id ? action.payload.name : v.name,
+      }));
+    },
     setBookList: (state: BookState, action: PayloadAction<Book[]>) => {
       state.bookList = action.payload;
     },
@@ -30,6 +40,7 @@ export const bookSlice = createSlice({
   },
 });
 
-export const { setBookNameList, addBookName, setBookList, addBook } = bookSlice.actions;
+export const { setBookNameList, addBookName, updateBookName, setBookList, addBook } =
+  bookSlice.actions;
 
 export default bookSlice.reducer;

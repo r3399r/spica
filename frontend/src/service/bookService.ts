@@ -51,17 +51,15 @@ export const getBookById = async (id: string) => {
   return res.data;
 };
 
-export const addMember = async (id: string, nickname: string, code: string) => {
+export const addMember = async (id: string, nickname: string) => {
   const {
     book: { bookList: storeBooks },
   } = getState();
   const book = storeBooks.find((v) => v.id === id);
   if (book === undefined) throw new Error('not found');
 
-  const res = await bookEndpoint.postBookIdMember(id, { nickname }, code);
+  const res = await bookEndpoint.postBookIdMember(id, { nickname }, book.id);
 
   const updatedBook = { ...book, members: [...book.members, res.data] };
   dispatch(setBookList([...storeBooks.filter((v) => v.id !== id), updatedBook]));
-
-  return updatedBook;
 };

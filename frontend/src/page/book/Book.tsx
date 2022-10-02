@@ -37,7 +37,7 @@ const Book = () => {
     <div>
       <h1>新增帳本</h1>
       <form style={{ display: 'flex', gap: 10 }} onSubmit={handleSubmit(onSubmit)}>
-        <input {...register('name')} placeholder="帳本名" />
+        <input {...register('name')} placeholder="帳本名" autoComplete="off" />
         <Button variant="contained" type="submit" disabled={disabled}>
           新增帳本
         </Button>
