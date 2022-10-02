@@ -16,11 +16,11 @@ const Share = () => {
   useEffect(() => {
     if (id === undefined) return;
     init(id)
-      .then((res) => setName(res.name))
-      .catch((err) => {
-        if (err === 'ALREADY_OWN') navigate(`${Page.Book}/${id}`);
-        else navigate(Page.Book);
-      });
+      .then((res) => {
+        if (res === 'ALREADY_OWN') navigate(`${Page.Book}/${id}`);
+        else setName(res);
+      })
+      .catch(() => navigate(Page.Book));
   }, [id]);
 
   const onSubmit = (data: ShareForm) => {

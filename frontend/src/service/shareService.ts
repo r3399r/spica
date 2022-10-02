@@ -2,15 +2,18 @@ import bookEndpoint from 'src/api/bookEndpoint';
 import { addBook } from 'src/redux/bookSlice';
 import { dispatch } from 'src/redux/store';
 import { getLocalBooks } from 'src/util/localStorage';
+import { getBookById } from './bookService';
 
 export const init = async (id: string) => {
-  const localBooks = getLocalBooks();
+  try {
+    await getBookById(id);
 
-  if (localBooks.map((v) => v.id).includes(id)) throw 'ALREADY_OWN';
+    return 'ALREADY_OWN';
+  } catch {
+    const res = await bookEndpoint.getBookIdName(id);
 
-  const res = await bookEndpoint.getBookIdName(id);
-
-  return res.data;
+    return res.data.name;
+  }
 };
 
 export const setShareBook = async (id: string, code: string) => {
