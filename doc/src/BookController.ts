@@ -33,12 +33,16 @@ import {
   PutBookTransferRequest,
   PutBookTransferResponse,
 } from '@y-celestial/spica-service';
+import {
+  BillShareType,
+  BillType,
+} from '@y-celestial/spica-service/lib/src/constant/Book';
 
 @Route('book')
 @Tags('帳簿')
 export class BookController extends Controller {
   /**
-   * 取得多個帳簿
+   * @summary 取得多個帳簿
    * @example _ids "book-id,book-id2"
    */
   @Example<GetBookResponse>([
@@ -46,7 +50,6 @@ export class BookController extends Controller {
       id: 'book-id',
       code: '123456',
       name: 'book-name',
-      dateLastChanged: null,
       dateCreated: new Date(),
       dateUpdated: new Date(),
     },
@@ -57,7 +60,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * 建立新帳簿
+   * @summary 建立新帳簿
    * @example _postBookRequest {
    *   "name": "book-name"
    * }
@@ -66,7 +69,6 @@ export class BookController extends Controller {
     id: 'book-id',
     code: '123456',
     name: 'book-name',
-    dateLastChanged: null,
     dateCreated: new Date(),
     dateUpdated: new Date(),
   })
@@ -76,14 +78,13 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * 取得指定帳簿詳情
+   * @summary 取得指定帳簿詳情
    * @example _id "book-id"
    */
   @Example<GetBookIdResponse>({
     id: 'book-id',
     code: '123456',
     name: 'book-name',
-    dateLastChanged: null,
     dateCreated: new Date(),
     dateUpdated: new Date(),
     members: [
@@ -91,6 +92,8 @@ export class BookController extends Controller {
         id: 'member-id',
         bookId: 'book-id',
         nickname: 'Shohei',
+        balance: 100,
+        deletable: false,
         dateCreated: new Date(),
         dateUpdated: new Date(),
       },
@@ -101,7 +104,7 @@ export class BookController extends Controller {
         ver: '1',
         bookId: 'book-id',
         date: new Date(),
-        type: 'income',
+        type: 'income' as BillType,
         descr: 'sample',
         amount: 100,
         memo: 'memo-bill',
@@ -111,29 +114,23 @@ export class BookController extends Controller {
         detail: [
           {
             id: 'bill-share-id',
-            billId: 'bill-id',
-            ver: '1',
             memberId: 'member-id-1',
             side: 'former',
-            type: 'weight',
+            type: 'weight' as BillShareType,
             value: 1,
             takeRemainder: false,
             dateCreated: new Date(),
             dateUpdated: null,
-            dateDeleted: null,
           },
           {
             id: 'bill-share-id',
-            billId: 'bill-id',
-            ver: '1',
             memberId: 'member-id-2',
             side: 'latter',
-            type: 'weight',
+            type: 'weight' as BillShareType,
             value: 1,
             takeRemainder: false,
             dateCreated: new Date(),
             dateUpdated: null,
-            dateDeleted: null,
           },
         ],
       },
@@ -158,7 +155,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * 重新命名帳簿
+   * @summary 重新命名帳簿
    * @example _id "book-id"
    * @example _putBookRequest {
    *   "name": "book-name-new"
@@ -168,7 +165,6 @@ export class BookController extends Controller {
     id: 'book-id',
     code: '123456',
     name: 'book-name-new',
-    dateLastChanged: null,
     dateCreated: new Date(),
     dateUpdated: new Date(),
   })
@@ -181,7 +177,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * 新增分帳
+   * @summary 新增分帳
    * @example _id "book-id"
    * @example _postBookBillRequest {
    *   "date": "2022-09-30T15:58:37.080Z",
@@ -206,7 +202,7 @@ export class BookController extends Controller {
     ver: '1',
     bookId: 'book-id',
     date: new Date(),
-    type: 'income',
+    type: 'income' as BillType,
     descr: 'sample',
     amount: 100,
     memo: 'memo-bill',
@@ -216,29 +212,23 @@ export class BookController extends Controller {
     detail: [
       {
         id: 'bill-share-id',
-        billId: 'bill-id',
-        ver: '1',
         memberId: 'member-id-1',
         side: 'former',
-        type: 'weight',
+        type: 'weight' as BillShareType,
         value: 1,
         takeRemainder: false,
         dateCreated: new Date(),
         dateUpdated: null,
-        dateDeleted: null,
       },
       {
         id: 'bill-share-id',
-        billId: 'bill-id',
-        ver: '1',
         memberId: 'member-id-2',
         side: 'latter',
-        type: 'weight',
+        type: 'weight' as BillShareType,
         value: 1,
         takeRemainder: false,
         dateCreated: new Date(),
         dateUpdated: null,
-        dateDeleted: null,
       },
     ],
   })
@@ -251,7 +241,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * 刪除分帳
+   * @summary 刪除分帳
    * @example _id "book-id"
    * @example _billId "bill-id"
    */
@@ -259,7 +249,7 @@ export class BookController extends Controller {
   @Delete('{id}/bill/{billId}')
   deleteBookIdBill(@Path('id') _id: string, @Path('billId') _billId: string) {}
   /**
-   * 修改分帳
+   * @summary 修改分帳
    * @example _id "book-id"
    * @example _billId "bill-id"
    * @example _putBookBillRequest {
@@ -285,7 +275,7 @@ export class BookController extends Controller {
     ver: '1',
     bookId: 'book-id',
     date: new Date(),
-    type: 'income',
+    type: 'income' as BillType,
     descr: 'sample',
     amount: 100,
     memo: 'memo-bill',
@@ -295,29 +285,23 @@ export class BookController extends Controller {
     detail: [
       {
         id: 'bill-share-id',
-        billId: 'bill-id',
-        ver: '1',
         memberId: 'member-id-1',
         side: 'former',
-        type: 'weight',
+        type: 'weight' as BillShareType,
         value: 1,
         takeRemainder: false,
         dateCreated: new Date(),
         dateUpdated: null,
-        dateDeleted: null,
       },
       {
         id: 'bill-share-id',
-        billId: 'bill-id',
-        ver: '1',
         memberId: 'member-id-2',
         side: 'latter',
-        type: 'weight',
+        type: 'weight' as BillShareType,
         value: 1,
         takeRemainder: false,
         dateCreated: new Date(),
         dateUpdated: null,
-        dateDeleted: null,
       },
     ],
   })
@@ -331,7 +315,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * 新增帳簿成員
+   * @summary 新增帳簿成員
    * @example _id "book-id"
    * @example _postBookMemberRequest {
    *   "nickname": "Einstein"
@@ -341,6 +325,8 @@ export class BookController extends Controller {
     id: 'member-id',
     bookId: 'book-id',
     nickname: 'Einstein',
+    balance: 100,
+    deletable: false,
     dateCreated: new Date(),
     dateUpdated: null,
   })
@@ -353,7 +339,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * 刪除帳本成員
+   * @summary 刪除帳本成員
    * @example _id "book-id"
    * @example _mid "member-id"
    */
@@ -361,7 +347,7 @@ export class BookController extends Controller {
   @Delete('{id}/member/{mid}')
   deleteBookIdMember(@Path('id') _id: string, @Path('mid') _mid: string) {}
   /**
-   * 重新命名帳本成員
+   * @summary 重新命名帳本成員
    * @example _id "book-id"
    * @example _mid "member-id"
    * @example _putBookMemberRequest {
@@ -372,6 +358,8 @@ export class BookController extends Controller {
     id: 'member-id',
     bookId: 'book-id',
     nickname: 'Albert',
+    balance: 100,
+    deletable: false,
     dateCreated: new Date(),
     dateUpdated: null,
   })
@@ -385,7 +373,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * 取得指定帳簿名稱
+   * @summary 取得指定帳簿名稱
    * @example _id "book-id"
    */
   @Example<GetBookNameResponse>({
@@ -397,7 +385,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * 新增轉帳
+   * @summary 新增轉帳
    * @example _id "book-id"
    * @example _postBookTransferRequest {
    *   "date": "2022-09-30T15:58:37.080Z",
@@ -429,7 +417,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * 刪除轉帳
+   * @summary 刪除轉帳
    * @example _id "book-id"
    * @example _tid "transfer-id"
    */
@@ -437,7 +425,7 @@ export class BookController extends Controller {
   @Delete('{id}/transfer/{tid}')
   deleteBookIdTransfer(@Path('id') _id: string, @Path('tid') _tid: string) {}
   /**
-   * 修改轉帳
+   * @summary 修改轉帳
    * @example _id "book-id"
    * @example _tid "transfer-id"
    * @example _putBookTransferRequest {
