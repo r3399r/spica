@@ -1,5 +1,4 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, Generated } from 'typeorm';
-import { BillShareType } from 'src/constant/Book';
 import { BillShare } from './BillShare';
 
 @Entity({ name: 'bill_share' })
@@ -17,17 +16,8 @@ export class BillShareEntity implements BillShare {
   @Column({ type: 'int8', name: 'member_id' })
   memberId!: string;
 
-  @Column({ type: 'text' })
-  side!: string;
-
-  @Column({ type: 'text' })
-  type!: BillShareType;
-
   @Column({ type: 'float' })
-  value!: number;
-
-  @Column({ type: 'bool', name: 'take_remainder' })
-  takeRemainder!: boolean;
+  amount!: number;
 
   @Column({ type: 'timestamp', name: 'date_created', default: null })
   dateCreated!: Date;

@@ -1,5 +1,4 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
-import { BillShareType } from 'src/constant/Book';
 import { ViewBillShare } from './ViewBillShare';
 
 @ViewEntity({ name: 'v_bill_share' })
@@ -17,16 +16,7 @@ export class ViewBillShareEntity implements ViewBillShare {
   memberId!: string;
 
   @ViewColumn()
-  side!: string;
-
-  @ViewColumn()
-  type!: BillShareType;
-
-  @ViewColumn()
-  value!: number;
-
-  @ViewColumn({ name: 'take_remainder' })
-  takeRemainder!: boolean;
+  amount!: number;
 
   @ViewColumn({ name: 'date_created' })
   dateCreated!: Date;

@@ -823,35 +823,20 @@ Resources:
                 "type": {"type": "string", "enum": ["income","expense"]},
                 "descr": {"type": "string"},
                 "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
-                "former": {
+                "detail": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
                       "id": {"type": "string"},
-                      "type": {"type": "string", "enum": ["weight","amount","pct"]},
-                      "value": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
-                      "takeRemainder": {"type": "boolean"}
+                      "amount": {"type": "number"},
                     },
-                    "required": ["id","type","value"]
-                  }
-                },
-                "latter": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {"type": "string"},
-                      "type": {"type": "string", "enum": ["weight","amount","pct"]},
-                      "value": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
-                      "takeRemainder": {"type": "boolean"}
-                    },
-                    "required": ["id","type","value"]
+                    "required": ["id","amount"]
                   }
                 },
                 "memo": {"type": "string"}
               },
-              "required": ["date","type","descr","amount","former","latter"]
+              "required": ["date","type","descr","amount","detail"]
             },
             "putBookBill": {
               "type": "object",
@@ -860,35 +845,20 @@ Resources:
                 "type": {"type": "string", "enum": ["income","expense"]},
                 "descr": {"type": "string"},
                 "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
-                "former": {
+                "detail": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
                       "id": {"type": "string"},
-                      "type": {"type": "string"},
-                      "value": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
-                      "takeRemainder": {"type": "boolean"}
+                      "amount": {"type": "number"},
                     },
-                    "required": ["id","type","value"]
-                  }
-                },
-                "latter": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {"type": "string"},
-                      "type": {"type": "string"},
-                      "value": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
-                      "takeRemainder": {"type": "boolean"}
-                    },
-                    "required": ["id","type","value"]
+                    "required": ["id","amount"]
                   }
                 },
                 "memo": {"type": "string"}
               },
-              "required": ["date","type","descr","amount","former","latter"]
+              "required": ["date","type","descr","amount","detail"]
             },
             "postBookMember": {
               "type": "object",

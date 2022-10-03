@@ -6,10 +6,7 @@ select
     bs.bill_id,
     bs.ver,
     bs.member_id,
-    bs.side,
-    bs.type,
-    bs.value,
-    bs.take_remainder,
+    bs.amount,
     bs.date_created,
     bs.date_updated,
     b.book_id

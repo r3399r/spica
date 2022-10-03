@@ -9,7 +9,7 @@ import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
 import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
 import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
-import { BillShareType, BillType } from 'src/constant/Book';
+import { BillType } from 'src/constant/Book';
 import {
   GetBookIdResponse,
   GetBookNameResponse,
@@ -241,74 +241,23 @@ export class BookService {
     await this.memberAccess.hardDeleteById(mid);
   }
 
-  private splitDetail(amount: number, data: ShareDetail[]) {
-    const memberWeight = data.filter((v) => v.type === BillShareType.Weight);
-    const memberAmount = data.filter((v) => v.type === BillShareType.Amount);
-    const memberPct = data.filter((v) => v.type === BillShareType.Pct);
+  private validateDetail(amount: number, data: ShareDetail[]) {
+    if (!BigNumber.sum(...data.map((v) => v.amount)).eq(0))
+      throw new BadRequestError('sum should be 0');
 
-    memberPct.forEach((v) => {
-      if (v.value > 100) throw new BadRequestError('% shoulde less than 100');
-    });
+    if (
+      !BigNumber.sum(
+        ...data.filter((v) => v.amount > 0).map((v) => v.amount)
+      ).eq(amount)
+    )
+      throw new BadRequestError('positive sum not consistent');
 
-    // avoid multiple remainder taker
-    const numTakeRemainder = data.filter(
-      (v) => v.takeRemainder === true
-    ).length;
-    if (numTakeRemainder > 1)
-      throw new BadRequestError('only 0 or 1 person could take remainder');
-
-    // check input totoal is reasonable
-    let inputTotal = bn(0);
-    const splitAmount = memberAmount.map((v) => {
-      inputTotal = inputTotal.plus(v.value);
-
-      return {
-        id: v.id,
-        type: v.type,
-        value: v.value,
-        amount: bn(v.value),
-      };
-    });
-    const splitPct = memberPct.map((v) => {
-      const splited = bn(amount).times(v.value).div(100).dp(2);
-      inputTotal = inputTotal.plus(splited);
-
-      return {
-        id: v.id,
-        type: v.type,
-        value: v.value,
-        amount: splited,
-      };
-    });
-
-    if (inputTotal.gt(amount))
-      throw new BadRequestError('input total exceeds amount');
-    if (inputTotal.lt(amount) && memberWeight.length === 0)
-      throw new BadRequestError('may need someone to take the rest amount');
-
-    const restAmount = bn(amount).minus(inputTotal);
-    const totalWeights = BigNumber.sum(...memberWeight.map((v) => bn(v.value)));
-
-    let weightTotal = bn(0);
-    const splitedWeight = memberWeight.map((v) => {
-      const splited = restAmount.times(v.value).div(totalWeights).dp(2);
-      weightTotal = weightTotal.plus(splited);
-
-      return { id: v.id, type: v.type, value: v.value, amount: splited };
-    });
-
-    const remainder = restAmount.minus(weightTotal);
-    const takeRemainder = data.find((v) => v.takeRemainder === true);
-    if (!remainder.eq(0) && numTakeRemainder === 0)
-      throw new BadRequestError('no one takes the remainder');
-
-    const splitCombined = [...splitAmount, ...splitPct, ...splitedWeight];
-
-    return splitCombined.map((v) => ({
-      ...v,
-      amount: takeRemainder?.id === v.id ? v.amount.plus(remainder) : v.amount,
-      takeRemainder: takeRemainder?.id === v.id,
-    }));
+    if (
+      !BigNumber.sum(...data.filter((v) => v.amount < 0).map((v) => v.amount))
+        .negated()
+        .eq(amount)
+    )
+      throw new BadRequestError('negative sum not consistent');
   }
 
   private async updateMemberBalance(id: string, amount: number | BigNumber) {
@@ -319,6 +268,8 @@ export class BookService {
       deletable: false,
     };
     await this.memberAccess.update(newMember);
+
+    return newMember;
   }
 
   public async addBill(
@@ -341,24 +292,17 @@ export class BookService {
       bill.memo = data.memo ?? null;
 
       const newBill = await this.billAccess.save(bill);
-      const splitFormer = this.splitDetail(data.amount, data.former);
-      const splitLatter = this.splitDetail(data.amount, data.latter);
+      this.validateDetail(data.amount, data.detail);
 
-      const detailFormer = await Promise.all(
-        splitFormer.map(async (v) => {
+      const res = await Promise.all(
+        data.detail.map(async (v) => {
           const billShare = new BillShareEntity();
           billShare.billId = newBill.id;
           billShare.ver = '1';
           billShare.memberId = v.id;
-          billShare.side = 'former';
-          billShare.type = v.type;
-          billShare.value = v.value;
-          billShare.takeRemainder = v.takeRemainder;
+          billShare.amount = v.amount;
 
-          await this.updateMemberBalance(
-            v.id,
-            data.type === BillType.Expense ? v.amount : v.amount.negated()
-          );
+          const member = await this.updateMemberBalance(v.id, v.amount);
           const newBillShare = await this.billShareAccess.save(billShare);
           const {
             billId: ignoredBillId,
@@ -366,38 +310,16 @@ export class BookService {
             ...rest
           } = newBillShare;
 
-          return rest;
-        })
-      );
-      const detailLatter = await Promise.all(
-        splitLatter.map(async (v) => {
-          const billShare = new BillShareEntity();
-          billShare.billId = newBill.id;
-          billShare.ver = '1';
-          billShare.memberId = v.id;
-          billShare.side = 'latter';
-          billShare.type = v.type;
-          billShare.value = v.value;
-          billShare.takeRemainder = v.takeRemainder;
-
-          await this.updateMemberBalance(
-            v.id,
-            data.type === BillType.Expense ? v.amount.negated() : v.amount
-          );
-          const newBillShare = await this.billShareAccess.save(billShare);
-          const {
-            billId: ignoredBillId,
-            ver: ignoredVer,
-            ...rest
-          } = newBillShare;
-
-          return rest;
+          return { member, detail: rest };
         })
       );
 
       await this.dbAccess.commitTransaction();
 
-      return { ...newBill, detail: [...detailFormer, ...detailLatter] };
+      return {
+        members: res.map((v) => v.member),
+        transaction: { ...newBill, detail: res.map((v) => v.detail) },
+      };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
@@ -415,42 +337,9 @@ export class BookService {
       oldBill.ver
     );
 
-    const oldFormer: ShareDetail[] = [];
-    const oldLatter: ShareDetail[] = [];
-    oldBillShares.forEach((v) => {
-      if (v.side === 'former')
-        oldFormer.push({
-          id: v.memberId,
-          type: v.type,
-          value: v.value,
-          takeRemainder: v.takeRemainder,
-        });
-      else
-        oldLatter.push({
-          id: v.memberId,
-          type: v.type,
-          value: v.value,
-          takeRemainder: v.takeRemainder,
-        });
-    });
-
-    const oldSpiltFormer = this.splitDetail(oldBill.amount, oldFormer);
-    const oldSpiltLatter = this.splitDetail(oldBill.amount, oldLatter);
-
     await Promise.all(
-      oldSpiltFormer.map(async (v) => {
-        await this.updateMemberBalance(
-          v.id,
-          oldBill.type === BillType.Expense ? v.amount.negated() : v.amount
-        );
-      })
-    );
-    await Promise.all(
-      oldSpiltLatter.map(async (v) => {
-        await this.updateMemberBalance(
-          v.id,
-          oldBill.type === BillType.Expense ? v.amount : v.amount.negated()
-        );
+      oldBillShares.map(async (v) => {
+        await this.updateMemberBalance(v.memberId, bn(v.amount).negated());
       })
     );
   }
@@ -480,24 +369,17 @@ export class BookService {
       bill.memo = data.memo ?? null;
 
       const newBill = await this.billAccess.save(bill);
-      const splitFormer = this.splitDetail(data.amount, data.former);
-      const splitLatter = this.splitDetail(data.amount, data.latter);
+      this.validateDetail(data.amount, data.detail);
 
-      const detailFormer = await Promise.all(
-        splitFormer.map(async (v) => {
+      const res = await Promise.all(
+        data.detail.map(async (v) => {
           const billShare = new BillShareEntity();
-          billShare.billId = billId;
+          billShare.billId = newBill.id;
           billShare.ver = bn(oldBill.ver).plus(1).toString();
           billShare.memberId = v.id;
-          billShare.side = 'former';
-          billShare.type = v.type;
-          billShare.value = v.value;
-          billShare.takeRemainder = v.takeRemainder;
+          billShare.amount = v.amount;
 
-          await this.updateMemberBalance(
-            v.id,
-            data.type === BillType.Expense ? v.amount : v.amount.negated()
-          );
+          const member = await this.updateMemberBalance(v.id, v.amount);
           const newBillShare = await this.billShareAccess.save(billShare);
           const {
             billId: ignoredBillId,
@@ -505,38 +387,16 @@ export class BookService {
             ...rest
           } = newBillShare;
 
-          return rest;
-        })
-      );
-      const detailLatter = await Promise.all(
-        splitLatter.map(async (v) => {
-          const billShare = new BillShareEntity();
-          billShare.billId = billId;
-          billShare.ver = bn(oldBill.ver).plus(1).toString();
-          billShare.memberId = v.id;
-          billShare.side = 'latter';
-          billShare.type = v.type;
-          billShare.value = v.value;
-          billShare.takeRemainder = v.takeRemainder;
-
-          await this.updateMemberBalance(
-            v.id,
-            data.type === BillType.Expense ? v.amount.negated() : v.amount
-          );
-          const newBillShare = await this.billShareAccess.save(billShare);
-          const {
-            billId: ignoredBillId,
-            ver: ignoredVer,
-            ...rest
-          } = newBillShare;
-
-          return rest;
+          return { member, detail: rest };
         })
       );
 
       await this.dbAccess.commitTransaction();
 
-      return { ...newBill, detail: [...detailFormer, ...detailLatter] };
+      return {
+        members: res.map((v) => v.member),
+        transaction: { ...newBill, detail: res.map((v) => v.detail) },
+      };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
@@ -577,8 +437,11 @@ export class BookService {
       transfer.dstMemberId = data.dstMemberId;
       transfer.memo = data.memo ?? null;
 
-      await this.updateMemberBalance(data.srcMemberId, bn(data.amount));
-      await this.updateMemberBalance(
+      const member1 = await this.updateMemberBalance(
+        data.srcMemberId,
+        bn(data.amount)
+      );
+      const member2 = await this.updateMemberBalance(
         data.dstMemberId,
         bn(data.amount).negated()
       );
@@ -586,7 +449,7 @@ export class BookService {
 
       await this.dbAccess.commitTransaction();
 
-      return res;
+      return { members: [member1, member2], transaction: res };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
@@ -628,8 +491,11 @@ export class BookService {
       newTransfer.dstMemberId = data.dstMemberId;
       newTransfer.memo = data.memo ?? null;
 
-      await this.updateMemberBalance(data.srcMemberId, bn(data.amount));
-      await this.updateMemberBalance(
+      const member1 = await this.updateMemberBalance(
+        data.srcMemberId,
+        bn(data.amount)
+      );
+      const member2 = await this.updateMemberBalance(
         data.dstMemberId,
         bn(data.amount).negated()
       );
@@ -637,7 +503,7 @@ export class BookService {
 
       await this.dbAccess.commitTransaction();
 
-      return res;
+      return { members: [member1, member2], transaction: res };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;

@@ -1,14 +1,9 @@
-import { BillShareType } from 'src/constant/Book';
-
 export type BillShare = {
   id: string;
   billId: string;
   ver: string;
   memberId: string;
-  side: string;
-  type: BillShareType;
-  value: number;
-  takeRemainder: boolean;
+  amount: number;
   dateCreated: Date | null;
   dateUpdated: Date | null;
 };

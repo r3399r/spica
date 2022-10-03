@@ -1,13 +1,11 @@
-import { BillShareType, BillType } from 'src/constant/Book';
+import { BillType } from 'src/constant/Book';
 import { Bill } from 'src/model/entity/Bill';
 import { BillShare } from 'src/model/entity/BillShare';
 import { Transfer } from 'src/model/entity/Transfer';
 
 export type ShareDetail = {
   id: string;
-  type: BillShareType;
-  value: number;
-  takeRemainder?: boolean;
+  amount: number;
 };
 
 export type BillData = {
@@ -15,8 +13,7 @@ export type BillData = {
   type: BillType;
   descr: string;
   amount: number;
-  former: ShareDetail[];
-  latter: ShareDetail[];
+  detail: ShareDetail[];
   memo?: string;
 };
 
