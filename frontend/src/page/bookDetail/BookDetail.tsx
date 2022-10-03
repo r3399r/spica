@@ -28,6 +28,7 @@ const BookDetail = () => {
               <Button
                 variant="contained"
                 type="button"
+                color="warning"
                 onClick={() => navigate(`${Page.Book}/${id}/setting`)}
               >
                 設定
@@ -35,10 +36,19 @@ const BookDetail = () => {
             </div>
           </div>
           <h2>餘額</h2>
+          {book.members.length === 0 && <div>目前帳本中無任何成員，請至設定新增</div>}
           {book.members.map((v) => (
             <div key={v.id}>{`${v.nickname}: $${v.balance}`}</div>
           ))}
           <h2>帳目清單</h2>
+          <Button
+            variant="contained"
+            color="success"
+            type="button"
+            onClick={() => navigate(`${Page.Book}/${id}/fill`)}
+          >
+            新增帳目
+          </Button>
         </div>
       )}
     </div>

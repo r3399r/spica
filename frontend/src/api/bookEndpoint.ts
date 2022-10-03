@@ -7,6 +7,8 @@ import {
   PostBookMemberResponse,
   PostBookRequest,
   PostBookResponse,
+  PostBookTransferRequest,
+  PostBookTransferResponse,
   PutBookMemberRequest,
   PutBookMemberResponse,
   PutBookRequest,
@@ -45,6 +47,12 @@ const putBookIdName = async (id: string, mid: string, data: PutBookMemberRequest
     headers: { 'x-api-code': code },
   });
 
+const postBookIdTransfer = async (id: string, data: PostBookTransferRequest, code: string) =>
+  await http.post<PostBookTransferResponse>(`book/${id}/transfer`, {
+    data,
+    headers: { 'x-api-code': code },
+  });
+
 export default {
   getBook,
   postBook,
@@ -54,4 +62,5 @@ export default {
   deleteBookIdMember,
   getBookIdName,
   putBookIdName,
+  postBookIdTransfer,
 };
