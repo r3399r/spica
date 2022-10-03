@@ -9,6 +9,7 @@ import { NewMemberForm } from 'src/model/Form';
 import { RootState } from 'src/redux/store';
 import { addMember, deleteMember, getBookById } from 'src/service/bookService';
 import RenameBookModal from './component/RenameBookModal';
+import RenameMemberModal from './component/RenameMemberModal';
 
 const BookSetting = () => {
   const { id } = useParams();
@@ -17,6 +18,7 @@ const BookSetting = () => {
   const [book, setBook] = useState<Book>();
   const { bookList } = useSelector((rootState: RootState) => rootState.book);
   const [renameBookOpen, setRenameBookOpen] = useState<boolean>(false);
+  const [renameMemberId, setRenameMemberId] = useState<string>();
   const { register, handleSubmit, control, reset } = useForm<NewMemberForm>();
   const nickname = useWatch({
     control,
@@ -67,7 +69,7 @@ const BookSetting = () => {
           {book.members.map((v) => (
             <div key={v.id} style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
               <div>{v.nickname}</div>
-              <Button variant="contained" type="button">
+              <Button variant="contained" type="button" onClick={() => setRenameMemberId(v.id)}>
                 重新命名
               </Button>
               <Button
@@ -94,6 +96,12 @@ const BookSetting = () => {
             open={renameBookOpen}
             onClose={() => setRenameBookOpen(false)}
             bookId={book.id}
+          />
+          <RenameMemberModal
+            open={renameMemberId !== undefined}
+            onClose={() => setRenameMemberId(undefined)}
+            bookId={book.id}
+            memberId={renameMemberId ?? 'xx'}
           />
         </div>
       )}

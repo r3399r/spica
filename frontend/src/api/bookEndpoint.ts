@@ -7,6 +7,8 @@ import {
   PostBookMemberResponse,
   PostBookRequest,
   PostBookResponse,
+  PutBookMemberRequest,
+  PutBookMemberResponse,
   PutBookRequest,
   PutBookResponse,
 } from '@y-celestial/spica-service';
@@ -37,6 +39,12 @@ const deleteBookIdMember = async (id: string, mid: string, code: string) =>
 
 const getBookIdName = async (id: string) => await http.get<GetBookNameResponse>(`book/${id}/name`);
 
+const putBookIdName = async (id: string, mid: string, data: PutBookMemberRequest, code: string) =>
+  await http.put<PutBookMemberResponse>(`book/${id}/member/${mid}`, {
+    data,
+    headers: { 'x-api-code': code },
+  });
+
 export default {
   getBook,
   postBook,
@@ -45,4 +53,5 @@ export default {
   postBookIdMember,
   deleteBookIdMember,
   getBookIdName,
+  putBookIdName,
 };
