@@ -31,8 +31,8 @@ export const bookSlice = createSlice({
         name: v.id === action.payload.id ? action.payload.name : v.name,
       }));
     },
-    setBookList: (state: BookState, action: PayloadAction<Book[]>) => {
-      state.bookList = action.payload;
+    updateBookList: (state: BookState, action: PayloadAction<Book>) => {
+      state.bookList = state.bookList.map((v) => (v.id === action.payload.id ? action.payload : v));
     },
     addBook: (state: BookState, action: PayloadAction<Book>) => {
       state.bookList = [...state.bookList, action.payload];
@@ -40,7 +40,7 @@ export const bookSlice = createSlice({
   },
 });
 
-export const { setBookNameList, addBookName, updateBookName, setBookList, addBook } =
+export const { setBookNameList, addBookName, updateBookName, updateBookList, addBook } =
   bookSlice.actions;
 
 export default bookSlice.reducer;

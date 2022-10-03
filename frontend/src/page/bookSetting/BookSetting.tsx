@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Page } from 'src/constant/Page';
 import { NewMemberForm } from 'src/model/Form';
 import { RootState } from 'src/redux/store';
-import { addMember, getBookById } from 'src/service/bookService';
+import { addMember, deleteMember, getBookById } from 'src/service/bookService';
 import RenameBookModal from './component/RenameBookModal';
 
 const BookSetting = () => {
@@ -17,7 +17,7 @@ const BookSetting = () => {
   const [book, setBook] = useState<Book>();
   const { bookList } = useSelector((rootState: RootState) => rootState.book);
   const [renameBookOpen, setRenameBookOpen] = useState<boolean>(false);
-  const { register, handleSubmit, control } = useForm<NewMemberForm>();
+  const { register, handleSubmit, control, reset } = useForm<NewMemberForm>();
   const nickname = useWatch({
     control,
     name: 'nickname',
@@ -41,6 +41,7 @@ const BookSetting = () => {
   const onSubmit = (data: NewMemberForm) => {
     if (!book) return;
     setDisabled(true);
+    reset();
     addMember(book.id, data.nickname).finally(() => setDisabled(false));
   };
 
@@ -64,12 +65,26 @@ const BookSetting = () => {
           <h2>成員</h2>
           {book.members.length === 0 && <div>目前帳本中無任何成員，請新增</div>}
           {book.members.map((v) => (
-            <div key={v.id}>{v.nickname}</div>
+            <div key={v.id} style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
+              <div>{v.nickname}</div>
+              <Button variant="contained" type="button">
+                重新命名
+              </Button>
+              <Button
+                variant="contained"
+                type="button"
+                color="error"
+                disabled={!v.deletable}
+                onClick={() => deleteMember(v.id, v.bookId)}
+              >
+                刪除
+              </Button>
+            </div>
           ))}
           <form style={{ display: 'flex', gap: 10 }} onSubmit={handleSubmit(onSubmit)}>
             <input {...register('nickname')} placeholder="暱稱" autoComplete="off" />
             <Button variant="contained" type="submit" disabled={disabled}>
-              新增成員
+              新增
             </Button>
           </form>
           <h2>與好友共享</h2>

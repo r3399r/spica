@@ -1,5 +1,5 @@
 import bookEndpoint from 'src/api/bookEndpoint';
-import { addBook, addBookName, setBookList, setBookNameList } from 'src/redux/bookSlice';
+import { addBook, addBookName, setBookNameList, updateBookList } from 'src/redux/bookSlice';
 import { dispatch, getState } from 'src/redux/store';
 import { getLocalBooks } from 'src/util/localStorage';
 
@@ -58,8 +58,22 @@ export const addMember = async (id: string, nickname: string) => {
   const book = storeBooks.find((v) => v.id === id);
   if (book === undefined) throw new Error('not found');
 
-  const res = await bookEndpoint.postBookIdMember(id, { nickname }, book.id);
+  const res = await bookEndpoint.postBookIdMember(id, { nickname }, book.code);
 
   const updatedBook = { ...book, members: [...book.members, res.data] };
-  dispatch(setBookList([...storeBooks.filter((v) => v.id !== id), updatedBook]));
+  dispatch(updateBookList(updatedBook));
+};
+
+export const deleteMember = async (memberId: string, bookId: string) => {
+  const {
+    book: { bookList: storeBooks },
+  } = getState();
+  const book = storeBooks.find((v) => v.id === bookId);
+
+  if (book === undefined) throw new Error('not found');
+
+  await bookEndpoint.deleteBookIdMember(bookId, memberId, book.code);
+
+  const updatedBook = { ...book, members: book.members.filter((v) => v.id !== memberId) };
+  dispatch(updateBookList(updatedBook));
 };

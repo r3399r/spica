@@ -30,6 +30,11 @@ const postBookIdMember = async (id: string, data: PostBookMemberRequest, code: s
     headers: { 'x-api-code': code },
   });
 
+const deleteBookIdMember = async (id: string, mid: string, code: string) =>
+  await http.delete(`book/${id}/member/${mid}`, {
+    headers: { 'x-api-code': code },
+  });
+
 const getBookIdName = async (id: string) => await http.get<GetBookNameResponse>(`book/${id}/name`);
 
 export default {
@@ -38,5 +43,6 @@ export default {
   putBookId,
   getBookId,
   postBookIdMember,
+  deleteBookIdMember,
   getBookIdName,
 };

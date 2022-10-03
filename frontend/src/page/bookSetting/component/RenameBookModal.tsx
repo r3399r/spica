@@ -35,7 +35,7 @@ const RenameBookModal = ({ open, onClose, bookId }: Props) => {
     <Modal open={open} onClose={onClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <input {...register('name')} autoComplete="off" />
+          <input {...register('name')} autoComplete="off" style={{ border: '1px solid black' }} />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 20 }}>
           <Button variant="outlined" color="error" onClick={onClose} type="button">
