@@ -20,20 +20,27 @@ const BookDetail = () => {
       <Button variant="contained" type="button" onClick={() => navigate(Page.Book)}>
         回到清單
       </Button>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h1>{book?.name}</h1>
+      {book && (
         <div>
-          <Button
-            variant="contained"
-            type="button"
-            onClick={() => navigate(`${Page.Book}/${id}/setting`)}
-          >
-            設定
-          </Button>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <h1>{book.name}</h1>
+            <div>
+              <Button
+                variant="contained"
+                type="button"
+                onClick={() => navigate(`${Page.Book}/${id}/setting`)}
+              >
+                設定
+              </Button>
+            </div>
+          </div>
+          <h2>餘額</h2>
+          {book.members.map((v) => (
+            <div key={v.id}>{`${v.nickname}: $${v.balance}`}</div>
+          ))}
+          <h2>帳目清單</h2>
         </div>
-      </div>
-      <h2>餘額</h2>
-      <h2>帳目清單</h2>
+      )}
     </div>
   );
 };
