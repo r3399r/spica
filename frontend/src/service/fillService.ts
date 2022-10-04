@@ -1,6 +1,7 @@
 import bookEndpoint from 'src/api/bookEndpoint';
 import { AddTransferForm } from 'src/model/Form';
-import { getState } from 'src/redux/store';
+import { addTransactions, updateMembers } from 'src/redux/bookSlice';
+import { dispatch, getState } from 'src/redux/store';
 
 export const addTransfer = async (bookId: string, formData: AddTransferForm) => {
   const {
@@ -9,7 +10,7 @@ export const addTransfer = async (bookId: string, formData: AddTransferForm) => 
   const book = storeBooks.find((v) => v.id === bookId);
   if (book === undefined) throw new Error('not found');
 
-  await bookEndpoint.postBookIdTransfer(
+  const res = await bookEndpoint.postBookIdTransfer(
     bookId,
     {
       date: formData.date.toISOString(),
@@ -20,13 +21,6 @@ export const addTransfer = async (bookId: string, formData: AddTransferForm) => 
     },
     book.code,
   );
-
-  // const updatedBook = { ...book,
-  //     members:book.members.map(v=>{
-  //         if(v.id===formData.from) return {...v,balance:v.balance+Number(formData.amount),deletable:false}
-  //         if(v.id===formData.to) return {...v,balance:v.balance-Number(formData.amount),deletable:false}
-  //         return v
-  //     }),
-  //      transactions:[...book.transactions,res.data] };
-  // dispatch(updateBookList(updatedBook));
+  dispatch(updateMembers(res.data.members));
+  dispatch(addTransactions([res.data.transaction]));
 };

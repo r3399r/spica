@@ -32,7 +32,7 @@ const Transfer = () => {
 
   const onSubmit = () => {
     if (book === undefined) return;
-    addTransfer(book.id, state);
+    addTransfer(book.id, state).then(() => navigate(`${Page.Book}/${id}`));
   };
 
   return (

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   GetBookIdResponse as Book,
+  GetBookIdResponse,
   GetBookResponse,
   PutBookMemberResponse,
 } from '@y-celestial/spica-service';
@@ -51,6 +52,31 @@ export const bookSlice = createSlice({
         };
       });
     },
+    updateMembers: (state: BookState, action: PayloadAction<PutBookMemberResponse[]>) => {
+      for (const member of action.payload)
+        state.bookList = state.bookList.map((v) => {
+          if (v.id !== member.bookId) return v;
+
+          return {
+            ...v,
+            members: v.members.map((o) => (o.id === member.id ? member : o)),
+          };
+        });
+    },
+    addTransactions: (
+      state: BookState,
+      action: PayloadAction<GetBookIdResponse['transactions']>,
+    ) => {
+      for (const transaction of action.payload)
+        state.bookList = state.bookList.map((v) => {
+          if (v.id !== transaction.bookId) return v;
+
+          return {
+            ...v,
+            transactions: [transaction, ...v.transactions],
+          };
+        });
+    },
   },
 });
 
@@ -61,6 +87,8 @@ export const {
   updateBookList,
   addBook,
   updateMember,
+  updateMembers,
+  addTransactions,
 } = bookSlice.actions;
 
 export default bookSlice.reducer;

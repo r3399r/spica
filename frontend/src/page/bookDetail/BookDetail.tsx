@@ -1,5 +1,6 @@
 import { Button } from '@mui/material';
 import { GetBookIdResponse as Book } from '@y-celestial/spica-service';
+import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Page } from 'src/constant/Page';
@@ -49,6 +50,47 @@ const BookDetail = () => {
           >
             新增帳目
           </Button>
+          {book.transactions.map((v) => {
+            if ('srcMemberId' in v)
+              return (
+                <div>
+                  <div style={{ height: 1, background: 'black' }} />
+                  <div>{format(new Date(v.date), 'yyyy-MM-dd HH:mm')}</div>
+                  <div>${v.amount}</div>
+                  <div>{`${book.members.find((o) => o.id === v.srcMemberId)?.nickname}→${
+                    book.members.find((o) => o.id === v.dstMemberId)?.nickname
+                  }`}</div>
+                </div>
+              );
+            else
+              return (
+                <div>
+                  <div style={{ height: 1, background: 'black' }} />
+                  <div>{format(new Date(v.date), 'yyyy-MM-dd HH:mm')}</div>
+                  <div>${v.amount}</div>
+                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                    <div>先墊:</div>
+                    {v.detail
+                      .filter((o) => o.amount > 0)
+                      .map((o) => (
+                        <div key={o.id}>{`${
+                          book.members.find((m) => m.id === o.memberId)?.nickname
+                        } ${o.amount}`}</div>
+                      ))}
+                  </div>
+                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                    <div>待付:</div>
+                    {v.detail
+                      .filter((o) => o.amount < 0)
+                      .map((o) => (
+                        <div key={o.id}>{`${
+                          book.members.find((m) => m.id === o.memberId)?.nickname
+                        } ${o.amount * -1}`}</div>
+                      ))}
+                  </div>
+                </div>
+              );
+          })}
         </div>
       )}
     </div>
