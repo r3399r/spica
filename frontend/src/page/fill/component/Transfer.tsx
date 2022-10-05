@@ -6,19 +6,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import DatetimeInput from 'src/component/DatetimeInput';
 import Input from 'src/component/Input';
 import { Page } from 'src/constant/Page';
-import { AddTransferForm } from 'src/model/Form';
+import { TransferForm } from 'src/model/Form';
 import { RootState } from 'src/redux/store';
 import { addTransfer } from 'src/service/fillService';
 
 const Transfer = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { bookList } = useSelector((rootState: RootState) => rootState.book);
   const [book, setBook] = useState<Book>();
   const [state, setState] = useReducer(
-    (prev: AddTransferForm, now: Partial<AddTransferForm>) => ({ ...prev, ...now }),
+    (prev: TransferForm, now: Partial<TransferForm>) => ({ ...prev, ...now }),
     { date: new Date(), amount: '', from: '', to: '', memo: '' },
   );
-  const { bookList } = useSelector((rootState: RootState) => rootState.book);
 
   useEffect(() => {
     const res = bookList.find((v) => v.id === id);

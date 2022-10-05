@@ -9,3 +9,13 @@ export const getMinIndex = (array: BN[]) => {
     return r;
   }, []);
 };
+
+export const getMaxIndex = (array: BN[]) => {
+  const max = BN.maximum(...array);
+
+  return array.reduce<number[]>((r, a, i) => {
+    a.eq(max) && r.push(i);
+
+    return r;
+  }, []);
+};

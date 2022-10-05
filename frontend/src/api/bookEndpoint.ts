@@ -3,6 +3,8 @@ import {
   GetBookNameResponse,
   GetBookParams,
   GetBookResponse,
+  PostBookBillRequest,
+  PostBookBillResponse,
   PostBookMemberRequest,
   PostBookMemberResponse,
   PostBookRequest,
@@ -27,6 +29,12 @@ const putBookId = async (id: string, data: PutBookRequest, code: string) =>
 
 const getBookId = async (id: string, code: string) =>
   await http.get<GetBookIdResponse>(`book/${id}`, { headers: { 'x-api-code': code } });
+
+const postBookIdBill = async (id: string, data: PostBookBillRequest, code: string) =>
+  await http.post<PostBookBillResponse>(`book/${id}/bill`, {
+    data,
+    headers: { 'x-api-code': code },
+  });
 
 const postBookIdMember = async (id: string, data: PostBookMemberRequest, code: string) =>
   await http.post<PostBookMemberResponse>(`book/${id}/member`, {
@@ -58,6 +66,7 @@ export default {
   postBook,
   putBookId,
   getBookId,
+  postBookIdBill,
   postBookIdMember,
   deleteBookIdMember,
   getBookIdName,

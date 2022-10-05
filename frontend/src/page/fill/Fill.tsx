@@ -1,6 +1,7 @@
 import { Button } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Bill from './component/Bill';
 import Transfer from './component/Transfer';
 
 const Fill = () => {
@@ -20,7 +21,7 @@ const Fill = () => {
           <option value="transfer">轉帳</option>
         </select>
       </div>
-      {type === 'transfer' && <Transfer />}
+      {type === 'transfer' ? <Transfer /> : <Bill type={type} />}
     </div>
   );
 };

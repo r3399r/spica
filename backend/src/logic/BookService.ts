@@ -294,8 +294,30 @@ export class BookService {
       const newBill = await this.billAccess.save(bill);
       this.validateDetail(data.amount, data.detail);
 
-      const res = await Promise.all(
-        data.detail.map(async (v) => {
+      const former = data.detail.filter((v) => v.amount > 0);
+      const latter = data.detail.filter((v) => v.amount < 0);
+
+      const resFormer = await Promise.all(
+        former.map(async (v) => {
+          const billShare = new BillShareEntity();
+          billShare.billId = newBill.id;
+          billShare.ver = '1';
+          billShare.memberId = v.id;
+          billShare.amount = v.amount;
+
+          const member = await this.updateMemberBalance(v.id, v.amount);
+          const newBillShare = await this.billShareAccess.save(billShare);
+          const {
+            billId: ignoredBillId,
+            ver: ignoredVer,
+            ...rest
+          } = newBillShare;
+
+          return { member, detail: rest };
+        })
+      );
+      const resLatter = await Promise.all(
+        latter.map(async (v) => {
           const billShare = new BillShareEntity();
           billShare.billId = newBill.id;
           billShare.ver = '1';
@@ -317,8 +339,11 @@ export class BookService {
       await this.dbAccess.commitTransaction();
 
       return {
-        members: res.map((v) => v.member),
-        transaction: { ...newBill, detail: res.map((v) => v.detail) },
+        members: [...resFormer, ...resLatter].map((v) => v.member),
+        transaction: {
+          ...newBill,
+          detail: [...resFormer, ...resLatter].map((v) => v.detail),
+        },
       };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
@@ -371,8 +396,30 @@ export class BookService {
       const newBill = await this.billAccess.save(bill);
       this.validateDetail(data.amount, data.detail);
 
-      const res = await Promise.all(
-        data.detail.map(async (v) => {
+      const former = data.detail.filter((v) => v.amount > 0);
+      const latter = data.detail.filter((v) => v.amount < 0);
+
+      const resFormer = await Promise.all(
+        former.map(async (v) => {
+          const billShare = new BillShareEntity();
+          billShare.billId = newBill.id;
+          billShare.ver = bn(oldBill.ver).plus(1).toString();
+          billShare.memberId = v.id;
+          billShare.amount = v.amount;
+
+          const member = await this.updateMemberBalance(v.id, v.amount);
+          const newBillShare = await this.billShareAccess.save(billShare);
+          const {
+            billId: ignoredBillId,
+            ver: ignoredVer,
+            ...rest
+          } = newBillShare;
+
+          return { member, detail: rest };
+        })
+      );
+      const resLatter = await Promise.all(
+        latter.map(async (v) => {
           const billShare = new BillShareEntity();
           billShare.billId = newBill.id;
           billShare.ver = bn(oldBill.ver).plus(1).toString();
@@ -394,8 +441,11 @@ export class BookService {
       await this.dbAccess.commitTransaction();
 
       return {
-        members: res.map((v) => v.member),
-        transaction: { ...newBill, detail: res.map((v) => v.detail) },
+        members: [...resFormer, ...resLatter].map((v) => v.member),
+        transaction: {
+          ...newBill,
+          detail: [...resFormer, ...resLatter].map((v) => v.detail),
+        },
       };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();

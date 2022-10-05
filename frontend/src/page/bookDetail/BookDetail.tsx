@@ -53,7 +53,7 @@ const BookDetail = () => {
           {book.transactions.map((v) => {
             if ('srcMemberId' in v)
               return (
-                <div>
+                <div key={v.id}>
                   <div style={{ height: 1, background: 'black' }} />
                   <div>{format(new Date(v.date), 'yyyy-MM-dd HH:mm')}</div>
                   <div>${v.amount}</div>
@@ -64,14 +64,14 @@ const BookDetail = () => {
               );
             else
               return (
-                <div>
+                <div key={v.id}>
                   <div style={{ height: 1, background: 'black' }} />
                   <div>{format(new Date(v.date), 'yyyy-MM-dd HH:mm')}</div>
-                  <div>${v.amount}</div>
+                  <div>{`${v.type === 'expense' ? '支出' : '收入'}: ${v.descr} $${v.amount}`}</div>
                   <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                    <div>先墊:</div>
+                    <div>先:</div>
                     {v.detail
-                      .filter((o) => o.amount > 0)
+                      .filter((o) => (v.type === 'expense' ? o.amount > 0 : o.amount < 0))
                       .map((o) => (
                         <div key={o.id}>{`${
                           book.members.find((m) => m.id === o.memberId)?.nickname
@@ -79,14 +79,18 @@ const BookDetail = () => {
                       ))}
                   </div>
                   <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                    <div>待付:</div>
+                    <div>待:</div>
                     {v.detail
-                      .filter((o) => o.amount < 0)
+                      .filter((o) => (v.type === 'expense' ? o.amount < 0 : o.amount > 0))
                       .map((o) => (
                         <div key={o.id}>{`${
                           book.members.find((m) => m.id === o.memberId)?.nickname
                         } ${o.amount * -1}`}</div>
                       ))}
+                  </div>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <div>備註:</div>
+                    <div style={{ whiteSpace: 'pre-wrap' }}>{v.memo}</div>
                   </div>
                 </div>
               );
