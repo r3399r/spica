@@ -77,6 +77,20 @@ export const bookSlice = createSlice({
           };
         });
     },
+    updateTransactions: (
+      state: BookState,
+      action: PayloadAction<GetBookIdResponse['transactions']>,
+    ) => {
+      for (const transaction of action.payload)
+        state.bookList = state.bookList.map((v) => {
+          if (v.id !== transaction.bookId) return v;
+
+          return {
+            ...v,
+            transactions: v.transactions.map((o) => (o.id === transaction.id ? transaction : o)),
+          };
+        });
+    },
   },
 });
 
@@ -89,6 +103,7 @@ export const {
   updateMember,
   updateMembers,
   addTransactions,
+  updateTransactions,
 } = bookSlice.actions;
 
 export default bookSlice.reducer;

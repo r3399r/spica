@@ -3,10 +3,11 @@ import { useEffect, useMemo, useState } from 'react';
 import Input from './Input';
 
 type Props = {
+  defaultDate?: Date;
   onChange: (date: Date) => void;
 };
 
-const DatetimeInput = ({ onChange }: Props) => {
+const DatetimeInput = ({ defaultDate, onChange }: Props) => {
   const now = useMemo(() => new Date(), []);
   const [year, setYear] = useState<string>(`${getYear(now)}`);
   const [month, setMonth] = useState<string>(`${getMonth(now) + 1}`);
@@ -19,6 +20,15 @@ const DatetimeInput = ({ onChange }: Props) => {
       new Date(Number(year), Number(month) - 1, Number(day), Number(hours), Number(minutes)),
     );
   }, [year, month, day, hours, minutes]);
+
+  useEffect(() => {
+    if (defaultDate === undefined) return;
+    setYear(`${getYear(defaultDate)}`);
+    setMonth(`${getMonth(defaultDate) + 1}`);
+    setDay(`${getDate(defaultDate)}`);
+    setHours(`${getHours(defaultDate)}`);
+    setMinutes(`${getMinutes(defaultDate)}`);
+  }, [defaultDate]);
 
   return (
     <div>

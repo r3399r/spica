@@ -13,6 +13,7 @@ import {
   Tags,
 } from 'tsoa';
 import {
+  BillType,
   GetBookIdResponse,
   GetBookNameResponse,
   GetBookResponse,
@@ -33,10 +34,6 @@ import {
   PutBookTransferRequest,
   PutBookTransferResponse,
 } from '@y-celestial/spica-service';
-import {
-  BillShareType,
-  BillType,
-} from '@y-celestial/spica-service/lib/src/constant/Book';
 
 @Route('book')
 @Tags('帳簿')
@@ -115,20 +112,14 @@ export class BookController extends Controller {
           {
             id: 'bill-share-id',
             memberId: 'member-id-1',
-            side: 'former',
-            type: 'weight' as BillShareType,
-            value: 1,
-            takeRemainder: false,
+            amount: 50,
             dateCreated: new Date(),
             dateUpdated: null,
           },
           {
             id: 'bill-share-id',
             memberId: 'member-id-2',
-            side: 'latter',
-            type: 'weight' as BillShareType,
-            value: 1,
-            takeRemainder: false,
+            amount: 50,
             dateCreated: new Date(),
             dateUpdated: null,
           },
@@ -198,39 +189,46 @@ export class BookController extends Controller {
    * }
    */
   @Example<PostBookBillResponse>({
-    id: 'bill-id',
-    ver: '1',
-    bookId: 'book-id',
-    date: new Date(),
-    type: 'income' as BillType,
-    descr: 'sample',
-    amount: 100,
-    memo: 'memo-bill',
-    dateCreated: new Date(),
-    dateUpdated: null,
-    dateDeleted: null,
-    detail: [
+    members: [
       {
-        id: 'bill-share-id',
-        memberId: 'member-id-1',
-        side: 'former',
-        type: 'weight' as BillShareType,
-        value: 1,
-        takeRemainder: false,
-        dateCreated: new Date(),
-        dateUpdated: null,
-      },
-      {
-        id: 'bill-share-id',
-        memberId: 'member-id-2',
-        side: 'latter',
-        type: 'weight' as BillShareType,
-        value: 1,
-        takeRemainder: false,
+        id: 'member-id-1',
+        bookId: 'book-id',
+        nickname: 'nickname',
+        balance: 50,
+        deletable: false,
         dateCreated: new Date(),
         dateUpdated: null,
       },
     ],
+    transaction: {
+      id: 'bill-id',
+      ver: '1',
+      bookId: 'book-id',
+      date: new Date(),
+      type: 'income' as BillType,
+      descr: 'sample',
+      amount: 100,
+      memo: 'memo-bill',
+      dateCreated: new Date(),
+      dateUpdated: null,
+      dateDeleted: null,
+      detail: [
+        {
+          id: 'bill-share-id',
+          memberId: 'member-id-1',
+          amount: 50,
+          dateCreated: new Date(),
+          dateUpdated: null,
+        },
+        {
+          id: 'bill-share-id',
+          memberId: 'member-id-2',
+          amount: 50,
+          dateCreated: new Date(),
+          dateUpdated: null,
+        },
+      ],
+    },
   })
   @Security('api_token')
   @Post('{id}/bill')
@@ -271,39 +269,46 @@ export class BookController extends Controller {
    * }
    */
   @Example<PutBookBillResponse>({
-    id: 'bill-id',
-    ver: '1',
-    bookId: 'book-id',
-    date: new Date(),
-    type: 'income' as BillType,
-    descr: 'sample',
-    amount: 100,
-    memo: 'memo-bill',
-    dateCreated: new Date(),
-    dateUpdated: null,
-    dateDeleted: null,
-    detail: [
+    members: [
       {
-        id: 'bill-share-id',
-        memberId: 'member-id-1',
-        side: 'former',
-        type: 'weight' as BillShareType,
-        value: 1,
-        takeRemainder: false,
-        dateCreated: new Date(),
-        dateUpdated: null,
-      },
-      {
-        id: 'bill-share-id',
-        memberId: 'member-id-2',
-        side: 'latter',
-        type: 'weight' as BillShareType,
-        value: 1,
-        takeRemainder: false,
+        id: 'member-id-1',
+        bookId: 'book-id',
+        nickname: 'nickname',
+        balance: 50,
+        deletable: false,
         dateCreated: new Date(),
         dateUpdated: null,
       },
     ],
+    transaction: {
+      id: 'bill-id',
+      ver: '1',
+      bookId: 'book-id',
+      date: new Date(),
+      type: 'income' as BillType,
+      descr: 'sample',
+      amount: 100,
+      memo: 'memo-bill',
+      dateCreated: new Date(),
+      dateUpdated: null,
+      dateDeleted: null,
+      detail: [
+        {
+          id: 'bill-share-id',
+          memberId: 'member-id-1',
+          amount: 50,
+          dateCreated: new Date(),
+          dateUpdated: null,
+        },
+        {
+          id: 'bill-share-id',
+          memberId: 'member-id-2',
+          amount: 50,
+          dateCreated: new Date(),
+          dateUpdated: null,
+        },
+      ],
+    },
   })
   @Security('api_token')
   @Put('{id}/bill/{billId}')
@@ -396,17 +401,30 @@ export class BookController extends Controller {
    * }
    */
   @Example<PostBookTransferResponse>({
-    id: 'bill-id',
-    ver: '1',
-    bookId: 'book-id',
-    date: new Date(),
-    amount: 100,
-    srcMemberId: 'member-id-1',
-    dstMemberId: 'member-id-2',
-    memo: 'memo-transfer',
-    dateCreated: new Date(),
-    dateUpdated: null,
-    dateDeleted: null,
+    members: [
+      {
+        id: 'member-id-1',
+        bookId: 'book-id',
+        nickname: 'nickname',
+        balance: 50,
+        deletable: false,
+        dateCreated: new Date(),
+        dateUpdated: null,
+      },
+    ],
+    transaction: {
+      id: 'bill-id',
+      ver: '1',
+      bookId: 'book-id',
+      date: new Date(),
+      amount: 100,
+      srcMemberId: 'member-id-1',
+      dstMemberId: 'member-id-2',
+      memo: 'memo-transfer',
+      dateCreated: new Date(),
+      dateUpdated: null,
+      dateDeleted: null,
+    },
   })
   @Security('api_token')
   @Post('{id}/transfer')
@@ -437,17 +455,30 @@ export class BookController extends Controller {
    * }
    */
   @Example<PutBookTransferResponse>({
-    id: 'bill-id',
-    ver: '1',
-    bookId: 'book-id',
-    date: new Date(),
-    amount: 100,
-    srcMemberId: 'member-id-1',
-    dstMemberId: 'member-id-2',
-    memo: 'memo-transfer',
-    dateCreated: new Date(),
-    dateUpdated: null,
-    dateDeleted: null,
+    members: [
+      {
+        id: 'member-id-1',
+        bookId: 'book-id',
+        nickname: 'nickname',
+        balance: 50,
+        deletable: false,
+        dateCreated: new Date(),
+        dateUpdated: null,
+      },
+    ],
+    transaction: {
+      id: 'bill-id',
+      ver: '1',
+      bookId: 'book-id',
+      date: new Date(),
+      amount: 100,
+      srcMemberId: 'member-id-1',
+      dstMemberId: 'member-id-2',
+      memo: 'memo-transfer',
+      dateCreated: new Date(),
+      dateUpdated: null,
+      dateDeleted: null,
+    },
   })
   @Security('api_token')
   @Put('{id}/transfer/{tid}')

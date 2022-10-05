@@ -11,10 +11,14 @@ import {
   PostBookResponse,
   PostBookTransferRequest,
   PostBookTransferResponse,
+  PutBookBillRequest,
+  PutBookBillResponse,
   PutBookMemberRequest,
   PutBookMemberResponse,
   PutBookRequest,
   PutBookResponse,
+  PutBookTransferRequest,
+  PutBookTransferResponse,
 } from '@y-celestial/spica-service';
 import http from 'src/util/http';
 
@@ -33,6 +37,17 @@ const getBookId = async (id: string, code: string) =>
 const postBookIdBill = async (id: string, data: PostBookBillRequest, code: string) =>
   await http.post<PostBookBillResponse>(`book/${id}/bill`, {
     data,
+    headers: { 'x-api-code': code },
+  });
+
+const putBookIdBill = async (id: string, bid: string, data: PutBookBillRequest, code: string) =>
+  await http.put<PutBookBillResponse>(`book/${id}/bill/${bid}`, {
+    data,
+    headers: { 'x-api-code': code },
+  });
+
+const deleteBookIdBill = async (id: string, bid: string, code: string) =>
+  await http.delete(`book/${id}/bill/${bid}`, {
     headers: { 'x-api-code': code },
   });
 
@@ -61,15 +76,35 @@ const postBookIdTransfer = async (id: string, data: PostBookTransferRequest, cod
     headers: { 'x-api-code': code },
   });
 
+const putBookIdTransfer = async (
+  id: string,
+  tid: string,
+  data: PutBookTransferRequest,
+  code: string,
+) =>
+  await http.put<PutBookTransferResponse>(`book/${id}/transfer/${tid}`, {
+    data,
+    headers: { 'x-api-code': code },
+  });
+
+const deleteBookIdTransfer = async (id: string, tid: string, code: string) =>
+  await http.delete(`book/${id}/transfer/${tid}`, {
+    headers: { 'x-api-code': code },
+  });
+
 export default {
   getBook,
   postBook,
   putBookId,
   getBookId,
   postBookIdBill,
+  putBookIdBill,
+  deleteBookIdBill,
   postBookIdMember,
   deleteBookIdMember,
   getBookIdName,
   putBookIdName,
   postBookIdTransfer,
+  putBookIdTransfer,
+  deleteBookIdTransfer,
 };

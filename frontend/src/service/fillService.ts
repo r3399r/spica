@@ -1,8 +1,8 @@
-import { BillType } from '@y-celestial/spica-service/lib/src/constant/Book';
+import { BillType } from '@y-celestial/spica-service';
 import { BigNumber } from 'bignumber.js';
 import bookEndpoint from 'src/api/bookEndpoint';
 import { BillForm, TransferForm } from 'src/model/Form';
-import { addTransactions, updateMembers } from 'src/redux/bookSlice';
+import { addTransactions, updateMembers, updateTransactions } from 'src/redux/bookSlice';
 import { dispatch, getState } from 'src/redux/store';
 import { getMaxIndex, getMinIndex } from 'src/util/algorithm';
 import { bn } from 'src/util/bignumber';
@@ -28,6 +28,43 @@ export const addTransfer = async (bookId: string, formData: TransferForm) => {
   );
   dispatch(updateMembers(res.data.members));
   dispatch(addTransactions([res.data.transaction]));
+};
+
+export const updateTransfer = async (
+  bookId: string,
+  transferId: string,
+  formData: TransferForm,
+) => {
+  const {
+    book: { bookList: storeBooks },
+  } = getState();
+  const book = storeBooks.find((v) => v.id === bookId);
+  if (book === undefined) throw new Error('not found');
+
+  const res = await bookEndpoint.putBookIdTransfer(
+    bookId,
+    transferId,
+    {
+      date: formData.date.toISOString(),
+      amount: Number(formData.amount),
+      srcMemberId: formData.from,
+      dstMemberId: formData.to,
+      memo: formData.memo === '' ? undefined : formData.memo,
+    },
+    book.code,
+  );
+  dispatch(updateMembers(res.data.members));
+  dispatch(updateTransactions([res.data.transaction]));
+};
+
+export const deleteTransfer = async (bookId: string, transferId: string) => {
+  const {
+    book: { bookList: storeBooks },
+  } = getState();
+  const book = storeBooks.find((v) => v.id === bookId);
+  if (book === undefined) throw new Error('not found');
+
+  await bookEndpoint.deleteBookIdTransfer(bookId, transferId, book.code);
 };
 
 export const addBill = async (
@@ -63,6 +100,53 @@ export const addBill = async (
   );
   dispatch(updateMembers(res.data.members));
   dispatch(addTransactions([res.data.transaction]));
+};
+
+export const updateBill = async (
+  bookId: string,
+  billId: string,
+  formData: BillForm,
+  former: { id: string; amount: number }[],
+  latter: { id: string; amount: number }[],
+) => {
+  const {
+    book: { bookList: storeBooks },
+  } = getState();
+  const book = storeBooks.find((v) => v.id === bookId);
+  if (book === undefined) throw new Error('not found');
+
+  const res = await bookEndpoint.putBookIdBill(
+    bookId,
+    billId,
+    {
+      date: formData.date.toISOString(),
+      type: formData.type as BillType,
+      descr: formData.descr,
+      amount: Number(formData.amount),
+      detail: [
+        ...former.map((v) =>
+          formData.type === 'expense' ? v : { id: v.id, amount: bn(v.amount).negated().toNumber() },
+        ),
+        ...latter.map((v) =>
+          formData.type === 'expense' ? { id: v.id, amount: bn(v.amount).negated().toNumber() } : v,
+        ),
+      ],
+      memo: formData.memo === '' ? undefined : formData.memo,
+    },
+    book.code,
+  );
+  dispatch(updateMembers(res.data.members));
+  dispatch(updateTransactions([res.data.transaction]));
+};
+
+export const deleteBill = async (bookId: string, billId: string) => {
+  const {
+    book: { bookList: storeBooks },
+  } = getState();
+  const book = storeBooks.find((v) => v.id === bookId);
+  if (book === undefined) throw new Error('not found');
+
+  await bookEndpoint.deleteBookIdBill(bookId, billId, book.code);
 };
 
 export const calculateAmount = (amount: string, detail: BillForm['detail']) => {

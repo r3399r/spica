@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Page } from 'src/constant/Page';
 import { getBookById } from 'src/service/bookService';
+import { deleteBill, deleteTransfer } from 'src/service/fillService';
 
 const BookDetail = () => {
   const { id } = useParams();
@@ -60,6 +61,28 @@ const BookDetail = () => {
                   <div>{`${book.members.find((o) => o.id === v.srcMemberId)?.nickname}→${
                     book.members.find((o) => o.id === v.dstMemberId)?.nickname
                   }`}</div>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <div>備註:</div>
+                    <div style={{ whiteSpace: 'pre-wrap' }}>{v.memo}</div>
+                  </div>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    type="button"
+                    onClick={() => navigate(`${Page.Book}/${id}/fill`, { state: v })}
+                    disabled={!!v.dateDeleted}
+                  >
+                    修改
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    type="button"
+                    onClick={() => deleteTransfer(id ?? 'xx', v.id).then(() => navigate('.'))}
+                    disabled={!!v.dateDeleted}
+                  >
+                    刪除
+                  </Button>
                 </div>
               );
             else
@@ -75,23 +98,41 @@ const BookDetail = () => {
                       .map((o) => (
                         <div key={o.id}>{`${
                           book.members.find((m) => m.id === o.memberId)?.nickname
-                        } ${o.amount}`}</div>
+                        } $${o.amount}`}</div>
                       ))}
                   </div>
                   <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                    <div>待:</div>
+                    <div>後:</div>
                     {v.detail
                       .filter((o) => (v.type === 'expense' ? o.amount < 0 : o.amount > 0))
                       .map((o) => (
                         <div key={o.id}>{`${
                           book.members.find((m) => m.id === o.memberId)?.nickname
-                        } ${o.amount * -1}`}</div>
+                        } $${o.amount}`}</div>
                       ))}
                   </div>
                   <div style={{ display: 'flex', gap: 10 }}>
                     <div>備註:</div>
                     <div style={{ whiteSpace: 'pre-wrap' }}>{v.memo}</div>
                   </div>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    type="button"
+                    onClick={() => navigate(`${Page.Book}/${id}/fill`, { state: v })}
+                    disabled={!!v.dateDeleted}
+                  >
+                    修改
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    type="button"
+                    onClick={() => deleteBill(id ?? 'xx', v.id).then(() => navigate(0))}
+                    disabled={!!v.dateDeleted}
+                  >
+                    刪除
+                  </Button>
                 </div>
               );
           })}

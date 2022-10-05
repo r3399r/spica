@@ -362,10 +362,17 @@ export class BookService {
       oldBill.ver
     );
 
+    const positive = oldBillShares.filter((v) => v.amount > 0);
+    const negative = oldBillShares.filter((v) => v.amount < 0);
     await Promise.all(
-      oldBillShares.map(async (v) => {
-        await this.updateMemberBalance(v.memberId, bn(v.amount).negated());
-      })
+      positive.map((v) =>
+        this.updateMemberBalance(v.memberId, bn(v.amount).negated())
+      )
+    );
+    await Promise.all(
+      negative.map((v) =>
+        this.updateMemberBalance(v.memberId, bn(v.amount).negated())
+      )
     );
   }
 

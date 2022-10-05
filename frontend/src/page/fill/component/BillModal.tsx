@@ -43,7 +43,7 @@ const BillModal = ({ open, onClose, side, member, onConfirm }: Props) => {
               tmp[i] = { ...tmp[i], value: e.target.value };
               setDetail(tmp);
             }}
-            regex={/^\d*\.?\d*$/}
+            regex={/^\d*\.?\d{0,2}$/}
           />
         </div>
       ))}

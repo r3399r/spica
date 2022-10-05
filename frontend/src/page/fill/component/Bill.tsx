@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { GetBookIdResponse as Book } from '@y-celestial/spica-service';
+import { GetBookIdResponse as Book, Transaction } from '@y-celestial/spica-service';
 import { ChangeEvent, useEffect, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -8,14 +8,15 @@ import Input from 'src/component/Input';
 import { Page } from 'src/constant/Page';
 import { BillForm } from 'src/model/Form';
 import { RootState } from 'src/redux/store';
-import { addBill, calculateAmount } from 'src/service/fillService';
+import { addBill, calculateAmount, updateBill } from 'src/service/fillService';
 import BillModal from './BillModal';
 
 type Props = {
   type: string;
+  edit: Transaction | null;
 };
 
-const Bill = ({ type }: Props) => {
+const Bill = ({ type, edit }: Props) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { bookList } = useSelector((rootState: RootState) => rootState.book);
@@ -38,6 +39,16 @@ const Bill = ({ type }: Props) => {
   );
 
   useEffect(() => {
+    if (!!edit && 'detail' in edit)
+      setState({
+        date: new Date(edit.date),
+        amount: String(edit.amount),
+        descr: edit.descr,
+        memo: edit.memo ?? '',
+      });
+  }, [edit]);
+
+  useEffect(() => {
     const res = bookList.find((v) => v.id === id);
     if (res === undefined) navigate(`${Page.Book}/${id}`);
     else {
@@ -51,7 +62,7 @@ const Bill = ({ type }: Props) => {
   useEffect(() => {
     setState({ type });
   }, [type]);
-  console.log(state, type);
+
   useEffect(() => {
     if (state.amount !== '') {
       setFormer(
@@ -91,14 +102,18 @@ const Bill = ({ type }: Props) => {
 
   const onSubmit = () => {
     if (book === undefined || former === undefined || latter === undefined) return;
-    addBill(book.id, state, former, latter).then(() => navigate(`${Page.Book}/${id}`));
+    if (edit)
+      updateBill(book.id, edit.id, state, former, latter).then(() =>
+        navigate(`${Page.Book}/${id}`),
+      );
+    else addBill(book.id, state, former, latter).then(() => navigate(`${Page.Book}/${id}`));
   };
 
   return (
     <div>
       <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
         <div>時間: </div>
-        <DatetimeInput onChange={onChange} />
+        <DatetimeInput defaultDate={state.date} onChange={onChange} />
       </div>
       <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
         <div>項目: </div>
@@ -109,7 +124,7 @@ const Bill = ({ type }: Props) => {
         <Input
           value={state.amount}
           onChange={(e) => setState({ amount: e.target.value })}
-          regex={/^\d*\.?\d*$/}
+          regex={/^\d*\.?\d{0,2}$/}
         />
       </div>
       {book && (

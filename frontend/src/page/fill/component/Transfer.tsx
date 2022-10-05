@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { GetBookIdResponse as Book } from '@y-celestial/spica-service';
+import { GetBookIdResponse as Book, Transaction } from '@y-celestial/spica-service';
 import { useEffect, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -8,9 +8,13 @@ import Input from 'src/component/Input';
 import { Page } from 'src/constant/Page';
 import { TransferForm } from 'src/model/Form';
 import { RootState } from 'src/redux/store';
-import { addTransfer } from 'src/service/fillService';
+import { addTransfer, updateTransfer } from 'src/service/fillService';
 
-const Transfer = () => {
+type Props = {
+  edit: Transaction | null;
+};
+
+const Transfer = ({ edit }: Props) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { bookList } = useSelector((rootState: RootState) => rootState.book);
@@ -19,6 +23,17 @@ const Transfer = () => {
     (prev: TransferForm, now: Partial<TransferForm>) => ({ ...prev, ...now }),
     { date: new Date(), amount: '', from: '', to: '', memo: '' },
   );
+
+  useEffect(() => {
+    if (!!edit && 'srcMemberId' in edit)
+      setState({
+        date: new Date(edit.date),
+        amount: String(edit.amount),
+        from: edit.srcMemberId,
+        to: edit.dstMemberId,
+        memo: edit.memo ?? '',
+      });
+  }, [edit]);
 
   useEffect(() => {
     const res = bookList.find((v) => v.id === id);
@@ -32,27 +47,28 @@ const Transfer = () => {
 
   const onSubmit = () => {
     if (book === undefined) return;
-    addTransfer(book.id, state).then(() => navigate(`${Page.Book}/${id}`));
+    if (edit) updateTransfer(book.id, edit.id, state).then(() => navigate(`${Page.Book}/${id}`));
+    else addTransfer(book.id, state).then(() => navigate(`${Page.Book}/${id}`));
   };
 
   return (
     <div>
       <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
         <div>時間: </div>
-        <DatetimeInput onChange={onChange} />
+        <DatetimeInput defaultDate={state.date} onChange={onChange} />
       </div>
       <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
         <div>金額: </div>
         <Input
           value={state.amount}
           onChange={(e) => setState({ amount: e.target.value })}
-          regex={/^\d*\.?\d*$/}
+          regex={/^\d*\.?\d{0,2}$/}
         />
       </div>
       {book && (
         <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
           <div>From: </div>
-          <select defaultValue="" onChange={(e) => setState({ from: e.target.value })}>
+          <select defaultValue={state.from} onChange={(e) => setState({ from: e.target.value })}>
             <option disabled value="" hidden>
               請選擇
             </option>
@@ -67,7 +83,7 @@ const Transfer = () => {
       {book && (
         <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
           <div>To: </div>
-          <select defaultValue="" onChange={(e) => setState({ to: e.target.value })}>
+          <select defaultValue={state.to} onChange={(e) => setState({ to: e.target.value })}>
             <option disabled value="" hidden>
               請選擇
             </option>
