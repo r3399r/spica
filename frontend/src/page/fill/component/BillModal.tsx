@@ -32,7 +32,7 @@ const BillModal = ({ open, onClose, side, member, onConfirm }: Props) => {
               setDetail(tmp);
             }}
           >
-            <option value="weight">權重</option>
+            <option value="weight">份數</option>
             <option value="pct">百分比</option>
             <option value="amount">金額</option>
           </select>
