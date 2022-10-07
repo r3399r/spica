@@ -13,9 +13,6 @@ export class BookEntity implements Book {
   @Column({ type: 'text' })
   name!: string;
 
-  @Column({ type: 'timestamp', name: 'date_last_changed', default: null })
-  dateLastChanged: Date | null = null;
-
   @Column({ type: 'timestamp', name: 'date_created', default: null })
   dateCreated!: Date;
 

@@ -1,5 +1,6 @@
 import { BadRequestError } from '@y-celestial/service';
 import { inject, injectable } from 'inversify';
+import { In } from 'typeorm';
 import { Book } from 'src/model/entity/Book';
 import { BookEntity } from 'src/model/entity/BookEntity';
 import { Database } from 'src/util/Database';
@@ -18,6 +19,14 @@ export class BookAccess {
     return await qr.manager.findOneByOrFail<Book>(BookEntity.name, { id });
   }
 
+  public async findByIds(ids: string[]) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.find<Book>(BookEntity.name, {
+      where: { id: In(ids) },
+    });
+  }
+
   public async save(book: Book) {
     const qr = await this.database.getQueryRunner();
     const entity = new BookEntity();
@@ -34,9 +43,5 @@ export class BookAccess {
     const res = await qr.manager.update(BookEntity, book.id, entity);
 
     if (res.affected === 0) throw new BadRequestError('nothing happened.');
-  }
-
-  public async cleanup() {
-    await this.database.cleanUp();
   }
 }

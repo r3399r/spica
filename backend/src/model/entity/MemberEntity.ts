@@ -13,7 +13,10 @@ export class MemberEntity implements Member {
   @Column({ type: 'text' })
   nickname!: string;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'float' })
+  balance!: number;
+
+  @Column({ type: 'bool' })
   deletable!: boolean;
 
   @Column({ type: 'timestamp', name: 'date_created', default: null })

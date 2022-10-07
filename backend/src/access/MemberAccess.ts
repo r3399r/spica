@@ -18,6 +18,14 @@ export class MemberAccess {
     return await qr.manager.findOneByOrFail<Member>(MemberEntity.name, { id });
   }
 
+  public async findByBookId(bookId: string) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.find<Member>(MemberEntity.name, {
+      where: { bookId },
+    });
+  }
+
   public async save(member: Member) {
     const qr = await this.database.getQueryRunner();
     const entity = new MemberEntity();

@@ -48,7 +48,9 @@ export class Database {
   }
 
   public async cleanUp() {
-    await this.queryRunner?.release();
-    await this.dataSource?.destroy();
+    if (this.queryRunner !== undefined && !this.queryRunner.isReleased)
+      await this.queryRunner.release();
+    if (this.dataSource !== undefined && !this.dataSource.isInitialized)
+      await this.dataSource.destroy();
   }
 }

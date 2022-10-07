@@ -10,13 +10,16 @@ import {
 import { bindings } from 'src/bindings';
 import { BookService } from 'src/logic/BookService';
 import {
+  GetBookParams,
+  PostBookBillRequest,
   PostBookMemberRequest,
   PostBookRequest,
-  PostBookResponse,
+  PostBookTransferRequest,
+  PutBookBillRequest,
   PutBookMemberRequest,
   PutBookRequest,
+  PutBookTransferRequest,
 } from 'src/model/api/Book';
-import { AuthHeaders } from 'src/model/api/Common';
 
 export async function book(
   event: LambdaEvent,
@@ -26,7 +29,7 @@ export async function book(
   try {
     service = bindings.get(BookService);
 
-    let res: void | PostBookResponse;
+    let res: unknown;
 
     switch (event.resource) {
       case '/api/book':
@@ -35,11 +38,26 @@ export async function book(
       case '/api/book/{id}':
         res = await apiBookId(event, service);
         break;
+      case '/api/book/{id}/bill':
+        res = await apiBookIdBill(event, service);
+        break;
+      case '/api/book/{id}/bill/{billId}':
+        res = await apiBookIdBillId(event, service);
+        break;
       case '/api/book/{id}/member':
         res = await apiBookIdMember(event, service);
         break;
       case '/api/book/{id}/member/{mid}':
         res = await apiBookIdMemberId(event, service);
+        break;
+      case '/api/book/{id}/name':
+        res = await apiBookIdName(event, service);
+        break;
+      case '/api/book/{id}/transfer':
+        res = await apiBookIdTransfer(event, service);
+        break;
+      case '/api/book/{id}/transfer/{tid}':
+        res = await apiBookIdTransferId(event, service);
         break;
       default:
         throw new InternalServerError('unknown resource');
@@ -55,6 +73,16 @@ export async function book(
 
 async function apiBook(event: LambdaEvent, service: BookService) {
   switch (event.httpMethod) {
+    case 'GET':
+      if (event.queryStringParameters === null)
+        throw new BadRequestError('queryStringParameters should not be empty');
+      if (event.headers === null)
+        throw new BadRequestError('headers should not be empty');
+
+      return service.getBookList(
+        event.queryStringParameters as GetBookParams,
+        event.headers['x-api-code']
+      );
     case 'POST':
       if (event.body === null)
         throw new BadRequestError('body should not be empty');
@@ -68,7 +96,14 @@ async function apiBook(event: LambdaEvent, service: BookService) {
 async function apiBookId(event: LambdaEvent, service: BookService) {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
+  if (event.headers === null)
+    throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
+    case 'GET':
+      return service.getBookDetail(
+        event.pathParameters.id,
+        event.headers['x-api-code']
+      );
     case 'PUT':
       if (event.body === null)
         throw new BadRequestError('body should not be empty');
@@ -76,7 +111,54 @@ async function apiBookId(event: LambdaEvent, service: BookService) {
       return service.reviseBook(
         event.pathParameters.id,
         JSON.parse(event.body) as PutBookRequest,
-        event.headers as AuthHeaders
+        event.headers['x-api-code']
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdBill(event: LambdaEvent, service: BookService) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  switch (event.httpMethod) {
+    case 'POST':
+      if (event.body === null)
+        throw new BadRequestError('body should not be empty');
+      if (event.headers === null)
+        throw new BadRequestError('headers should not be empty');
+
+      return service.addBill(
+        event.pathParameters.id,
+        JSON.parse(event.body) as PostBookBillRequest,
+        event.headers['x-api-code']
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdBillId(event: LambdaEvent, service: BookService) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  if (event.headers === null)
+    throw new BadRequestError('headers should not be empty');
+  switch (event.httpMethod) {
+    case 'PUT':
+      if (event.body === null)
+        throw new BadRequestError('body should not be empty');
+
+      return service.updateBill(
+        event.pathParameters.id,
+        event.pathParameters.billId,
+        JSON.parse(event.body) as PutBookBillRequest,
+        event.headers['x-api-code']
+      );
+    case 'DELETE':
+      return service.deleteBill(
+        event.pathParameters.id,
+        event.pathParameters.billId,
+        event.headers['x-api-code']
       );
     default:
       throw new InternalServerError('unknown http method');
@@ -90,11 +172,13 @@ async function apiBookIdMember(event: LambdaEvent, service: BookService) {
     case 'POST':
       if (event.body === null)
         throw new BadRequestError('body should not be empty');
+      if (event.headers === null)
+        throw new BadRequestError('headers should not be empty');
 
       return service.addMember(
         event.pathParameters.id,
         JSON.parse(event.body) as PostBookMemberRequest,
-        event.headers as AuthHeaders
+        event.headers['x-api-code']
       );
     default:
       throw new InternalServerError('unknown http method');
@@ -104,6 +188,8 @@ async function apiBookIdMember(event: LambdaEvent, service: BookService) {
 async function apiBookIdMemberId(event: LambdaEvent, service: BookService) {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
+  if (event.headers === null)
+    throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
     case 'PUT':
       if (event.body === null)
@@ -113,13 +199,71 @@ async function apiBookIdMemberId(event: LambdaEvent, service: BookService) {
         event.pathParameters.id,
         event.pathParameters.mid,
         JSON.parse(event.body) as PutBookMemberRequest,
-        event.headers as AuthHeaders
+        event.headers['x-api-code']
       );
     case 'DELETE':
       return service.deleteMember(
         event.pathParameters.id,
         event.pathParameters.mid,
-        event.headers as AuthHeaders
+        event.headers['x-api-code']
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdName(event: LambdaEvent, service: BookService) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  switch (event.httpMethod) {
+    case 'GET':
+      return service.getBookNameById(event.pathParameters.id);
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdTransfer(event: LambdaEvent, service: BookService) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  switch (event.httpMethod) {
+    case 'POST':
+      if (event.body === null)
+        throw new BadRequestError('body should not be empty');
+      if (event.headers === null)
+        throw new BadRequestError('headers should not be empty');
+
+      return service.addTransfer(
+        event.pathParameters.id,
+        JSON.parse(event.body) as PostBookTransferRequest,
+        event.headers['x-api-code']
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdTransferId(event: LambdaEvent, service: BookService) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  if (event.headers === null)
+    throw new BadRequestError('headers should not be empty');
+  switch (event.httpMethod) {
+    case 'PUT':
+      if (event.body === null)
+        throw new BadRequestError('body should not be empty');
+
+      return service.updateTransfer(
+        event.pathParameters.id,
+        event.pathParameters.tid,
+        JSON.parse(event.body) as PutBookTransferRequest,
+        event.headers['x-api-code']
+      );
+    case 'DELETE':
+      return service.deleteTransfer(
+        event.pathParameters.id,
+        event.pathParameters.tid,
+        event.headers['x-api-code']
       );
     default:
       throw new InternalServerError('unknown http method');
