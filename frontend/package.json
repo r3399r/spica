@@ -10,7 +10,7 @@
     "eject": "react-scripts eject",
     "lint:es": "eslint -c ./eslint.json src",
     "fix:es": "npm run lint:es -- --fix",
-    "lint:format": "prettier --list-different \"{src,public}/**/*.{tsx,ts,js,html,scss,json}\"",
+    "lint:format": "prettier --list-different \"{src,public}/**/*.{tsx,ts,js,html,css,json}\"",
     "fix:format": "npm run lint:format -- --write",
     "lint": "run-s lint:*",
     "fix": "run-s fix:*",

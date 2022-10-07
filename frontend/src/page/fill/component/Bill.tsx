@@ -117,7 +117,11 @@ const Bill = ({ type, edit }: Props) => {
       </div>
       <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
         <div>項目: </div>
-        <input value={state.descr} onChange={(e) => setState({ descr: e.target.value })} />
+        <input
+          className="border"
+          value={state.descr}
+          onChange={(e) => setState({ descr: e.target.value })}
+        />
       </div>
       <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
         <div>金額: </div>
@@ -182,7 +186,11 @@ const Bill = ({ type, edit }: Props) => {
       </div>{' '}
       <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
         <div>備註: </div>
-        <textarea value={state.memo} onChange={(e) => setState({ memo: e.target.value })} />
+        <textarea
+          className="border"
+          value={state.memo}
+          onChange={(e) => setState({ memo: e.target.value })}
+        />
       </div>
       <Button variant="contained" type="button" onClick={onSubmit}>
         送出

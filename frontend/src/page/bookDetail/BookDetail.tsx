@@ -3,6 +3,8 @@ import { GetBookIdResponse as Book } from '@y-celestial/spica-service';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import H1 from 'src/component/typography/H1';
+import H2 from 'src/component/typography/H2';
 import { Page } from 'src/constant/Page';
 import { getBookById } from 'src/service/bookService';
 import { deleteBill, deleteTransfer } from 'src/service/fillService';
@@ -25,7 +27,7 @@ const BookDetail = () => {
       {book && (
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <h1>{book.name}</h1>
+            <H1>{book.name}</H1>
             <div>
               <Button
                 variant="contained"
@@ -37,12 +39,12 @@ const BookDetail = () => {
               </Button>
             </div>
           </div>
-          <h2>餘額</h2>
+          <H2>餘額</H2>
           {book.members.length === 0 && <div>目前帳本中無任何成員，請至設定新增</div>}
           {book.members.map((v) => (
             <div key={v.id}>{`${v.nickname}: $${v.balance}`}</div>
           ))}
-          <h2>帳目清單</h2>
+          <H2>帳目清單</H2>
           <Button
             variant="contained"
             color="success"

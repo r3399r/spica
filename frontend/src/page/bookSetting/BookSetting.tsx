@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import H1 from 'src/component/typography/H1';
+import H2 from 'src/component/typography/H2';
 import { Page } from 'src/constant/Page';
 import { NewMemberForm } from 'src/model/Form';
 import { RootState } from 'src/redux/store';
@@ -54,8 +56,8 @@ const BookSetting = () => {
       </Button>
       {book && (
         <div>
-          <h1>設定</h1>
-          <h2>帳本名稱</h2>
+          <H1>設定</H1>
+          <H2>帳本名稱</H2>
           <div style={{ display: 'flex', gap: 10 }}>
             <div>{book.name}</div>
             <div>
@@ -64,7 +66,7 @@ const BookSetting = () => {
               </Button>
             </div>
           </div>
-          <h2>成員</h2>
+          <H2>成員</H2>
           {book.members.length === 0 && <div>目前帳本中無任何成員，請新增</div>}
           {book.members.map((v) => (
             <div key={v.id} style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
@@ -84,12 +86,17 @@ const BookSetting = () => {
             </div>
           ))}
           <form style={{ display: 'flex', gap: 10 }} onSubmit={handleSubmit(onSubmit)}>
-            <input {...register('nickname')} placeholder="暱稱" autoComplete="off" />
+            <input
+              className="border"
+              {...register('nickname')}
+              placeholder="暱稱"
+              autoComplete="off"
+            />
             <Button variant="contained" type="submit" disabled={disabled}>
               新增
             </Button>
           </form>
-          <h2>與好友共享</h2>
+          <H2>與好友共享</H2>
           <div>通行碼：{book.code}</div>
           <div>分享網址：{`${location.origin}${Page.Share}/${book.id}`}</div>
           <RenameBookModal

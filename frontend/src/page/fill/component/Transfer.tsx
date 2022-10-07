@@ -68,7 +68,11 @@ const Transfer = ({ edit }: Props) => {
       {book && (
         <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
           <div>From: </div>
-          <select defaultValue={state.from} onChange={(e) => setState({ from: e.target.value })}>
+          <select
+            className="border"
+            defaultValue={state.from}
+            onChange={(e) => setState({ from: e.target.value })}
+          >
             <option disabled value="" hidden>
               請選擇
             </option>
@@ -97,7 +101,11 @@ const Transfer = ({ edit }: Props) => {
       )}
       <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
         <div>備註: </div>
-        <textarea value={state.memo} onChange={(e) => setState({ memo: e.target.value })} />
+        <textarea
+          className="border"
+          value={state.memo}
+          onChange={(e) => setState({ memo: e.target.value })}
+        />
       </div>
       <Button variant="contained" type="button" onClick={onSubmit}>
         送出

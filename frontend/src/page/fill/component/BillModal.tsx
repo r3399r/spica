@@ -25,6 +25,7 @@ const BillModal = ({ open, onClose, side, member, onConfirm }: Props) => {
         <div key={v.id} style={{ display: 'flex', gap: 10 }}>
           <div>{v.nickname}</div>
           <select
+            className="border"
             defaultValue={'weight'}
             onChange={(e) => {
               const tmp = [...detail];

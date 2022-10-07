@@ -10,7 +10,7 @@ const Input = ({ regex, onChange, ...props }: Props) => {
     onChange && onChange(e);
   };
 
-  return <input onChange={onInput} {...props} />;
+  return <input onChange={onInput} className="border" {...props} />;
 };
 
 export default Input;
