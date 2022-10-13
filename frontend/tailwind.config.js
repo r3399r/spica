@@ -25,7 +25,7 @@ module.exports = {
         100: '#f7f9f9',
         200: '#f2f4f4',
         300: '#e3e5e5',
-        500: '#cdf1f1',
+        500: '#cfd1d1',
       },
       teal: {
         300: '#b1dedc',

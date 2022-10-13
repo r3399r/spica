@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import Button from 'src/component/Button';
 import H1 from 'src/component/typography/H1';
 import H2 from 'src/component/typography/H2';
 import H3 from 'src/component/typography/H3';
@@ -19,7 +20,7 @@ const Landing = () => {
       <H5>h5 heading 5 標題 5</H5>
       <H6>h6 heading 6 標題 6</H6>
       <p>Alle Menschen sind frei und gleich an Würde und Rechten</p>
-      <button onClick={() => navigate(Page.Book)}>START</button>
+      <Button onClick={() => navigate(Page.Book)}>START</Button>
     </div>
   );
 };
