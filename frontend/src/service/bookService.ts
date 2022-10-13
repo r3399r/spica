@@ -1,26 +1,33 @@
 import bookEndpoint from 'src/api/bookEndpoint';
 import { addBook, addBookName, setBookNameList, updateBookList } from 'src/redux/bookSlice';
 import { dispatch, getState } from 'src/redux/store';
+import { finishWaiting, startWaiting } from 'src/redux/uiSlice';
 import { getLocalBooks } from 'src/util/localStorage';
 
 export const getBookList = async () => {
-  const {
-    book: { bookNameList: storeBooks },
-  } = getState();
-  if (storeBooks.length > 0) return storeBooks;
+  try {
+    dispatch(startWaiting());
 
-  const localBooks = getLocalBooks();
+    const {
+      book: { bookNameList: storeBooks },
+    } = getState();
+    if (storeBooks.length > 0) return storeBooks;
 
-  if (localBooks.length === 0) return [];
+    const localBooks = getLocalBooks();
 
-  const ids = localBooks.map((v) => v.id).join();
-  const code = localBooks.map((v) => v.code).join();
-  const res = await bookEndpoint.getBook({ ids }, code);
+    if (localBooks.length === 0) return [];
 
-  dispatch(setBookNameList(res.data));
-  localStorage.setItem('book', JSON.stringify(res.data.map((v) => ({ id: v.id, code: v.code }))));
+    const ids = localBooks.map((v) => v.id).join();
+    const code = localBooks.map((v) => v.code).join();
+    const res = await bookEndpoint.getBook({ ids }, code);
 
-  return res.data;
+    dispatch(setBookNameList(res.data));
+    localStorage.setItem('book', JSON.stringify(res.data.map((v) => ({ id: v.id, code: v.code }))));
+
+    return res.data;
+  } finally {
+    dispatch(finishWaiting());
+  }
 };
 
 export const createBook = async (name: string) => {
