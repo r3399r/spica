@@ -17,7 +17,7 @@ const Book = () => {
 
   return (
     <>
-      <div className="h-[calc(100vh-104px)] overflow-y-scroll">
+      <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-scroll">
         <div>
           <img src={PicBookHero} className="w-full" />
         </div>
@@ -43,7 +43,7 @@ const Book = () => {
           ))}
         </div>
       </div>
-      <div className="h-[104px]">
+      <div className="fixed bottom-0 h-[104px] w-full">
         <div className="mx-auto w-fit">
           <Button className="mt-5 w-64 h-12">
             <div className="flex justify-center">
