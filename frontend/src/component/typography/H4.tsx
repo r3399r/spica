@@ -1,7 +1,10 @@
+import classNames from 'classnames';
 import { HTMLAttributes } from 'react';
 
 type Props = HTMLAttributes<HTMLHeadingElement>;
 
-const H4 = (props: Props) => <h4 className="font-bold text-[1.25rem] leading-[1.4]" {...props} />;
+const H4 = ({ className, ...props }: Props) => (
+  <h4 className={classNames('font-bold text-[1.25rem] leading-[1.4]', className)} {...props} />
+);
 
 export default H4;

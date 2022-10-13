@@ -1,62 +1,59 @@
-import { Button } from '@mui/material';
 import { GetBookResponse } from '@y-celestial/spica-service';
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { Page } from 'src/constant/Page';
-import { NewBookForm } from 'src/model/Form';
-import { createBook, getBookList } from 'src/service/bookService';
+import Button from 'src/component/Button';
+import H2 from 'src/component/typography/H2';
+import IcAdd from 'src/image/ic-add.svg';
+import IcBook from 'src/image/ic-book.svg';
+import PicBookHero from 'src/image/pic-book-hero.svg';
+import { getBookList } from 'src/service/bookService';
 
 const Book = () => {
-  const navigate = useNavigate();
-  const [disabled, setDisabled] = useState<boolean>(true);
   const [bookList, setBookList] = useState<GetBookResponse>();
-  const { register, handleSubmit, control } = useForm<NewBookForm>();
-  const name = useWatch({
-    control,
-    name: 'name',
-  });
 
   useEffect(() => {
     getBookList().then((res) => setBookList(res));
   }, []);
 
-  useEffect(() => {
-    if (name === '' || name === undefined) setDisabled(true);
-    else setDisabled(false);
-  }, [name]);
-
-  const onSubmit = (data: NewBookForm) => {
-    setDisabled(true);
-    createBook(data.name)
-      .then((res) => setBookList([...(bookList ?? []), res]))
-      .finally(() => setDisabled(false));
-  };
-
   return (
-    <div>
-      <h1>新增帳本</h1>
-      <form style={{ display: 'flex', gap: 10 }} onSubmit={handleSubmit(onSubmit)}>
-        <input className="border" {...register('name')} placeholder="帳本名" autoComplete="off" />
-        <Button variant="contained" type="submit" disabled={disabled}>
-          新增帳本
-        </Button>
-      </form>
-      <h1>帳本清單</h1>
-      {bookList &&
-        bookList.map((v) => (
-          <div key={v.id} style={{ display: 'flex', gap: 10, marginTop: 10 }}>
-            <div>{v.name}</div>
-            <Button
-              variant="contained"
-              type="button"
-              onClick={() => navigate(`${Page.Book}/${v.id}`)}
+    <>
+      <div className="h-[calc(100vh-104px)] overflow-y-scroll">
+        <div>
+          <img src={PicBookHero} className="w-full" />
+        </div>
+        <H2 className="mt-[30px] mb-5 mx-10">帳簿清單</H2>
+        <div className="flex gap-[10px] mx-10 flex-wrap">
+          {bookList?.map((v, i) => (
+            <div
+              key={v.id}
+              className={classNames(
+                'h-[100px] w-[calc(50%-5px)] rounded-[15px] px-[10px] pt-[10px]',
+                {
+                  ['bg-beige-300']: i % 3 === 0,
+                  ['bg-green-300']: i % 3 === 1,
+                  ['bg-tan-300']: i % 3 === 2,
+                },
+              )}
             >
-              GO
-            </Button>
-          </div>
-        ))}
-    </div>
+              <div className="bg-white w-fit h-fit rounded-full mb-[10px]">
+                <img src={IcBook} />
+              </div>
+              <div className="text-[14px] leading-normal break-words">{v.name}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="h-[104px]">
+        <div className="mx-auto w-fit">
+          <Button className="mt-5 w-64 h-12">
+            <div className="flex justify-center">
+              <img src={IcAdd} />
+              <div>建立新帳簿</div>
+            </div>
+          </Button>
+        </div>
+      </div>
+    </>
   );
 };
 
