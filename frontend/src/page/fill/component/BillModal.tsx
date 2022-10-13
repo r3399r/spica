@@ -1,8 +1,8 @@
 import { Button } from '@mui/material';
 import { Member } from '@y-celestial/spica-service/lib/src/model/entity/Member';
 import { useState } from 'react';
-import Input from 'src/component/Input';
-import Modal from 'src/component/Modal';
+import Input from 'src/component/deprecated/Input';
+import Modal from 'src/component/deprecated/Modal';
 import { BillForm } from 'src/model/Form';
 
 type Props = {

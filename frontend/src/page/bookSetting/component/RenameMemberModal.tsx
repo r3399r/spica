@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import Modal from 'src/component/Modal';
+import Modal from 'src/component/deprecated/Modal';
 import { RenameMemberForm } from 'src/model/Form';
 import { renameMember } from 'src/service/settingService';
 

@@ -3,8 +3,8 @@ import { GetBookIdResponse as Book, Transaction } from '@y-celestial/spica-servi
 import { useEffect, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import DatetimeInput from 'src/component/DatetimeInput';
-import Input from 'src/component/Input';
+import DatetimeInput from 'src/component/deprecated/DatetimeInput';
+import Input from 'src/component/deprecated/Input';
 import { Page } from 'src/constant/Page';
 import { TransferForm } from 'src/model/Form';
 import { RootState } from 'src/redux/store';
