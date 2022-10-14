@@ -2,6 +2,7 @@ import { GetBookResponse } from '@y-celestial/spica-service';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import Button from 'src/component/Button';
+import ModalVanilla from 'src/component/ModalVanilla';
 import H2 from 'src/component/typography/H2';
 import IcAdd from 'src/image/ic-add.svg';
 import IcBook from 'src/image/ic-book.svg';
@@ -10,6 +11,7 @@ import { getBookList } from 'src/service/bookService';
 
 const Book = () => {
   const [bookList, setBookList] = useState<GetBookResponse>();
+  const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
     getBookList().then((res) => setBookList(res));
@@ -47,7 +49,7 @@ const Book = () => {
       </div>
       <div className="fixed bottom-0 h-[104px] w-full">
         <div className="mx-auto w-fit">
-          <Button className="mt-5 w-64 h-12">
+          <Button className="mt-5 w-64 h-12" onClick={() => setOpen(true)}>
             <div className="flex justify-center">
               <img src={IcAdd} />
               <div>建立新帳簿</div>
@@ -55,6 +57,15 @@ const Book = () => {
           </Button>
         </div>
       </div>
+      <ModalVanilla
+        open={open}
+        handleClose={() => setOpen(false)}
+        title="建立新帳簿"
+        leftBtn="取消"
+        rightBtn="送出"
+      >
+        <div>QQ form</div>
+      </ModalVanilla>
     </>
   );
 };
