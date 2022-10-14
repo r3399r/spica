@@ -1,15 +1,18 @@
 import { GetBookResponse } from '@y-celestial/spica-service';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from 'src/component/Button';
 import ModalVanilla from 'src/component/ModalVanilla';
 import H2 from 'src/component/typography/H2';
+import { Page } from 'src/constant/Page';
 import IcAdd from 'src/image/ic-add.svg';
 import IcBook from 'src/image/ic-book.svg';
 import PicBookHero from 'src/image/pic-book-hero.svg';
 import { getBookList } from 'src/service/bookService';
 
 const Book = () => {
+  const navigate = useNavigate();
   const [bookList, setBookList] = useState<GetBookResponse>();
   const [open, setOpen] = useState<boolean>(false);
 
@@ -30,13 +33,14 @@ const Book = () => {
               <div
                 key={v.id}
                 className={classNames(
-                  'min-h-[100px] w-[calc(50%-5px)] rounded-[15px] px-[10px] pt-[10px] pb-2 sm:w-[140px]',
+                  'min-h-[100px] w-[calc(50%-5px)] rounded-[15px] px-[10px] pt-[10px] pb-2 sm:w-[140px] cursor-pointer',
                   {
                     ['bg-beige-300']: i % 3 === 0,
                     ['bg-green-300']: i % 3 === 1,
                     ['bg-tan-300']: i % 3 === 2,
                   },
                 )}
+                onClick={() => navigate(`${Page.Book}/${v.id}`)}
               >
                 <div className="bg-white w-fit h-fit rounded-full mb-[10px]">
                   <img src={IcBook} />
