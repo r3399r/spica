@@ -8,7 +8,7 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
 };
 
 const Input = ({ label, helper, error, disabled, ...props }: Props) => (
-  <div className="py-4">
+  <div className="pt-4">
     {label && (
       <div
         className={classNames('text-[14px] leading-normal text-navy-700 mb-[5px]', {
@@ -20,7 +20,7 @@ const Input = ({ label, helper, error, disabled, ...props }: Props) => (
     )}
     <input
       className={classNames(
-        'rounded bg-grey-200 outline-none p-2 h-[40px] border-solid border-[1px] focus:border-solid focus:border-teal-500',
+        'rounded bg-grey-200 outline-none p-2 h-[40px] w-full border-solid border-[1px] focus:border-solid focus:border-teal-500',
         {
           'border-tomato-500': !!error,
           'border-grey-200': !error,

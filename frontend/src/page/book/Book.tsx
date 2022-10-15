@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from 'src/component/Button';
+import Input from 'src/component/Input';
 import ModalVanilla from 'src/component/ModalVanilla';
 import H2 from 'src/component/typography/H2';
 import { Page } from 'src/constant/Page';
@@ -68,7 +69,9 @@ const Book = () => {
         leftBtn="取消"
         rightBtn="送出"
       >
-        <div>QQ form</div>
+        <div>
+          <Input placeholder="帳簿名稱 （最多15字）" />
+        </div>
       </ModalVanilla>
     </>
   );
