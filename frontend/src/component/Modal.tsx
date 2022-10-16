@@ -13,7 +13,7 @@ const Modal = ({ children, handleClose, ...props }: Props) => (
     onClose={() => handleClose()}
     {...props}
   >
-    <div className="w-full mx-[15px] sm:w-[610px] sm:mx-auto bg-white rounded-[20px]">
+    <div className="w-full mx-[15px] sm:w-[610px] sm:mx-auto bg-white rounded-[20px] outline-none">
       <div className="relative h-[34px]">
         <img
           className="absolute right-[10px] bottom-0 cursor-pointer"

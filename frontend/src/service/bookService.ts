@@ -11,11 +11,13 @@ export const getBookList = async () => {
     const {
       book: { bookNameList: storeBooks },
     } = getState();
-    if (storeBooks.length > 0) return storeBooks;
 
     const localBooks = getLocalBooks();
 
-    if (localBooks.length === 0) return [];
+    const reduxSet = new Set([...storeBooks.map((v) => v.id)]);
+    const localSet = new Set([...localBooks.map((v) => v.id)]);
+
+    if (reduxSet.size === localSet.size && [...reduxSet].every((x) => localSet.has(x))) return;
 
     const ids = localBooks.map((v) => v.id).join();
     const code = localBooks.map((v) => v.code).join();
@@ -23,22 +25,26 @@ export const getBookList = async () => {
 
     dispatch(setBookNameList(res.data));
     localStorage.setItem('book', JSON.stringify(res.data.map((v) => ({ id: v.id, code: v.code }))));
-
-    return res.data;
   } finally {
     dispatch(finishWaiting());
   }
 };
 
 export const createBook = async (name: string) => {
-  const res = await bookEndpoint.postBook({ name });
-  const book = res.data;
-  const localBooks = getLocalBooks();
+  try {
+    dispatch(startWaiting());
 
-  dispatch(addBookName(res.data));
-  localStorage.setItem('book', JSON.stringify([...localBooks, { id: book.id, code: book.code }]));
+    const res = await bookEndpoint.postBook({ name });
+    const book = res.data;
+    const localBooks = getLocalBooks();
 
-  return res.data;
+    dispatch(addBookName(res.data));
+    localStorage.setItem('book', JSON.stringify([...localBooks, { id: book.id, code: book.code }]));
+
+    return res.data;
+  } finally {
+    dispatch(finishWaiting());
+  }
 };
 
 export const getBookById = async (id: string) => {
