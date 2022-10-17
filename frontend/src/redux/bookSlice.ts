@@ -7,12 +7,12 @@ import {
 } from '@y-celestial/spica-service';
 
 export type BookState = {
-  bookNameList: GetBookResponse;
+  bookNameList: GetBookResponse | null;
   bookList: Book[];
 };
 
 const initialState: BookState = {
-  bookNameList: [],
+  bookNameList: null,
   bookList: [],
 };
 
@@ -24,10 +24,10 @@ export const bookSlice = createSlice({
       state.bookNameList = action.payload;
     },
     addBookName: (state: BookState, action: PayloadAction<GetBookResponse[0]>) => {
-      state.bookNameList = [...state.bookNameList, action.payload];
+      state.bookNameList = [...(state.bookNameList ?? []), action.payload];
     },
     updateBookName: (state: BookState, action: PayloadAction<GetBookResponse[0]>) => {
-      state.bookNameList = state.bookNameList.map((v) => ({
+      state.bookNameList = (state.bookNameList ?? []).map((v) => ({
         ...v,
         name: v.id === action.payload.id ? action.payload.name : v.name,
       }));
