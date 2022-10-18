@@ -49,6 +49,21 @@ const BookSetting = () => {
     addMember(book.id, data.nickname).finally(() => setDisabled(false));
   };
 
+  const onShare = () => {
+    if (navigator.share)
+      navigator
+        .share({
+          text: `與你共享帳本「${book?.name}」，點擊連結後輸入通行碼 ${book?.code}`,
+          url: `${location.origin}${Page.Share}/${book?.id}`,
+        })
+        .then(() => {
+          console.log('Successful share');
+        })
+        .catch((error) => {
+          console.log('Error sharing', error);
+        });
+  };
+
   return (
     <div>
       <Button variant="contained" type="button" onClick={() => navigate(`${Page.Book}/${id}`)}>
@@ -99,6 +114,9 @@ const BookSetting = () => {
           <H2>與好友共享</H2>
           <div>通行碼：{book.code}</div>
           <div>分享網址：{`${location.origin}${Page.Share}/${book.id}`}</div>
+          <Button variant="contained" onClick={onShare}>
+            Share
+          </Button>
           <RenameBookModal
             open={renameBookOpen}
             onClose={() => setRenameBookOpen(false)}

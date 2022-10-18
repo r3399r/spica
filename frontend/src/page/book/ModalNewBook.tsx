@@ -31,7 +31,7 @@ const ModalNewBook = ({ open, handleClose }: Props) => {
       cancelBtn="取消"
       confirmBtn="送出"
     >
-      <FormInput name="name" placeholder="帳本名稱" autoFocus />
+      <FormInput name="name" placeholder="帳本名稱" autoFocus required />
     </ModalForm>
   );
 };
