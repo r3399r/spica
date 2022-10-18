@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosRequestHeaders, RawAxiosRequestHeaders 
 
 // eslint-disable-next-line
 type Options<D = any, P = any> = {
-  headers?: AxiosRequestHeaders;
+  headers?: RawAxiosRequestHeaders;
   data?: D;
   params?: P;
 };
