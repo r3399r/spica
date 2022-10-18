@@ -1,4 +1,4 @@
-import Loader from './component/Loader';
+import Loader from './component/celestial-ui/Loader';
 import Routes from './Routes';
 
 const App = () => (

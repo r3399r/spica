@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
-import FormInput from 'src/component/form/FormInput';
-import ModalForm from 'src/component/ModalForm';
+import FormInput from 'src/component/celestial-ui/FormInput';
+import ModalForm from 'src/component/celestial-ui/ModalForm';
 import { NewBookForm } from 'src/model/Form';
 import { createBook } from 'src/service/bookService';
 

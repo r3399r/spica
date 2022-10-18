@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import Button from 'src/component/Button';
-import H1 from 'src/component/typography/H1';
-import H2 from 'src/component/typography/H2';
-import H3 from 'src/component/typography/H3';
-import H4 from 'src/component/typography/H4';
-import H5 from 'src/component/typography/H5';
-import H6 from 'src/component/typography/H6';
+import Button from 'src/component/celestial-ui/Button';
+import H1 from 'src/component/celestial-ui/typography/H1';
+import H2 from 'src/component/celestial-ui/typography/H2';
+import H3 from 'src/component/celestial-ui/typography/H3';
+import H4 from 'src/component/celestial-ui/typography/H4';
+import H5 from 'src/component/celestial-ui/typography/H5';
+import H6 from 'src/component/celestial-ui/typography/H6';
 import { Page } from 'src/constant/Page';
 
 const Landing = () => {
