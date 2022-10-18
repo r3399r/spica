@@ -14,7 +14,7 @@ export const getBookList = async () => {
 
     const localBooks = getLocalBooks();
 
-    const reduxSet = new Set([...storeBooks.map((v) => v.id)]);
+    const reduxSet = new Set([...(storeBooks ?? []).map((v) => v.id)]);
     const localSet = new Set([...localBooks.map((v) => v.id)]);
 
     if (reduxSet.size === localSet.size && [...reduxSet].every((x) => localSet.has(x))) return;

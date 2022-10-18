@@ -29,11 +29,13 @@ const Book = () => {
         </div>
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
           <H2 className="mt-[30px] mb-5 mx-[25px]">帳簿清單</H2>
-          {bookNameList.length === 0 ? (
-            <div>目前無帳簿</div>
+          {bookNameList?.length === 0 ? (
+            <div className="py-[30px] flex justify-center text-navy-300 text-[14px] leading-normal">
+              目前無帳簿
+            </div>
           ) : (
             <div className="flex gap-[10px] mx-[25px] flex-wrap">
-              {bookNameList.map((v, i) => (
+              {bookNameList?.map((v, i) => (
                 <div
                   key={v.id}
                   className={classNames(
