@@ -27,11 +27,11 @@ const ModalNewBook = ({ open, handleClose }: Props) => {
       onSubmit={onSubmit}
       open={open}
       handleClose={onClose}
-      title="建立新帳簿"
+      title="建立新帳本"
       cancelBtn="取消"
       confirmBtn="送出"
     >
-      <FormInput name="name" placeholder="帳簿名稱 （最多15字）" autoFocus maxLength={15} />
+      <FormInput name="name" placeholder="帳本名稱" autoFocus />
     </ModalForm>
   );
 };

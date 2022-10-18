@@ -28,10 +28,10 @@ const Book = () => {
           <img src={PicBookHero} className="w-full" />
         </div>
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
-          <H2 className="mt-[30px] mb-5 mx-[25px]">帳簿清單</H2>
+          <H2 className="mt-[30px] mb-5 mx-[25px]">帳本清單</H2>
           {bookNameList?.length === 0 ? (
             <div className="py-[30px] flex justify-center text-navy-300 text-[14px] leading-normal">
-              目前無帳簿
+              目前無帳本
             </div>
           ) : (
             <div className="flex gap-[10px] mx-[25px] flex-wrap">
@@ -63,7 +63,7 @@ const Book = () => {
           <Button className="mt-5 w-64 h-12" onClick={() => setOpen(true)}>
             <div className="flex justify-center">
               <img src={IcAdd} />
-              <div>建立新帳簿</div>
+              <div>建立新帳本</div>
             </div>
           </Button>
         </div>
