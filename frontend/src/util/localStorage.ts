@@ -12,3 +12,9 @@ export const getLocalBooks = (): { id: string; code: string }[] => {
     return [];
   }
 };
+
+export const getLocalBookById = (id: string): { id: string; code: string } | undefined => {
+  const localBooks = getLocalBooks();
+
+  return localBooks.find((v) => v.id === id);
+};

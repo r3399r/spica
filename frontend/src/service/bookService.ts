@@ -1,24 +1,22 @@
 import bookEndpoint from 'src/api/bookEndpoint';
-import { addBook, addBookName, setBookNameList, updateBookList } from 'src/redux/bookSlice';
+import { addBook, appendBook, setBooks, updateBookList } from 'src/redux/bookSlice';
 import { dispatch, getState } from 'src/redux/store';
 import { finishWaiting, startWaiting } from 'src/redux/uiSlice';
-import { getLocalBooks } from 'src/util/localStorage';
+import { getLocalBookById, getLocalBooks } from 'src/util/localStorage';
 
-export const getBookList = async () => {
+export const loadBookList = async () => {
   try {
     dispatch(startWaiting());
 
-    const {
-      book: { bookNameList: storeBooks },
-    } = getState();
+    const { books } = getState().book;
 
     const localBooks = getLocalBooks();
 
-    const reduxSet = new Set([...(storeBooks ?? []).map((v) => v.id)]);
+    const reduxSet = new Set([...(books ?? []).map((v) => v.id)]);
     const localSet = new Set([...localBooks.map((v) => v.id)]);
 
     if (localSet.size === 0) {
-      dispatch(setBookNameList([]));
+      dispatch(setBooks([]));
 
       return;
     }
@@ -28,7 +26,13 @@ export const getBookList = async () => {
     const code = localBooks.map((v) => v.code).join();
     const res = await bookEndpoint.getBook({ ids }, code);
 
-    dispatch(setBookNameList(res.data));
+    const updatedBooks = res.data.map((v) => {
+      const savedBook = books?.find((o) => o.id === v.id);
+
+      return { ...v, members: null, transactions: null, ...savedBook };
+    });
+
+    dispatch(setBooks(updatedBooks));
     localStorage.setItem('book', JSON.stringify(res.data.map((v) => ({ id: v.id, code: v.code }))));
   } finally {
     dispatch(finishWaiting());
@@ -43,10 +47,33 @@ export const createBook = async (name: string) => {
     const book = res.data;
     const localBooks = getLocalBooks();
 
-    dispatch(addBookName(res.data));
+    dispatch(appendBook({ ...res.data, members: null, transactions: null }));
     localStorage.setItem('book', JSON.stringify([...localBooks, { id: book.id, code: book.code }]));
 
     return res.data;
+  } finally {
+    dispatch(finishWaiting());
+  }
+};
+
+export const loadBookById = async (id: string) => {
+  try {
+    dispatch(startWaiting());
+    const { books } = getState().book;
+
+    const savedBook = books?.find((v) => v.id === id);
+    if (savedBook && savedBook.members !== null && savedBook.transactions !== null) return;
+
+    const code = getLocalBookById(id)?.code ?? '';
+    const res = await bookEndpoint.getBookId(id, code);
+
+    const index = books?.findIndex((v) => v.id === id) ?? -1;
+    if (books === null || index === -1) dispatch(appendBook(res.data));
+    else {
+      const tmp = [...books];
+      tmp[index] = res.data;
+      dispatch(setBooks(tmp));
+    }
   } finally {
     dispatch(finishWaiting());
   }

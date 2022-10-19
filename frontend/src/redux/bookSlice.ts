@@ -1,30 +1,39 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  GetBookIdResponse as Book,
   GetBookIdResponse,
   GetBookResponse,
   PutBookMemberResponse,
+  Transaction,
 } from '@y-celestial/spica-service';
+import { Book } from '@y-celestial/spica-service/lib/src/model/entity/Book';
+import { Member } from '@y-celestial/spica-service/lib/src/model/entity/Member';
+
+type SavedBook = Book & {
+  members: Member[] | null;
+  transactions: Transaction[] | null;
+};
 
 export type BookState = {
   bookNameList: GetBookResponse | null;
-  bookList: Book[];
+  bookList: GetBookIdResponse[];
+  books: SavedBook[] | null;
 };
 
 const initialState: BookState = {
   bookNameList: null,
   bookList: [],
+  books: null,
 };
 
 export const bookSlice = createSlice({
   name: 'book',
   initialState,
   reducers: {
-    setBookNameList: (state: BookState, action: PayloadAction<GetBookResponse>) => {
-      state.bookNameList = action.payload;
+    setBooks: (state: BookState, action: PayloadAction<SavedBook[]>) => {
+      state.books = action.payload;
     },
-    addBookName: (state: BookState, action: PayloadAction<GetBookResponse[0]>) => {
-      state.bookNameList = [...(state.bookNameList ?? []), action.payload];
+    appendBook: (state: BookState, action: PayloadAction<SavedBook>) => {
+      state.books = [...(state.books ?? []), action.payload];
     },
     updateBookName: (state: BookState, action: PayloadAction<GetBookResponse[0]>) => {
       state.bookNameList = (state.bookNameList ?? []).map((v) => ({
@@ -36,10 +45,10 @@ export const bookSlice = createSlice({
         name: v.id === action.payload.id ? action.payload.name : v.name,
       }));
     },
-    updateBookList: (state: BookState, action: PayloadAction<Book>) => {
+    updateBookList: (state: BookState, action: PayloadAction<GetBookIdResponse>) => {
       state.bookList = state.bookList.map((v) => (v.id === action.payload.id ? action.payload : v));
     },
-    addBook: (state: BookState, action: PayloadAction<Book>) => {
+    addBook: (state: BookState, action: PayloadAction<GetBookIdResponse>) => {
       state.bookList = [...state.bookList, action.payload];
     },
     updateMember: (state: BookState, action: PayloadAction<PutBookMemberResponse>) => {
@@ -95,8 +104,8 @@ export const bookSlice = createSlice({
 });
 
 export const {
-  setBookNameList,
-  addBookName,
+  setBooks,
+  appendBook,
   updateBookName,
   updateBookList,
   addBook,

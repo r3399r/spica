@@ -10,17 +10,17 @@ import IcAdd from 'src/image/ic-add.svg';
 import IcBook from 'src/image/ic-book.svg';
 import PicBookHero from 'src/image/pic-book-hero.svg';
 import { RootState } from 'src/redux/store';
-import { getBookList } from 'src/service/bookService';
+import { loadBookList } from 'src/service/bookService';
 import ModalNewBook from './ModalNewBook';
 
 const BookList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { bookNameList } = useSelector((rootState: RootState) => rootState.book);
+  const { books } = useSelector((rootState: RootState) => rootState.book);
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    getBookList();
+    loadBookList();
   }, []);
 
   return (
@@ -31,13 +31,13 @@ const BookList = () => {
         </div>
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
           <H2 className="mt-[30px] mb-5 mx-[25px]">{t('bookList.bookList')}</H2>
-          {bookNameList?.length === 0 ? (
+          {books?.length === 0 ? (
             <div className="py-[30px] flex justify-center text-navy-300 text-[14px] leading-normal">
               {t('bookList.noBook')}
             </div>
           ) : (
             <div className="flex gap-[10px] mx-[25px] flex-wrap">
-              {bookNameList?.map((v, i) => (
+              {books?.map((v, i) => (
                 <div
                   key={v.id}
                   className={classNames(

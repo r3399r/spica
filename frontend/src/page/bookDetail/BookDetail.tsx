@@ -1,26 +1,33 @@
-import { Button } from '@mui/material';
-import { GetBookIdResponse as Book } from '@y-celestial/spica-service';
+import { Button as MuiButton } from '@mui/material';
 import { format } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import H1 from 'src/component/celestial-ui/typography/H1';
+import Button from 'src/component/celestial-ui/Button';
 import H2 from 'src/component/celestial-ui/typography/H2';
 import { Page } from 'src/constant/Page';
 import IcBack from 'src/image/ic-back.svg';
+import IcMember from 'src/image/ic-member.svg';
 import IcSetting from 'src/image/ic-setting.svg';
-import { getBookById } from 'src/service/bookService';
+import { RootState } from 'src/redux/store';
+import { loadBookById } from 'src/service/bookService';
 import { deleteBill, deleteTransfer } from 'src/service/fillService';
 
 const BookDetail = () => {
   const { id } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [book, setBook] = useState<Book>();
+  const { books } = useSelector((rootState: RootState) => rootState.book);
+  const book = useMemo(() => {
+    if (books === null) return;
+
+    return books.find((v) => v.id === id);
+  }, [id, books]);
 
   useEffect(() => {
     if (id === undefined) return;
-    getBookById(id).then((res) => setBook(res));
+    loadBookById(id);
   }, [id]);
 
   return (
@@ -30,54 +37,58 @@ const BookDetail = () => {
           <img src={IcBack} />
           <div className="text-navy-700 font-bold">{t('bookDetail.back')}</div>
         </div>
-        <div className="cursor-pointer">
+        <div className="cursor-pointer" onClick={() => navigate(`${Page.Book}/${id}/setting`)}>
           <img src={IcSetting} />
+        </div>
+      </div>
+      <div className="rounded-[15px] bg-beige-300 p-[10px]">
+        <div className="text-navy-700 font-bold text-xl mb-[10px]">{book?.name}</div>
+        <div className="flex items-end">
+          <div className="flex-1">
+            <div className="text-navy-300 text-[12px] leading-[18px]">總花費</div>
+            <div className="text-navy-700 font-bold">0.00 TWD</div>
+          </div>
+          <div>
+            <Button appearance="default" className="!p-[5px] !rounded-md">
+              <div className="flex gap-[5px]">
+                <img src={IcMember} />
+                <div className="pr-[5px]">成員</div>
+              </div>
+            </Button>
+          </div>
         </div>
       </div>
       {book && (
         <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <H1>{book.name}</H1>
-            <div>
-              <Button
-                variant="contained"
-                type="button"
-                color="warning"
-                onClick={() => navigate(`${Page.Book}/${id}/setting`)}
-              >
-                設定
-              </Button>
-            </div>
-          </div>
           <H2>餘額</H2>
-          {book.members.length === 0 && <div>目前帳本中無任何成員，請至設定新增</div>}
-          {book.members.map((v) => (
+          {(book.members ?? []).length === 0 && <div>目前帳本中無任何成員，請至設定新增</div>}
+          {(book.members ?? []).map((v) => (
             <div key={v.id}>{`${v.nickname}: $${v.balance}`}</div>
           ))}
           <H2>帳目清單</H2>
-          <Button
+          <MuiButton
             variant="contained"
             color="success"
             type="button"
             onClick={() => navigate(`${Page.Book}/${id}/fill`)}
           >
             新增帳目
-          </Button>
-          {book.transactions.map((v) => {
+          </MuiButton>
+          {(book.transactions ?? []).map((v) => {
             if ('srcMemberId' in v)
               return (
                 <div key={v.id}>
                   <div style={{ height: 1, background: 'black' }} />
                   <div>{format(new Date(v.date), 'yyyy-MM-dd HH:mm')}</div>
                   <div>${v.amount}</div>
-                  <div>{`${book.members.find((o) => o.id === v.srcMemberId)?.nickname}→${
-                    book.members.find((o) => o.id === v.dstMemberId)?.nickname
+                  <div>{`${(book.members ?? []).find((o) => o.id === v.srcMemberId)?.nickname}→${
+                    (book.members ?? []).find((o) => o.id === v.dstMemberId)?.nickname
                   }`}</div>
                   <div style={{ display: 'flex', gap: 10 }}>
                     <div>備註:</div>
                     <div style={{ whiteSpace: 'pre-wrap' }}>{v.memo}</div>
                   </div>
-                  <Button
+                  <MuiButton
                     variant="contained"
                     color="secondary"
                     type="button"
@@ -85,8 +96,8 @@ const BookDetail = () => {
                     disabled={!!v.dateDeleted}
                   >
                     修改
-                  </Button>
-                  <Button
+                  </MuiButton>
+                  <MuiButton
                     variant="contained"
                     color="error"
                     type="button"
@@ -94,7 +105,7 @@ const BookDetail = () => {
                     disabled={!!v.dateDeleted}
                   >
                     刪除
-                  </Button>
+                  </MuiButton>
                 </div>
               );
             else
@@ -109,7 +120,7 @@ const BookDetail = () => {
                       .filter((o) => (v.type === 'expense' ? o.amount > 0 : o.amount < 0))
                       .map((o) => (
                         <div key={o.id}>{`${
-                          book.members.find((m) => m.id === o.memberId)?.nickname
+                          (book.members ?? []).find((m) => m.id === o.memberId)?.nickname
                         } $${o.amount}`}</div>
                       ))}
                   </div>
@@ -119,7 +130,7 @@ const BookDetail = () => {
                       .filter((o) => (v.type === 'expense' ? o.amount < 0 : o.amount > 0))
                       .map((o) => (
                         <div key={o.id}>{`${
-                          book.members.find((m) => m.id === o.memberId)?.nickname
+                          (book.members ?? []).find((m) => m.id === o.memberId)?.nickname
                         } $${o.amount}`}</div>
                       ))}
                   </div>
@@ -127,7 +138,7 @@ const BookDetail = () => {
                     <div>備註:</div>
                     <div style={{ whiteSpace: 'pre-wrap' }}>{v.memo}</div>
                   </div>
-                  <Button
+                  <MuiButton
                     variant="contained"
                     color="secondary"
                     type="button"
@@ -135,8 +146,8 @@ const BookDetail = () => {
                     disabled={!!v.dateDeleted}
                   >
                     修改
-                  </Button>
-                  <Button
+                  </MuiButton>
+                  <MuiButton
                     variant="contained"
                     color="error"
                     type="button"
@@ -144,7 +155,7 @@ const BookDetail = () => {
                     disabled={!!v.dateDeleted}
                   >
                     刪除
-                  </Button>
+                  </MuiButton>
                 </div>
               );
           })}
