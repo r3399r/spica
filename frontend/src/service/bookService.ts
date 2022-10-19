@@ -79,6 +79,12 @@ export const loadBookById = async (id: string) => {
   }
 };
 
+export const getBookIndex = (id: string) => {
+  const books = getLocalBooks();
+
+  return books.findIndex((v) => v.id === id);
+};
+
 export const getBookById = async (id: string) => {
   const {
     book: { bookList: storeBooks },

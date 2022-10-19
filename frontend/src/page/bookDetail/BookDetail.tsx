@@ -12,7 +12,7 @@ import IcBack from 'src/image/ic-back.svg';
 import IcMember from 'src/image/ic-member.svg';
 import IcSetting from 'src/image/ic-setting.svg';
 import { RootState } from 'src/redux/store';
-import { loadBookById } from 'src/service/bookService';
+import { getBookIndex, loadBookById } from 'src/service/bookService';
 import { deleteBill, deleteTransfer } from 'src/service/fillService';
 
 const BookDetail = () => {
@@ -20,12 +20,12 @@ const BookDetail = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { books } = useSelector((rootState: RootState) => rootState.book);
-  const [book, index] = useMemo(() => {
-    if (books === null) return [undefined, -1];
-    const idx = books.findIndex((v) => v.id === id);
+  const book = useMemo(() => {
+    if (books === null) return;
 
-    return [books[idx], idx];
+    return books.find((v) => v.id === id);
   }, [id, books]);
+  const index = useMemo(() => getBookIndex(id ?? ''), [id]);
 
   useEffect(() => {
     if (id === undefined) return;
@@ -50,7 +50,7 @@ const BookDetail = () => {
           'bg-tan-300': index % 3 === 2,
         })}
       >
-        <div className="text-navy-700 font-bold text-xl mb-[10px]">{book?.name}</div>
+        <div className="min-h-[28px] text-navy-700 font-bold text-xl mb-[10px]">{book?.name}</div>
         <div className="flex items-end">
           <div className="flex-1">
             <div className="text-navy-300 text-[12px] leading-[18px]">總花費</div>
@@ -71,9 +71,11 @@ const BookDetail = () => {
         <div className="text-black">--</div>
       </div>
       <div className="text-black p-[10px]">--</div>
-      <div className="mt-[30px] px-[46px] text-center text-sm text-navy-300">
-        請先至「成員」中新增一起分帳的夥伴， 才能開始記帳喔！
-      </div>
+      {book?.members?.length === 0 && (
+        <div className="mt-[30px] px-[46px] text-center text-sm text-navy-300">
+          請先至「成員」中新增一起分帳的夥伴，才能開始記帳喔！
+        </div>
+      )}
       {book && (
         <div>
           <H2>餘額</H2>
