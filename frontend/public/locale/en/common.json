@@ -1,0 +1,12 @@
+{
+  "appName": "Bi-ll",
+  "language": "English",
+  "bookList": {
+    "bookList": "Book List",
+    "createNewBook": "Create New Book",
+    "noBook": "No Book"
+  },
+  "bookDetail": {
+    "back": "Back"
+  }
+}

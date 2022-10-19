@@ -1,0 +1,12 @@
+{
+  "appName": "Bitop",
+  "language": "简体中文",
+  "bookList": {
+    "bookList": "帐本清单",
+    "createNewBook": "建立新帐本",
+    "noBook": "目前无帐本"
+  },
+  "bookDetail": {
+    "back": "回清单"
+  }
+}

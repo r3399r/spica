@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from 'src/component/celestial-ui/Button';
@@ -12,7 +13,8 @@ import { RootState } from 'src/redux/store';
 import { getBookList } from 'src/service/bookService';
 import ModalNewBook from './ModalNewBook';
 
-const Book = () => {
+const BookList = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { bookNameList } = useSelector((rootState: RootState) => rootState.book);
   const [open, setOpen] = useState<boolean>(false);
@@ -28,10 +30,10 @@ const Book = () => {
           <img src={PicBookHero} className="w-full" />
         </div>
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
-          <H2 className="mt-[30px] mb-5 mx-[25px]">帳本清單</H2>
+          <H2 className="mt-[30px] mb-5 mx-[25px]">{t('bookList.bookList')}</H2>
           {bookNameList?.length === 0 ? (
             <div className="py-[30px] flex justify-center text-navy-300 text-[14px] leading-normal">
-              目前無帳本
+              {t('bookList.noBook')}
             </div>
           ) : (
             <div className="flex gap-[10px] mx-[25px] flex-wrap">
@@ -63,7 +65,7 @@ const Book = () => {
           <Button className="mt-5 w-64 h-12" onClick={() => setOpen(true)}>
             <div className="flex justify-center">
               <img src={IcAdd} />
-              <div>建立新帳本</div>
+              <div>{t('bookList.createNewBook')}</div>
             </div>
           </Button>
         </div>
@@ -73,4 +75,4 @@ const Book = () => {
   );
 };
 
-export default Book;
+export default BookList;

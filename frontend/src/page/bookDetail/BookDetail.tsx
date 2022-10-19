@@ -2,6 +2,7 @@ import { Button } from '@mui/material';
 import { GetBookIdResponse as Book } from '@y-celestial/spica-service';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import H1 from 'src/component/celestial-ui/typography/H1';
 import H2 from 'src/component/celestial-ui/typography/H2';
@@ -13,6 +14,7 @@ import { deleteBill, deleteTransfer } from 'src/service/fillService';
 
 const BookDetail = () => {
   const { id } = useParams();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [book, setBook] = useState<Book>();
 
@@ -24,11 +26,11 @@ const BookDetail = () => {
   return (
     <div className="max-w-[640px] mx-[15px] sm:mx-auto">
       <div className="flex justify-between mt-[15px] mb-5">
-        <div className="flex">
+        <div className="flex cursor-pointer" onClick={() => navigate(Page.Book)}>
           <img src={IcBack} />
-          <div className="text-navy-700 font-bold">回清單</div>
+          <div className="text-navy-700 font-bold">{t('bookDetail.back')}</div>
         </div>
-        <div>
+        <div className="cursor-pointer">
           <img src={IcSetting} />
         </div>
       </div>
