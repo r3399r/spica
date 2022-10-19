@@ -6,6 +6,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import H1 from 'src/component/celestial-ui/typography/H1';
 import H2 from 'src/component/celestial-ui/typography/H2';
 import { Page } from 'src/constant/Page';
+import IcBack from 'src/image/ic-back.svg';
+import IcSetting from 'src/image/ic-setting.svg';
 import { getBookById } from 'src/service/bookService';
 import { deleteBill, deleteTransfer } from 'src/service/fillService';
 
@@ -20,10 +22,16 @@ const BookDetail = () => {
   }, [id]);
 
   return (
-    <div>
-      <Button variant="contained" type="button" onClick={() => navigate(Page.Book)}>
-        回到清單
-      </Button>
+    <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+      <div className="flex justify-between mt-[15px] mb-5">
+        <div className="flex">
+          <img src={IcBack} />
+          <div className="text-navy-700 font-bold">回清單</div>
+        </div>
+        <div>
+          <img src={IcSetting} />
+        </div>
+      </div>
       {book && (
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
