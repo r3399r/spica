@@ -43,9 +43,9 @@ const BookList = () => {
                   className={classNames(
                     'min-h-[100px] w-[calc(50%-5px)] rounded-[15px] px-[10px] pt-[10px] pb-2 sm:w-[140px] cursor-pointer',
                     {
-                      ['bg-beige-300']: i % 3 === 0,
-                      ['bg-green-300']: i % 3 === 1,
-                      ['bg-tan-300']: i % 3 === 2,
+                      'bg-beige-300': i % 3 === 0,
+                      'bg-green-300': i % 3 === 1,
+                      'bg-tan-300': i % 3 === 2,
                     },
                   )}
                   onClick={() => navigate(`${Page.Book}/${v.id}`)}

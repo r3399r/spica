@@ -1,4 +1,5 @@
 import { Button as MuiButton } from '@mui/material';
+import classNames from 'classnames';
 import { format } from 'date-fns';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,10 +20,11 @@ const BookDetail = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { books } = useSelector((rootState: RootState) => rootState.book);
-  const book = useMemo(() => {
-    if (books === null) return;
+  const [book, index] = useMemo(() => {
+    if (books === null) return [undefined, -1];
+    const idx = books.findIndex((v) => v.id === id);
 
-    return books.find((v) => v.id === id);
+    return [books[idx], idx];
   }, [id, books]);
 
   useEffect(() => {
@@ -41,7 +43,13 @@ const BookDetail = () => {
           <img src={IcSetting} />
         </div>
       </div>
-      <div className="rounded-[15px] bg-beige-300 p-[10px]">
+      <div
+        className={classNames('rounded-[15px] p-[10px]', {
+          'bg-beige-300': index % 3 === 0,
+          'bg-green-300': index % 3 === 1,
+          'bg-tan-300': index % 3 === 2,
+        })}
+      >
         <div className="text-navy-700 font-bold text-xl mb-[10px]">{book?.name}</div>
         <div className="flex items-end">
           <div className="flex-1">
@@ -57,6 +65,14 @@ const BookDetail = () => {
             </Button>
           </div>
         </div>
+      </div>
+      <div className="rounded-[15px] p-[10px] bg-grey-200 my-[10px]">
+        <div className="text-navy-700 font-bold text-xl mb-[10px]">餘額</div>
+        <div className="text-black">--</div>
+      </div>
+      <div className="text-black p-[10px]">--</div>
+      <div className="mt-[30px] px-[46px] text-center text-sm text-navy-300">
+        請先至「成員」中新增一起分帳的夥伴， 才能開始記帳喔！
       </div>
       {book && (
         <div>
