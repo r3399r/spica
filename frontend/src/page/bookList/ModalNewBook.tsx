@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import FormInput from 'src/component/celestial-ui/FormInput';
 import ModalForm from 'src/component/celestial-ui/ModalForm';
 import { NewBookForm } from 'src/model/Form';
@@ -10,6 +11,7 @@ type Props = {
 };
 
 const ModalNewBook = ({ open, handleClose }: Props) => {
+  const { t } = useTranslation();
   const methods = useForm<NewBookForm>();
 
   const onClose = () => {
@@ -27,11 +29,11 @@ const ModalNewBook = ({ open, handleClose }: Props) => {
       onSubmit={onSubmit}
       open={open}
       handleClose={onClose}
-      title="建立新帳本"
-      cancelBtn="取消"
-      confirmBtn="送出"
+      title={t('bookList.newBook')}
+      cancelBtn={t('act.cancel')}
+      confirmBtn={t('act.submit')}
     >
-      <FormInput name="name" placeholder="帳本名稱" autoFocus required />
+      <FormInput name="name" placeholder={t('bookList.name')} autoFocus required />
     </ModalForm>
   );
 };

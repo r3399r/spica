@@ -1,10 +1,16 @@
 {
   "appName": "Bi-ll",
   "language": "日本語",
+  "act": {
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "submit": "送信"
+  },
   "bookList": {
     "bookList": "会計簿一覧",
-    "createNewBook": "新しい会計簿",
-    "noBook": "会計簿がない"
+    "newBook": "新しい会計簿",
+    "noBook": "会計簿がない",
+    "name": "名前"
   },
   "bookDetail": {
     "back": "一覧へ戻る"

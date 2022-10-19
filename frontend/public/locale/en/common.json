@@ -1,10 +1,16 @@
 {
   "appName": "Bi-ll",
   "language": "English",
+  "act": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "submit": "Submit"
+  },
   "bookList": {
     "bookList": "Book List",
-    "createNewBook": "Create New Book",
-    "noBook": "No Book"
+    "newBook": "Create New Book",
+    "noBook": "No Book",
+    "name": "Name"
   },
   "bookDetail": {
     "back": "Back"

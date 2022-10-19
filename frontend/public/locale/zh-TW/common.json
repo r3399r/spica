@@ -1,10 +1,16 @@
 {
   "appName": "Bitop",
   "language": "繁體中文",
+  "act": {
+    "confirm": "確認",
+    "cancel": "取消",
+    "submit": "送出"
+  },
   "bookList": {
     "bookList": "帳本清單",
-    "createNewBook": "建立新帳本",
-    "noBook": "目前無帳本"
+    "newBook": "建立新帳本",
+    "noBook": "目前無帳本",
+    "name": "名稱"
   },
   "bookDetail": {
     "back": "回清單"

@@ -65,7 +65,7 @@ const BookList = () => {
           <Button className="mt-5 w-64 h-12" onClick={() => setOpen(true)}>
             <div className="flex justify-center">
               <img src={IcAdd} />
-              <div>{t('bookList.createNewBook')}</div>
+              <div>{t('bookList.newBook')}</div>
             </div>
           </Button>
         </div>
