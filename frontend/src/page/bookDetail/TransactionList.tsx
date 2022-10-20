@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { RootState } from 'src/redux/store';
 import { aggregateTransactions } from 'src/service/bookService';
+import { bnFormat } from 'src/util/bignumber';
 
 const TransactionList = () => {
   const { id } = useParams();
@@ -22,7 +23,9 @@ const TransactionList = () => {
         Number(shareCount) > 1
           ? t('bookDetail.multiple')
           : book?.members?.find((v) => v.id === shareMemberId)?.nickname;
-      if (type === 'out') return t('bookDetail.billNote', { member, amount });
+      if (type === 'out') return t('bookDetail.billOutNote', { member, amount: bnFormat(amount) });
+
+      return t('bookDetail.billInNote', { member, amount: bnFormat(amount) });
     },
     [t, book],
   );
@@ -33,7 +36,7 @@ const TransactionList = () => {
         <div key={item.id} className="py-[10px] border-b-[1px] border-b-grey-300">
           <div className="flex justify-between">
             <div className="font-bold">{item.descr}</div>
-            <div>{`$${item.amount}`}</div>
+            <div>{`$${bnFormat(item.amount)}`}</div>
           </div>
           <div className="text-[12px] leading-[18px] text-teal-500">{billNote(item)}</div>
         </div>
@@ -44,14 +47,14 @@ const TransactionList = () => {
 
   if (book && book.transactions && book.transactions.length > 0 && transactions)
     return (
-      <>
+      <div className="p-[10px]">
         {Object.keys(transactions).map((v) => (
           <div key={v} className="mb-[10px]">
             <div className="pt-[5px] text-sm text-navy-100 font-bold">{v}</div>
             <div>{transactions[v].map(items)}</div>
           </div>
         ))}
-      </>
+      </div>
     );
 
   return <div className="text-black p-[10px]">--</div>;

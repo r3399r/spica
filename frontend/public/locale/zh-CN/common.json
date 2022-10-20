@@ -20,6 +20,7 @@
     "noMemberHint": "请先至「成员」中新增一起分帐的伙伴，才能开始记帐喔！",
     "newTransaction": "新增帐目",
     "multiple": "多人",
-    "billNote": "{{member}}支付了 ${{amount}}"
+    "billOutNote": "{{member}}支付了 ${{amount}}",
+    "billInNote": "{{member}}收取了 ${{amount}}"
   }
 }

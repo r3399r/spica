@@ -7,6 +7,7 @@ import Button from 'src/component/celestial-ui/Button';
 import IcMember from 'src/image/ic-member.svg';
 import { RootState } from 'src/redux/store';
 import { getBookIndex } from 'src/service/bookService';
+import { bn } from 'src/util/bignumber';
 
 const MainCard = () => {
   const { id } = useParams();
@@ -14,6 +15,14 @@ const MainCard = () => {
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
   const index = useMemo(() => getBookIndex(id ?? ''), [id]);
+  const total = useMemo(
+    () =>
+      book?.members
+        ?.reduce((prev, current) => prev.plus(current.total), bn(0))
+        .abs()
+        .toFormat(),
+    [book],
+  );
 
   return (
     <div
@@ -27,7 +36,7 @@ const MainCard = () => {
       <div className="flex items-end">
         <div className="flex-1">
           <div className="text-navy-300 text-[12px] leading-[18px]">{t('bookDetail.total')}</div>
-          <div className="text-navy-700 font-bold">0.00 TWD</div>
+          <div className="text-navy-700 font-bold">{total} TWD</div>
         </div>
         <div>
           <Button appearance="default" className="!p-[5px] !rounded-md">

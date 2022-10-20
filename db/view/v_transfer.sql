@@ -1,3 +1,4 @@
+DROP VIEW IF EXISTS v_transaction;
 DROP VIEW IF EXISTS v_transfer;
 
 CREATE VIEW v_transfer AS

@@ -20,6 +20,7 @@
     "noMemberHint": "Please click \"Member\" to add members, and then we can start",
     "newTransaction": "New Bill",
     "multiple": "Multiple People",
-    "billNote": "{{member}} paid ${{amount}}"
+    "billOutNote": "{{member}} paid ${{amount}}",
+    "billInNote": "{{member}} received ${{amount}}"
   }
 }

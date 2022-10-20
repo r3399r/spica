@@ -1,6 +1,7 @@
+DROP VIEW IF EXISTS v_transaction;
 DROP VIEW IF EXISTS v_bill;
 
-CREATE VIEW v_bill AS
+CREATE VIEW v_bill as
 select
 	b.id,
 	b.ver,
@@ -10,7 +11,7 @@ select
 	b.descr,
 	b.amount,
 	tmp_bs.share_member_id,
-	tmp_bs.share_count,
+	(case when b.type = 'out' then tmp_bs.p_count else tmp_bs.n_count end ) as share_count,
 	b.memo,
 	b.date_created,
 	b.date_updated,
@@ -33,7 +34,8 @@ left join (
 		bs.bill_id ,
 		bs.ver ,
 		min(bs.member_id) as share_member_id,
-		sum(case when bs.amount > 0 then 1 else 0 end )as share_count
+		sum(case when bs.amount > 0 then 1 else 0 end )as p_count,
+		sum(case when bs.amount < 0 then 1 else 0 end )as n_count
 	from
 		bill_share bs
 	group by
