@@ -7,7 +7,7 @@ export type ViewTransaction = {
   descr: string | null;
   amount: number;
   shareMemberId: string | null;
-  shareCount: number | null;
+  shareCount: string | null;
   srcMemberId: string | null;
   dstMemberId: string | null;
   memo: string | null;
@@ -25,7 +25,7 @@ export type ViewTransactionBill = {
   descr: string;
   amount: number;
   shareMemberId: string;
-  shareCount: number;
+  shareCount: string;
   srcMemberId: null;
   dstMemberId: null;
   memo: string | null;

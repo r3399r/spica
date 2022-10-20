@@ -12,7 +12,7 @@ const Fill = () => {
   const state = location.state as Transaction | null;
 
   useEffect(() => {
-    if (state === null) setType('expense');
+    if (state === null) setType('out');
     else if ('srcMemberId' in state) setType('transfer');
     else setType(state.type);
   }, [state]);

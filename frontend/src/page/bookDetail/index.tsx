@@ -12,6 +12,7 @@ import { RootState } from 'src/redux/store';
 import { loadBookById } from 'src/service/bookService';
 import BalanceCard from './BalanceCard';
 import MainCard from './MainCard';
+import TransactionList from './TransactionList';
 
 const BookDetail = () => {
   const { id } = useParams();
@@ -41,7 +42,7 @@ const BookDetail = () => {
           </div>
           <MainCard />
           <BalanceCard />
-          <div className="text-black p-[10px]">--</div>
+          <TransactionList />
           {noMember && (
             <div className="mt-[30px] px-[46px] text-center text-sm text-navy-300">
               {t('bookDetail.noMemberHint')}

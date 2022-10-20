@@ -14,10 +14,12 @@
   },
   "bookDetail": {
     "back": "回清单",
-    "total": "Total",
-    "member": "Member",
-    "balance": "Balance",
-    "noMemberHint": "Please click \"Member\" to add members, and then we can start",
-    "newTransaction": "新增帳目"
+    "total": "总花费",
+    "member": "成员",
+    "balance": "馀额",
+    "noMemberHint": "请先至「成员」中新增一起分帐的伙伴，才能开始记帐喔！",
+    "newTransaction": "新增帐目",
+    "multiple": "多人",
+    "billNote": "{{member}}支付了 ${{amount}}"
   }
 }

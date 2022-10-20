@@ -1,3 +1,5 @@
+import { Transaction } from '@y-celestial/spica-service';
+import { format } from 'date-fns';
 import bookEndpoint from 'src/api/bookEndpoint';
 import { addBook, appendBook, setBooks, updateBookList } from 'src/redux/bookSlice';
 import { dispatch, getState } from 'src/redux/store';
@@ -127,4 +129,16 @@ export const deleteMember = async (memberId: string, bookId: string) => {
 
   const updatedBook = { ...book, members: book.members.filter((v) => v.id !== memberId) };
   dispatch(updateBookList(updatedBook));
+};
+
+export const aggregateTransactions = (transactions: Transaction[]) => {
+  const map: { [key: string]: Transaction[] } = {};
+  transactions.forEach((v) => {
+    console.log(v);
+    const date = format(new Date(v.date), 'yyyy-MM-dd');
+    if (map[date] === undefined) map[date] = [v];
+    else map[date] = [...map[date], v];
+  });
+
+  return map;
 };

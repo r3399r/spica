@@ -16,31 +16,29 @@ const MainCard = () => {
   const index = useMemo(() => getBookIndex(id ?? ''), [id]);
 
   return (
-    <>
-      <div
-        className={classNames('rounded-[15px] p-[10px]', {
-          'bg-beige-300': index % 3 === 0,
-          'bg-green-300': index % 3 === 1,
-          'bg-tan-300': index % 3 === 2,
-        })}
-      >
-        <div className="min-h-[28px] text-navy-700 font-bold text-xl mb-[10px]">{book?.name}</div>
-        <div className="flex items-end">
-          <div className="flex-1">
-            <div className="text-navy-300 text-[12px] leading-[18px]">{t('bookDetail.total')}</div>
-            <div className="text-navy-700 font-bold">0.00 TWD</div>
-          </div>
-          <div>
-            <Button appearance="default" className="!p-[5px] !rounded-md">
-              <div className="flex gap-[5px]">
-                <img src={IcMember} />
-                <div className="pr-[5px]">{t('bookDetail.member')}</div>
-              </div>
-            </Button>
-          </div>
+    <div
+      className={classNames('rounded-[15px] p-[10px]', {
+        'bg-beige-300': index % 3 === 0,
+        'bg-green-300': index % 3 === 1,
+        'bg-tan-300': index % 3 === 2,
+      })}
+    >
+      <div className="min-h-[28px] text-navy-700 font-bold text-xl mb-[10px]">{book?.name}</div>
+      <div className="flex items-end">
+        <div className="flex-1">
+          <div className="text-navy-300 text-[12px] leading-[18px]">{t('bookDetail.total')}</div>
+          <div className="text-navy-700 font-bold">0.00 TWD</div>
+        </div>
+        <div>
+          <Button appearance="default" className="!p-[5px] !rounded-md">
+            <div className="flex gap-[5px]">
+              <img src={IcMember} />
+              <div className="pr-[5px]">{t('bookDetail.member')}</div>
+            </div>
+          </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

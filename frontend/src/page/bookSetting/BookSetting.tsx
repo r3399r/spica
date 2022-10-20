@@ -53,7 +53,7 @@ const BookSetting = () => {
     if (navigator.share)
       navigator
         .share({
-          text: `與你共享帳本「${book?.name}」，點擊連結後輸入通行碼 ${book?.code}`,
+          text: `與你共享帳本「${book?.name}」，點擊連結後請輸入通行碼`,
           url: `${location.origin}${Page.Share}/${book?.id}`,
         })
         .then(() => {

@@ -324,7 +324,7 @@ export class BookService {
         transaction: {
           ...newBill,
           shareMemberId: former[0].id,
-          shareCount: former.length,
+          shareCount: former.length.toString(),
         },
       };
     } catch (e) {
@@ -420,7 +420,7 @@ export class BookService {
         transaction: {
           ...newBill,
           shareMemberId: former[0].id,
-          shareCount: former.length,
+          shareCount: former.length.toString(),
         },
       };
     } catch (e) {

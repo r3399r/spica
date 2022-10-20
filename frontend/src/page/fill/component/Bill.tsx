@@ -38,15 +38,15 @@ const Bill = ({ type, edit }: Props) => {
     },
   );
 
-  useEffect(() => {
-    if (!!edit && 'detail' in edit)
-      setState({
-        date: new Date(edit.date),
-        amount: String(edit.amount),
-        descr: edit.descr,
-        memo: edit.memo ?? '',
-      });
-  }, [edit]);
+  // useEffect(() => {
+  //   if (!!edit && 'detail' in edit)
+  //     setState({
+  //       date: new Date(edit.date),
+  //       amount: String(edit.amount),
+  //       descr: edit.descr,
+  //       memo: edit.memo ?? '',
+  //     });
+  // }, [edit]);
 
   useEffect(() => {
     const res = bookList.find((v) => v.id === id);

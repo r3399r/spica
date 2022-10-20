@@ -28,7 +28,7 @@ export class ViewTransactionEntity implements ViewTransaction {
   shareMemberId: string | null = null;
 
   @ViewColumn({ name: 'share_count' })
-  shareCount: number | null = null;
+  shareCount: string | null = null;
 
   @ViewColumn({ name: 'src_member_id' })
   srcMemberId: string | null = null;

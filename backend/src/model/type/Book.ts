@@ -33,7 +33,7 @@ export type TransactionBill = {
   descr: string;
   amount: number;
   shareMemberId: string;
-  shareCount: number;
+  shareCount: string;
   memo: string | null;
   dateCreated: Date;
   dateUpdated: Date | null;
