@@ -1,56 +1,36 @@
 DROP VIEW IF EXISTS v_transaction;
 
 CREATE VIEW v_transaction AS
-select
-	b.id,
-	b.ver,
-	b.book_id,
-	b.date,
-	b.type,
-	b.descr,
-	b.amount,
+select vb.id,
+	vb.ver,
+	vb.book_id,
+	vb.date,
+	vb.type,
+	vb.descr,
+	vb.amount,
+	vb.share_member_id,
+	vb.share_count,
 	null as src_member_id,
 	null as dst_member_id,
-	b.memo,
-	b.date_created,
-	b.date_updated,
-	b.date_deleted
-from
-	(
-		select
-			id,
-			max(ver) as ver
-		from
-			bill b
-		group by
-			b.id
-	) as tmp_b
-	left join bill b on tmp_b.id = b.id
-	and tmp_b.ver = b.ver
+	vb.memo,
+	vb.date_created,
+	vb.date_updated,
+	vb.date_deleted
+from v_bill vb
 union all
-select
-	t.id,
-	t.ver,
-	t.book_id,
-	t.date,
+select vt.id,
+	vt.ver,
+	vt.book_id,
+	vt.date,
 	'transfer' as type,
 	null as descr,
-	t.amount,
-	t.src_member_id,
-	t.dst_member_id,
-	t.memo,
-	t.date_created,
-	t.date_updated,
-	t.date_updated
-from
-	(
-		select
-			id,
-			max(ver) as ver
-		from
-			"transfer" t
-		group by
-			t.id
-	) as tmp_t
-	left join "transfer" t on tmp_t.id = t.id
-	and tmp_t.ver = t.ver;
+	vt.amount,
+	null as share_member_id,
+	null as share_count,
+	vt.src_member_id,
+	vt.dst_member_id,
+	vt.memo,
+	vt.date_created,
+	vt.date_updated,
+	vt.date_deleted
+from v_transfer vt;

@@ -2,10 +2,10 @@ import { Book } from 'src/model/entity/Book';
 import { Member } from 'src/model/entity/Member';
 import {
   BillData,
-  BillTransaction,
   Transaction,
+  TransactionBill,
+  TransactionTransfer,
   TransferData,
-  TransferTransaction,
 } from 'src/model/type/Book';
 
 export type GetBookParams = { ids: string };
@@ -50,26 +50,26 @@ export type PostBookBillRequest = BillData;
 
 export type PostBookBillResponse = {
   members: Member[];
-  transaction: BillTransaction;
+  transaction: TransactionBill;
 };
 
 export type PutBookBillRequest = BillData;
 
 export type PutBookBillResponse = {
   members: Member[];
-  transaction: BillTransaction;
+  transaction: TransactionBill;
 };
 
 export type PostBookTransferRequest = TransferData;
 
 export type PostBookTransferResponse = {
   members: Member[];
-  transaction: TransferTransaction;
+  transaction: TransactionTransfer;
 };
 
 export type PutBookTransferRequest = TransferData;
 
 export type PutBookTransferResponse = {
   members: Member[];
-  transaction: TransferTransaction;
+  transaction: TransactionTransfer;
 };

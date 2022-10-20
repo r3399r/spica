@@ -26,8 +26,8 @@ const Fill = () => {
         <div>類別: </div>
         {type && (
           <select className="border" defaultValue={type} onChange={(e) => setType(e.target.value)}>
-            <option value="expense">支出</option>
-            <option value="income">收入</option>
+            <option value="out">支出</option>
+            <option value="in">收入</option>
             <option value="transfer">轉帳</option>
           </select>
         )}

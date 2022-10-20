@@ -6,7 +6,6 @@ import { BookAccess } from './access/BookAccess';
 import { DbAccess } from './access/DbAccess';
 import { MemberAccess } from './access/MemberAccess';
 import { TransferAccess } from './access/TransferAccess';
-import { ViewBillShareAccess } from './access/ViewBillShareAccess';
 import { ViewTransactionAccess } from './access/ViewTransactionAccess';
 import { BookService } from './logic/BookService';
 import { BillEntity } from './model/entity/BillEntity';
@@ -14,7 +13,6 @@ import { BillShareEntity } from './model/entity/BillShareEntity';
 import { BookEntity } from './model/entity/BookEntity';
 import { MemberEntity } from './model/entity/MemberEntity';
 import { TransferEntity } from './model/entity/TransferEntity';
-import { ViewBillShareEntity } from './model/viewEntity/ViewBillShareEntity';
 import { ViewTransactionEntity } from './model/viewEntity/ViewTransactionEntity';
 import { Database, dbEntitiesBindingId } from './util/Database';
 
@@ -28,7 +26,6 @@ container.bind<Function>(dbEntitiesBindingId).toFunction(BillShareEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(BookEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(MemberEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(TransferEntity);
-container.bind<Function>(dbEntitiesBindingId).toFunction(ViewBillShareEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(ViewTransactionEntity);
 
 // db access for tables
@@ -38,7 +35,6 @@ container.bind<BillShareAccess>(BillShareAccess).toSelf();
 container.bind<BookAccess>(BookAccess).toSelf();
 container.bind<MemberAccess>(MemberAccess).toSelf();
 container.bind<TransferAccess>(TransferAccess).toSelf();
-container.bind<ViewBillShareAccess>(ViewBillShareAccess).toSelf();
 container.bind<ViewTransactionAccess>(ViewTransactionAccess).toSelf();
 
 // service

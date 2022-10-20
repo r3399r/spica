@@ -11,8 +11,4 @@ export const Language = [
     name: '简体中文',
     code: 'zh-CN',
   },
-  {
-    name: '日本語',
-    code: 'jp',
-  },
 ];

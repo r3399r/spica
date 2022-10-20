@@ -14,7 +14,7 @@
     "fix:format": "npm run lint:format -- --write",
     "lint": "run-s lint:*",
     "fix": "run-s fix:*",
-    "i18n-sync": "i18next-locales-sync -p en -s zh-CN zh-TW jp -l public/locale",
+    "i18n-sync": "i18next-locales-sync -p en -s zh-CN zh-TW -l public/locale",
     "clean": "del-cli dist -f",
     "pre:commit": "npm run lint",
     "pre:deploy": "run-s clean build"

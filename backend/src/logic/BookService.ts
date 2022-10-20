@@ -7,9 +7,7 @@ import { BookAccess } from 'src/access/BookAccess';
 import { DbAccess } from 'src/access/DbAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
-import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
 import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
-import { BillType } from 'src/constant/Book';
 import {
   GetBookIdResponse,
   GetBookNameResponse,
@@ -69,9 +67,6 @@ export class BookService {
   @inject(TransferAccess)
   private readonly transferAccess!: TransferAccess;
 
-  @inject(ViewBillShareAccess)
-  private readonly viewBillShareAccess!: ViewBillShareAccess;
-
   @inject(ViewTransactionAccess)
   private readonly viewTransactionAccess!: ViewTransactionAccess;
 
@@ -126,7 +121,6 @@ export class BookService {
     const book = await this.validateBook(id, code);
 
     const members = await this.memberAccess.findByBookId(id);
-    const billShares = await this.viewBillShareAccess.findByBookId(id);
     const transactions = (await this.viewTransactionAccess.findByBookId(
       id
     )) as (ViewTransactionBill | ViewTransactionTransfer)[];
@@ -141,6 +135,7 @@ export class BookService {
             ver: v.ver,
             bookId: v.bookId,
             date: v.date,
+            type: v.type,
             amount: v.amount,
             srcMemberId: v.srcMemberId,
             dstMemberId: v.dstMemberId,
@@ -155,25 +150,15 @@ export class BookService {
             ver: v.ver,
             bookId: v.bookId,
             date: v.date,
-            type: v.type as BillType,
+            type: v.type,
             descr: v.descr,
             amount: v.amount,
+            shareMemberId: v.shareMemberId,
+            shareCount: v.shareCount,
             memo: v.memo,
             dateCreated: v.dateCreated,
             dateUpdated: v.dateUpdated,
             dateDeleted: v.dateDeleted,
-            detail: billShares
-              .filter((o) => o.billId === v.id && o.ver === v.ver)
-              .map((o) => {
-                const {
-                  bookId: ignoredBookId,
-                  billId: ignoredBillId,
-                  ver: ignoredVer,
-                  ...rest
-                } = o;
-
-                return rest;
-              }),
           };
       }),
     };
@@ -206,6 +191,7 @@ export class BookService {
     const member = new MemberEntity();
     member.bookId = id;
     member.nickname = data.nickname;
+    member.total = 0;
     member.balance = 0;
     member.deletable = true;
 
@@ -260,10 +246,17 @@ export class BookService {
       throw new BadRequestError('negative sum not consistent');
   }
 
-  private async updateMemberBalance(id: string, amount: number | BigNumber) {
+  private async updateMember(
+    id: string,
+    amount: number | BigNumber,
+    updateTotal = false
+  ) {
     const oldMember = await this.memberAccess.findById(id);
     const newMember: Member = {
       ...oldMember,
+      total: updateTotal
+        ? bn(oldMember.total).plus(amount).toNumber()
+        : oldMember.total,
       balance: bn(oldMember.balance).plus(amount).toNumber(),
       deletable: false,
     };
@@ -305,15 +298,9 @@ export class BookService {
           billShare.memberId = v.id;
           billShare.amount = v.amount;
 
-          const member = await this.updateMemberBalance(v.id, v.amount);
-          const newBillShare = await this.billShareAccess.save(billShare);
-          const {
-            billId: ignoredBillId,
-            ver: ignoredVer,
-            ...rest
-          } = newBillShare;
+          await this.billShareAccess.save(billShare);
 
-          return { member, detail: rest };
+          return await this.updateMember(v.id, v.amount);
         })
       );
       const resLatter = await Promise.all(
@@ -324,25 +311,20 @@ export class BookService {
           billShare.memberId = v.id;
           billShare.amount = v.amount;
 
-          const member = await this.updateMemberBalance(v.id, v.amount);
-          const newBillShare = await this.billShareAccess.save(billShare);
-          const {
-            billId: ignoredBillId,
-            ver: ignoredVer,
-            ...rest
-          } = newBillShare;
+          await this.billShareAccess.save(billShare);
 
-          return { member, detail: rest };
+          return await this.updateMember(v.id, v.amount, true);
         })
       );
 
       await this.dbAccess.commitTransaction();
 
       return {
-        members: [...resFormer, ...resLatter].map((v) => v.member),
+        members: [...resFormer, ...resLatter],
         transaction: {
           ...newBill,
-          detail: [...resFormer, ...resLatter].map((v) => v.detail),
+          shareMemberId: former[0].id,
+          shareCount: former.length,
         },
       };
     } catch (e) {
@@ -362,16 +344,14 @@ export class BookService {
       oldBill.ver
     );
 
-    const positive = oldBillShares.filter((v) => v.amount > 0);
-    const negative = oldBillShares.filter((v) => v.amount < 0);
+    const former = oldBillShares.filter((v) => v.amount > 0);
+    const latter = oldBillShares.filter((v) => v.amount < 0);
     await Promise.all(
-      positive.map((v) =>
-        this.updateMemberBalance(v.memberId, bn(v.amount).negated())
-      )
+      former.map((v) => this.updateMember(v.memberId, bn(v.amount).negated()))
     );
     await Promise.all(
-      negative.map((v) =>
-        this.updateMemberBalance(v.memberId, bn(v.amount).negated())
+      latter.map((v) =>
+        this.updateMember(v.memberId, bn(v.amount).negated(), true)
       )
     );
   }
@@ -414,15 +394,9 @@ export class BookService {
           billShare.memberId = v.id;
           billShare.amount = v.amount;
 
-          const member = await this.updateMemberBalance(v.id, v.amount);
-          const newBillShare = await this.billShareAccess.save(billShare);
-          const {
-            billId: ignoredBillId,
-            ver: ignoredVer,
-            ...rest
-          } = newBillShare;
+          await this.billShareAccess.save(billShare);
 
-          return { member, detail: rest };
+          return await this.updateMember(v.id, v.amount);
         })
       );
       const resLatter = await Promise.all(
@@ -433,25 +407,20 @@ export class BookService {
           billShare.memberId = v.id;
           billShare.amount = v.amount;
 
-          const member = await this.updateMemberBalance(v.id, v.amount);
-          const newBillShare = await this.billShareAccess.save(billShare);
-          const {
-            billId: ignoredBillId,
-            ver: ignoredVer,
-            ...rest
-          } = newBillShare;
+          await this.billShareAccess.save(billShare);
 
-          return { member, detail: rest };
+          return await this.updateMember(v.id, v.amount, true);
         })
       );
 
       await this.dbAccess.commitTransaction();
 
       return {
-        members: [...resFormer, ...resLatter].map((v) => v.member),
+        members: [...resFormer, ...resLatter],
         transaction: {
           ...newBill,
-          detail: [...resFormer, ...resLatter].map((v) => v.detail),
+          shareMemberId: former[0].id,
+          shareCount: former.length,
         },
       };
     } catch (e) {
@@ -494,11 +463,11 @@ export class BookService {
       transfer.dstMemberId = data.dstMemberId;
       transfer.memo = data.memo ?? null;
 
-      const member1 = await this.updateMemberBalance(
+      const member1 = await this.updateMember(
         data.srcMemberId,
         bn(data.amount)
       );
-      const member2 = await this.updateMemberBalance(
+      const member2 = await this.updateMember(
         data.dstMemberId,
         bn(data.amount).negated()
       );
@@ -506,7 +475,13 @@ export class BookService {
 
       await this.dbAccess.commitTransaction();
 
-      return { members: [member1, member2], transaction: res };
+      return {
+        members: [member1, member2],
+        transaction: {
+          ...res,
+          type: 'transfer',
+        },
+      };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
@@ -529,14 +504,11 @@ export class BookService {
         ...oldTransfer,
         dateDeleted: new Date(),
       });
-      await this.updateMemberBalance(
+      await this.updateMember(
         oldTransfer.srcMemberId,
         bn(oldTransfer.amount).negated()
       );
-      await this.updateMemberBalance(
-        oldTransfer.dstMemberId,
-        bn(oldTransfer.amount)
-      );
+      await this.updateMember(oldTransfer.dstMemberId, bn(oldTransfer.amount));
 
       const newTransfer = new TransferEntity();
       newTransfer.id = tid;
@@ -548,11 +520,11 @@ export class BookService {
       newTransfer.dstMemberId = data.dstMemberId;
       newTransfer.memo = data.memo ?? null;
 
-      const member1 = await this.updateMemberBalance(
+      const member1 = await this.updateMember(
         data.srcMemberId,
         bn(data.amount)
       );
-      const member2 = await this.updateMemberBalance(
+      const member2 = await this.updateMember(
         data.dstMemberId,
         bn(data.amount).negated()
       );
@@ -560,7 +532,13 @@ export class BookService {
 
       await this.dbAccess.commitTransaction();
 
-      return { members: [member1, member2], transaction: res };
+      return {
+        members: [member1, member2],
+        transaction: {
+          ...res,
+          type: 'transfer',
+        },
+      };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
@@ -574,11 +552,11 @@ export class BookService {
       await this.dbAccess.startTransaction();
       const transfer = await this.transferAccess.findUndeletedById(tid);
 
-      await this.updateMemberBalance(
+      await this.updateMember(
         transfer.srcMemberId,
         bn(transfer.amount).negated()
       );
-      await this.updateMemberBalance(transfer.dstMemberId, bn(transfer.amount));
+      await this.updateMember(transfer.dstMemberId, bn(transfer.amount));
       await this.transferAccess.update({
         ...transfer,
         dateDeleted: new Date(),

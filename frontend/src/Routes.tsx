@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Page } from './constant/Page';
-import BookDetail from './page/bookDetail/BookDetail';
-import BookList from './page/bookList/BookList';
+import BookDetail from './page/bookDetail';
+import BookList from './page/bookList';
 import BookSetting from './page/bookSetting/BookSetting';
 import Fill from './page/fill/Fill';
 import Landing from './page/landing/Landing';

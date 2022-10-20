@@ -820,7 +820,7 @@ Resources:
               "type": "object",
               "properties": {
                 "date": {"type": "string"},
-                "type": {"type": "string", "enum": ["income","expense"]},
+                "type": {"type": "string", "enum": ["in","out"]},
                 "descr": {"type": "string"},
                 "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
                 "detail": {
@@ -842,7 +842,7 @@ Resources:
               "type": "object",
               "properties": {
                 "date": {"type": "string"},
-                "type": {"type": "string", "enum": ["income","expense"]},
+                "type": {"type": "string", "enum": ["in","out"]},
                 "descr": {"type": "string"},
                 "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
                 "detail": {

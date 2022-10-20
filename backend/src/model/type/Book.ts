@@ -1,7 +1,4 @@
 import { BillType } from 'src/constant/Book';
-import { Bill } from 'src/model/entity/Bill';
-import { BillShare } from 'src/model/entity/BillShare';
-import { Transfer } from 'src/model/entity/Transfer';
 
 export type ShareDetail = {
   id: string;
@@ -25,10 +22,35 @@ export type TransferData = {
   memo?: string;
 };
 
-export type Transaction = BillTransaction | TransferTransaction;
+export type Transaction = TransactionBill | TransactionTransfer;
 
-export type BillTransaction = Bill & {
-  detail: Omit<BillShare, 'billId' | 'ver'>[];
+export type TransactionBill = {
+  id: string;
+  ver: string;
+  bookId: string;
+  date: Date;
+  type: 'in' | 'out';
+  descr: string;
+  amount: number;
+  shareMemberId: string;
+  shareCount: number;
+  memo: string | null;
+  dateCreated: Date;
+  dateUpdated: Date | null;
+  dateDeleted: Date | null;
 };
 
-export type TransferTransaction = Transfer;
+export type TransactionTransfer = {
+  id: string;
+  ver: string;
+  bookId: string;
+  date: Date;
+  type: 'transfer';
+  amount: number;
+  srcMemberId: string;
+  dstMemberId: string;
+  memo: string | null;
+  dateCreated: Date;
+  dateUpdated: Date | null;
+  dateDeleted: Date | null;
+};

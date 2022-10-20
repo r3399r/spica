@@ -101,7 +101,7 @@ export class BookController extends Controller {
         ver: '1',
         bookId: 'book-id',
         date: new Date(),
-        type: 'income' as BillType,
+        type: 'in' as BillType,
         descr: 'sample',
         amount: 100,
         memo: 'memo-bill',
@@ -172,7 +172,7 @@ export class BookController extends Controller {
    * @example _id "book-id"
    * @example _postBookBillRequest {
    *   "date": "2022-09-30T15:58:37.080Z",
-   *   "type":"income",
+   *   "type":"in",
    *   "descr":"sample",
    *   "amount":100,
    *   "former":[{
@@ -205,7 +205,7 @@ export class BookController extends Controller {
       ver: '1',
       bookId: 'book-id',
       date: new Date(),
-      type: 'income' as BillType,
+      type: 'in' as BillType,
       descr: 'sample',
       amount: 100,
       memo: 'memo-bill',
@@ -252,7 +252,7 @@ export class BookController extends Controller {
    * @example _billId "bill-id"
    * @example _putBookBillRequest {
    *   "date": "2022-09-30T15:58:37.080Z",
-   *   "type":"income",
+   *   "type":"in",
    *   "descr":"sample",
    *   "amount":100,
    *   "former":[{
@@ -285,7 +285,7 @@ export class BookController extends Controller {
       ver: '1',
       bookId: 'book-id',
       date: new Date(),
-      type: 'income' as BillType,
+      type: 'in' as BillType,
       descr: 'sample',
       amount: 100,
       memo: 'memo-bill',

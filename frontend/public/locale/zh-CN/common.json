@@ -13,6 +13,11 @@
     "name": "名称"
   },
   "bookDetail": {
-    "back": "回清单"
+    "back": "回清单",
+    "total": "Total",
+    "member": "Member",
+    "balance": "Balance",
+    "noMemberHint": "Please click \"Member\" to add members, and then we can start",
+    "newTransaction": "新增帳目"
   }
 }

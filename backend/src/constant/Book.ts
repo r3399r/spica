@@ -1,4 +1,4 @@
 export enum BillType {
-  Income = 'income',
-  Expense = 'expense',
+  In = 'in', // income
+  Out = 'out', // expense
 }

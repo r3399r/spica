@@ -3,9 +3,11 @@ export type ViewTransaction = {
   ver: string;
   bookId: string;
   date: Date;
-  type: 'income' | 'expense' | 'transfer';
+  type: 'in' | 'out' | 'transfer';
   descr: string | null;
   amount: number;
+  shareMemberId: string | null;
+  shareCount: number | null;
   srcMemberId: string | null;
   dstMemberId: string | null;
   memo: string | null;
@@ -19,9 +21,11 @@ export type ViewTransactionBill = {
   ver: string;
   bookId: string;
   date: Date;
-  type: 'income' | 'expense';
+  type: 'in' | 'out';
   descr: string;
   amount: number;
+  shareMemberId: string;
+  shareCount: number;
   srcMemberId: null;
   dstMemberId: null;
   memo: string | null;
@@ -38,6 +42,8 @@ export type ViewTransactionTransfer = {
   type: 'transfer';
   descr: null;
   amount: number;
+  shareMemberId: null;
+  shareCount: null;
   srcMemberId: string;
   dstMemberId: string;
   memo: string | null;

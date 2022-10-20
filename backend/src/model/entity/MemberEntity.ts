@@ -14,6 +14,9 @@ export class MemberEntity implements Member {
   nickname!: string;
 
   @Column({ type: 'float' })
+  total!: number;
+
+  @Column({ type: 'float' })
   balance!: number;
 
   @Column({ type: 'bool' })

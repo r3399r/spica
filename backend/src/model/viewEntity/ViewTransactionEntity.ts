@@ -16,13 +16,19 @@ export class ViewTransactionEntity implements ViewTransaction {
   date!: Date;
 
   @ViewColumn()
-  type!: 'income' | 'expense' | 'transfer';
+  type!: 'in' | 'out' | 'transfer';
 
   @ViewColumn()
   descr: string | null = null;
 
   @ViewColumn()
   amount!: number;
+
+  @ViewColumn({ name: 'share_member_id' })
+  shareMemberId: string | null = null;
+
+  @ViewColumn({ name: 'share_count' })
+  shareCount: number | null = null;
 
   @ViewColumn({ name: 'src_member_id' })
   srcMemberId: string | null = null;
