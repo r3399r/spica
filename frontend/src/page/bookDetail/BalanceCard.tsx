@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import Body from 'src/component/celestial-ui/typography/Body';
+import H4 from 'src/component/celestial-ui/typography/H4';
 import IcGo from 'src/image/ic-go.svg';
 import { RootState } from 'src/redux/store';
 import { bn, bnFormat } from 'src/util/bignumber';
@@ -17,9 +19,11 @@ const BalanceCard = () => {
   return (
     <div className="rounded-[15px] p-[10px] bg-grey-200 my-[10px] text-navy-700">
       <div className="mb-[10px] flex justify-between">
-        <div className="font-bold text-xl">{t('bookDetail.balance')}</div>
+        <H4>{t('bookDetail.balance')}</H4>
         <div className="flex items-center h-[21px]">
-          <div className="text-[14px] leading-[21px] text-navy-300 font-bold">結帳</div>
+          <Body bold className="text-navy-300">
+            結帳
+          </Body>
           <img src={IcGo} />
         </div>
       </div>
@@ -27,13 +31,17 @@ const BalanceCard = () => {
       {former.length > 0 && (
         <>
           <div className="flex items-center gap-[10px]">
-            <div className="text-[12px] leading-[18px] text-navy-300">須收款</div>
+            <Body size="s" className="text-navy-300">
+              須收款
+            </Body>
             <div className="h-[1px] bg-grey-500 flex-1" />
           </div>
           {former.map((v) => (
             <div key={v.id} className="flex justify-between py-[5px] ml-[10px] gap-2">
-              <div>{v.nickname}</div>
-              <div>{`$${bnFormat(v.balance)}`}</div>
+              <Body size="l" className="text-navy-700">
+                {v.nickname}
+              </Body>
+              <Body size="l" className="text-navy-700">{`$${bnFormat(v.balance)}`}</Body>
             </div>
           ))}
         </>
@@ -41,13 +49,15 @@ const BalanceCard = () => {
       {latter.length > 0 && (
         <>
           <div className="flex items-center gap-[10px]">
-            <div className="text-[12px] leading-[18px] text-navy-300">須還款</div>
+            <Body className="text-navy-300">須還款</Body>
             <div className="h-[1px] bg-grey-500 flex-1" />
           </div>
           {latter.map((v) => (
             <div key={v.id} className="flex justify-between py-[5px] ml-[10px] gap-2">
-              <div>{v.nickname}</div>
-              <div>{`$${bn(v.balance).negated().toFormat()}`}</div>
+              <Body size="l" className="text-navy-700">
+                {v.nickname}
+              </Body>
+              <Body size="l" className="text-navy-700">{`$${bn(v.balance).abs().toFormat()}`}</Body>
             </div>
           ))}
         </>

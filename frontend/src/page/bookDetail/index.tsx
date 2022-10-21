@@ -2,25 +2,23 @@ import classNames from 'classnames';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Button from 'src/component/celestial-ui/Button';
-import { Page } from 'src/constant/Page';
+import Body from 'src/component/celestial-ui/typography/Body';
 import IcAdd from 'src/image/ic-add.svg';
-import IcBack from 'src/image/ic-back.svg';
-import IcSetting from 'src/image/ic-setting.svg';
 import { RootState } from 'src/redux/store';
 import { loadBookById } from 'src/service/bookService';
 import BalanceCard from './BalanceCard';
 import MainCard from './MainCard';
+import Navbar from './Navbar';
 import TransactionList from './TransactionList';
 
 const BookDetail = () => {
   const { id } = useParams();
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
-  const noMember = useMemo(() => book?.members?.length === 0, [book]);
+  const noMember = useMemo(() => book === undefined || book?.members?.length === 0, [book]);
 
   useEffect(() => {
     if (id === undefined) return;
@@ -35,22 +33,14 @@ const BookDetail = () => {
         })}
       >
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
-          <div className="flex justify-between mt-[15px] mb-5">
-            <div className="flex cursor-pointer" onClick={() => navigate(Page.Book)}>
-              <img src={IcBack} />
-              <div className="text-navy-700 font-bold">{t('bookDetail.back')}</div>
-            </div>
-            <div className="cursor-pointer" onClick={() => navigate(`${Page.Book}/${id}/setting`)}>
-              <img src={IcSetting} />
-            </div>
-          </div>
+          <Navbar />
           <MainCard />
           <BalanceCard />
           <TransactionList />
           {noMember && (
-            <div className="mt-[30px] px-[46px] text-center text-sm text-navy-300">
+            <Body className="mt-[30px] px-[46px] text-center text-navy-300">
               {t('bookDetail.noMemberHint')}
-            </div>
+            </Body>
           )}
         </div>
       </div>
@@ -60,7 +50,9 @@ const BookDetail = () => {
             <Button className="mt-5 w-64 h-12">
               <div className="flex justify-center">
                 <img src={IcAdd} />
-                <div>{t('bookDetail.newTransaction')}</div>
+                <Body size="l" bold className="text-white">
+                  {t('bookDetail.newTransaction')}
+                </Body>
               </div>
             </Button>
           </div>

@@ -9,7 +9,7 @@
   "bookList": {
     "bookList": "帳本清單",
     "newBook": "建立新帳本",
-    "noBook": "目前無帳本",
+    "noBook": "尚未建立帳本",
     "name": "名稱"
   },
   "bookDetail": {
@@ -23,5 +23,8 @@
     "multiple": "多人",
     "billOutNote": "{{member}}支付了 ${{amount}}",
     "billInNote": "{{member}}收取了 ${{amount}}"
+  },
+  "member": {
+    "back": "回帳本"
   }
 }

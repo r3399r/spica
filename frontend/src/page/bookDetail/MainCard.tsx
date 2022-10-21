@@ -2,8 +2,12 @@ import classNames from 'classnames';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'src/component/celestial-ui/Button';
+import Body from 'src/component/celestial-ui/typography/Body';
+import H4 from 'src/component/celestial-ui/typography/H4';
+import H5 from 'src/component/celestial-ui/typography/H5';
+import { Page } from 'src/constant/Page';
 import IcMember from 'src/image/ic-member.svg';
 import { RootState } from 'src/redux/store';
 import { getBookIndex } from 'src/service/bookService';
@@ -12,6 +16,7 @@ import { bn } from 'src/util/bignumber';
 const MainCard = () => {
   const { id } = useParams();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
   const index = useMemo(() => getBookIndex(id ?? ''), [id]);
@@ -28,19 +33,25 @@ const MainCard = () => {
         'bg-tan-300': index % 3 === 2,
       })}
     >
-      <div className="min-h-[28px] text-navy-700 font-bold text-xl mb-[10px]">{book?.name}</div>
+      <H4 className="min-h-[28px] text-navy-700 mb-[10px]">{book?.name}</H4>
       <div className="flex items-end">
         <div className="flex-1">
-          <div className="text-navy-300 text-[12px] leading-[18px]">
+          <Body size="s" className="text-navy-300">
             {total?.gte(0) ? t('bookDetail.totalIn') : t('bookDetail.totalOut')}
-          </div>
-          <div className="text-navy-700 font-bold">{total?.abs().toFormat()} TWD</div>
+          </Body>
+          <H5 className="text-navy-700">{total?.abs().toFormat()} TWD</H5>
         </div>
         <div>
-          <Button appearance="default" className="!p-[5px] !rounded-md">
+          <Button
+            appearance="default"
+            className="!p-[5px] !rounded-md"
+            onClick={() => navigate(`${Page.Book}/${id}/member`)}
+          >
             <div className="flex gap-[5px]">
               <img src={IcMember} />
-              <div className="pr-[5px]">{t('bookDetail.member')}</div>
+              <Body bold className="pr-[5px] text-white">
+                {t('bookDetail.member')}
+              </Body>
             </div>
           </Button>
         </div>

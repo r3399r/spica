@@ -3,6 +3,7 @@ import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import Body from 'src/component/celestial-ui/typography/Body';
 import { RootState } from 'src/redux/store';
 import { aggregateTransactions } from 'src/service/bookService';
 import { bnFormat } from 'src/util/bignumber';
@@ -35,10 +36,14 @@ const TransactionList = () => {
       return (
         <div key={item.id} className="py-[10px] border-b-[1px] border-b-grey-300">
           <div className="flex justify-between">
-            <div className="font-bold">{item.descr}</div>
-            <div>{`$${bnFormat(item.amount)}`}</div>
+            <Body size="l" bold>
+              {item.descr}
+            </Body>
+            <Body size="l">{`$${bnFormat(item.amount)}`}</Body>
           </div>
-          <div className="text-[12px] leading-[18px] text-teal-500">{billNote(item)}</div>
+          <Body size="s" className="text-[12px] leading-[18px] text-teal-500">
+            {billNote(item)}
+          </Body>
         </div>
       );
 
@@ -50,8 +55,10 @@ const TransactionList = () => {
       <div className="p-[10px]">
         {Object.keys(transactions).map((v) => (
           <div key={v} className="mb-[10px]">
-            <div className="pt-[5px] text-sm text-navy-100 font-bold">{v}</div>
-            <div>{transactions[v].map(items)}</div>
+            <Body bold className="pt-[5px] text-navy-100">
+              {v}
+            </Body>
+            <>{transactions[v].map(items)}</>
           </div>
         ))}
       </div>

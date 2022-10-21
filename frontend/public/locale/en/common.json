@@ -23,5 +23,8 @@
     "multiple": "Multiple People",
     "billOutNote": "{{member}} paid ${{amount}}",
     "billInNote": "{{member}} received ${{amount}}"
+  },
+  "member": {
+    "back": "Back"
   }
 }
