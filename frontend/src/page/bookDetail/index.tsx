@@ -28,7 +28,7 @@ const BookDetail = () => {
   return (
     <>
       <div
-        className={classNames('fixed top-0 h-[calc(100%-104px)] w-full overflow-y-scroll', {
+        className={classNames('fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto', {
           'h-full': noMember,
         })}
       >

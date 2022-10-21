@@ -26,7 +26,7 @@ const BookList = () => {
 
   return (
     <>
-      <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-scroll">
+      <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
         <div>
           <img src={PicBookHero} className="w-full" />
         </div>
