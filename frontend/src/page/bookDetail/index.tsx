@@ -18,7 +18,7 @@ const BookDetail = () => {
   const { t } = useTranslation();
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
-  const noMember = useMemo(() => book === undefined || book?.members?.length === 0, [book]);
+  const noMember = useMemo(() => book?.members?.length === 0, [book]);
 
   useEffect(() => {
     if (id === undefined) return;
@@ -44,7 +44,7 @@ const BookDetail = () => {
           )}
         </div>
       </div>
-      {!noMember && (
+      {book !== undefined && !noMember && (
         <div className="fixed bottom-0 h-[104px] w-full">
           <div className="mx-auto w-fit">
             <Button className="mt-5 w-64 h-12">
