@@ -11,7 +11,7 @@ select
 	b.descr,
 	b.amount,
 	tmp_bs.share_member_id,
-	(case when b.type = 'out' then tmp_bs.p_count else tmp_bs.n_count end ) as share_count,
+	tmp_bs.share_count,
 	b.memo,
 	b.date_created,
 	b.date_updated,
@@ -26,21 +26,24 @@ from
 	group by
 			b.id
 	) as tmp_b
-left join bill b on
-	tmp_b.id = b.id
-	and tmp_b.ver = b.ver
+left join bill b
+	on tmp_b.id = b.id and tmp_b.ver = b.ver
 left join (
 	select
-		bs.bill_id ,
-		bs.ver ,
+		bs.bill_id,
+		bs.ver,
+		bs.pm,
 		min(bs.member_id) as share_member_id,
-		sum(case when bs.amount > 0 then 1 else 0 end )as p_count,
-		sum(case when bs.amount < 0 then 1 else 0 end )as n_count
+		count(bs.amount) as share_count
 	from
-		bill_share bs
+		v_bill_share bs
 	group by
 		bs.bill_id,
-		bs.ver
+		bs.ver,
+		bs.pm
 	) as tmp_bs on
 	tmp_bs.bill_id = b.id
-	and tmp_bs.ver = b.ver;
+	and tmp_bs.ver = b.ver
+where
+	(b.type = 'out' and tmp_bs.pm = 1 )
+	or (b.type = 'in' and tmp_bs.pm = -1 );

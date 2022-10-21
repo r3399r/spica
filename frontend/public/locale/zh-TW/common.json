@@ -14,7 +14,8 @@
   },
   "bookDetail": {
     "back": "回清單",
-    "total": "總花費",
+    "totalOut": "總支出",
+    "totalIn": "總收入",
     "member": "成員",
     "balance": "餘額",
     "noMemberHint": "請先至「成員」中新增一起分帳的夥伴，才能開始記帳喔！",

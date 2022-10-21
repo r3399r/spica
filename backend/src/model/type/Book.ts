@@ -10,7 +10,8 @@ export type BillData = {
   type: BillType;
   descr: string;
   amount: number;
-  detail: ShareDetail[];
+  former: ShareDetail[];
+  latter: ShareDetail[];
   memo?: string;
 };
 

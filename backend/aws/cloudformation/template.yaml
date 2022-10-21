@@ -823,20 +823,31 @@ Resources:
                 "type": {"type": "string", "enum": ["in","out"]},
                 "descr": {"type": "string"},
                 "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
-                "detail": {
+                "former": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
                       "id": {"type": "string"},
-                      "amount": {"type": "number"},
+                      "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
+                    },
+                    "required": ["id","amount"]
+                  }
+                },
+                "latter": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "string"},
+                      "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
                     },
                     "required": ["id","amount"]
                   }
                 },
                 "memo": {"type": "string"}
               },
-              "required": ["date","type","descr","amount","detail"]
+              "required": ["date","type","descr","amount","former","latter"]
             },
             "putBookBill": {
               "type": "object",
@@ -845,20 +856,31 @@ Resources:
                 "type": {"type": "string", "enum": ["in","out"]},
                 "descr": {"type": "string"},
                 "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
-                "detail": {
+                "former": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
                       "id": {"type": "string"},
-                      "amount": {"type": "number"},
+                      "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
+                    },
+                    "required": ["id","amount"]
+                  }
+                },
+                "latter": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "string"},
+                      "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
                     },
                     "required": ["id","amount"]
                   }
                 },
                 "memo": {"type": "string"}
               },
-              "required": ["date","type","descr","amount","detail"]
+              "required": ["date","type","descr","amount","former","latter"]
             },
             "postBookMember": {
               "type": "object",

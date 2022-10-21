@@ -8,6 +8,7 @@ import { DbAccess } from 'src/access/DbAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
 import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
+import { BillType } from 'src/constant/Book';
 import {
   GetBookIdResponse,
   GetBookNameResponse,
@@ -228,22 +229,8 @@ export class BookService {
   }
 
   private validateDetail(amount: number, data: ShareDetail[]) {
-    if (!BigNumber.sum(...data.map((v) => v.amount)).eq(0))
-      throw new BadRequestError('sum should be 0');
-
-    if (
-      !BigNumber.sum(
-        ...data.filter((v) => v.amount > 0).map((v) => v.amount)
-      ).eq(amount)
-    )
-      throw new BadRequestError('positive sum not consistent');
-
-    if (
-      !BigNumber.sum(...data.filter((v) => v.amount < 0).map((v) => v.amount))
-        .negated()
-        .eq(amount)
-    )
-      throw new BadRequestError('negative sum not consistent');
+    if (!BigNumber.sum(...data.map((v) => v.amount)).eq(amount))
+      throw new BadRequestError('sum is not consistent');
   }
 
   private async updateMember(
@@ -285,35 +272,39 @@ export class BookService {
       bill.memo = data.memo ?? null;
 
       const newBill = await this.billAccess.save(bill);
-      this.validateDetail(data.amount, data.detail);
-
-      const former = data.detail.filter((v) => v.amount > 0);
-      const latter = data.detail.filter((v) => v.amount < 0);
+      this.validateDetail(data.amount, data.former);
+      this.validateDetail(data.amount, data.latter);
 
       const resFormer = await Promise.all(
-        former.map(async (v) => {
+        data.former.map(async (v) => {
+          let amount = v.amount;
+          if (data.type === BillType.In) amount = v.amount * -1;
+
           const billShare = new BillShareEntity();
           billShare.billId = newBill.id;
           billShare.ver = '1';
           billShare.memberId = v.id;
-          billShare.amount = v.amount;
+          billShare.amount = amount;
 
           await this.billShareAccess.save(billShare);
 
-          return await this.updateMember(v.id, v.amount);
+          return await this.updateMember(v.id, amount);
         })
       );
       const resLatter = await Promise.all(
-        latter.map(async (v) => {
+        data.latter.map(async (v) => {
+          let amount = v.amount;
+          if (data.type === BillType.Out) amount = v.amount * -1;
+
           const billShare = new BillShareEntity();
           billShare.billId = newBill.id;
           billShare.ver = '1';
           billShare.memberId = v.id;
-          billShare.amount = v.amount;
+          billShare.amount = amount;
 
           await this.billShareAccess.save(billShare);
 
-          return await this.updateMember(v.id, v.amount, true);
+          return await this.updateMember(v.id, amount, true);
         })
       );
 
@@ -323,8 +314,8 @@ export class BookService {
         members: [...resFormer, ...resLatter],
         transaction: {
           ...newBill,
-          shareMemberId: former[0].id,
-          shareCount: former.length.toString(),
+          shareMemberId: data.former[0].id,
+          shareCount: data.former.length.toString(),
         },
       };
     } catch (e) {
@@ -344,14 +335,24 @@ export class BookService {
       oldBill.ver
     );
 
-    const former = oldBillShares.filter((v) => v.amount > 0);
-    const latter = oldBillShares.filter((v) => v.amount < 0);
+    const positive = oldBillShares.filter((v) => v.amount > 0);
+    const negative = oldBillShares.filter((v) => v.amount < 0);
     await Promise.all(
-      former.map((v) => this.updateMember(v.memberId, bn(v.amount).negated()))
+      positive.map((v) =>
+        this.updateMember(
+          v.memberId,
+          bn(v.amount).negated(),
+          oldBill.type === BillType.In
+        )
+      )
     );
     await Promise.all(
-      latter.map((v) =>
-        this.updateMember(v.memberId, bn(v.amount).negated(), true)
+      negative.map((v) =>
+        this.updateMember(
+          v.memberId,
+          bn(v.amount).negated(),
+          oldBill.type === BillType.Out
+        )
       )
     );
   }
@@ -381,35 +382,39 @@ export class BookService {
       bill.memo = data.memo ?? null;
 
       const newBill = await this.billAccess.save(bill);
-      this.validateDetail(data.amount, data.detail);
-
-      const former = data.detail.filter((v) => v.amount > 0);
-      const latter = data.detail.filter((v) => v.amount < 0);
+      this.validateDetail(data.amount, data.former);
+      this.validateDetail(data.amount, data.latter);
 
       const resFormer = await Promise.all(
-        former.map(async (v) => {
+        data.former.map(async (v) => {
+          let amount = v.amount;
+          if (data.type === BillType.In) amount = v.amount * -1;
+
           const billShare = new BillShareEntity();
           billShare.billId = newBill.id;
           billShare.ver = bn(oldBill.ver).plus(1).toString();
           billShare.memberId = v.id;
-          billShare.amount = v.amount;
+          billShare.amount = amount;
 
           await this.billShareAccess.save(billShare);
 
-          return await this.updateMember(v.id, v.amount);
+          return await this.updateMember(v.id, amount);
         })
       );
       const resLatter = await Promise.all(
-        latter.map(async (v) => {
+        data.latter.map(async (v) => {
+          let amount = v.amount;
+          if (data.type === BillType.Out) amount = v.amount * -1;
+
           const billShare = new BillShareEntity();
           billShare.billId = newBill.id;
           billShare.ver = bn(oldBill.ver).plus(1).toString();
           billShare.memberId = v.id;
-          billShare.amount = v.amount;
+          billShare.amount = amount;
 
           await this.billShareAccess.save(billShare);
 
-          return await this.updateMember(v.id, v.amount, true);
+          return await this.updateMember(v.id, amount, true);
         })
       );
 
@@ -419,8 +424,8 @@ export class BookService {
         members: [...resFormer, ...resLatter],
         transaction: {
           ...newBill,
-          shareMemberId: former[0].id,
-          shareCount: former.length.toString(),
+          shareMemberId: data.former[0].id,
+          shareCount: data.former.length.toString(),
         },
       };
     } catch (e) {

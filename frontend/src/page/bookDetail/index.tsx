@@ -29,7 +29,11 @@ const BookDetail = () => {
 
   return (
     <>
-      <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-scroll">
+      <div
+        className={classNames('fixed top-0 h-[calc(100%-104px)] w-full overflow-y-scroll', {
+          'h-full': noMember,
+        })}
+      >
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
           <div className="flex justify-between mt-[15px] mb-5">
             <div className="flex cursor-pointer" onClick={() => navigate(Page.Book)}>
@@ -50,20 +54,18 @@ const BookDetail = () => {
           )}
         </div>
       </div>
-      <div className="fixed bottom-0 h-[104px] w-full">
-        <div className="mx-auto w-fit">
-          <Button
-            className="mt-5 w-64 h-12"
-            disabled={noMember}
-            onClick={() => navigate(`${Page.Book}/${id}/fill`)}
-          >
-            <div className="flex justify-center">
-              <img src={IcAdd} className={classNames({ 'opacity-40': noMember })} />
-              <div>{t('bookDetail.newTransaction')}</div>
-            </div>
-          </Button>
+      {!noMember && (
+        <div className="fixed bottom-0 h-[104px] w-full">
+          <div className="mx-auto w-fit">
+            <Button className="mt-5 w-64 h-12">
+              <div className="flex justify-center">
+                <img src={IcAdd} />
+                <div>{t('bookDetail.newTransaction')}</div>
+              </div>
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

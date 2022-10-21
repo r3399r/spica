@@ -14,7 +14,8 @@
   },
   "bookDetail": {
     "back": "Back",
-    "total": "Total",
+    "totalOut": "Total Expense",
+    "totalIn": "Total Income",
     "member": "Member",
     "balance": "Balance",
     "noMemberHint": "Please click \"Member\" to add members, and then we can start",
