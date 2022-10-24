@@ -49,7 +49,9 @@ const BalanceCard = () => {
       {latter.length > 0 && (
         <>
           <div className="flex items-center gap-[10px]">
-            <Body className="text-navy-300">須還款</Body>
+            <Body size="s" className="text-navy-300">
+              須還款
+            </Body>
             <div className="h-[1px] bg-grey-500 flex-1" />
           </div>
           {latter.map((v) => (
