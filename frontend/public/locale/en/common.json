@@ -25,6 +25,14 @@
     "billInNote": "{{member}} received ${{amount}}"
   },
   "member": {
-    "back": "Back"
+    "head": "Members",
+    "back": "Back",
+    "create": "Create",
+    "nickname": "nickname",
+    "noMemberHint": "Let's create new members!",
+    "shareWithFriend": "Share With Friends",
+    "scanHint": "Scan QR Code or",
+    "shareLink": "Share Link",
+    "code": "Code:"
   }
 }

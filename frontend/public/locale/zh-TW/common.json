@@ -25,6 +25,14 @@
     "billInNote": "{{member}}收取了 ${{amount}}"
   },
   "member": {
-    "back": "回帳本"
+    "head": "帳本成員",
+    "back": "回帳本",
+    "create": "新增",
+    "nickname": "暱稱",
+    "noMemberHint": "尚未有成員，請輸入暱稱來新增成員吧！",
+    "shareWithFriend": "與好友共享",
+    "scanHint": "讓好友掃描此 QR Code 或",
+    "shareLink": "分享連結",
+    "code": "通行碼："
   }
 }
