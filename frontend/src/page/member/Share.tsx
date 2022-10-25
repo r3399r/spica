@@ -12,21 +12,32 @@ const Share = () => {
   const { id } = useParams();
   const { t } = useTranslation();
   const { books } = useSelector((rootState: RootState) => rootState.book);
-  const code = useMemo(() => books?.find((v) => v.id === id)?.code, [id, books]);
+  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
+  const link = `${location.origin}/share/${id}`;
+
+  const onShareLink = () => {
+    if (!navigator.share || book === undefined) return;
+    navigator.share({
+      text: `與你共享帳本「${book.name}」，點擊連結後請輸入通行碼`,
+      url: link,
+    });
+  };
 
   return (
     <div className="p-[10px] bg-grey-100 rounded-[15px]">
       <H4>{t('member.shareWithFriend')}</H4>
       <div className="mt-5 flex flex-col gap-[10px] items-center">
         <div className="bg-white w-[180px] p-[10px]">
-          <QRCode value={'hi'} size={160} />
+          <QRCode value={link} size={160} />
         </div>
         <Body>{t('member.scanHint')}</Body>
-        <Button className="px-[15px] py-[5px] rounded-md">{t('member.shareLink')}</Button>
+        <Button className="px-[15px] py-[5px] rounded-md" onClick={onShareLink}>
+          {t('member.shareLink')}
+        </Button>
         <div className="flex">
           <Body>{t('member.code')}</Body>
           <Body bold className="text-tomato-500">
-            {code ?? '-'}
+            {book?.code ?? '-'}
           </Body>
         </div>
       </div>
