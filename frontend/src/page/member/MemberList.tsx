@@ -14,8 +14,10 @@ const MemberList = () => {
   const { id } = useParams();
   const { t } = useTranslation();
   const { books } = useSelector((rootState: RootState) => rootState.book);
-  const members = useMemo(() => books?.find((v) => v.id === id)?.members ?? null, [books]);
+  const members = useMemo(() => books?.find((v) => v.id === id)?.members, [books]);
   const [target, setTarget] = useState<Member>();
+
+  if (members === undefined) return <></>;
 
   if (members === null || members.length === 0)
     return <Body className="text-navy-300 py-[30px] text-center">{t('member.noMemberHint')}</Body>;
