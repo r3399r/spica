@@ -8,6 +8,7 @@ import IcEdit from 'src/image/ic-edit.svg';
 import IcRemoveDisabled from 'src/image/ic-remove-disabled.svg';
 import IcRemove from 'src/image/ic-remove.svg';
 import { RootState } from 'src/redux/store';
+import ModalDeleteMember from './ModalDeleteMember';
 import ModalEditMember from './ModalEditMember';
 
 const MemberList = () => {
@@ -15,7 +16,8 @@ const MemberList = () => {
   const { t } = useTranslation();
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const members = useMemo(() => books?.find((v) => v.id === id)?.members, [books]);
-  const [target, setTarget] = useState<Member>();
+  const [editTarget, setEditTarget] = useState<Member>();
+  const [deleteTarget, setDeleteTarget] = useState<Member>();
 
   if (members === undefined) return <></>;
 
@@ -32,9 +34,9 @@ const MemberList = () => {
           >
             <div>{v.nickname}</div>
             <div className="flex gap-[15px]">
-              <img src={IcEdit} className="cursor-pointer" onClick={() => setTarget(v)} />
+              <img src={IcEdit} className="cursor-pointer" onClick={() => setEditTarget(v)} />
               {v.deletable === true ? (
-                <img src={IcRemove} className="cursor-pointer" />
+                <img src={IcRemove} className="cursor-pointer" onClick={() => setDeleteTarget(v)} />
               ) : (
                 <img src={IcRemoveDisabled} className="cursor-pointer" />
               )}
@@ -42,7 +44,16 @@ const MemberList = () => {
           </div>
         ))}
       </div>
-      <ModalEditMember open={!!target} handleClose={() => setTarget(undefined)} target={target} />
+      <ModalEditMember
+        open={!!editTarget}
+        handleClose={() => setEditTarget(undefined)}
+        target={editTarget}
+      />
+      <ModalDeleteMember
+        open={!!deleteTarget}
+        handleClose={() => setDeleteTarget(undefined)}
+        target={deleteTarget}
+      />
     </>
   );
 };

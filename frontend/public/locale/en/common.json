@@ -4,7 +4,8 @@
   "act": {
     "confirm": "Confirm",
     "cancel": "Cancel",
-    "submit": "Submit"
+    "submit": "Submit",
+    "delete": "Delete"
   },
   "bookList": {
     "bookList": "Book List",
@@ -34,7 +35,8 @@
     "scanHint": "Scan QR Code or",
     "shareLink": "Share Link",
     "code": "Code:",
-    "edit": "Edit Profile"
+    "edit": "Edit Profile",
+    "deleteHint": "Delete \"{{nickname}}\"?"
   },
   "share": {
     "join": "Join this Book?",

@@ -56,3 +56,31 @@ export const renameMember = async (bookId: string, memberId: string, nickname: s
     dispatch(finishWaiting());
   }
 };
+
+export const deleteMember = async (bookId: string, memberId: string) => {
+  try {
+    dispatch(startWaiting());
+
+    const localBooks = getLocalBooks();
+    const code = localBooks.find((v) => bookId === v.id)?.code ?? 'xx';
+    await bookEndpoint.deleteBookIdMember(bookId, memberId, code);
+
+    const { books } = getState().book;
+    const updatedBooks = (books ?? []).map((v) => {
+      if (v.id === bookId) {
+        const updatedMembers = (v.members ?? []).filter((o) => o.id !== memberId);
+
+        return {
+          ...v,
+          members: updatedMembers,
+        };
+      }
+
+      return v;
+    });
+
+    dispatch(setBooks(updatedBooks));
+  } finally {
+    dispatch(finishWaiting());
+  }
+};

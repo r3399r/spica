@@ -4,7 +4,8 @@
   "act": {
     "confirm": "確認",
     "cancel": "取消",
-    "submit": "送出"
+    "submit": "送出",
+    "delete": "刪除"
   },
   "bookList": {
     "bookList": "帳本清單",
@@ -34,7 +35,8 @@
     "scanHint": "讓好友掃描此 QR Code 或",
     "shareLink": "分享連結",
     "code": "通行碼：",
-    "edit": "編輯資料"
+    "edit": "編輯資料",
+    "deleteHint": "要刪除「{{nickname}}」嗎？"
   },
   "share": {
     "join": "加入此帳本？",
