@@ -35,7 +35,7 @@ const Share = () => {
           {t('member.shareLink')}
         </Button>
         <div className="flex">
-          <Body>{t('member.code')}</Body>
+          <Body>{t('member.codeHint')}</Body>
           <Body bold className="text-tomato-500">
             {book?.code ?? '-'}
           </Body>

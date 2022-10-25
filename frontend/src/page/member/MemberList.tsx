@@ -38,7 +38,7 @@ const MemberList = () => {
               {v.deletable === true ? (
                 <img src={IcRemove} className="cursor-pointer" onClick={() => setDeleteTarget(v)} />
               ) : (
-                <img src={IcRemoveDisabled} className="cursor-pointer" />
+                <img src={IcRemoveDisabled} />
               )}
             </div>
           </div>

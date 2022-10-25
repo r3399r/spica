@@ -34,7 +34,7 @@
     "shareWithFriend": "与好友共享",
     "scanHint": "让好友扫描此 QR Code 或",
     "shareLink": "分享连结",
-    "code": "通行码：",
+    "codeHint": "并输入通行码：",
     "edit": "编辑资料",
     "deleteHint": "要删除「{{nickname}}」吗？"
   },

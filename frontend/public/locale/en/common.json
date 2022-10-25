@@ -34,7 +34,7 @@
     "shareWithFriend": "Share With Friends",
     "scanHint": "Scan QR Code or",
     "shareLink": "Share Link",
-    "code": "Code:",
+    "codeHint": "and input the code:",
     "edit": "Edit Profile",
     "deleteHint": "Delete \"{{nickname}}\"?"
   },
