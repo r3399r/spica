@@ -33,7 +33,8 @@
     "shareWithFriend": "Share With Friends",
     "scanHint": "Scan QR Code or",
     "shareLink": "Share Link",
-    "code": "Code:"
+    "code": "Code:",
+    "edit": "Edit Profile"
   },
   "share": {
     "join": "Join this Book?",

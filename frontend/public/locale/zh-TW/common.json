@@ -33,7 +33,8 @@
     "shareWithFriend": "與好友共享",
     "scanHint": "讓好友掃描此 QR Code 或",
     "shareLink": "分享連結",
-    "code": "通行碼："
+    "code": "通行碼：",
+    "edit": "編輯資料"
   },
   "share": {
     "join": "加入此帳本？",
