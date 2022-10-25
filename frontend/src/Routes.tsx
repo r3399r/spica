@@ -6,7 +6,7 @@ import BookSetting from './page/bookSetting/BookSetting';
 import Fill from './page/fill/Fill';
 import Landing from './page/landing/Landing';
 import Member from './page/member';
-import Share from './page/share/Share';
+import Share from './page/share';
 
 const AppRoutes = () => (
   <Routes>

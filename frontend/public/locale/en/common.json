@@ -34,5 +34,10 @@
     "scanHint": "Scan QR Code or",
     "shareLink": "Share Link",
     "code": "Code:"
+  },
+  "share": {
+    "join": "Join this Book?",
+    "code": "Code",
+    "wrongCode": "Wrong Code"
   }
 }

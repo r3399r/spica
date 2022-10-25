@@ -34,5 +34,10 @@
     "scanHint": "讓好友掃描此 QR Code 或",
     "shareLink": "分享連結",
     "code": "通行碼："
+  },
+  "share": {
+    "join": "加入此帳本？",
+    "code": "通行碼",
+    "wrongCode": "錯誤的通行碼"
   }
 }

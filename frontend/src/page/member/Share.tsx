@@ -28,7 +28,7 @@ const Share = () => {
       <H4>{t('member.shareWithFriend')}</H4>
       <div className="mt-5 flex flex-col gap-[10px] items-center">
         <div className="bg-white w-[180px] p-[10px]">
-          <QRCode value={link} size={160} />
+          <QRCode value={`${link}?code=${book?.code}`} size={160} />
         </div>
         <Body>{t('member.scanHint')}</Body>
         <Button className="px-[15px] py-[5px] rounded-md" onClick={onShareLink}>
