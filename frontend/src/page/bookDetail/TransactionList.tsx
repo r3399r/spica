@@ -1,4 +1,4 @@
-import { Transaction, TransactionBill } from '@y-celestial/spica-service';
+import { Transaction, TransactionBill, TransactionTransfer } from '@y-celestial/spica-service';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -30,6 +30,16 @@ const TransactionList = () => {
     },
     [t, book],
   );
+  const transferNote = useCallback(
+    (transaction: TransactionTransfer) => {
+      const { amount, srcMemberId, dstMemberId } = transaction;
+      const srcMember = book?.members?.find((v) => v.id === srcMemberId)?.nickname;
+      const dstMember = book?.members?.find((v) => v.id === dstMemberId)?.nickname;
+
+      return t('bookDetail.transferNote', { srcMember, dstMember, amount: bnFormat(amount) });
+    },
+    [t, book],
+  );
 
   const items = (item: Transaction) => {
     if (item.type !== 'transfer')
@@ -47,7 +57,19 @@ const TransactionList = () => {
         </div>
       );
 
-    return <div key={item.id}>transfer</div>;
+    return (
+      <div key={item.id} className="py-[10px] border-b-[1px] border-b-grey-300">
+        <div className="flex justify-between">
+          <Body size="l" bold>
+            {t('bookDetail.transfer')}
+          </Body>
+          <Body size="l">{`$${bnFormat(item.amount)}`}</Body>
+        </div>
+        <Body size="s" className="text-[12px] leading-[18px] text-teal-500">
+          {transferNote(item)}
+        </Body>
+      </div>
+    );
   };
 
   if (book && book.transactions && book.transactions.length > 0 && transactions)

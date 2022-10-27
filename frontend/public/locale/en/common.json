@@ -23,7 +23,9 @@
     "newTransaction": "New Bill",
     "multiple": "Multiple People",
     "billOutNote": "{{member}} paid ${{amount}}",
-    "billInNote": "{{member}} received ${{amount}}"
+    "billInNote": "{{member}} received ${{amount}}",
+    "transfer": "Transfer",
+    "transferNote": "{{srcMember}} transferred ${{amount}} to {{dstMember}}"
   },
   "member": {
     "head": "Members",
