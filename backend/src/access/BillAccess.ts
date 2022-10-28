@@ -43,4 +43,20 @@ export class BillAccess {
 
     if (res.affected === 0) throw new BadRequestError('nothing happened.');
   }
+
+  public async findByBookId(bookId: string) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.find<Bill>(BillEntity.name, {
+      where: { bookId },
+    });
+  }
+
+  public async hardDeleteByBookId(id: string) {
+    const qr = await this.database.getQueryRunner();
+
+    await qr.manager.delete(BillEntity.name, { bookId: id });
+
+    // if (res.affected === 0) throw new BadRequestError('nothing happened.');
+  }
 }

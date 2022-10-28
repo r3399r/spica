@@ -44,4 +44,12 @@ export class BookAccess {
 
     if (res.affected === 0) throw new BadRequestError('nothing happened.');
   }
+
+  public async hardDeleteById(id: string) {
+    const qr = await this.database.getQueryRunner();
+
+    const res = await qr.manager.delete(BookEntity.name, id);
+
+    if (res.affected === 0) throw new BadRequestError('nothing happened.');
+  }
 }
