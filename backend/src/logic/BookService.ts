@@ -1,4 +1,3 @@
-import { BadRequestError, UnauthorizedError } from '@y-celestial/service';
 import { BigNumber } from 'bignumber.js';
 import { inject, injectable } from 'inversify';
 import { BillAccess } from 'src/access/BillAccess';
@@ -8,6 +7,10 @@ import { DbAccess } from 'src/access/DbAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
 import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
+import {
+  BadRequestError,
+  UnauthorizedError,
+} from 'src/celestial-service/error';
 import { BillType } from 'src/constant/Book';
 import {
   GetBookIdResponse,

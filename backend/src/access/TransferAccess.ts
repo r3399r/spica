@@ -1,6 +1,6 @@
-import { BadRequestError } from '@y-celestial/service';
 import { inject, injectable } from 'inversify';
 import { IsNull } from 'typeorm';
+import { BadRequestError } from 'src/celestial-service/error';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
 import { Database } from 'src/util/Database';
