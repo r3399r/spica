@@ -955,6 +955,24 @@ Resources:
       Action: 'lambda:InvokeFunction'
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ServerlessApi}/*
+  LambdaDbClean:
+    Type: AWS::Serverless::Function
+    Properties:
+      Architectures: [arm64]
+      Handler: index.dbClean
+      Runtime: !Sub ${NodeJsVer}
+      FunctionName: !Sub ${Project}-${TargetEnvr}-dbClean
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
+      CodeUri: ../../dist/webpack/lambda
+      MemorySize: 128
+  InvokePermissionDbClean:
+    Type: AWS::Lambda::Permission
+    DependsOn: [EventBridge, LambdaDbClean]
+    Properties:
+      FunctionName: !Sub ${Project}-${TargetEnvr}-dbClean
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt EventBridge.Arn
   #########################################
   ##### Cloudfront and Route53 config #####
   #########################################
@@ -1050,3 +1068,16 @@ Resources:
                 }
             ]
           }'
+  #######################
+  ##### EventBridge #####
+  #######################
+  EventBridge:
+    Type: AWS::Events::Rule
+    DependsOn: [LambdaDbClean]
+    Properties:
+      Name: !Sub ${Project}-${TargetEnvr}-db-clean
+      ScheduleExpression: cron(0 0 * * ? *)
+      State: ENABLED
+      Targets: 
+        - Arn: !GetAtt LambdaDbClean.Arn
+          Id: !Sub ${Project}-${TargetEnvr}-db-clean
