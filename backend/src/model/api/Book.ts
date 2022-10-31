@@ -7,10 +7,11 @@ import {
   TransactionTransfer,
   TransferData,
 } from 'src/model/type/Book';
+import { ViewBook } from 'src/model/viewEntity/ViewBook';
 
 export type GetBookParams = { ids: string };
 
-export type GetBookResponse = Book[];
+export type GetBookResponse = ViewBook[];
 
 export type PostBookRequest = {
   name: string;
@@ -22,7 +23,7 @@ export type PutBookRequest = {
   name: string;
 };
 
-export type GetBookIdResponse = Book & {
+export type GetBookIdResponse = ViewBook & {
   members: Member[];
   transactions: Transaction[];
 };

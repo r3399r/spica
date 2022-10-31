@@ -6,6 +6,7 @@ import { BookAccess } from 'src/access/BookAccess';
 import { DbAccess } from 'src/access/DbAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
+import { ViewBookAccess } from 'src/access/ViewBookAccess';
 import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
 import {
   BadRequestError,
@@ -71,8 +72,11 @@ export class BookService {
   @inject(TransferAccess)
   private readonly transferAccess!: TransferAccess;
 
+  @inject(ViewBookAccess)
+  private readonly vBookAccess!: ViewBookAccess;
+
   @inject(ViewTransactionAccess)
-  private readonly viewTransactionAccess!: ViewTransactionAccess;
+  private readonly vTransactionAccess!: ViewTransactionAccess;
 
   public async cleanup() {
     await this.dbAccess.cleanup();
@@ -87,7 +91,7 @@ export class BookService {
   }
 
   private async validateBook(id: string, code: string) {
-    const book = await this.bookAccess.findById(id);
+    const book = await this.vBookAccess.findById(id);
     if (book.code !== code.toLowerCase()) throw new UnauthorizedError();
 
     return book;
@@ -102,7 +106,7 @@ export class BookService {
     if (idArray.length !== codeArray.length)
       throw new BadRequestError('bad request');
 
-    const books = await this.bookAccess.findByIds(idArray);
+    const books = await this.vBookAccess.findByIds(idArray);
 
     return books.filter((v) => {
       const idx = idArray.findIndex((id) => id === v.id);
@@ -113,7 +117,7 @@ export class BookService {
   }
 
   public async getBookNameById(id: string): Promise<GetBookNameResponse> {
-    const book = await this.bookAccess.findById(id);
+    const book = await this.vBookAccess.findById(id);
 
     return { id: book.id, name: book.name };
   }
@@ -125,9 +129,10 @@ export class BookService {
     const book = await this.validateBook(id, code);
 
     const members = await this.memberAccess.findByBookId(id);
-    const transactions = (await this.viewTransactionAccess.findByBookId(
-      id
-    )) as (ViewTransactionBill | ViewTransactionTransfer)[];
+    const transactions = (await this.vTransactionAccess.findByBookId(id)) as (
+      | ViewTransactionBill
+      | ViewTransactionTransfer
+    )[];
 
     return {
       ...book,
