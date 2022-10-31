@@ -39,7 +39,7 @@ const MainCard = () => {
           <Body size="s" className="text-navy-300">
             {total?.gte(0) ? t('bookDetail.totalIn') : t('bookDetail.totalOut')}
           </Body>
-          <H5 className="text-navy-700">{total?.abs().toFormat()} TWD</H5>
+          <H5 className="text-navy-700">${total?.abs().toFormat()}</H5>
         </div>
         <div>
           <Button

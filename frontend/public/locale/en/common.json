@@ -25,7 +25,10 @@
     "billOutNote": "{{member}} paid ${{amount}}",
     "billInNote": "{{member}} received ${{amount}}",
     "transfer": "Transfer",
-    "transferNote": "{{srcMember}} transferred ${{amount}} to {{dstMember}}"
+    "transferNote": "{{srcMember}} transferred ${{amount}} to {{dstMember}}",
+    "check": "Check",
+    "shouldReceive": "Should Receive",
+    "shouldPay": "Should Pay"
   },
   "member": {
     "head": "Members",

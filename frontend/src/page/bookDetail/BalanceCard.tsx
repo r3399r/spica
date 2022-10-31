@@ -13,8 +13,8 @@ const BalanceCard = () => {
   const { t } = useTranslation();
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
-  const former = useMemo(() => book?.members?.filter((v) => v.balance > 0) ?? [], [book]);
-  const latter = useMemo(() => book?.members?.filter((v) => v.balance <= 0) ?? [], [book]);
+  const former = useMemo(() => book?.members?.filter((v) => v.balance >= 0) ?? [], [book]);
+  const latter = useMemo(() => book?.members?.filter((v) => v.balance < 0) ?? [], [book]);
 
   return (
     <div className="rounded-[15px] p-[10px] bg-grey-200 my-[10px] text-navy-700">
@@ -22,7 +22,7 @@ const BalanceCard = () => {
         <H4>{t('bookDetail.balance')}</H4>
         <div className="flex items-center h-[21px]">
           <Body bold className="text-navy-300">
-            結帳
+            {t('bookDetail.check')}
           </Body>
           <img src={IcGo} />
         </div>
@@ -32,7 +32,7 @@ const BalanceCard = () => {
         <>
           <div className="flex items-center gap-[10px]">
             <Body size="s" className="text-navy-300">
-              須收款
+              {t('bookDetail.shouldReceive')}
             </Body>
             <div className="h-[1px] bg-grey-500 flex-1" />
           </div>
@@ -41,7 +41,7 @@ const BalanceCard = () => {
               <Body size="l" className="text-navy-700">
                 {v.nickname}
               </Body>
-              <Body size="l" className="text-navy-700">{`$${bnFormat(v.balance)}`}</Body>
+              <Body size="l" className="text-green-700">{`$${bnFormat(v.balance)}`}</Body>
             </div>
           ))}
         </>
@@ -50,7 +50,7 @@ const BalanceCard = () => {
         <>
           <div className="flex items-center gap-[10px]">
             <Body size="s" className="text-navy-300">
-              須還款
+              {t('bookDetail.shouldPay')}
             </Body>
             <div className="h-[1px] bg-grey-500 flex-1" />
           </div>
@@ -59,7 +59,9 @@ const BalanceCard = () => {
               <Body size="l" className="text-navy-700">
                 {v.nickname}
               </Body>
-              <Body size="l" className="text-navy-700">{`$${bn(v.balance).abs().toFormat()}`}</Body>
+              <Body size="l" className="text-tomato-700">{`$${bn(v.balance)
+                .abs()
+                .toFormat()}`}</Body>
             </div>
           ))}
         </>
