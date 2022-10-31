@@ -86,14 +86,8 @@ export const addBill = async (
       type: formData.type as BillType,
       descr: formData.descr,
       amount: Number(formData.amount),
-      detail: [
-        ...former.map((v) =>
-          formData.type === 'expense' ? v : { id: v.id, amount: bn(v.amount).negated().toNumber() },
-        ),
-        ...latter.map((v) =>
-          formData.type === 'expense' ? { id: v.id, amount: bn(v.amount).negated().toNumber() } : v,
-        ),
-      ],
+      former: former.map((v) => ({ id: v.id, amount: v.amount })),
+      latter: latter.map((v) => ({ id: v.id, amount: v.amount })),
       memo: formData.memo === '' ? undefined : formData.memo,
     },
     book.code,
@@ -123,14 +117,8 @@ export const updateBill = async (
       type: formData.type as BillType,
       descr: formData.descr,
       amount: Number(formData.amount),
-      detail: [
-        ...former.map((v) =>
-          formData.type === 'expense' ? v : { id: v.id, amount: bn(v.amount).negated().toNumber() },
-        ),
-        ...latter.map((v) =>
-          formData.type === 'expense' ? { id: v.id, amount: bn(v.amount).negated().toNumber() } : v,
-        ),
-      ],
+      former: former.map((v) => ({ id: v.id, amount: v.amount })),
+      latter: latter.map((v) => ({ id: v.id, amount: v.amount })),
       memo: formData.memo === '' ? undefined : formData.memo,
     },
     book.code,

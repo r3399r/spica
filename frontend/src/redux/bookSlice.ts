@@ -5,10 +5,10 @@ import {
   PutBookMemberResponse,
   Transaction,
 } from '@y-celestial/spica-service';
-import { Book } from '@y-celestial/spica-service/lib/src/model/entity/Book';
 import { Member } from '@y-celestial/spica-service/lib/src/model/entity/Member';
+import { ViewBook } from '@y-celestial/spica-service/lib/src/model/viewEntity/ViewBook';
 
-type SavedBook = Book & {
+type SavedBook = ViewBook & {
   members: Member[] | null;
   transactions: Transaction[] | null;
 };

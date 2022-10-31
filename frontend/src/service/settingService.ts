@@ -9,7 +9,7 @@ export const renameBook = async (id: string, name: string) => {
   const code = localBooks.find((v) => id === v.id)?.code ?? 'xx';
   const res = await bookEndpoint.putBookId(id, { name }, code);
 
-  dispatch(updateBookName(res.data));
+  dispatch(updateBookName({ ...res.data, lastDateUpdated: new Date() }));
 };
 
 export const renameMember = async (bookId: string, memberId: string, nickname: string) => {
