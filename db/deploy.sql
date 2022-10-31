@@ -7,3 +7,4 @@
 \i ./view/v_bill.sql
 \i ./view/v_transfer.sql
 \i ./view/v_transaction.sql
+\i ./view/v_book.sql

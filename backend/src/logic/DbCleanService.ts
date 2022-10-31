@@ -5,7 +5,7 @@ import { BookAccess } from 'src/access/BookAccess';
 import { DbAccess } from 'src/access/DbAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
-import { ViewLastUpdateAccess } from 'src/access/ViewLastUpdateAccess';
+import { ViewBookAccess } from 'src/access/ViewBookAccess';
 
 /**
  * Service class for DbClean
@@ -15,8 +15,8 @@ export class DbCleanService {
   @inject(DbAccess)
   private readonly dbAccess!: DbAccess;
 
-  @inject(ViewLastUpdateAccess)
-  private readonly vLastUpdateAccess!: ViewLastUpdateAccess;
+  @inject(ViewBookAccess)
+  private readonly vBookAccess!: ViewBookAccess;
 
   @inject(TransferAccess)
   private readonly transferAccess!: TransferAccess;
@@ -40,11 +40,11 @@ export class DbCleanService {
   public async cleanExpiredBook() {
     try {
       await this.dbAccess.startTransaction();
-      const res = await this.vLastUpdateAccess.findAll();
+      const res = await this.vBookAccess.findAll();
 
       for (const book of res)
         if (
-          new Date().getTime() - book.dateLastUpdate.getTime() >
+          new Date().getTime() - book.lastDateUpdated.getTime() >
           90 * 24 * 60 * 60 * 1000 // 90 days
         ) {
           // delete transfer
