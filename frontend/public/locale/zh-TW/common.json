@@ -30,6 +30,15 @@
     "shouldReceive": "須收款",
     "shouldPay": "須還款"
   },
+  "bookSetting": {
+    "back": "回帳本",
+    "head": "設定",
+    "bookName": "帳本名稱",
+    "currency": "幣別",
+    "deleteBook": "刪除帳本",
+    "systemDeleteDate": "系統移除日期",
+    "systemDeleteHint": "若此帳本累積 100 天未更新，則系統將自動移除此帳本所有資料。"
+  },
   "member": {
     "head": "帳本成員",
     "back": "回帳本",

@@ -41,7 +41,9 @@ const BalanceCard = () => {
               <Body size="l" className="text-navy-700">
                 {v.nickname}
               </Body>
-              <Body size="l" className="text-green-700">{`$${bnFormat(v.balance)}`}</Body>
+              <Body size="l" className="text-green-700">{`${book?.symbol}${bnFormat(
+                v.balance,
+              )}`}</Body>
             </div>
           ))}
         </>
@@ -59,7 +61,7 @@ const BalanceCard = () => {
               <Body size="l" className="text-navy-700">
                 {v.nickname}
               </Body>
-              <Body size="l" className="text-tomato-700">{`$${bn(v.balance)
+              <Body size="l" className="text-tomato-700">{`${book?.symbol}${bn(v.balance)
                 .abs()
                 .toFormat()}`}</Body>
             </div>

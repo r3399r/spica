@@ -30,6 +30,15 @@
     "shouldReceive": "须收款",
     "shouldPay": "须还款"
   },
+  "bookSetting": {
+    "back": "回帐本",
+    "head": "设定",
+    "bookName": "帐本名称",
+    "currency": "币别",
+    "deleteBook": "删除帐本",
+    "systemDeleteDate": "系统移除日期",
+    "systemDeleteHint": "若此帐本累积 100 天未更新，则系统将自动移除此帐本所有资料。"
+  },
   "member": {
     "head": "帐本成员",
     "back": "回帐本",

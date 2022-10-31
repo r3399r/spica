@@ -13,6 +13,9 @@ export class BookEntity implements Book {
   @Column({ type: 'text' })
   name!: string;
 
+  @Column({ type: 'text' })
+  symbol!: string;
+
   @Column({ type: 'timestamp', name: 'date_created', default: null })
   dateCreated!: Date;
 

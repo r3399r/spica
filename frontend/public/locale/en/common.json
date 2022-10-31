@@ -30,6 +30,15 @@
     "shouldReceive": "Should Receive",
     "shouldPay": "Should Pay"
   },
+  "bookSetting": {
+    "back": "Back",
+    "head": "Settings",
+    "bookName": "Name of Book",
+    "currency": "Curreny Symbol",
+    "deleteBook": "Delete Book",
+    "systemDeleteDate": "System Clean up Date",
+    "systemDeleteHint": "If there is no any update for 100 days, the book would be removed by system."
+  },
   "member": {
     "head": "Members",
     "back": "Back",

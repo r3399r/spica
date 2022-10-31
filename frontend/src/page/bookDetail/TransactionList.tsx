@@ -49,7 +49,7 @@ const TransactionList = () => {
             <Body size="l" bold>
               {item.descr}
             </Body>
-            <Body size="l">{`$${bnFormat(item.amount)}`}</Body>
+            <Body size="l">{`${book?.symbol}${bnFormat(item.amount)}`}</Body>
           </div>
           <Body size="s" className="text-[12px] leading-[18px] text-teal-500">
             {billNote(item)}
@@ -63,7 +63,7 @@ const TransactionList = () => {
           <Body size="l" bold>
             {t('bookDetail.transfer')}
           </Body>
-          <Body size="l">{`$${bnFormat(item.amount)}`}</Body>
+          <Body size="l">{`${book?.symbol}${bnFormat(item.amount)}`}</Body>
         </div>
         <Body size="s" className="text-[12px] leading-[18px] text-teal-500">
           {transferNote(item)}

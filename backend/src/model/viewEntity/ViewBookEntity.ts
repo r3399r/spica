@@ -12,6 +12,9 @@ export class ViewBookEntity implements ViewBook {
   @ViewColumn()
   code!: string;
 
+  @ViewColumn()
+  symbol!: string;
+
   @ViewColumn({ name: 'last_date_updated' })
   lastDateUpdated!: Date;
 }
