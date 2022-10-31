@@ -1,4 +1,4 @@
-import { Member } from '@y-celestial/spica-service/lib/src/model/entity/Member';
+import { Member } from '@y-celestial/spica-service';
 import { useTranslation } from 'react-i18next';
 import ModalVanilla from 'src/component/celestial-ui/ModalVanilla';
 import { deleteMember } from 'src/service/memberService';

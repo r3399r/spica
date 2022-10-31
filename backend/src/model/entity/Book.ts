@@ -3,6 +3,6 @@ export type Book = {
   code: string;
   name: string;
   symbol: string;
-  dateCreated: Date | null;
-  dateUpdated: Date | null;
+  dateCreated: string | null;
+  dateUpdated: string | null;
 };

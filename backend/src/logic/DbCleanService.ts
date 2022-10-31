@@ -44,7 +44,7 @@ export class DbCleanService {
 
       for (const book of res)
         if (
-          new Date().getTime() - book.lastDateUpdated.getTime() >
+          new Date().getTime() - new Date(book.lastDateUpdated).getTime() >
           100 * 24 * 60 * 60 * 1000 // 100 days
         ) {
           // delete transfer

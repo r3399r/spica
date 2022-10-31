@@ -1,4 +1,4 @@
-import { Member } from '@y-celestial/spica-service/lib/src/model/entity/Member';
+import { Member } from '@y-celestial/spica-service';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';

@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { Member } from '@y-celestial/spica-service/lib/src/model/entity/Member';
+import { Member } from '@y-celestial/spica-service';
 import { useState } from 'react';
 import Input from 'src/component/deprecated/Input';
 import Modal from 'src/component/deprecated/Modal';

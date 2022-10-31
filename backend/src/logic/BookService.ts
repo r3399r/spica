@@ -274,7 +274,7 @@ export class BookService {
       const bill = new BillEntity();
       bill.ver = '1';
       bill.bookId = id;
-      bill.date = new Date(data.date);
+      bill.date = data.date;
       bill.type = data.type;
       bill.descr = data.descr;
       bill.amount = data.amount;
@@ -336,7 +336,7 @@ export class BookService {
   private async deleteOldBill(oldBill: Bill) {
     await this.billAccess.update({
       ...oldBill,
-      dateDeleted: new Date(),
+      dateDeleted: new Date().toISOString(),
     });
 
     const oldBillShares = await this.billShareAccess.findByBill(
@@ -384,7 +384,7 @@ export class BookService {
       bill.id = billId;
       bill.ver = bn(oldBill.ver).plus(1).toString();
       bill.bookId = bid;
-      bill.date = new Date(data.date);
+      bill.date = data.date;
       bill.type = data.type;
       bill.descr = data.descr;
       bill.amount = data.amount;
@@ -471,7 +471,7 @@ export class BookService {
       const transfer = new TransferEntity();
       transfer.ver = '1';
       transfer.bookId = id;
-      transfer.date = new Date(data.date);
+      transfer.date = data.date;
       transfer.amount = data.amount;
       transfer.srcMemberId = data.srcMemberId;
       transfer.dstMemberId = data.dstMemberId;
@@ -516,7 +516,7 @@ export class BookService {
 
       await this.transferAccess.update({
         ...oldTransfer,
-        dateDeleted: new Date(),
+        dateDeleted: new Date().toISOString(),
       });
       await this.updateMember(
         oldTransfer.srcMemberId,
@@ -528,7 +528,7 @@ export class BookService {
       newTransfer.id = tid;
       newTransfer.ver = bn(oldTransfer.ver).plus(1).toString();
       newTransfer.bookId = bid;
-      newTransfer.date = new Date(data.date);
+      newTransfer.date = data.date;
       newTransfer.amount = data.amount;
       newTransfer.srcMemberId = data.srcMemberId;
       newTransfer.dstMemberId = data.dstMemberId;
@@ -573,7 +573,7 @@ export class BookService {
       await this.updateMember(transfer.dstMemberId, bn(transfer.amount));
       await this.transferAccess.update({
         ...transfer,
-        dateDeleted: new Date(),
+        dateDeleted: new Date().toISOString(),
       });
 
       await this.dbAccess.commitTransaction();

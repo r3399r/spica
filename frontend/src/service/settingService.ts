@@ -12,18 +12,26 @@ export const renameBook = async (id: string, name: string) => {
     const res = await bookEndpoint.putBookId(id, { name }, code);
 
     const { books } = getState().book;
-    const updatedBooks = (books ?? []).map((v) => {
-      if (v.id === id)
-        return {
-          ...v,
-          name: res.data.name,
-        };
-
-      return v;
-    });
+    const updatedBooks = (books ?? []).map((v) =>
+      v.id === id
+        ? {
+            ...v,
+            name: res.data.name,
+          }
+        : v,
+    );
 
     dispatch(setBooks(updatedBooks));
   } finally {
     dispatch(finishWaiting());
   }
+};
+
+export const deleteBook = (id: string) => {
+  const { books } = getState().book;
+  const updatedBooks = (books ?? []).filter((v) => v.id !== id);
+  dispatch(setBooks(updatedBooks));
+
+  const localBooks = getLocalBooks();
+  localStorage.setItem('book', JSON.stringify(localBooks.filter((v) => v.id !== id)));
 };

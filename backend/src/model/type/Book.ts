@@ -29,29 +29,29 @@ export type TransactionBill = {
   id: string;
   ver: string;
   bookId: string;
-  date: Date;
+  date: string;
   type: 'in' | 'out';
   descr: string;
   amount: number;
   shareMemberId: string;
   shareCount: string;
   memo: string | null;
-  dateCreated: Date;
-  dateUpdated: Date | null;
-  dateDeleted: Date | null;
+  dateCreated: string;
+  dateUpdated: string | null;
+  dateDeleted: string | null;
 };
 
 export type TransactionTransfer = {
   id: string;
   ver: string;
   bookId: string;
-  date: Date;
+  date: string;
   type: 'transfer';
   amount: number;
   srcMemberId: string;
   dstMemberId: string;
   memo: string | null;
-  dateCreated: Date;
-  dateUpdated: Date | null;
-  dateDeleted: Date | null;
+  dateCreated: string;
+  dateUpdated: string | null;
+  dateDeleted: string | null;
 };

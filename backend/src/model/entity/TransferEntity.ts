@@ -14,7 +14,7 @@ export class TransferEntity implements Transfer {
   bookId!: string;
 
   @Column({ type: 'timestamp' })
-  date!: Date;
+  date!: string;
 
   @Column({ type: 'float' })
   amount!: number;
@@ -29,21 +29,21 @@ export class TransferEntity implements Transfer {
   memo: string | null = null;
 
   @Column({ type: 'timestamp', name: 'date_created', default: null })
-  dateCreated!: Date;
+  dateCreated!: string;
 
   @Column({ type: 'timestamp', name: 'date_updated', default: null })
-  dateUpdated: Date | null = null;
+  dateUpdated: string | null = null;
 
   @Column({ type: 'timestamp', name: 'date_deleted', default: null })
-  dateDeleted: Date | null = null;
+  dateDeleted: string | null = null;
 
   @BeforeInsert()
   setDateCreated(): void {
-    this.dateCreated = new Date();
+    this.dateCreated = new Date().toISOString();
   }
 
   @BeforeUpdate()
   setDateUpdated(): void {
-    this.dateUpdated = new Date();
+    this.dateUpdated = new Date().toISOString();
   }
 }

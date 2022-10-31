@@ -4,6 +4,6 @@ export type BillShare = {
   ver: string;
   memberId: string;
   amount: number;
-  dateCreated: Date | null;
-  dateUpdated: Date | null;
+  dateCreated: string | null;
+  dateUpdated: string | null;
 };

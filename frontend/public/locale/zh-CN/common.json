@@ -38,7 +38,8 @@
     "deleteBook": "删除帐本",
     "systemDeleteDate": "系统移除日期",
     "systemDeleteHint": "若此帐本累积 100 天未更新，则系统将自动移除此帐本所有资料。",
-    "rename": "重新命名"
+    "rename": "重新命名",
+    "deleteHint": "此处仅能删除这台装置当中的记录，其他装置的记录不受影响"
   },
   "member": {
     "head": "帐本成员",

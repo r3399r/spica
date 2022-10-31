@@ -3,5 +3,5 @@ export type ViewBook = {
   name: string;
   code: string;
   symbol: string;
-  lastDateUpdated: Date;
+  lastDateUpdated: string;
 };

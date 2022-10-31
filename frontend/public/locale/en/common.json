@@ -38,7 +38,8 @@
     "deleteBook": "Delete Book",
     "systemDeleteDate": "System Clean up Date",
     "systemDeleteHint": "If there is no any update for 100 days, the book would be removed by system.",
-    "rename": "Rename"
+    "rename": "Rename",
+    "deleteHint": "Note that this action would only delete the book in this device. It would not affect others' devices."
   },
   "member": {
     "head": "Members",

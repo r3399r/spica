@@ -50,7 +50,12 @@ export const createBook = async (name: string) => {
     const localBooks = getLocalBooks();
 
     dispatch(
-      appendBook({ ...book, lastDateUpdated: new Date(), members: null, transactions: null }),
+      appendBook({
+        ...book,
+        lastDateUpdated: new Date().toISOString(),
+        members: null,
+        transactions: null,
+      }),
     );
     localStorage.setItem('book', JSON.stringify([...localBooks, { id: book.id, code: book.code }]));
 

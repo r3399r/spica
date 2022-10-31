@@ -38,7 +38,8 @@
     "deleteBook": "刪除帳本",
     "systemDeleteDate": "系統移除日期",
     "systemDeleteHint": "若此帳本累積 100 天未更新，則系統將自動移除此帳本所有資料。",
-    "rename": "重新命名"
+    "rename": "重新命名",
+    "deleteHint": "此處僅能刪除這台裝置當中的記錄，其他裝置的記錄不受影響"
   },
   "member": {
     "head": "帳本成員",

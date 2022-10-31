@@ -13,7 +13,7 @@ export class ViewTransactionEntity implements ViewTransaction {
   bookId!: string;
 
   @ViewColumn()
-  date!: Date;
+  date!: string;
 
   @ViewColumn()
   type!: 'in' | 'out' | 'transfer';
@@ -40,11 +40,11 @@ export class ViewTransactionEntity implements ViewTransaction {
   memo: string | null = null;
 
   @ViewColumn({ name: 'date_created' })
-  dateCreated!: Date;
+  dateCreated!: string;
 
   @ViewColumn({ name: 'date_updated' })
-  dateUpdated: Date | null = null;
+  dateUpdated: string | null = null;
 
   @ViewColumn({ name: 'date_deleted' })
-  dateDeleted: Date | null = null;
+  dateDeleted: string | null = null;
 }
