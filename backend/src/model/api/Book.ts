@@ -15,12 +15,14 @@ export type GetBookResponse = ViewBook[];
 
 export type PostBookRequest = {
   name: string;
+  symbol?: string;
 };
 
 export type PostBookResponse = Book;
 
 export type PutBookRequest = {
-  name: string;
+  name?: string;
+  symbol?: string;
 };
 
 export type GetBookIdResponse = ViewBook & {

@@ -86,7 +86,7 @@ export class BookService {
     const book = new BookEntity();
     book.name = data.name;
     book.code = randomBase10(6);
-    book.symbol = '$';
+    book.symbol = data.symbol ?? '$';
 
     return await this.bookAccess.save(book);
   }
@@ -183,7 +183,8 @@ export class BookService {
 
     const book = new BookEntity();
     book.id = id;
-    book.name = data.name;
+    book.name = data.name ?? oldBook.name;
+    book.symbol = data.symbol ?? oldBook.symbol;
     book.code = oldBook.code;
 
     await this.bookAccess.update(book);

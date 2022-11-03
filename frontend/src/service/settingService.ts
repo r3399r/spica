@@ -26,6 +26,28 @@ export const renameBook = async (id: string, name: string) => {
     dispatch(finishWaiting());
   }
 };
+export const resetSymbol = async (id: string, symbol: string) => {
+  try {
+    dispatch(startWaiting());
+    const localBooks = getLocalBooks();
+    const code = localBooks.find((v) => id === v.id)?.code ?? 'xx';
+    const res = await bookEndpoint.putBookId(id, { symbol }, code);
+
+    const { books } = getState().book;
+    const updatedBooks = (books ?? []).map((v) =>
+      v.id === id
+        ? {
+            ...v,
+            symbol: res.data.symbol,
+          }
+        : v,
+    );
+
+    dispatch(setBooks(updatedBooks));
+  } finally {
+    dispatch(finishWaiting());
+  }
+};
 
 export const deleteBook = (id: string) => {
   const { books } = getState().book;

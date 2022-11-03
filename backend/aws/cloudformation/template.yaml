@@ -805,16 +805,17 @@ Resources:
             "postBook": {
               "type": "object",
               "properties": {
-                "name": {"type": "string"}
+                "name": {"type": "string"},
+                "symbol": {"type": "string"}
               },
               "required": ["name"]
             },
             "putBook": {
               "type": "object",
               "properties": {
-                "name": {"type": "string"}
-              },
-              "required": ["name"]
+                "name": {"type": "string"},
+                "symbol": {"type": "string"}
+              }
             },
             "postBookBill": {
               "type": "object",

@@ -6,6 +6,8 @@ export type ShareForm = { code: string };
 
 export type RenameBookForm = { name: string };
 
+export type ReviseSymbolForm = { symbol: string };
+
 export type RenameMemberForm = { nickname: string };
 
 export type TransferForm = {
