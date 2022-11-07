@@ -1,0 +1,4 @@
+DROP VIEW IF EXISTS v_book;
+DROP VIEW IF EXISTS v_transaction;
+DROP VIEW IF EXISTS v_bill;
+DROP VIEW IF EXISTS v_bill_share;

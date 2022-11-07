@@ -12,6 +12,7 @@ import {
   BadRequestError,
   UnauthorizedError,
 } from 'src/celestial-service/error';
+import { compare } from 'src/celestial-service/util/compare';
 import { BillType } from 'src/constant/Book';
 import {
   GetBookIdResponse,
@@ -41,7 +42,12 @@ import { BookEntity } from 'src/model/entity/BookEntity';
 import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
-import { ShareDetail } from 'src/model/type/Book';
+import {
+  History,
+  ShareDetail,
+  Transaction,
+  TransactionTransfer,
+} from 'src/model/type/Book';
 import {
   ViewTransactionBill,
   ViewTransactionTransfer,
@@ -123,6 +129,99 @@ export class BookService {
     return { id: book.id, name: book.name };
   }
 
+  private compareTxTransfer = (
+    oldTx: TransactionTransfer,
+    newTx: ViewTransactionTransfer
+  ): History => {
+    const items: History['items'] = [];
+    if (oldTx.date !== newTx.date)
+      items.push({ key: 'date', from: oldTx.date, to: newTx.date });
+    if (oldTx.amount !== newTx.amount)
+      items.push({ key: 'amount', from: oldTx.amount, to: newTx.amount });
+    if (oldTx.srcMemberId !== newTx.srcMemberId)
+      items.push({
+        key: 'srcMemberId',
+        from: oldTx.srcMemberId,
+        to: newTx.srcMemberId,
+      });
+    if (oldTx.dstMemberId !== newTx.dstMemberId)
+      items.push({
+        key: 'dstMemberId',
+        from: oldTx.dstMemberId,
+        to: newTx.dstMemberId,
+      });
+    if (oldTx.memo !== newTx.memo)
+      items.push({ key: 'memo', from: oldTx.memo, to: newTx.memo });
+
+    return { id: newTx.id, items };
+  };
+
+  private handleTransactions = (
+    transactions: (ViewTransactionBill | ViewTransactionTransfer)[]
+  ) => {
+    const res: Transaction[] = [];
+    for (const tx of transactions) {
+      const idx = res.findIndex((v) => v.id === tx.id);
+      if (idx === -1)
+        if (tx.type === 'transfer')
+          res.push({
+            id: tx.id,
+            ver: tx.ver,
+            bookId: tx.bookId,
+            date: tx.date,
+            type: tx.type,
+            amount: tx.amount,
+            srcMemberId: tx.srcMemberId,
+            dstMemberId: tx.dstMemberId,
+            memo: tx.memo,
+            dateCreated: tx.dateCreated,
+            dateUpdated: tx.dateUpdated,
+            dateDeleted: tx.dateDeleted,
+            history: [],
+          });
+        else
+          res.push({
+            id: tx.id,
+            ver: tx.ver,
+            bookId: tx.bookId,
+            date: tx.date,
+            type: tx.type,
+            descr: tx.descr,
+            amount: tx.amount,
+            shareMemberId: tx.shareMemberId,
+            shareCount: tx.shareCount,
+            memo: tx.memo,
+            dateCreated: tx.dateCreated,
+            dateUpdated: tx.dateUpdated,
+            dateDeleted: tx.dateDeleted,
+            history: [],
+          });
+      else {
+        const lastTx = res[idx];
+        if (lastTx.type === 'transfer' && tx.type === 'transfer') {
+          const diff = this.compareTxTransfer(lastTx, tx);
+          res[idx] = {
+            id: tx.id,
+            ver: tx.ver,
+            bookId: tx.bookId,
+            date: tx.date,
+            type: tx.type,
+            amount: tx.amount,
+            srcMemberId: tx.srcMemberId,
+            dstMemberId: tx.dstMemberId,
+            memo: tx.memo,
+            dateCreated: tx.dateCreated,
+            dateUpdated: tx.dateUpdated,
+            dateDeleted: tx.dateDeleted,
+            history: [diff, ...lastTx.history],
+          };
+        }
+      }
+    }
+
+    return res.sort(compare('date', 'desc'));
+  };
+
   public async getBookDetail(
     id: string,
     code: string
@@ -138,39 +237,7 @@ export class BookService {
     return {
       ...book,
       members,
-      transactions: transactions.map((v) => {
-        if (v.type === 'transfer')
-          return {
-            id: v.id,
-            ver: v.ver,
-            bookId: v.bookId,
-            date: v.date,
-            type: v.type,
-            amount: v.amount,
-            srcMemberId: v.srcMemberId,
-            dstMemberId: v.dstMemberId,
-            memo: v.memo,
-            dateCreated: v.dateCreated,
-            dateUpdated: v.dateUpdated,
-            dateDeleted: v.dateDeleted,
-          };
-        else
-          return {
-            id: v.id,
-            ver: v.ver,
-            bookId: v.bookId,
-            date: v.date,
-            type: v.type,
-            descr: v.descr,
-            amount: v.amount,
-            shareMemberId: v.shareMemberId,
-            shareCount: v.shareCount,
-            memo: v.memo,
-            dateCreated: v.dateCreated,
-            dateUpdated: v.dateUpdated,
-            dateDeleted: v.dateDeleted,
-          };
-      }),
+      transactions: this.handleTransactions(transactions),
     };
   }
 
@@ -326,6 +393,7 @@ export class BookService {
           ...newBill,
           shareMemberId: data.former[0].id,
           shareCount: data.former.length.toString(),
+          history: [],
         },
       };
     } catch (e) {
@@ -436,6 +504,7 @@ export class BookService {
           ...newBill,
           shareMemberId: data.former[0].id,
           shareCount: data.former.length.toString(),
+          history: [], // TODO
         },
       };
     } catch (e) {
@@ -495,6 +564,7 @@ export class BookService {
         transaction: {
           ...res,
           type: 'transfer',
+          history: [],
         },
       };
     } catch (e) {
@@ -552,6 +622,7 @@ export class BookService {
         transaction: {
           ...res,
           type: 'transfer',
+          history: [], // TODO
         },
       };
     } catch (e) {

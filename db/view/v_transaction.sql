@@ -18,19 +18,19 @@ select vb.id,
 	vb.date_deleted
 from v_bill vb
 union all
-select vt.id,
-	vt.ver,
-	vt.book_id,
-	vt.date,
+select t.id,
+	t.ver,
+	t.book_id,
+	t.date,
 	'transfer' as type,
 	null as descr,
-	vt.amount,
+	t.amount,
 	null as share_member_id,
 	null as share_count,
-	vt.src_member_id,
-	vt.dst_member_id,
-	vt.memo,
-	vt.date_created,
-	vt.date_updated,
-	vt.date_deleted
-from v_transfer vt;
+	t.src_member_id,
+	t.dst_member_id,
+	t.memo,
+	t.date_created,
+	t.date_updated,
+	t.date_deleted
+from "transfer" t;

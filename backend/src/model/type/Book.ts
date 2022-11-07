@@ -39,6 +39,7 @@ export type TransactionBill = {
   dateCreated: string;
   dateUpdated: string | null;
   dateDeleted: string | null;
+  history: History[];
 };
 
 export type TransactionTransfer = {
@@ -54,4 +55,14 @@ export type TransactionTransfer = {
   dateCreated: string;
   dateUpdated: string | null;
   dateDeleted: string | null;
+  history: History[];
+};
+
+export type History = {
+  id: string;
+  items: {
+    key: 'date' | 'amount' | 'memo' | 'srcMemberId' | 'dstMemberId';
+    from: string | number | null;
+    to: string | number | null;
+  }[];
 };
