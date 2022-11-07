@@ -1,6 +1,3 @@
-DROP VIEW IF EXISTS v_transaction;
-DROP VIEW IF EXISTS v_bill;
-
 CREATE VIEW v_bill as
 select
 	b.id,

@@ -1,5 +1,3 @@
-DROP VIEW IF EXISTS v_book;
-
 CREATE VIEW v_book as
 select
 	b.id,

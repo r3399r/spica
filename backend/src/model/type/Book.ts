@@ -36,7 +36,7 @@ export type TransactionBill = {
   shareMemberId: string;
   shareCount: string;
   memo: string | null;
-  dateCreated: string;
+  dateCreated: string | null;
   dateUpdated: string | null;
   dateDeleted: string | null;
   history: History[];
@@ -52,7 +52,7 @@ export type TransactionTransfer = {
   srcMemberId: string;
   dstMemberId: string;
   memo: string | null;
-  dateCreated: string;
+  dateCreated: string | null;
   dateUpdated: string | null;
   dateDeleted: string | null;
   history: History[];

@@ -41,6 +41,7 @@ import { BillShareEntity } from 'src/model/entity/BillShareEntity';
 import { BookEntity } from 'src/model/entity/BookEntity';
 import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
+import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
 import {
   History,
@@ -131,7 +132,7 @@ export class BookService {
 
   private compareTxTransfer = (
     oldTx: TransactionTransfer,
-    newTx: ViewTransactionTransfer
+    newTx: Transfer
   ): History => {
     const items: History['items'] = [];
     if (oldTx.date !== newTx.date)
@@ -154,6 +155,50 @@ export class BookService {
       items.push({ key: 'memo', from: oldTx.memo, to: newTx.memo });
 
     return { id: newTx.id, items };
+  };
+
+  private handleTransfer = (transfers: Transfer[]) => {
+    const res: TransactionTransfer[] = [];
+    for (const tx of transfers) {
+      const idx = res.findIndex((v) => v.id === tx.id);
+      if (idx < 0)
+        res.push({
+          id: tx.id,
+          ver: tx.ver,
+          bookId: tx.bookId,
+          date: tx.date,
+          type: 'transfer',
+          amount: tx.amount,
+          srcMemberId: tx.srcMemberId,
+          dstMemberId: tx.dstMemberId,
+          memo: tx.memo,
+          dateCreated: tx.dateCreated,
+          dateUpdated: tx.dateUpdated,
+          dateDeleted: tx.dateDeleted,
+          history: [],
+        });
+      else {
+        const lastTx = res[idx];
+        const diff = this.compareTxTransfer(lastTx, tx);
+        res[idx] = {
+          id: tx.id,
+          ver: tx.ver,
+          bookId: tx.bookId,
+          date: tx.date,
+          type: 'transfer',
+          amount: tx.amount,
+          srcMemberId: tx.srcMemberId,
+          dstMemberId: tx.dstMemberId,
+          memo: tx.memo,
+          dateCreated: tx.dateCreated,
+          dateUpdated: tx.dateUpdated,
+          dateDeleted: tx.dateDeleted,
+          history: [diff, ...lastTx.history],
+        };
+      }
+    }
+
+    return res;
   };
 
   private handleTransactions = (
@@ -229,6 +274,7 @@ export class BookService {
     const book = await this.validateBook(id, code);
 
     const members = await this.memberAccess.findByBookId(id);
+    const transfers = await this.transferAccess.findByBookId(id);
     const transactions = (await this.vTransactionAccess.findByBookId(id)) as (
       | ViewTransactionBill
       | ViewTransactionTransfer
@@ -237,7 +283,10 @@ export class BookService {
     return {
       ...book,
       members,
-      transactions: this.handleTransactions(transactions),
+      transactions: [
+        ...this.handleTransfer(transfers),
+        ...this.handleTransactions(transactions),
+      ],
     };
   }
 
