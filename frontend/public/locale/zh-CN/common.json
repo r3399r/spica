@@ -25,7 +25,7 @@
     "billOutNote": "{{member}} 支付了 ${{amount}}",
     "billInNote": "{{member}} 收取了 ${{amount}}",
     "transfer": "转帐",
-    "transferNote": "{{srcMember}} 转了 ${{amount}} 给 {{dstMember}}",
+    "transferNote": "{{srcMember}} 转帐 ${{amount}} 给 {{dstMember}}",
     "check": "结帐",
     "shouldReceive": "须收款",
     "shouldPay": "须还款"

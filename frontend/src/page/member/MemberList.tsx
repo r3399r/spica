@@ -34,12 +34,12 @@ const MemberList = () => {
           >
             <div>{v.nickname}</div>
             <div className="flex gap-[15px]">
-              <img src={IcEdit} className="cursor-pointer" onClick={() => setEditTarget(v)} />
               {v.deletable === true ? (
                 <img src={IcRemove} className="cursor-pointer" onClick={() => setDeleteTarget(v)} />
               ) : (
                 <img src={IcRemoveDisabled} />
               )}
+              <img src={IcEdit} className="cursor-pointer" onClick={() => setEditTarget(v)} />
             </div>
           </div>
         ))}
