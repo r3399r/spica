@@ -15,7 +15,7 @@ const TransactionList = () => {
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
   const transactions = useMemo(
-    () => (book?.transactions ? aggregateTransactions(book.transactions) : null),
+    () => (book?.transactions ? aggregateTransactions(book.id, book.transactions) : null),
     [book],
   );
   const billNote = useCallback(

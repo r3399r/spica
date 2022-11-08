@@ -4,3 +4,9 @@ export type SavedBook = ViewBook & {
   members: Member[] | null;
   transactions: Transaction[] | null;
 };
+
+export type LocalBook = {
+  id: string;
+  code: string;
+  showDeleted: boolean;
+};

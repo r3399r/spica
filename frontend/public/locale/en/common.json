@@ -37,6 +37,7 @@
     "bookName": "Name of Book",
     "currency": "Curreny Symbol",
     "deleteBook": "Delete Book",
+    "showDeleted": "Show Deleted Transactions",
     "systemDeleteDate": "System Clean up Date",
     "systemDeleteHint": "If there is no any update for 100 days, the book would be removed by system.",
     "rename": "Rename",

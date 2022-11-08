@@ -8,6 +8,7 @@ import Currency from './Currency';
 import DeleteBook from './DeleteBook';
 import Navbar from './Navbar';
 import RenameBook from './RenameBook';
+import ShowDeleted from './ShowDeleted';
 import SystemHint from './SystemHint';
 
 const BookSetting = () => {
@@ -26,6 +27,7 @@ const BookSetting = () => {
       <RenameBook />
       <Currency />
       <DeleteBook />
+      <ShowDeleted />
       <SystemHint />
     </div>
   );

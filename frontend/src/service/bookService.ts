@@ -35,7 +35,10 @@ export const loadBookList = async () => {
     });
 
     dispatch(setBooks(updatedBooks));
-    localStorage.setItem('book', JSON.stringify(res.data.map((v) => ({ id: v.id, code: v.code }))));
+    localStorage.setItem(
+      'book',
+      JSON.stringify(res.data.map((v) => ({ id: v.id, code: v.code, showDeleted: false }))),
+    );
   } finally {
     dispatch(finishWaiting());
   }
@@ -57,7 +60,10 @@ export const createBook = async (name: string) => {
         transactions: null,
       }),
     );
-    localStorage.setItem('book', JSON.stringify([...localBooks, { id: book.id, code: book.code }]));
+    localStorage.setItem(
+      'book',
+      JSON.stringify([...localBooks, { id: book.id, code: book.code, showDeleted: false }]),
+    );
 
     return res.data;
   } finally {
@@ -138,9 +144,13 @@ export const deleteMember = async (memberId: string, bookId: string) => {
   dispatch(updateBookList(updatedBook));
 };
 
-export const aggregateTransactions = (transactions: Transaction[]) => {
+export const aggregateTransactions = (id: string, transactions: Transaction[]) => {
+  const showDeleted = getLocalBookById(id)?.showDeleted;
+
   const map: { [key: string]: Transaction[] } = {};
   transactions.forEach((v) => {
+    if (v.dateDeleted !== null && !showDeleted) return;
+
     const date = format(new Date(v.date), 'yyyy-MM-dd');
     if (map[date] === undefined) map[date] = [v];
     else map[date] = [...map[date], v];

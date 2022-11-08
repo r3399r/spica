@@ -37,6 +37,7 @@
     "bookName": "帐本名称",
     "currency": "币别",
     "deleteBook": "删除帐本",
+    "showDeleted": "显示已删除帐目",
     "systemDeleteDate": "系统移除日期",
     "systemDeleteHint": "若此帐本累积 100 天未更新，则系统将自动移除此帐本所有资料。",
     "rename": "重新命名",
