@@ -19,11 +19,12 @@ const TransactionList = () => {
   );
   const billNote = useCallback(
     (transaction: TransactionBill) => {
-      const { type, amount, shareCount, shareMemberId } = transaction;
+      const { type, amount, former } = transaction;
+      if (former.length === 0) return 'ERROR';
       const member =
-        Number(shareCount) > 1
+        former.length > 1
           ? t('bookDetail.multiple')
-          : book?.members?.find((v) => v.id === shareMemberId)?.nickname;
+          : book?.members?.find((v) => v.id === former[0].id)?.nickname;
       if (type === 'out')
         return t('bookDetail.billOutNote', {
           member,
