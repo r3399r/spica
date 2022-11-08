@@ -22,10 +22,10 @@
     "noMemberHint": "请先至「成员」中新增一起分帐的伙伴，才能开始记帐喔！",
     "newTransaction": "新增帐目",
     "multiple": "多人",
-    "billOutNote": "{{member}} 支付了 ${{amount}}",
-    "billInNote": "{{member}} 收取了 ${{amount}}",
+    "billOutNote": "{{member}} 支付了 {{symbol}}{{amount}}",
+    "billInNote": "{{member}} 收取了 {{symbol}}{{amount}}",
     "transfer": "转帐",
-    "transferNote": "{{srcMember}} 转帐 ${{amount}} 给 {{dstMember}}",
+    "transferNote": "{{srcMember}} 转帐 {{symbol}}{{amount}} 给 {{dstMember}}",
     "check": "结帐",
     "shouldReceive": "须收款",
     "shouldPay": "须还款"

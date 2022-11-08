@@ -22,11 +22,18 @@ left join (
 			member m
 	union all
 		select
-			vt.book_id as id,
-			vt.date_created,
-			vt.date_updated
+			b.book_id as id,
+			b.date_created,
+			b.date_updated
 		from
-			v_transaction vt
+			bill b
+	union all
+		select
+			t.book_id as id,
+			t.date_created,
+			t.date_updated
+		from
+			"transfer" t
 ) as tmp
 	group by
 		id

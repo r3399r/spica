@@ -24,9 +24,14 @@ const TransactionList = () => {
         Number(shareCount) > 1
           ? t('bookDetail.multiple')
           : book?.members?.find((v) => v.id === shareMemberId)?.nickname;
-      if (type === 'out') return t('bookDetail.billOutNote', { member, amount: bnFormat(amount) });
+      if (type === 'out')
+        return t('bookDetail.billOutNote', {
+          member,
+          amount: bnFormat(amount),
+          symbol: book?.symbol,
+        });
 
-      return t('bookDetail.billInNote', { member, amount: bnFormat(amount) });
+      return t('bookDetail.billInNote', { member, amount: bnFormat(amount), symbol: book?.symbol });
     },
     [t, book],
   );
@@ -36,7 +41,12 @@ const TransactionList = () => {
       const srcMember = book?.members?.find((v) => v.id === srcMemberId)?.nickname;
       const dstMember = book?.members?.find((v) => v.id === dstMemberId)?.nickname;
 
-      return t('bookDetail.transferNote', { srcMember, dstMember, amount: bnFormat(amount) });
+      return t('bookDetail.transferNote', {
+        srcMember,
+        dstMember,
+        amount: bnFormat(amount),
+        symbol: book?.symbol,
+      });
     },
     [t, book],
   );

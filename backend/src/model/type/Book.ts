@@ -31,10 +31,10 @@ export type TransactionBill = {
   bookId: string;
   date: string;
   type: 'in' | 'out';
-  descr: string;
+  descr: string | null;
   amount: number;
-  shareMemberId: string;
-  shareCount: string;
+  former: ShareDetail[];
+  latter: ShareDetail[];
   memo: string | null;
   dateCreated: string | null;
   dateUpdated: string | null;
@@ -61,7 +61,15 @@ export type TransactionTransfer = {
 export type History = {
   id: string;
   items: {
-    key: 'date' | 'amount' | 'memo' | 'srcMemberId' | 'dstMemberId';
+    key:
+      | 'date'
+      | 'amount'
+      | 'memo'
+      | 'srcMemberId'
+      | 'dstMemberId'
+      | 'descr'
+      | 'former'
+      | 'latter';
     from: string | number | null;
     to: string | number | null;
   }[];

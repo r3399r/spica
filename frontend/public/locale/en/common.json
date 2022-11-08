@@ -22,10 +22,10 @@
     "noMemberHint": "Please click \"Member\" to add members, and then we can start",
     "newTransaction": "New Bill",
     "multiple": "Multiple People",
-    "billOutNote": "{{member}} paid ${{amount}}",
-    "billInNote": "{{member}} received ${{amount}}",
+    "billOutNote": "{{member}} paid {{symbol}}{{amount}}",
+    "billInNote": "{{member}} received {{symbol}}{{amount}}",
     "transfer": "Transfer",
-    "transferNote": "{{srcMember}} transferred ${{amount}} to {{dstMember}}",
+    "transferNote": "{{srcMember}} transferred {{symbol}}{{amount}} to {{dstMember}}",
     "check": "Check",
     "shouldReceive": "Should Receive",
     "shouldPay": "Should Pay"

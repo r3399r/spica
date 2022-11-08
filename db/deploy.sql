@@ -5,6 +5,4 @@
 \i ./table/bill_share.sql
 \i ./table/transfer.sql
 \i ./view/v_bill_share.sql
-\i ./view/v_bill.sql
-\i ./view/v_transaction.sql
 \i ./view/v_book.sql

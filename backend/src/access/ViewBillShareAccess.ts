@@ -1,20 +1,20 @@
 import { inject, injectable } from 'inversify';
-import { ViewTransaction } from 'src/model/viewEntity/ViewTransaction';
-import { ViewTransactionEntity } from 'src/model/viewEntity/ViewTransactionEntity';
+import { ViewBillShare } from 'src/model/viewEntity/ViewBillShare';
+import { ViewBillShareEntity } from 'src/model/viewEntity/ViewBillShareEntity';
 import { Database } from 'src/util/Database';
 
 /**
- * Access class for ViewTransaction model.
+ * Access class for ViewBillShare model.
  */
 @injectable()
-export class ViewTransactionAccess {
+export class ViewBillShareAccess {
   @inject(Database)
   private readonly database!: Database;
 
   public async findByBookId(bookId: string) {
     const qr = await this.database.getQueryRunner();
 
-    return await qr.manager.find<ViewTransaction>(ViewTransactionEntity.name, {
+    return await qr.manager.find<ViewBillShare>(ViewBillShareEntity.name, {
       where: { bookId },
       order: { id: 'ASC', ver: 'ASC' },
     });

@@ -1,10 +1,13 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
-import { ViewTransaction } from './ViewTransaction';
+import { ViewBillShare } from './ViewBillShare';
 
-@ViewEntity({ name: 'v_transaction' })
-export class ViewTransactionEntity implements ViewTransaction {
+@ViewEntity({ name: 'v_bill_share' })
+export class ViewBillShareEntity implements ViewBillShare {
   @ViewColumn()
   id!: string;
+
+  @ViewColumn({ name: 'bill_id' })
+  billId!: string;
 
   @ViewColumn()
   ver!: string;
@@ -16,25 +19,13 @@ export class ViewTransactionEntity implements ViewTransaction {
   date!: string;
 
   @ViewColumn()
-  type!: 'in' | 'out' | 'transfer';
+  type!: 'in' | 'out';
 
   @ViewColumn()
   descr: string | null = null;
 
   @ViewColumn()
   amount!: number;
-
-  @ViewColumn({ name: 'share_member_id' })
-  shareMemberId: string | null = null;
-
-  @ViewColumn({ name: 'share_count' })
-  shareCount: string | null = null;
-
-  @ViewColumn({ name: 'src_member_id' })
-  srcMemberId: string | null = null;
-
-  @ViewColumn({ name: 'dst_member_id' })
-  dstMemberId: string | null = null;
 
   @ViewColumn()
   memo: string | null = null;
@@ -47,4 +38,10 @@ export class ViewTransactionEntity implements ViewTransaction {
 
   @ViewColumn({ name: 'date_deleted' })
   dateDeleted: string | null = null;
+
+  @ViewColumn({ name: 'member_id' })
+  memberId!: string;
+
+  @ViewColumn({ name: 'member_amount' })
+  memberAmount!: number;
 }

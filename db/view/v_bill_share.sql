@@ -3,12 +3,17 @@ select
     bs.id,
     bs.bill_id,
     bs.ver,
+    b.book_id,
+    b.date,
+    b.type,
+    b.descr,
+    b.amount,
+    b.memo,
+    b.date_created,
+    b.date_updated,
+    b.date_deleted,
     bs.member_id,
-    (case when bs.amount > 0 then 1 else -1 end) as pm,
-    bs.amount,
-    bs.date_created,
-    bs.date_updated,
-    b.book_id
+    bs.amount as member_amount
 from
     bill_share bs
     left join bill b on bs.bill_id = b.id

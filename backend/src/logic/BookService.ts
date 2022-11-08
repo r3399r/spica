@@ -6,13 +6,17 @@ import { BookAccess } from 'src/access/BookAccess';
 import { DbAccess } from 'src/access/DbAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
+import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
 import { ViewBookAccess } from 'src/access/ViewBookAccess';
-import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
 import {
   BadRequestError,
   UnauthorizedError,
 } from 'src/celestial-service/error';
 import { compare } from 'src/celestial-service/util/compare';
+import {
+  differenceBy,
+  intersectionBy,
+} from 'src/celestial-service/util/setTheory';
 import { BillType } from 'src/constant/Book';
 import {
   GetBookIdResponse,
@@ -46,13 +50,10 @@ import { TransferEntity } from 'src/model/entity/TransferEntity';
 import {
   History,
   ShareDetail,
-  Transaction,
+  TransactionBill,
   TransactionTransfer,
 } from 'src/model/type/Book';
-import {
-  ViewTransactionBill,
-  ViewTransactionTransfer,
-} from 'src/model/viewEntity/ViewTransaction';
+import { ViewBillShare } from 'src/model/viewEntity/ViewBillShare';
 import { bn } from 'src/util/bignumber';
 import { randomBase10 } from 'src/util/random';
 
@@ -82,8 +83,8 @@ export class BookService {
   @inject(ViewBookAccess)
   private readonly vBookAccess!: ViewBookAccess;
 
-  @inject(ViewTransactionAccess)
-  private readonly vTransactionAccess!: ViewTransactionAccess;
+  @inject(ViewBillShareAccess)
+  private readonly vBillShareAccess!: ViewBillShareAccess;
 
   public async cleanup() {
     await this.dbAccess.cleanup();
@@ -135,7 +136,7 @@ export class BookService {
     newTx: Transfer
   ): History => {
     const items: History['items'] = [];
-    if (oldTx.date !== newTx.date)
+    if (String(oldTx.date) !== String(newTx.date))
       items.push({ key: 'date', from: oldTx.date, to: newTx.date });
     if (oldTx.amount !== newTx.amount)
       items.push({ key: 'amount', from: oldTx.amount, to: newTx.amount });
@@ -153,6 +154,75 @@ export class BookService {
       });
     if (oldTx.memo !== newTx.memo)
       items.push({ key: 'memo', from: oldTx.memo, to: newTx.memo });
+
+    return { id: newTx.id, items };
+  };
+
+  private compareTxBill = (
+    oldTx: TransactionBill,
+    newTx: TransactionBill
+  ): History => {
+    const items: History['items'] = [];
+    if (String(oldTx.date) !== String(newTx.date))
+      items.push({ key: 'date', from: oldTx.date, to: newTx.date });
+    if (oldTx.amount !== newTx.amount)
+      items.push({ key: 'amount', from: oldTx.amount, to: newTx.amount });
+    if (oldTx.descr !== newTx.descr)
+      items.push({ key: 'descr', from: oldTx.descr, to: newTx.descr });
+    if (oldTx.memo !== newTx.memo)
+      items.push({ key: 'memo', from: oldTx.memo, to: newTx.memo });
+
+    const sameFormer = intersectionBy(newTx.former, oldTx.former, 'id');
+    for (const former of sameFormer) {
+      const old = oldTx.former.find((v) => v.id === former.id);
+      if (old?.amount !== former.amount)
+        items.push({
+          key: 'former',
+          from: `${old?.id}:${old?.amount}`,
+          to: `${former.id}:${former.amount}`,
+        });
+    }
+    const addFormer = differenceBy(newTx.former, oldTx.former, 'id');
+    for (const former of addFormer)
+      items.push({
+        key: 'former',
+        from: null,
+        to: `${former.id}:${former.amount}`,
+      });
+
+    const minusFormer = differenceBy(oldTx.former, newTx.former, 'id');
+    for (const former of minusFormer)
+      items.push({
+        key: 'former',
+        from: `${former.id}:${former.amount}`,
+        to: null,
+      });
+
+    const sameLatter = intersectionBy(newTx.latter, oldTx.latter, 'id');
+    for (const latter of sameLatter) {
+      const old = oldTx.latter.find((v) => v.id === latter.id);
+      if (old?.amount !== latter.amount)
+        items.push({
+          key: 'latter',
+          from: `${old?.id}:${old?.amount}`,
+          to: `${latter.id}:${latter.amount}`,
+        });
+    }
+    const addLatter = differenceBy(newTx.latter, oldTx.latter, 'id');
+    for (const latter of addLatter)
+      items.push({
+        key: 'latter',
+        from: null,
+        to: `${latter.id}:${latter.amount}`,
+      });
+
+    const minusLatter = differenceBy(oldTx.latter, newTx.latter, 'id');
+    for (const latter of minusLatter)
+      items.push({
+        key: 'latter',
+        from: `${latter.id}:${latter.amount}`,
+        to: null,
+      });
 
     return { id: newTx.id, items };
   };
@@ -201,70 +271,74 @@ export class BookService {
     return res;
   };
 
-  private handleTransactions = (
-    transactions: (ViewTransactionBill | ViewTransactionTransfer)[]
-  ) => {
-    const res: Transaction[] = [];
-    for (const tx of transactions) {
-      const idx = res.findIndex((v) => v.id === tx.id);
-      if (idx === -1)
-        if (tx.type === 'transfer')
-          res.push({
-            id: tx.id,
-            ver: tx.ver,
-            bookId: tx.bookId,
-            date: tx.date,
-            type: tx.type,
-            amount: tx.amount,
-            srcMemberId: tx.srcMemberId,
-            dstMemberId: tx.dstMemberId,
-            memo: tx.memo,
-            dateCreated: tx.dateCreated,
-            dateUpdated: tx.dateUpdated,
-            dateDeleted: tx.dateDeleted,
-            history: [],
-          });
-        else
-          res.push({
-            id: tx.id,
-            ver: tx.ver,
-            bookId: tx.bookId,
-            date: tx.date,
-            type: tx.type,
-            descr: tx.descr,
-            amount: tx.amount,
-            shareMemberId: tx.shareMemberId,
-            shareCount: tx.shareCount,
-            memo: tx.memo,
-            dateCreated: tx.dateCreated,
-            dateUpdated: tx.dateUpdated,
-            dateDeleted: tx.dateDeleted,
-            history: [],
-          });
-      else {
-        const lastTx = res[idx];
-        if (lastTx.type === 'transfer' && tx.type === 'transfer') {
-          const diff = this.compareTxTransfer(lastTx, tx);
-          res[idx] = {
-            id: tx.id,
-            ver: tx.ver,
-            bookId: tx.bookId,
-            date: tx.date,
-            type: tx.type,
-            amount: tx.amount,
-            srcMemberId: tx.srcMemberId,
-            dstMemberId: tx.dstMemberId,
-            memo: tx.memo,
-            dateCreated: tx.dateCreated,
-            dateUpdated: tx.dateUpdated,
-            dateDeleted: tx.dateDeleted,
-            history: [diff, ...lastTx.history],
-          };
-        }
+  private handleBill = (billShares: ViewBillShare[]) => {
+    const bills: TransactionBill[] = [];
+    for (const share of billShares) {
+      const idx = bills.findIndex(
+        (v) => v.id === share.billId && v.ver === share.ver
+      );
+      if (idx < 0) {
+        const isFormer =
+          (share.type === 'out' && share.memberAmount > 0) ||
+          (share.type === 'in' && share.memberAmount < 0);
+        bills.push({
+          id: share.billId,
+          ver: share.ver,
+          bookId: share.bookId,
+          date: share.date,
+          type: share.type,
+          descr: share.descr,
+          amount: share.amount,
+          former: isFormer
+            ? [{ id: share.memberId, amount: share.memberAmount }]
+            : [],
+          latter: !isFormer
+            ? [{ id: share.memberId, amount: share.memberAmount }]
+            : [],
+          memo: share.memo,
+          dateCreated: share.dateCreated,
+          dateUpdated: share.dateUpdated,
+          dateDeleted: share.dateDeleted,
+          history: [],
+        });
+      } else {
+        const lastTx = bills[idx];
+        const isFormer =
+          (share.type === 'out' && share.memberAmount > 0) ||
+          (share.type === 'in' && share.memberAmount < 0);
+        bills[idx] = {
+          ...lastTx,
+          former: isFormer
+            ? [
+                { id: share.memberId, amount: share.memberAmount },
+                ...lastTx.former,
+              ]
+            : [...lastTx.former],
+          latter: !isFormer
+            ? [
+                { id: share.memberId, amount: share.memberAmount },
+                ...lastTx.latter,
+              ]
+            : [...lastTx.latter],
+        };
       }
     }
 
-    return res.sort(compare('date', 'desc'));
+    const res: TransactionBill[] = [];
+    for (const tx of bills) {
+      const idx = res.findIndex((v) => v.id === tx.id);
+      if (idx < 0) res.push({ ...tx });
+      else {
+        const lastTx = res[idx];
+        const diff = this.compareTxBill(lastTx, tx);
+        res[idx] = {
+          ...tx,
+          history: [diff, ...lastTx.history],
+        };
+      }
+    }
+
+    return res;
   };
 
   public async getBookDetail(
@@ -275,18 +349,15 @@ export class BookService {
 
     const members = await this.memberAccess.findByBookId(id);
     const transfers = await this.transferAccess.findByBookId(id);
-    const transactions = (await this.vTransactionAccess.findByBookId(id)) as (
-      | ViewTransactionBill
-      | ViewTransactionTransfer
-    )[];
+    const billShares = await this.vBillShareAccess.findByBookId(id);
 
     return {
       ...book,
       members,
       transactions: [
         ...this.handleTransfer(transfers),
-        ...this.handleTransactions(transactions),
-      ],
+        ...this.handleBill(billShares),
+      ].sort(compare('date', 'desc')),
     };
   }
 
@@ -440,8 +511,8 @@ export class BookService {
         members: [...resFormer, ...resLatter],
         transaction: {
           ...newBill,
-          shareMemberId: data.former[0].id,
-          shareCount: data.former.length.toString(),
+          former: [],
+          latter: [],
           history: [],
         },
       };
@@ -551,8 +622,8 @@ export class BookService {
         members: [...resFormer, ...resLatter],
         transaction: {
           ...newBill,
-          shareMemberId: data.former[0].id,
-          shareCount: data.former.length.toString(),
+          former: [],
+          latter: [],
           history: [], // TODO
         },
       };
