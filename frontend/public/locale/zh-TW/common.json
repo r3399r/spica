@@ -28,7 +28,8 @@
     "transferNote": "{{srcMember}} 轉帳 {{symbol}}{{amount}} 給 {{dstMember}}",
     "check": "結帳",
     "shouldReceive": "須收款",
-    "shouldPay": "須還款"
+    "shouldPay": "須還款",
+    "deleted": "已刪除"
   },
   "bookSetting": {
     "back": "回帳本",

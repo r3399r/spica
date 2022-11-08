@@ -28,7 +28,8 @@
     "transferNote": "{{srcMember}} transferred {{symbol}}{{amount}} to {{dstMember}}",
     "check": "Check",
     "shouldReceive": "Should Receive",
-    "shouldPay": "Should Pay"
+    "shouldPay": "Should Pay",
+    "deleted": "Deleted"
   },
   "bookSetting": {
     "back": "Back",

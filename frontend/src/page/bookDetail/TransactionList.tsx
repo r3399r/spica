@@ -1,4 +1,5 @@
 import { Transaction, TransactionBill, TransactionTransfer } from '@y-celestial/spica-service';
+import classNames from 'classnames';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -57,10 +58,19 @@ const TransactionList = () => {
       return (
         <div key={item.id} className="py-[10px] border-b-[1px] border-b-grey-300">
           <div className="flex justify-between">
-            <Body size="l" bold>
-              {item.descr}
-            </Body>
-            <Body size="l">{`${book?.symbol}${bnFormat(item.amount)}`}</Body>
+            <div className="flex gap-1">
+              {item.dateDeleted && (
+                <Body size="s" className="px-1 py-[3px] bg-tomato-500 text-white">
+                  {t('bookDetail.deleted')}
+                </Body>
+              )}
+              <Body size="l" bold className={classNames({ 'opacity-30': item.dateDeleted })}>
+                {item.descr}
+              </Body>
+            </div>
+            <Body size="l" className={classNames({ 'opacity-30': item.dateDeleted })}>{`${
+              book?.symbol
+            }${bnFormat(item.amount)}`}</Body>
           </div>
           <Body size="s" className="text-[12px] leading-[18px] text-teal-500">
             {billNote(item)}
@@ -71,10 +81,19 @@ const TransactionList = () => {
     return (
       <div key={item.id} className="py-[10px] border-b-[1px] border-b-grey-300">
         <div className="flex justify-between">
-          <Body size="l" bold>
-            {t('bookDetail.transfer')}
-          </Body>
-          <Body size="l">{`${book?.symbol}${bnFormat(item.amount)}`}</Body>
+          <div className="flex gap-1">
+            {item.dateDeleted && (
+              <Body size="s" className="px-1 py-[3px] bg-tomato-500 text-white">
+                {t('bookDetail.deleted')}
+              </Body>
+            )}
+            <Body size="l" bold className={classNames({ 'opacity-30': item.dateDeleted })}>
+              {t('bookDetail.transfer')}
+            </Body>
+          </div>
+          <Body size="l" className={classNames({ 'opacity-30': item.dateDeleted })}>{`${
+            book?.symbol
+          }${bnFormat(item.amount)}`}</Body>
         </div>
         <Body size="s" className="text-[12px] leading-[18px] text-teal-500">
           {transferNote(item)}

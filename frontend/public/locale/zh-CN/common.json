@@ -28,7 +28,8 @@
     "transferNote": "{{srcMember}} 转帐 {{symbol}}{{amount}} 给 {{dstMember}}",
     "check": "结帐",
     "shouldReceive": "须收款",
-    "shouldPay": "须还款"
+    "shouldPay": "须还款",
+    "deleted": "已删除"
   },
   "bookSetting": {
     "back": "回帐本",
