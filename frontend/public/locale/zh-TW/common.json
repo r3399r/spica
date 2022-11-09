@@ -43,6 +43,31 @@
     "rename": "重新命名",
     "deleteHint": "此處僅能刪除這台裝置當中的記錄，其他裝置的記錄不受影響"
   },
+  "transaction": {
+    "back": "回帳本",
+    "in": "收入",
+    "out": "支出",
+    "transfer": "轉帳",
+    "payer": "付款者",
+    "sharer": "分攤者",
+    "sender": "匯款者",
+    "receiver": "收款者",
+    "memo": "備註",
+    "created": "於 {{date}} 建立",
+    "updated": "於 {{date}} 更新",
+    "deleted": "於 {{date}} 刪除",
+    "updateContent": "- {{key}} 從 {{from}} 變更成 {{to}}",
+    "key": {
+      "date": "日期",
+      "amount": "金額",
+      "memo": "備註",
+      "descr": "項目",
+      "former": "付款者",
+      "latter": "分攤者",
+      "srcMemberId": "匯款者",
+      "dstMemberId": "收款者"
+    }
+  },
   "member": {
     "head": "帳本成員",
     "back": "回帳本",

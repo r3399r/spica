@@ -43,6 +43,31 @@
     "rename": "重新命名",
     "deleteHint": "此处仅能删除这台装置当中的记录，其他装置的记录不受影响"
   },
+  "transaction": {
+    "back": "回帐本",
+    "in": "收入",
+    "out": "支出",
+    "transfer": "转帐",
+    "payer": "付款者",
+    "sharer": "分摊者",
+    "sender": "汇款者",
+    "receiver": "收款者",
+    "memo": "备註",
+    "created": "于 {{date}} 建立",
+    "updated": "于 {{date}} 更新",
+    "deleted": "于 {{date}} 删除",
+    "updateContent": "- {{key}} 从 {{from}} 变更成 {{to}}",
+    "key": {
+      "date": "日期",
+      "amount": "金额",
+      "memo": "备註",
+      "descr": "项目",
+      "former": "付款者",
+      "latter": "分摊者",
+      "srcMemberId": "汇款者",
+      "dstMemberId": "收款者"
+    }
+  },
   "member": {
     "head": "帐本成员",
     "back": "回帐本",

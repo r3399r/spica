@@ -155,7 +155,7 @@ export class BookService {
     if (oldTx.memo !== newTx.memo)
       items.push({ key: 'memo', from: oldTx.memo, to: newTx.memo });
 
-    return { id: newTx.id, items };
+    return { date: oldTx.dateUpdated, items };
   };
 
   private compareTxBill = (
@@ -224,7 +224,7 @@ export class BookService {
         to: null,
       });
 
-    return { id: newTx.id, items };
+    return { date: oldTx.dateUpdated, items };
   };
 
   private handleTransfer = (transfers: Transfer[]) => {

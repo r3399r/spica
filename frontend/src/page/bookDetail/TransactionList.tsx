@@ -3,8 +3,9 @@ import classNames from 'classnames';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Body from 'src/component/celestial-ui/typography/Body';
+import { Page } from 'src/constant/Page';
 import { RootState } from 'src/redux/store';
 import { aggregateTransactions } from 'src/service/bookService';
 import { bnFormat } from 'src/util/bignumber';
@@ -12,6 +13,7 @@ import { bnFormat } from 'src/util/bignumber';
 const TransactionList = () => {
   const { id } = useParams();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
   const transactions = useMemo(
@@ -56,7 +58,11 @@ const TransactionList = () => {
   const items = (item: Transaction) => {
     if (item.type !== 'transfer')
       return (
-        <div key={item.id} className="py-[10px] border-b-[1px] border-b-grey-300">
+        <div
+          key={item.id}
+          className="py-[10px] border-b-[1px] border-b-grey-300"
+          onClick={() => navigate(`${Page.Book}/${id}/tx/${item.id}`)}
+        >
           <div className="flex justify-between">
             <div className="flex gap-1">
               {item.dateDeleted && (
@@ -79,7 +85,11 @@ const TransactionList = () => {
       );
 
     return (
-      <div key={item.id} className="py-[10px] border-b-[1px] border-b-grey-300">
+      <div
+        key={item.id}
+        className="py-[10px] border-b-[1px] border-b-grey-300"
+        onClick={() => navigate(`${Page.Book}/${id}/tx/${item.id}`)}
+      >
         <div className="flex justify-between">
           <div className="flex gap-1">
             {item.dateDeleted && (

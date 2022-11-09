@@ -59,7 +59,7 @@ export type TransactionTransfer = {
 };
 
 export type History = {
-  id: string;
+  date: string | null;
   items: {
     key:
       | 'date'

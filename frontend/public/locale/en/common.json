@@ -43,6 +43,31 @@
     "rename": "Rename",
     "deleteHint": "Note that this action would only delete the book in this device. It would not affect others' devices."
   },
+  "transaction": {
+    "back": "Back",
+    "in": "Income",
+    "out": "Expense",
+    "transfer": "Transfer",
+    "payer": "Payer",
+    "sharer": "Sharer",
+    "sender": "Sender",
+    "receiver": "Receiver",
+    "memo": "Memo",
+    "created": "Created at {{date}}",
+    "updated": "Updated at {{date}}",
+    "deleted": "Deleted at {{date}}",
+    "updateContent": "- {{key}} is updated from {{from}} to {{to}}",
+    "key": {
+      "date": "Date",
+      "amount": "Amount",
+      "memo": "Memo",
+      "descr": "Item",
+      "former": "Payer",
+      "latter": "Sharer",
+      "srcMemberId": "Sender",
+      "dstMemberId": "Receiver"
+    }
+  },
   "member": {
     "head": "Members",
     "back": "Back",

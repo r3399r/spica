@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -21,7 +20,7 @@ const BookSetting = () => {
   }, [id]);
 
   return (
-    <div className={classNames('max-w-[640px] mx-[15px] sm:mx-auto')}>
+    <div className="max-w-[640px] mx-[15px] sm:mx-auto">
       <Navbar />
       <H2>{t('bookSetting.head')}</H2>
       <RenameBook />
