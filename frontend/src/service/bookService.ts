@@ -37,7 +37,13 @@ export const loadBookList = async () => {
     dispatch(setBooks(updatedBooks));
     localStorage.setItem(
       'book',
-      JSON.stringify(res.data.map((v) => ({ id: v.id, code: v.code, showDeleted: false }))),
+      JSON.stringify(
+        res.data.map((v) => ({
+          id: v.id,
+          code: v.code,
+          showDeleted: localBooks.find((o) => o.id === v.id)?.showDeleted ?? false,
+        })),
+      ),
     );
   } finally {
     dispatch(finishWaiting());

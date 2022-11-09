@@ -58,14 +58,16 @@ const History = () => {
     <div className="my-[15px]">
       {tx.dateDeleted && (
         <Body size="s" className="text-navy-300 mb-[5px]">
-          {t('transaction.deleted', { date: format(new Date(tx.dateDeleted), 'yyyy-MM-dd HH:mm') })}
+          {t('transaction.deletedAt', {
+            date: format(new Date(tx.dateDeleted), 'yyyy-MM-dd HH:mm'),
+          })}
         </Body>
       )}
       {tx.history.map((v, i) => (
         <div key={i} className="mb-[5px]">
           {v.date && (
             <Body size="s" className="text-navy-300">
-              {t('transaction.updated', { date: format(new Date(v.date), 'yyyy-MM-dd HH:mm') })}
+              {t('transaction.updatedAt', { date: format(new Date(v.date), 'yyyy-MM-dd HH:mm') })}
             </Body>
           )}
           {v.items.map((o, j) => (
@@ -77,7 +79,9 @@ const History = () => {
       ))}
       {tx.dateCreated && (
         <Body size="s" className="text-navy-300">
-          {t('transaction.created', { date: format(new Date(tx.dateCreated), 'yyyy-MM-dd HH:mm') })}
+          {t('transaction.createdAt', {
+            date: format(new Date(tx.dateCreated), 'yyyy-MM-dd HH:mm'),
+          })}
         </Body>
       )}
     </div>
