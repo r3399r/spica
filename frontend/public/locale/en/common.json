@@ -49,6 +49,7 @@
     "out": "Expense",
     "transfer": "Transfer",
     "deleted": "Deleted",
+    "deleteHint": "Delete this record?",
     "payer": "Payer",
     "sharer": "Sharer",
     "sender": "Sender",

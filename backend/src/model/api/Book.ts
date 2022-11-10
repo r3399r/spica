@@ -63,6 +63,11 @@ export type PutBookBillResponse = {
   transaction: TransactionBill;
 };
 
+export type DeleteBookBillResponse = {
+  updatedMembers: Member[];
+  dateDeleted: string;
+};
+
 export type PostBookTransferRequest = TransferData;
 
 export type PostBookTransferResponse = {
@@ -75,4 +80,9 @@ export type PutBookTransferRequest = TransferData;
 export type PutBookTransferResponse = {
   members: Member[];
   transaction: TransactionTransfer;
+};
+
+export type DeleteBookTransferResponse = {
+  updatedMembers: Member[];
+  dateDeleted: string;
 };

@@ -51,7 +51,7 @@ const History = () => {
     },
     [book, t],
   );
-  console.log(tx);
+
   if (!tx) return <></>;
 
   return (

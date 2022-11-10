@@ -49,6 +49,7 @@
     "out": "支出",
     "transfer": "轉帳",
     "deleted": "已刪除",
+    "deleteHint": "要刪除這筆紀錄嗎？",
     "payer": "付款者",
     "sharer": "分攤者",
     "sender": "匯款者",

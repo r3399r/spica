@@ -19,6 +19,8 @@ import {
 } from 'src/celestial-service/util/setTheory';
 import { BillType } from 'src/constant/Book';
 import {
+  DeleteBookBillResponse,
+  DeleteBookTransferResponse,
   GetBookIdResponse,
   GetBookNameResponse,
   GetBookParams,
@@ -508,7 +510,7 @@ export class BookService {
       await this.dbAccess.commitTransaction();
 
       return {
-        members: [...resFormer, ...resLatter],
+        members: [...resFormer, ...resLatter], // TODO
         transaction: {
           ...newBill,
           former: [],
@@ -535,7 +537,7 @@ export class BookService {
 
     const positive = oldBillShares.filter((v) => v.amount > 0);
     const negative = oldBillShares.filter((v) => v.amount < 0);
-    await Promise.all(
+    const positiveMembers = await Promise.all(
       positive.map((v) =>
         this.updateMember(
           v.memberId,
@@ -544,7 +546,7 @@ export class BookService {
         )
       )
     );
-    await Promise.all(
+    const negativeMembers = await Promise.all(
       negative.map((v) =>
         this.updateMember(
           v.memberId,
@@ -553,6 +555,13 @@ export class BookService {
         )
       )
     );
+
+    const res = [...negativeMembers];
+    for (const member of positiveMembers)
+      if (!negativeMembers.map((v) => v.id).includes(member.id))
+        res.push(member);
+
+    return res;
   }
 
   public async updateBill(
@@ -633,15 +642,21 @@ export class BookService {
     }
   }
 
-  public async deleteBill(bid: string, billId: string, code: string) {
-    await this.validateBook(bid, code);
+  public async deleteBill(
+    bookId: string,
+    billId: string,
+    code: string
+  ): Promise<DeleteBookBillResponse> {
+    await this.validateBook(bookId, code);
 
     try {
       await this.dbAccess.startTransaction();
       const bill = await this.billAccess.findUndeletedById(billId);
-      await this.deleteOldBill(bill);
+      const updatedMembers = await this.deleteOldBill(bill);
 
       await this.dbAccess.commitTransaction();
+
+      return { updatedMembers, dateDeleted: new Date().toISOString() };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
@@ -751,24 +766,36 @@ export class BookService {
     }
   }
 
-  public async deleteTransfer(bid: string, tid: string, code: string) {
+  public async deleteTransfer(
+    bid: string,
+    tid: string,
+    code: string
+  ): Promise<DeleteBookTransferResponse> {
     await this.validateBook(bid, code);
 
     try {
       await this.dbAccess.startTransaction();
       const transfer = await this.transferAccess.findUndeletedById(tid);
 
-      await this.updateMember(
+      const member1 = await this.updateMember(
         transfer.srcMemberId,
         bn(transfer.amount).negated()
       );
-      await this.updateMember(transfer.dstMemberId, bn(transfer.amount));
+      const member2 = await this.updateMember(
+        transfer.dstMemberId,
+        bn(transfer.amount)
+      );
       await this.transferAccess.update({
         ...transfer,
         dateDeleted: new Date().toISOString(),
       });
 
       await this.dbAccess.commitTransaction();
+
+      return {
+        updatedMembers: [member1, member2],
+        dateDeleted: new Date().toISOString(),
+      };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
