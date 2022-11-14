@@ -119,12 +119,14 @@ export class BookService {
 
     const books = await this.vBookAccess.findByIds(idArray);
 
-    return books.filter((v) => {
-      const idx = idArray.findIndex((id) => id === v.id);
-      if (idx === -1 || codeArray[idx] !== v.code) return false;
+    return books
+      .filter((v) => {
+        const idx = idArray.findIndex((id) => id === v.id);
+        if (idx === -1 || codeArray[idx] !== v.code) return false;
 
-      return true;
-    });
+        return true;
+      })
+      .sort(compare('dateCreated'));
   }
 
   public async getBookNameById(id: string): Promise<GetBookNameResponse> {
