@@ -6,6 +6,7 @@ import BookSetting from './page/bookSetting';
 import Fill from './page/fill/Fill';
 import Landing from './page/landing/Landing';
 import Member from './page/member';
+import NewTransaction from './page/newTransaction';
 import Share from './page/share';
 import Transaction from './page/transaction';
 
@@ -14,6 +15,7 @@ const AppRoutes = () => (
     <Route path={Page.Landing} element={<Landing />} />
     <Route path={Page.Book} element={<BookList />} />
     <Route path={`${Page.Book}/:id`} element={<BookDetail />} />
+    <Route path={`${Page.Book}/:id/tx`} element={<NewTransaction />} />
     <Route path={`${Page.Book}/:id/tx/:tid`} element={<Transaction />} />
     <Route path={`${Page.Book}/:id/member`} element={<Member />} />
     <Route path={`${Page.Book}/:id/fill`} element={<Fill />} />

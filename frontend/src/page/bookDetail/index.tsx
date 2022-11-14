@@ -2,9 +2,10 @@ import classNames from 'classnames';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'src/component/celestial-ui/Button';
 import Body from 'src/component/celestial-ui/typography/Body';
+import { Page } from 'src/constant/Page';
 import IcAdd from 'src/image/ic-add.svg';
 import { RootState } from 'src/redux/store';
 import { loadBookById } from 'src/service/bookService';
@@ -16,6 +17,7 @@ import TransactionList from './TransactionList';
 const BookDetail = () => {
   const { id } = useParams();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
   const noMember = useMemo(() => book?.members?.length === 0, [book]);
@@ -47,7 +49,10 @@ const BookDetail = () => {
       {book !== undefined && !noMember && (
         <div className="fixed bottom-0 h-[104px] w-full">
           <div className="mx-auto w-fit">
-            <Button className="mt-5 w-64 h-12">
+            <Button
+              className="mt-5 w-64 h-12"
+              onClick={() => navigate(`${Page.Book}/${book.id}/tx`)}
+            >
               <div className="flex justify-center">
                 <img src={IcAdd} />
                 <Body size="l" bold className="text-white">
