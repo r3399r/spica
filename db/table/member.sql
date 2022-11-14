@@ -1,6 +1,6 @@
 CREATE TABLE member (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
-	book_id INT8 NOT NULL,
+	book_id UUID NOT NULL,
 	nickname STRING NOT NULL,
 	total FLOAT NOT NULL,
 	balance FLOAT NOT NULL,
