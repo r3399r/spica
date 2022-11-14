@@ -3,8 +3,8 @@ import { Member } from './Member';
 
 @Entity({ name: 'member' })
 export class MemberEntity implements Member {
-  @Column({ primary: true, type: 'bigint' })
-  @Generated('rowid')
+  @Column({ primary: true })
+  @Generated('uuid')
   id!: string;
 
   @Column({ type: 'int8', name: 'book_id' })

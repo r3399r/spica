@@ -1,5 +1,5 @@
 CREATE TABLE member (
-	id SERIAL,
+	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	book_id INT8 NOT NULL,
 	nickname STRING NOT NULL,
 	total FLOAT NOT NULL,

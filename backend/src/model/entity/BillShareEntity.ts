@@ -3,8 +3,8 @@ import { BillShare } from './BillShare';
 
 @Entity({ name: 'bill_share' })
 export class BillShareEntity implements BillShare {
-  @Column({ primary: true, type: 'bigint' })
-  @Generated('rowid')
+  @Column({ primary: true })
+  @Generated('uuid')
   id!: string;
 
   @Column({ type: 'int8', name: 'bill_id' })

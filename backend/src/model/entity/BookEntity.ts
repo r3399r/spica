@@ -3,8 +3,8 @@ import { Book } from './Book';
 
 @Entity({ name: 'book' })
 export class BookEntity implements Book {
-  @Column({ primary: true, type: 'bigint' })
-  @Generated('rowid')
+  @Column({ primary: true })
+  @Generated('uuid')
   id!: string;
 
   @Column({ type: 'text' })

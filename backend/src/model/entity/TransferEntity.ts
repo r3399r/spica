@@ -3,8 +3,8 @@ import { Transfer } from './Transfer';
 
 @Entity({ name: 'transfer' })
 export class TransferEntity implements Transfer {
-  @Column({ primary: true, type: 'bigint' })
-  @Generated('rowid')
+  @Column({ primary: true })
+  @Generated('uuid')
   id!: string;
 
   @Column({ primary: true, type: 'int8' })

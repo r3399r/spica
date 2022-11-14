@@ -1,5 +1,5 @@
 CREATE TABLE transfer (
-	id SERIAL,
+	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	ver INT8 NOT NULL,
 	book_id INT8 NOT NULL,
 	date TIMESTAMP NOT NULL,

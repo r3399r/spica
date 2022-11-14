@@ -4,8 +4,8 @@ import { Bill } from './Bill';
 
 @Entity({ name: 'bill' })
 export class BillEntity implements Bill {
-  @Column({ primary: true, type: 'bigint' })
-  @Generated('rowid')
+  @Column({ primary: true })
+  @Generated('uuid')
   id!: string;
 
   @Column({ primary: true, type: 'int8' })
