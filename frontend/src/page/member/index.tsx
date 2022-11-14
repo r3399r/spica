@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import H2 from 'src/component/celestial-ui/typography/H2';
+import { Page } from 'src/constant/Page';
 import { loadBookById } from 'src/service/bookService';
 import MemberList from './MemberList';
 import Navbar from './Navbar';
@@ -11,10 +12,11 @@ import Share from './Share';
 const Member = () => {
   const { id } = useParams();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id === undefined) return;
-    loadBookById(id);
+    loadBookById(id).catch(() => navigate(Page.Book));
   }, [id]);
 
   return (

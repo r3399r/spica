@@ -24,7 +24,7 @@ const BookDetail = () => {
 
   useEffect(() => {
     if (id === undefined) return;
-    loadBookById(id);
+    loadBookById(id).catch(() => navigate(Page.Book));
   }, [id]);
 
   return (

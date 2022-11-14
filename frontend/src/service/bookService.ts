@@ -46,6 +46,7 @@ export const loadBookList = async () => {
       ),
     );
   } finally {
+    localStorage.removeItem('book');
     dispatch(finishWaiting());
   }
 };
