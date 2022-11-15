@@ -351,13 +351,15 @@ export class BookService {
   ): Promise<GetBookIdResponse> {
     const book = await this.validateBook(id, code);
 
-    const members = await this.memberAccess.findByBookId(id);
-    const transfers = await this.transferAccess.findByBookId(id);
-    const billShares = await this.vBillShareAccess.findByBookId(id);
+    const [members, transfers, billShares] = await Promise.all([
+      this.memberAccess.findByBookId(id),
+      this.transferAccess.findByBookId(id),
+      this.vBillShareAccess.findByBookId(id),
+    ]);
 
     return {
       ...book,
-      members,
+      members: members.sort(compare('dateCreated')),
       transactions: [
         ...this.handleTransfer(transfers),
         ...this.handleBill(billShares),

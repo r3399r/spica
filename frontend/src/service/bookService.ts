@@ -1,5 +1,6 @@
 import { Transaction } from '@y-celestial/spica-service';
 import { format } from 'date-fns';
+import { validate as uuidValidate } from 'uuid';
 import bookEndpoint from 'src/api/bookEndpoint';
 import { addBook, appendBook, setBooks, updateBookList } from 'src/redux/bookSlice';
 import { dispatch, getState } from 'src/redux/store';
@@ -24,8 +25,14 @@ export const loadBookList = async () => {
     }
     if (reduxSet.size === localSet.size && [...reduxSet].every((x) => localSet.has(x))) return;
 
-    const ids = localBooks.map((v) => v.id).join();
-    const code = localBooks.map((v) => v.code).join();
+    const ids = localBooks
+      .filter((v) => uuidValidate(v.id))
+      .map((v) => v.id)
+      .join();
+    const code = localBooks
+      .filter((v) => uuidValidate(v.id))
+      .map((v) => v.code)
+      .join();
     const res = await bookEndpoint.getBook({ ids }, code);
 
     const updatedBooks = res.data.map((v) => {
@@ -45,8 +52,6 @@ export const loadBookList = async () => {
         })),
       ),
     );
-  } catch {
-    localStorage.removeItem('book');
   } finally {
     dispatch(finishWaiting());
   }
