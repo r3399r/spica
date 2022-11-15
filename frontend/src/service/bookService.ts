@@ -18,13 +18,6 @@ export const loadBookList = async () => {
     const reduxSet = new Set([...(books ?? []).map((v) => v.id)]);
     const localSet = new Set([...localBooks.map((v) => v.id)]);
 
-    if (localSet.size === 0) {
-      dispatch(setBooks([]));
-
-      return;
-    }
-    if (reduxSet.size === localSet.size && [...reduxSet].every((x) => localSet.has(x))) return;
-
     const ids = localBooks
       .filter((v) => uuidValidate(v.id))
       .map((v) => v.id)
@@ -33,6 +26,14 @@ export const loadBookList = async () => {
       .filter((v) => uuidValidate(v.id))
       .map((v) => v.code)
       .join();
+
+    if (localSet.size === 0 || ids.length === 0) {
+      dispatch(setBooks([]));
+
+      return;
+    }
+    if (reduxSet.size === localSet.size && [...reduxSet].every((x) => localSet.has(x))) return;
+
     const res = await bookEndpoint.getBook({ ids }, code);
 
     const updatedBooks = res.data.map((v) => {

@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 import QRCode from 'react-qr-code';
 import { useSelector } from 'react-redux';
@@ -31,9 +32,11 @@ const Share = () => {
           <QRCode value={`${link}?code=${book?.code}`} size={160} />
         </div>
         <Body>{t('member.scanHint')}</Body>
-        <Button className="px-[15px] py-[5px] rounded-md" onClick={onShareLink}>
-          {t('member.shareLink')}
-        </Button>
+        <CopyToClipboard text={link}>
+          <Button className="px-[15px] py-[5px] rounded-md" onClick={onShareLink}>
+            {t('member.shareLink')}
+          </Button>
+        </CopyToClipboard>
         <div className="flex">
           <Body>{t('member.codeHint')}</Body>
           <Body bold className="text-tomato-500">
