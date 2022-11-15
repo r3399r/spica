@@ -10,24 +10,18 @@ export type ReviseSymbolForm = { symbol: string };
 
 export type RenameMemberForm = { nickname: string };
 
+export type BillForm = {
+  type: 'in' | 'out';
+  date: string;
+  descr: string;
+  amount: string;
+  memo: string;
+};
+
 export type TransferForm = {
   date: Date;
   amount: string;
   from: string;
   to: string;
-  memo: string;
-};
-
-export type BillForm = {
-  date: Date;
-  type: string;
-  descr: string;
-  amount: string;
-  detail: {
-    id: string;
-    side: 'former' | 'latter';
-    type: 'weight' | 'pct' | 'amount';
-    value: string;
-  }[];
   memo: string;
 };

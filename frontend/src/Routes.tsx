@@ -3,7 +3,6 @@ import { Page } from './constant/Page';
 import BookDetail from './page/bookDetail';
 import BookList from './page/bookList';
 import BookSetting from './page/bookSetting';
-import Fill from './page/fill/Fill';
 import Landing from './page/landing/Landing';
 import Member from './page/member';
 import NewTransaction from './page/newTransaction';
@@ -18,7 +17,6 @@ const AppRoutes = () => (
     <Route path={`${Page.Book}/:id/tx`} element={<NewTransaction />} />
     <Route path={`${Page.Book}/:id/tx/:tid`} element={<Transaction />} />
     <Route path={`${Page.Book}/:id/member`} element={<Member />} />
-    <Route path={`${Page.Book}/:id/fill`} element={<Fill />} />
     <Route path={`${Page.Book}/:id/setting`} element={<BookSetting />} />
     <Route path={`${Page.Share}/:id`} element={<Share />} />
     <Route path="/*" element={<Navigate to={Page.Landing} />} />
