@@ -56,7 +56,7 @@ const Share = () => {
         <H5>{name}</H5>
       </div>
       <Form className="mt-5 flex gap-[10px]" methods={methods} onSubmit={onSubmit}>
-        <div className="flex-1">
+        <div className="flex-1 pt-4">
           <FormInput name="code" placeholder={t('share.code')} required />
         </div>
         <div className="pt-4">
