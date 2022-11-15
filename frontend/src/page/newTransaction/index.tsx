@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import Button from 'src/component/celestial-ui/Button';
+import DatetimePicker from 'src/component/celestial-ui/DatetimePicker';
 import Divider from 'src/component/celestial-ui/Divider';
 import Form from 'src/component/celestial-ui/Form';
 import FormInput from 'src/component/celestial-ui/FormInput';
@@ -15,6 +17,7 @@ import Navbar from './Navbar';
 const NewTransaction = () => {
   const { t } = useTranslation();
   const methods = useForm<BillForm>();
+  const [value, setValue] = useState<Date>(new Date());
 
   const onSubmit = (data: BillForm) => {
     console.log(data);
@@ -27,12 +30,23 @@ const NewTransaction = () => {
           <Navbar />
           <Form onSubmit={onSubmit} methods={methods}>
             <div className="flex gap-4 pb-4">
-              <Select label={t('newTx.type')}>
-                <SelectOption value="out">{t('desc.out')}</SelectOption>
-                <SelectOption value="in">{t('desc.in')}</SelectOption>
-                <SelectOption value="transfer">{t('desc.transfer')}</SelectOption>
-              </Select>
-              <FormInput name="date" label={t('newTx.date')} />
+              <div className="w-[108px]">
+                <Select label={t('newTx.type')}>
+                  <SelectOption value="out">{t('desc.out')}</SelectOption>
+                  <SelectOption value="in">{t('desc.in')}</SelectOption>
+                  <SelectOption value="transfer">{t('desc.transfer')}</SelectOption>
+                </Select>
+              </div>
+              <div className="flex-1">
+                <DatetimePicker
+                  label={t('newTx.date')}
+                  initValue={new Date()}
+                  value={value}
+                  setValue={setValue}
+                  cancelTxt={t('act.cancel')}
+                  confirmTxt={t('act.confirm')}
+                />
+              </div>
             </div>
             <div className="pb-4">
               <FormInput name="descr" label={t('newTx.descr')} required />
