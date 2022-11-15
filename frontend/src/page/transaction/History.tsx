@@ -22,13 +22,37 @@ const History = () => {
       const key = value.key;
       let from = value.from;
       let to = value.to;
-      if (value.key === 'date' && from && to) {
+
+      if (from === null) {
+        const memberId = String(to).split(':')[0];
+        const amount = bn(String(to).split(':')[1]).abs().toFormat();
+
+        return t('transaction.createContent', {
+          key: t(`transaction.key.${key}`),
+          to: `${book?.members?.find((v) => v.id === memberId)?.nickname}(${
+            book?.symbol
+          }${amount})`,
+        });
+      }
+      if (to === null) {
+        const memberId = String(from).split(':')[0];
+        const amount = bn(String(from).split(':')[1]).abs().toFormat();
+
+        return t('transaction.removeContent', {
+          key: t(`transaction.key.${key}`),
+          from: `${book?.members?.find((v) => v.id === memberId)?.nickname}(${
+            book?.symbol
+          }${amount})`,
+        });
+      }
+
+      if (key === 'date' && from && to) {
         from = format(new Date(from), 'yyyy-MM-dd HH:mm');
         to = format(new Date(to), 'yyyy-MM-dd HH:mm');
-      } else if (value.key === 'amount') {
+      } else if (key === 'amount') {
         from = `${book?.symbol}${from}`;
         to = `${book?.symbol}${to}`;
-      } else if (value.key === 'former' || value.key === 'latter') {
+      } else if (key === 'former' || key === 'latter') {
         const fromMemberId = String(from).split(':')[0];
         const fromAmount = bn(String(from).split(':')[1]).abs().toFormat();
         const toMemberId = String(to).split(':')[0];
@@ -39,10 +63,10 @@ const History = () => {
         to = `${book?.members?.find((v) => v.id === toMemberId)?.nickname}(${
           book?.symbol
         }${toAmount})`;
-      } else if (value.key === 'srcMemberId') {
+      } else if (key === 'srcMemberId') {
         from = String(book?.members?.find((v) => v.id === from)?.nickname);
         to = String(book?.members?.find((v) => v.id === to)?.nickname);
-      } else if (value.key === 'dstMemberId') {
+      } else if (key === 'dstMemberId') {
         from = String(book?.members?.find((v) => v.id === from)?.nickname);
         to = String(book?.members?.find((v) => v.id === to)?.nickname);
       }

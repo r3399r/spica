@@ -59,6 +59,8 @@
     "updatedAt": "Updated at {{date}}",
     "deletedAt": "Deleted at {{date}}",
     "updateContent": "- {{key}} is updated from {{from}} to {{to}}",
+    "removeContent": "- {{key}} {{from}} is removed",
+    "createContent": "- {{key}} {{to}} is created",
     "key": {
       "date": "Date",
       "amount": "Amount",

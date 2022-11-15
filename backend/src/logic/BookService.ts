@@ -281,10 +281,10 @@ export class BookService {
       const idx = bills.findIndex(
         (v) => v.id === share.billId && v.ver === share.ver
       );
-      if (idx < 0) {
-        const isFormer =
-          (share.type === 'out' && share.memberAmount > 0) ||
-          (share.type === 'in' && share.memberAmount < 0);
+      const isFormer =
+        (share.type === 'out' && share.memberAmount > 0) ||
+        (share.type === 'in' && share.memberAmount < 0);
+      if (idx < 0)
         bills.push({
           id: share.billId,
           ver: share.ver,
@@ -305,25 +305,22 @@ export class BookService {
           dateDeleted: share.dateDeleted,
           history: [],
         });
-      } else {
-        const lastTx = bills[idx];
-        const isFormer =
-          (share.type === 'out' && share.memberAmount > 0) ||
-          (share.type === 'in' && share.memberAmount < 0);
+      else {
+        const lastBill = bills[idx];
         bills[idx] = {
-          ...lastTx,
+          ...lastBill,
           former: isFormer
             ? [
                 { id: share.memberId, amount: share.memberAmount },
-                ...lastTx.former,
+                ...lastBill.former,
               ]
-            : [...lastTx.former],
+            : [...lastBill.former],
           latter: !isFormer
             ? [
                 { id: share.memberId, amount: share.memberAmount },
-                ...lastTx.latter,
+                ...lastBill.latter,
               ]
-            : [...lastTx.latter],
+            : [...lastBill.latter],
         };
       }
     }

@@ -16,7 +16,7 @@ export class ViewBillShareAccess {
 
     return await qr.manager.find<ViewBillShare>(ViewBillShareEntity.name, {
       where: { bookId },
-      order: { id: 'ASC', ver: 'ASC' },
+      order: { ver: 'ASC' },
     });
   }
 }

@@ -59,6 +59,8 @@
     "updatedAt": "於 {{date}} 更新",
     "deletedAt": "於 {{date}} 刪除",
     "updateContent": "- {{key}} 從 {{from}} 變更成 {{to}}",
+    "removeContent": "- {{key}} 移除 {{from}}",
+    "createContent": "- {{key}} 新增 {{to}}",
     "key": {
       "date": "日期",
       "amount": "金額",
