@@ -96,6 +96,8 @@
     "type": "Type",
     "date": "Date",
     "descr": "Item",
-    "amount": "Amount"
+    "amount": "Amount",
+    "all": "All",
+    "allShare": "All Share Equally"
   }
 }

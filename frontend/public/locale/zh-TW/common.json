@@ -96,6 +96,8 @@
     "type": "類別",
     "date": "日期",
     "descr": "項目",
-    "amount": "金額"
+    "amount": "金額",
+    "all": "全部",
+    "allShare": "所有人均分"
   }
 }
