@@ -98,7 +98,7 @@ const TransactionList = () => {
               </Body>
             )}
             <Body size="l" bold className={classNames({ 'opacity-30': item.dateDeleted })}>
-              {t('bookDetail.transfer')}
+              {t('desc.transfer')}
             </Body>
           </div>
           <Body size="l" className={classNames({ 'opacity-30': item.dateDeleted })}>{`${

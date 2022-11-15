@@ -9,7 +9,7 @@ const Navbar = () => {
 
   return (
     <div className="mt-[15px] mb-5">
-      <BackButton text={t('bookDetail.back')} to={`${Page.Book}/${id}`} />
+      <BackButton text={t('newTx.back')} to={`${Page.Book}/${id}`} />
     </div>
   );
 };

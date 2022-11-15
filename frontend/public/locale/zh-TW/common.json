@@ -7,6 +7,16 @@
     "submit": "送出",
     "delete": "刪除"
   },
+  "desc": {
+    "in": "收入",
+    "out": "支出",
+    "transfer": "轉帳",
+    "payer": "付款者",
+    "sharer": "分攤者",
+    "sender": "匯款者",
+    "receiver": "收款者",
+    "memo": "備註"
+  },
   "bookList": {
     "bookList": "帳本清單",
     "newBook": "建立新帳本",
@@ -24,7 +34,6 @@
     "multiple": "多人",
     "billOutNote": "{{member}} 支付了 {{symbol}}{{amount}}",
     "billInNote": "{{member}} 收取了 {{symbol}}{{amount}}",
-    "transfer": "轉帳",
     "transferNote": "{{srcMember}} 轉帳 {{symbol}}{{amount}} 給 {{dstMember}}",
     "check": "結帳",
     "shouldReceive": "須收款",
@@ -45,16 +54,8 @@
   },
   "transaction": {
     "back": "回帳本",
-    "in": "收入",
-    "out": "支出",
-    "transfer": "轉帳",
     "deleted": "已刪除",
     "deleteHint": "要刪除這筆紀錄嗎？",
-    "payer": "付款者",
-    "sharer": "分攤者",
-    "sender": "匯款者",
-    "receiver": "收款者",
-    "memo": "備註",
     "createdAt": "於 {{date}} 建立",
     "updatedAt": "於 {{date}} 更新",
     "deletedAt": "於 {{date}} 刪除",
@@ -89,5 +90,12 @@
     "join": "加入此帳本？",
     "code": "通行碼",
     "wrongCode": "錯誤的通行碼"
+  },
+  "newTx": {
+    "back": "回帳本",
+    "type": "類別",
+    "date": "日期",
+    "descr": "項目",
+    "amount": "金額"
   }
 }

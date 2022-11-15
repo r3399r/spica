@@ -24,15 +24,15 @@ const Main = () => {
   if (tx.type === 'transfer')
     return (
       <>
-        <H4>{t('transaction.transfer')}</H4>
-        <Body className="text-teal-500">{t(`transaction.transfer`)}</Body>
+        <H4>{t('desc.transfer')}</H4>
+        <Body className="text-teal-500">{t('desc.transfer')}</Body>
         <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:ss')}</Body>
         <H2 className="text-right mt-[10px] pb-[18px] border-b-[1px] border-b-grey-300">{`${
           book.symbol
         }${bn(tx.amount).toFormat()}`}</H2>
         <div className="py-[15px] border-b-[1px] border-b-grey-300">
           <Body size="s" className="mb-[5px] text-navy-300">
-            {t('transaction.sender')}
+            {t('desc.sender')}
           </Body>
           <div className="py-[5px] pl-[10px] flex justify-between">
             <Body size="l" className="text-navy-700">
@@ -45,7 +45,7 @@ const Main = () => {
         </div>
         <div className="py-[15px] border-b-[1px] border-b-grey-300">
           <Body size="s" className="mb-[5px] text-navy-300">
-            {t('transaction.receiver')}
+            {t('desc.receiver')}
           </Body>
           <div className="py-[5px] pl-[10px] flex justify-between">
             <Body size="l" className="text-navy-700">
@@ -58,7 +58,7 @@ const Main = () => {
         </div>
         <div className="py-[15px] border-b-[1px] border-b-grey-300">
           <Body size="s" className="text-navy-300">
-            {t('transaction.memo')}
+            {t('desc.memo')}
           </Body>
           {tx.memo && <Body className="mt-[5px] pl-[10px]">{tx.memo}</Body>}
         </div>
@@ -69,14 +69,14 @@ const Main = () => {
     return (
       <>
         <H4>{tx.descr}</H4>
-        <Body className={'text-tomato-700'}>{t(`transaction.${tx.type}`)}</Body>
+        <Body className={'text-tomato-700'}>{t('desc.out')}</Body>
         <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:ss')}</Body>
         <H2 className="text-right mt-[10px] pb-[18px] border-b-[1px] border-b-grey-300">{`${
           book.symbol
         }${bn(tx.amount).toFormat()}`}</H2>
         <div className="py-[15px] border-b-[1px] border-b-grey-300">
           <Body size="s" className="mb-[5px] text-navy-300">
-            {t('transaction.payer')}
+            {t('desc.payer')}
           </Body>
           {tx.former.map((v) => (
             <div key={v.id} className="py-[5px] pl-[10px] flex justify-between">
@@ -91,7 +91,7 @@ const Main = () => {
         </div>
         <div className="py-[15px] border-b-[1px] border-b-grey-300">
           <Body size="s" className="mb-[5px] text-navy-300">
-            {t('transaction.sharer')}
+            {t('desc.sharer')}
           </Body>
           {tx.latter.map((v) => (
             <div key={v.id} className="py-[5px] pl-[10px] flex justify-between">
@@ -106,7 +106,7 @@ const Main = () => {
         </div>
         <div className="py-[15px] border-b-[1px] border-b-grey-300">
           <Body size="s" className="text-navy-300">
-            {t('transaction.memo')}
+            {t('desc.memo')}
           </Body>
           {tx.memo && <Body className="mt-[5px] pl-[10px]">{tx.memo}</Body>}
         </div>
@@ -116,14 +116,14 @@ const Main = () => {
   return (
     <>
       <H4>{tx.descr}</H4>
-      <Body className={'text-green-700'}>{t(`transaction.${tx.type}`)}</Body>
+      <Body className={'text-green-700'}>{t('desc.in')}</Body>
       <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:ss')}</Body>
       <H2 className="text-right mt-[10px] pb-[18px] border-b-[1px] border-b-grey-300">{`${
         book.symbol
       }${bn(tx.amount).toFormat()}`}</H2>
       <div className="py-[15px] border-b-[1px] border-b-grey-300">
         <Body size="s" className="mb-[5px] text-navy-300">
-          {t('transaction.receiver')}
+          {t('desc.receiver')}
         </Body>
         {tx.former.map((v) => (
           <div key={v.id} className="py-[5px] pl-[10px] flex justify-between">
@@ -138,7 +138,7 @@ const Main = () => {
       </div>
       <div className="py-[15px] border-b-[1px] border-b-grey-300">
         <Body size="s" className="mb-[5px] text-navy-300">
-          {t('transaction.sharer')}
+          {t('desc.sharer')}
         </Body>
         {tx.latter.map((v) => (
           <div key={v.id} className="py-[5px] pl-[10px] flex justify-between">
@@ -153,7 +153,7 @@ const Main = () => {
       </div>
       <div className="py-[15px] border-b-[1px] border-b-grey-300">
         <Body size="s" className="text-navy-300">
-          {t('transaction.memo')}
+          {t('desc.memo')}
         </Body>
         {tx.memo && <Body className="mt-[5px] pl-[10px]">{tx.memo}</Body>}
       </div>

@@ -6,6 +6,8 @@ import Form from 'src/component/celestial-ui/Form';
 import FormInput from 'src/component/celestial-ui/FormInput';
 import FormNumberInput from 'src/component/celestial-ui/FormNumberInput';
 import FormTextarea from 'src/component/celestial-ui/FormTextarea';
+import Select from 'src/component/celestial-ui/Select';
+import SelectOption from 'src/component/celestial-ui/SelectOption';
 import Body from 'src/component/celestial-ui/typography/Body';
 import { BillForm } from 'src/model/Form';
 import Navbar from './Navbar';
@@ -25,20 +27,24 @@ const NewTransaction = () => {
           <Navbar />
           <Form onSubmit={onSubmit} methods={methods}>
             <div className="flex gap-4 pb-4">
-              <FormInput name="type" label="類別" />
-              <FormInput name="date" label="時間" />
+              <Select label={t('newTx.type')}>
+                <SelectOption value="out">{t('desc.out')}</SelectOption>
+                <SelectOption value="in">{t('desc.in')}</SelectOption>
+                <SelectOption value="transfer">{t('desc.transfer')}</SelectOption>
+              </Select>
+              <FormInput name="date" label={t('newTx.date')} />
             </div>
             <div className="pb-4">
-              <FormInput name="descr" label="項目" required />
+              <FormInput name="descr" label={t('newTx.descr')} required />
             </div>
             <div className="pb-4">
-              <FormNumberInput decimal={2} name="amount" label="金額" />
+              <FormNumberInput decimal={2} name="amount" label={t('newTx.amount')} />
             </div>
-            <Body>付款者</Body>
+            <Body>{t('desc.payer')}</Body>
             <Divider />
-            <Body>分攤者</Body>
+            <Body>{t('desc.sharer')}</Body>
             <Divider />
-            <FormTextarea name="memo" label="備註" />
+            <FormTextarea name="memo" label={t('desc.memo')} />
             <button className="hidden" />
           </Form>
         </div>

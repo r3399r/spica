@@ -11,7 +11,6 @@ export type ReviseSymbolForm = { symbol: string };
 export type RenameMemberForm = { nickname: string };
 
 export type BillForm = {
-  type: 'in' | 'out';
   date: string;
   descr: string;
   amount: string;

@@ -7,6 +7,16 @@
     "submit": "Submit",
     "delete": "Delete"
   },
+  "desc": {
+    "in": "Income",
+    "out": "Expense",
+    "transfer": "Transfer",
+    "payer": "Payer",
+    "sharer": "Sharer",
+    "sender": "Sender",
+    "receiver": "Receiver",
+    "memo": "Memo"
+  },
   "bookList": {
     "bookList": "Book List",
     "newBook": "Create New Book",
@@ -24,7 +34,6 @@
     "multiple": "Multiple People",
     "billOutNote": "{{member}} paid {{symbol}}{{amount}}",
     "billInNote": "{{member}} received {{symbol}}{{amount}}",
-    "transfer": "Transfer",
     "transferNote": "{{srcMember}} transferred {{symbol}}{{amount}} to {{dstMember}}",
     "check": "Check",
     "shouldReceive": "Should Receive",
@@ -45,16 +54,8 @@
   },
   "transaction": {
     "back": "Back",
-    "in": "Income",
-    "out": "Expense",
-    "transfer": "Transfer",
     "deleted": "Deleted",
     "deleteHint": "Delete this record?",
-    "payer": "Payer",
-    "sharer": "Sharer",
-    "sender": "Sender",
-    "receiver": "Receiver",
-    "memo": "Memo",
     "createdAt": "Created at {{date}}",
     "updatedAt": "Updated at {{date}}",
     "deletedAt": "Deleted at {{date}}",
@@ -89,5 +90,12 @@
     "join": "Join this Book?",
     "code": "Code",
     "wrongCode": "Wrong Code"
+  },
+  "newTx": {
+    "back": "Back",
+    "type": "Type",
+    "date": "Date",
+    "descr": "Item",
+    "amount": "Amount"
   }
 }
