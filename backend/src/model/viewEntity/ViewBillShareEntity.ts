@@ -1,4 +1,5 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
+import { BillType, ShareMethod } from 'src/constant/Book';
 import { ViewBillShare } from './ViewBillShare';
 
 @ViewEntity({ name: 'v_bill_share' })
@@ -19,7 +20,7 @@ export class ViewBillShareEntity implements ViewBillShare {
   date!: string;
 
   @ViewColumn()
-  type!: 'in' | 'out';
+  type!: BillType;
 
   @ViewColumn()
   descr: string | null = null;
@@ -41,6 +42,12 @@ export class ViewBillShareEntity implements ViewBillShare {
 
   @ViewColumn({ name: 'member_id' })
   memberId!: string;
+
+  @ViewColumn()
+  method!: ShareMethod;
+
+  @ViewColumn()
+  value: number | null = null;
 
   @ViewColumn({ name: 'member_amount' })
   memberAmount!: number;

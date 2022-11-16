@@ -830,9 +830,11 @@ Resources:
                     "type": "object",
                     "properties": {
                       "id": {"type": "string"},
+                      "method": {"type": "string", "enum": ["%","N","$","±"]},
+                      "value": {"type": "number"},
                       "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
                     },
-                    "required": ["id","amount"]
+                    "required": ["id","method","amount"]
                   }
                 },
                 "latter": {
@@ -841,9 +843,11 @@ Resources:
                     "type": "object",
                     "properties": {
                       "id": {"type": "string"},
+                      "method": {"type": "string", "enum": ["%","N","$","±"]},
+                      "value": {"type": "number"},
                       "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
                     },
-                    "required": ["id","amount"]
+                    "required": ["id","method","amount"]
                   }
                 },
                 "memo": {"type": "string"}
@@ -863,9 +867,11 @@ Resources:
                     "type": "object",
                     "properties": {
                       "id": {"type": "string"},
+                      "method": {"type": "string", "enum": ["%","N","$","±"]},
+                      "value": {"type": "number"},
                       "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
                     },
-                    "required": ["id","amount"]
+                    "required": ["id","method","amount"]
                   }
                 },
                 "latter": {
@@ -874,9 +880,11 @@ Resources:
                     "type": "object",
                     "properties": {
                       "id": {"type": "string"},
+                      "method": {"type": "string", "enum": ["%","N","$","±"]},
+                      "value": {"type": "number"},
                       "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
                     },
-                    "required": ["id","amount"]
+                    "required": ["id","method","amount"]
                   }
                 },
                 "memo": {"type": "string"}

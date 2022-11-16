@@ -294,10 +294,24 @@ export class BookService {
           descr: share.descr,
           amount: share.amount,
           former: isFormer
-            ? [{ id: share.memberId, amount: share.memberAmount }]
+            ? [
+                {
+                  id: share.memberId,
+                  method: share.method,
+                  value: share.value ?? undefined,
+                  amount: share.memberAmount,
+                },
+              ]
             : [],
           latter: !isFormer
-            ? [{ id: share.memberId, amount: share.memberAmount }]
+            ? [
+                {
+                  id: share.memberId,
+                  method: share.method,
+                  value: share.value ?? undefined,
+                  amount: share.memberAmount,
+                },
+              ]
             : [],
           memo: share.memo,
           dateCreated: share.dateCreated,
@@ -311,13 +325,23 @@ export class BookService {
           ...lastBill,
           former: isFormer
             ? [
-                { id: share.memberId, amount: share.memberAmount },
+                {
+                  id: share.memberId,
+                  method: share.method,
+                  value: share.value ?? undefined,
+                  amount: share.memberAmount,
+                },
                 ...lastBill.former,
               ]
             : [...lastBill.former],
           latter: !isFormer
             ? [
-                { id: share.memberId, amount: share.memberAmount },
+                {
+                  id: share.memberId,
+                  method: share.method,
+                  value: share.value ?? undefined,
+                  amount: share.memberAmount,
+                },
                 ...lastBill.latter,
               ]
             : [...lastBill.latter],
@@ -484,6 +508,8 @@ export class BookService {
           billShare.billId = newBill.id;
           billShare.ver = '1';
           billShare.memberId = v.id;
+          billShare.method = v.method;
+          billShare.value = v.value ?? null;
           billShare.amount = amount;
 
           await this.billShareAccess.save(billShare);
@@ -500,6 +526,8 @@ export class BookService {
           billShare.billId = newBill.id;
           billShare.ver = '1';
           billShare.memberId = v.id;
+          billShare.method = v.method;
+          billShare.value = v.value ?? null;
           billShare.amount = amount;
 
           await this.billShareAccess.save(billShare);
@@ -602,6 +630,8 @@ export class BookService {
           billShare.billId = newBill.id;
           billShare.ver = bn(oldBill.ver).plus(1).toString();
           billShare.memberId = v.id;
+          billShare.method = v.method;
+          billShare.value = v.value ?? null;
           billShare.amount = amount;
 
           await this.billShareAccess.save(billShare);
@@ -618,6 +648,8 @@ export class BookService {
           billShare.billId = newBill.id;
           billShare.ver = bn(oldBill.ver).plus(1).toString();
           billShare.memberId = v.id;
+          billShare.method = v.method;
+          billShare.value = v.value ?? null;
           billShare.amount = amount;
 
           await this.billShareAccess.save(billShare);

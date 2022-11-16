@@ -1,4 +1,5 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, Generated } from 'typeorm';
+import { ShareMethod } from 'src/constant/Book';
 import { BillShare } from './BillShare';
 
 @Entity({ name: 'bill_share' })
@@ -15,6 +16,12 @@ export class BillShareEntity implements BillShare {
 
   @Column({ type: 'int8', name: 'member_id' })
   memberId!: string;
+
+  @Column({ type: 'text' })
+  method!: ShareMethod;
+
+  @Column({ type: 'float' })
+  value: number | null = null;
 
   @Column({ type: 'float' })
   amount!: number;

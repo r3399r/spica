@@ -13,6 +13,8 @@ select
     b.date_updated,
     b.date_deleted,
     bs.member_id,
+    bs.method,
+    bs.value,
     bs.amount as member_amount
 from
     bill_share bs

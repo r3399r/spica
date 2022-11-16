@@ -1,7 +1,9 @@
-import { BillType } from 'src/constant/Book';
+import { BillType, ShareMethod } from 'src/constant/Book';
 
 export type ShareDetail = {
   id: string;
+  method: ShareMethod;
+  value?: number;
   amount: number;
 };
 

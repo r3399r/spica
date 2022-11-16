@@ -3,6 +3,8 @@ CREATE TABLE bill_share (
 	bill_id UUID NOT NULL,
 	ver INT8 NOT NULL,
 	member_id UUID NOT NULL,
+	method STRING NOT NULL,
+	value FLOAT NULL,
 	amount FLOAT NOT NULL,
 	date_created TIMESTAMP NULL,
 	date_updated TIMESTAMP NULL,
