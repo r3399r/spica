@@ -1,12 +1,6 @@
 import { Book } from 'src/model/entity/Book';
 import { Member } from 'src/model/entity/Member';
-import {
-  BillData,
-  Transaction,
-  TransactionBill,
-  TransactionTransfer,
-  TransferData,
-} from 'src/model/type/Book';
+import { BillData, Transaction, TransferData } from 'src/model/type/Book';
 import { ViewBook } from 'src/model/viewEntity/ViewBook';
 
 export type GetBookParams = { ids: string };
@@ -53,36 +47,36 @@ export type PostBookBillRequest = BillData;
 
 export type PostBookBillResponse = {
   members: Member[];
-  transaction: TransactionBill;
+  transaction: Transaction;
 };
 
 export type PutBookBillRequest = BillData;
 
 export type PutBookBillResponse = {
   members: Member[];
-  transaction: TransactionBill;
+  transaction: Transaction;
 };
 
 export type DeleteBookBillResponse = {
-  updatedMembers: Member[];
-  dateDeleted: string;
+  members: Member[];
+  transaction: Transaction;
 };
 
 export type PostBookTransferRequest = TransferData;
 
 export type PostBookTransferResponse = {
   members: Member[];
-  transaction: TransactionTransfer;
+  transaction: Transaction;
 };
 
 export type PutBookTransferRequest = TransferData;
 
 export type PutBookTransferResponse = {
   members: Member[];
-  transaction: TransactionTransfer;
+  transaction: Transaction;
 };
 
 export type DeleteBookTransferResponse = {
-  updatedMembers: Member[];
-  dateDeleted: string;
+  members: Member[];
+  transaction: Transaction;
 };

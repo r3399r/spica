@@ -1,36 +1,44 @@
-import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import Divider from 'src/component/celestial-ui/Divider';
-import Form from 'src/component/celestial-ui/Form';
-import FormInput from 'src/component/celestial-ui/FormInput';
-import FormNumberInput from 'src/component/celestial-ui/FormNumberInput';
-import FormTextarea from 'src/component/celestial-ui/FormTextarea';
+import Input from 'src/component/celestial-ui/Input';
+import NumberInput from 'src/component/celestial-ui/NumberInput';
+import Textarea from 'src/component/celestial-ui/Textarea';
 import Body from 'src/component/celestial-ui/typography/Body';
 import IcEdit from 'src/image/ic-edit-tx.svg';
-import { BillForm as FormType } from 'src/model/Form';
+import { BillForm as Form } from 'src/model/Form';
+import { resetBillFormData, saveBillFormData } from 'src/redux/formSlice';
 import Former from './Former';
 
-type Props = {
-  type: 'in' | 'out';
-};
-
-const BillForm = ({ type }: Props) => {
+const BillForm = () => {
   const { t } = useTranslation();
-  const methods = useForm<FormType>();
+  const dispatch = useDispatch();
 
-  const onSubmit = (data: FormType) => {
-    console.log(data);
+  useEffect(
+    () => () => {
+      dispatch(resetBillFormData());
+    },
+    [],
+  );
+
+  const saveFormData = (data: Partial<Form>) => {
+    dispatch(saveBillFormData(data));
   };
 
   return (
-    <Form onSubmit={onSubmit} methods={methods}>
+    <>
       <div className="pb-4">
-        <FormInput name="descr" label={t('newTx.descr')} required />
+        <Input label={t('newTx.descr')} onChange={(e) => saveFormData({ descr: e.target.value })} />
       </div>
       <div className="pb-4">
-        <FormNumberInput decimal={2} name="amount" label={t('newTx.amount')} />
+        <NumberInput
+          decimal={2}
+          label={t('newTx.amount')}
+          onChange={(e) => saveFormData({ amount: Number(e.target.value) })}
+        />
       </div>
-      <Former type={type} />
+      <Former />
       <Divider className="my-[15px]" />
       <Body className="mb-[5px] text-navy-700">{t('desc.sharer')}</Body>
       <div className="flex justify-between gap-[10px]">
@@ -42,9 +50,8 @@ const BillForm = ({ type }: Props) => {
         </div>
       </div>
       <Divider className="my-[15px]" />
-      <FormTextarea name="memo" label={t('desc.memo')} />
-      <button className="hidden" />
-    </Form>
+      <Textarea label={t('desc.memo')} onChange={(e) => saveFormData({ memo: e.target.value })} />
+    </>
   );
 };
 

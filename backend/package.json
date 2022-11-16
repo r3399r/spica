@@ -1,6 +1,6 @@
 {
   "name": "@y-celestial/spica-service",
-  "version": "1.0.11",
+  "version": "1.0.14",
   "author": "Yue Chang",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

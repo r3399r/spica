@@ -21,6 +21,14 @@ export class TransferAccess {
     return await qr.manager.save(entity);
   }
 
+  public async findById(id: string) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.find<Transfer>(TransferEntity.name, {
+      where: { id },
+    });
+  }
+
   public async findByBookId(bookId: string) {
     const qr = await this.database.getQueryRunner();
 

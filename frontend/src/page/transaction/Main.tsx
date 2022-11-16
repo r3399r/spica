@@ -26,7 +26,7 @@ const Main = () => {
       <>
         <H4>{t('desc.transfer')}</H4>
         <Body className="text-teal-500">{t('desc.transfer')}</Body>
-        <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:ss')}</Body>
+        <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:mm')}</Body>
         <H2 className="text-right mt-[10px] pb-[18px] border-b-[1px] border-b-grey-300">{`${
           book.symbol
         }${bn(tx.amount).toFormat()}`}</H2>
@@ -70,7 +70,7 @@ const Main = () => {
       <>
         <H4>{tx.descr}</H4>
         <Body className={'text-tomato-700'}>{t('desc.out')}</Body>
-        <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:ss')}</Body>
+        <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:mm')}</Body>
         <H2 className="text-right mt-[10px] pb-[18px] border-b-[1px] border-b-grey-300">{`${
           book.symbol
         }${bn(tx.amount).toFormat()}`}</H2>
@@ -117,7 +117,7 @@ const Main = () => {
     <>
       <H4>{tx.descr}</H4>
       <Body className={'text-green-700'}>{t('desc.in')}</Body>
-      <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:ss')}</Body>
+      <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:mm')}</Body>
       <H2 className="text-right mt-[10px] pb-[18px] border-b-[1px] border-b-grey-300">{`${
         book.symbol
       }${bn(tx.amount).toFormat()}`}</H2>

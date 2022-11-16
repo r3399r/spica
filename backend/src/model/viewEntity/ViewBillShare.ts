@@ -10,7 +10,7 @@ export type ViewBillShare = {
   descr: string | null;
   amount: number;
   memo: string | null;
-  dateCreated: string;
+  dateCreated: string | null;
   dateUpdated: string | null;
   dateDeleted: string | null;
   memberId: string;

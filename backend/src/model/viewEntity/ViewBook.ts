@@ -3,6 +3,6 @@ export type ViewBook = {
   name: string;
   code: string;
   symbol: string;
-  dateCreated: string;
+  dateCreated: string | null;
   lastDateUpdated: string;
 };

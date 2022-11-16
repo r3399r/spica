@@ -19,4 +19,13 @@ export class ViewBillShareAccess {
       order: { ver: 'ASC' },
     });
   }
+
+  public async findByBillId(billId: string) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.find<ViewBillShare>(ViewBillShareEntity.name, {
+      where: { billId },
+      order: { ver: 'ASC' },
+    });
+  }
 }

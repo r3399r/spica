@@ -366,21 +366,23 @@ export class BookService {
     return res;
   };
 
-  public async getBookDetail(
-    id: string,
-    code: string
-  ): Promise<GetBookIdResponse> {
-    const book = await this.validateBook(id, code);
+  private async getMemberByBook(id: string) {
+    const members = await this.memberAccess.findByBookId(id);
 
+    return members.sort(compare('dateCreated'));
+  }
+
+  public async getBook(id: string, code: string): Promise<GetBookIdResponse> {
+    const book = await this.validateBook(id, code);
     const [members, transfers, billShares] = await Promise.all([
-      this.memberAccess.findByBookId(id),
+      this.getMemberByBook(id),
       this.transferAccess.findByBookId(id),
       this.vBillShareAccess.findByBookId(id),
     ]);
 
     return {
       ...book,
-      members: members.sort(compare('dateCreated')),
+      members,
       transactions: [
         ...this.handleTransfer(transfers),
         ...this.handleBill(billShares),
@@ -499,7 +501,7 @@ export class BookService {
       this.validateDetail(data.amount, data.former);
       this.validateDetail(data.amount, data.latter);
 
-      const resFormer = await Promise.all(
+      await Promise.all(
         data.former.map(async (v) => {
           let amount = v.amount;
           if (data.type === BillType.In) amount = v.amount * -1;
@@ -517,7 +519,7 @@ export class BookService {
           return await this.updateMember(v.id, amount);
         })
       );
-      const resLatter = await Promise.all(
+      await Promise.all(
         data.latter.map(async (v) => {
           let amount = v.amount;
           if (data.type === BillType.Out) amount = v.amount * -1;
@@ -539,11 +541,11 @@ export class BookService {
       await this.dbAccess.commitTransaction();
 
       return {
-        members: [...resFormer, ...resLatter], // TODO
+        members: await this.getMemberByBook(id),
         transaction: {
           ...newBill,
-          former: [],
-          latter: [],
+          former: data.former,
+          latter: data.latter,
           history: [],
         },
       };
@@ -566,7 +568,7 @@ export class BookService {
 
     const positive = oldBillShares.filter((v) => v.amount > 0);
     const negative = oldBillShares.filter((v) => v.amount < 0);
-    const positiveMembers = await Promise.all(
+    await Promise.all(
       positive.map((v) =>
         this.updateMember(
           v.memberId,
@@ -575,7 +577,7 @@ export class BookService {
         )
       )
     );
-    const negativeMembers = await Promise.all(
+    await Promise.all(
       negative.map((v) =>
         this.updateMember(
           v.memberId,
@@ -584,22 +586,15 @@ export class BookService {
         )
       )
     );
-
-    const res = [...negativeMembers];
-    for (const member of positiveMembers)
-      if (!negativeMembers.map((v) => v.id).includes(member.id))
-        res.push(member);
-
-    return res;
   }
 
   public async updateBill(
-    bid: string,
+    bookId: string,
     billId: string,
     data: PutBookBillRequest,
     code: string
   ): Promise<PutBookBillResponse> {
-    await this.validateBook(bid, code);
+    await this.validateBook(bookId, code);
 
     try {
       await this.dbAccess.startTransaction();
@@ -610,7 +605,7 @@ export class BookService {
       const bill = new BillEntity();
       bill.id = billId;
       bill.ver = bn(oldBill.ver).plus(1).toString();
-      bill.bookId = bid;
+      bill.bookId = bookId;
       bill.date = data.date;
       bill.type = data.type;
       bill.descr = data.descr;
@@ -621,7 +616,7 @@ export class BookService {
       this.validateDetail(data.amount, data.former);
       this.validateDetail(data.amount, data.latter);
 
-      const resFormer = await Promise.all(
+      await Promise.all(
         data.former.map(async (v) => {
           let amount = v.amount;
           if (data.type === BillType.In) amount = v.amount * -1;
@@ -639,7 +634,7 @@ export class BookService {
           return await this.updateMember(v.id, amount);
         })
       );
-      const resLatter = await Promise.all(
+      await Promise.all(
         data.latter.map(async (v) => {
           let amount = v.amount;
           if (data.type === BillType.Out) amount = v.amount * -1;
@@ -660,14 +655,11 @@ export class BookService {
 
       await this.dbAccess.commitTransaction();
 
+      const billShares = await this.vBillShareAccess.findByBillId(newBill.id);
+
       return {
-        members: [...resFormer, ...resLatter],
-        transaction: {
-          ...newBill,
-          former: [],
-          latter: [],
-          history: [], // TODO
-        },
+        members: await this.getMemberByBook(bookId),
+        transaction: this.handleBill(billShares)[0],
       };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
@@ -685,11 +677,16 @@ export class BookService {
     try {
       await this.dbAccess.startTransaction();
       const bill = await this.billAccess.findUndeletedById(billId);
-      const updatedMembers = await this.deleteOldBill(bill);
+      await this.deleteOldBill(bill);
 
       await this.dbAccess.commitTransaction();
 
-      return { updatedMembers, dateDeleted: new Date().toISOString() };
+      const billShares = await this.vBillShareAccess.findByBillId(billId);
+
+      return {
+        members: await this.getMemberByBook(bookId),
+        transaction: this.handleBill(billShares)[0],
+      };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
@@ -715,25 +712,15 @@ export class BookService {
       transfer.dstMemberId = data.dstMemberId;
       transfer.memo = data.memo ?? null;
 
-      const member1 = await this.updateMember(
-        data.srcMemberId,
-        bn(data.amount)
-      );
-      const member2 = await this.updateMember(
-        data.dstMemberId,
-        bn(data.amount).negated()
-      );
-      const res = await this.transferAccess.save(transfer);
+      await this.updateMember(data.srcMemberId, bn(data.amount));
+      await this.updateMember(data.dstMemberId, bn(data.amount).negated());
+      await this.transferAccess.save(transfer);
 
       await this.dbAccess.commitTransaction();
 
       return {
-        members: [member1, member2],
-        transaction: {
-          ...res,
-          type: 'transfer',
-          history: [],
-        },
+        members: await this.getMemberByBook(id),
+        transaction: { ...transfer, type: 'transfer', history: [] },
       };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
@@ -742,16 +729,18 @@ export class BookService {
   }
 
   public async updateTransfer(
-    bid: string,
-    tid: string,
+    bookId: string,
+    transferId: string,
     data: PostBookTransferRequest,
     code: string
   ): Promise<PutBookTransferResponse> {
-    await this.validateBook(bid, code);
+    await this.validateBook(bookId, code);
 
     try {
       await this.dbAccess.startTransaction();
-      const oldTransfer = await this.transferAccess.findUndeletedById(tid);
+      const oldTransfer = await this.transferAccess.findUndeletedById(
+        transferId
+      );
 
       await this.transferAccess.update({
         ...oldTransfer,
@@ -764,34 +753,26 @@ export class BookService {
       await this.updateMember(oldTransfer.dstMemberId, bn(oldTransfer.amount));
 
       const newTransfer = new TransferEntity();
-      newTransfer.id = tid;
+      newTransfer.id = transferId;
       newTransfer.ver = bn(oldTransfer.ver).plus(1).toString();
-      newTransfer.bookId = bid;
+      newTransfer.bookId = bookId;
       newTransfer.date = data.date;
       newTransfer.amount = data.amount;
       newTransfer.srcMemberId = data.srcMemberId;
       newTransfer.dstMemberId = data.dstMemberId;
       newTransfer.memo = data.memo ?? null;
 
-      const member1 = await this.updateMember(
-        data.srcMemberId,
-        bn(data.amount)
-      );
-      const member2 = await this.updateMember(
-        data.dstMemberId,
-        bn(data.amount).negated()
-      );
-      const res = await this.transferAccess.save(newTransfer);
+      await this.updateMember(data.srcMemberId, bn(data.amount));
+      await this.updateMember(data.dstMemberId, bn(data.amount).negated());
+      await this.transferAccess.save(newTransfer);
 
       await this.dbAccess.commitTransaction();
 
+      const transfers = await this.transferAccess.findById(transferId);
+
       return {
-        members: [member1, member2],
-        transaction: {
-          ...res,
-          type: 'transfer',
-          history: [], // TODO
-        },
+        members: await this.getMemberByBook(bookId),
+        transaction: this.handleTransfer(transfers)[0],
       };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
@@ -800,24 +781,21 @@ export class BookService {
   }
 
   public async deleteTransfer(
-    bid: string,
-    tid: string,
+    bookId: string,
+    transferId: string,
     code: string
   ): Promise<DeleteBookTransferResponse> {
-    await this.validateBook(bid, code);
+    await this.validateBook(bookId, code);
 
     try {
       await this.dbAccess.startTransaction();
-      const transfer = await this.transferAccess.findUndeletedById(tid);
+      const transfer = await this.transferAccess.findUndeletedById(transferId);
 
-      const member1 = await this.updateMember(
+      await this.updateMember(
         transfer.srcMemberId,
         bn(transfer.amount).negated()
       );
-      const member2 = await this.updateMember(
-        transfer.dstMemberId,
-        bn(transfer.amount)
-      );
+      await this.updateMember(transfer.dstMemberId, bn(transfer.amount));
       await this.transferAccess.update({
         ...transfer,
         dateDeleted: new Date().toISOString(),
@@ -825,9 +803,11 @@ export class BookService {
 
       await this.dbAccess.commitTransaction();
 
+      const transfers = await this.transferAccess.findById(transferId);
+
       return {
-        updatedMembers: [member1, member2],
-        dateDeleted: new Date().toISOString(),
+        members: await this.getMemberByBook(bookId),
+        transaction: this.handleTransfer(transfers)[0],
       };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();

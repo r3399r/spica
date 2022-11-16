@@ -11,7 +11,7 @@ const BackButton = ({ text, to }: Props) => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex cursor-pointer" onClick={() => navigate(to, { replace: true })}>
+    <div className="flex cursor-pointer w-fit" onClick={() => navigate(to, { replace: true })}>
       <img src={IcBack} />
       <Body size="l" bold className="text-navy-700">
         {text}

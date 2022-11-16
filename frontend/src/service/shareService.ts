@@ -1,5 +1,5 @@
 import bookEndpoint from 'src/api/bookEndpoint';
-import { addBook } from 'src/redux/bookSlice';
+import { appendBook } from 'src/redux/bookSlice';
 import { dispatch } from 'src/redux/store';
 import { finishWaiting, startWaiting } from 'src/redux/uiSlice';
 import { getLocalBooks } from 'src/util/localStorage';
@@ -22,7 +22,7 @@ export const setShareBook = async (id: string, code: string) => {
   try {
     dispatch(startWaiting());
     const res = await bookEndpoint.getBookId(id, code);
-    dispatch(addBook(res.data));
+    dispatch(appendBook(res.data));
 
     const localBooks = getLocalBooks();
     localStorage.setItem('book', JSON.stringify([...localBooks, { id, code }]));

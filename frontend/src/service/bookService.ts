@@ -2,7 +2,7 @@ import { Transaction } from '@y-celestial/spica-service';
 import { format } from 'date-fns';
 import { validate as uuidValidate } from 'uuid';
 import bookEndpoint from 'src/api/bookEndpoint';
-import { addBook, appendBook, setBooks, updateBookList } from 'src/redux/bookSlice';
+import { appendBook, setBooks } from 'src/redux/bookSlice';
 import { dispatch, getState } from 'src/redux/store';
 import { finishWaiting, startWaiting } from 'src/redux/uiSlice';
 import { getLocalBookById, getLocalBooks } from 'src/util/localStorage';
@@ -112,50 +112,6 @@ export const getBookIndex = (id: string) => {
   const books = getLocalBooks();
 
   return books.findIndex((v) => v.id === id);
-};
-
-export const getBookById = async (id: string) => {
-  const {
-    book: { bookList: storeBooks },
-  } = getState();
-  const book = storeBooks.find((v) => v.id === id);
-
-  if (book !== undefined) return book;
-
-  const localBooks = getLocalBooks();
-  const code = localBooks.find((v) => v.id === id)?.code ?? '';
-  const res = await bookEndpoint.getBookId(id, code);
-
-  dispatch(addBook(res.data));
-
-  return res.data;
-};
-
-export const addMember = async (id: string, nickname: string) => {
-  const {
-    book: { bookList: storeBooks },
-  } = getState();
-  const book = storeBooks.find((v) => v.id === id);
-  if (book === undefined) throw new Error('not found');
-
-  const res = await bookEndpoint.postBookIdMember(id, { nickname }, book.code);
-
-  const updatedBook = { ...book, members: [...book.members, res.data] };
-  dispatch(updateBookList(updatedBook));
-};
-
-export const deleteMember = async (memberId: string, bookId: string) => {
-  const {
-    book: { bookList: storeBooks },
-  } = getState();
-  const book = storeBooks.find((v) => v.id === bookId);
-
-  if (book === undefined) throw new Error('not found');
-
-  await bookEndpoint.deleteBookIdMember(bookId, memberId, book.code);
-
-  const updatedBook = { ...book, members: book.members.filter((v) => v.id !== memberId) };
-  dispatch(updateBookList(updatedBook));
 };
 
 export const aggregateTransactions = (id: string, transactions: Transaction[]) => {

@@ -101,7 +101,7 @@ async function apiBookId(event: LambdaEvent, service: BookService) {
     throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
     case 'GET':
-      return service.getBookDetail(
+      return service.getBook(
         event.pathParameters.id,
         event.headers['x-api-code']
       );
