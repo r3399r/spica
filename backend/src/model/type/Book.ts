@@ -5,6 +5,7 @@ export type ShareDetail = {
   method: ShareMethod;
   value?: number;
   amount: number;
+  memberDateCreated: string;
 };
 
 export type BillData = {

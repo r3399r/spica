@@ -17,4 +17,5 @@ export type ViewBillShare = {
   method: ShareMethod;
   value: number | null;
   memberAmount: number;
+  memberDateCreated: string;
 };

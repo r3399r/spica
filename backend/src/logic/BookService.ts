@@ -300,6 +300,7 @@ export class BookService {
                   method: share.method,
                   value: share.value ?? undefined,
                   amount: share.memberAmount,
+                  memberDateCreated: share.memberDateCreated,
                 },
               ]
             : [],
@@ -310,6 +311,7 @@ export class BookService {
                   method: share.method,
                   value: share.value ?? undefined,
                   amount: share.memberAmount,
+                  memberDateCreated: share.memberDateCreated,
                 },
               ]
             : [],
@@ -330,6 +332,7 @@ export class BookService {
                   method: share.method,
                   value: share.value ?? undefined,
                   amount: share.memberAmount,
+                  memberDateCreated: share.memberDateCreated,
                 },
                 ...lastBill.former,
               ]
@@ -341,6 +344,7 @@ export class BookService {
                   method: share.method,
                   value: share.value ?? undefined,
                   amount: share.memberAmount,
+                  memberDateCreated: share.memberDateCreated,
                 },
                 ...lastBill.latter,
               ]
@@ -352,12 +356,19 @@ export class BookService {
     const res: TransactionBill[] = [];
     for (const tx of bills) {
       const idx = res.findIndex((v) => v.id === tx.id);
-      if (idx < 0) res.push({ ...tx });
+      if (idx < 0)
+        res.push({
+          ...tx,
+          former: tx.former.sort(compare('memberDateCreated')),
+          latter: tx.latter.sort(compare('memberDateCreated')),
+        });
       else {
         const lastTx = res[idx];
         const diff = this.compareTxBill(lastTx, tx);
         res[idx] = {
           ...tx,
+          former: tx.former.sort(compare('memberDateCreated')),
+          latter: tx.latter.sort(compare('memberDateCreated')),
           history: [diff, ...lastTx.history],
         };
       }
