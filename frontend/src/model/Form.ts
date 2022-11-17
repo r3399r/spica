@@ -1,4 +1,4 @@
-import { BillType, ShareDetail } from '@y-celestial/spica-service';
+import { ShareDetail } from '@y-celestial/spica-service';
 
 export type NewBookForm = { name: string };
 
@@ -14,7 +14,7 @@ export type RenameMemberForm = { nickname: string };
 
 export type BillForm = {
   date: string;
-  type: BillType;
+  type: 'in' | 'out';
   descr: string;
   amount: number;
   former: ShareDetail[];

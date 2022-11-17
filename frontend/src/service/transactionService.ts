@@ -1,4 +1,10 @@
-import { Member, ShareDetail, ShareMethod, Transaction } from '@y-celestial/spica-service';
+import {
+  BillType,
+  Member,
+  ShareDetail,
+  ShareMethod,
+  Transaction,
+} from '@y-celestial/spica-service';
 import bookEndpoint from 'src/api/bookEndpoint';
 import { setBooks } from 'src/redux/bookSlice';
 import { dispatch, getState } from 'src/redux/store';
@@ -52,18 +58,29 @@ export const isTxSubmittable = () => {
 
 export const calculateAmount = (
   total: number,
-  detail: { id: string; method: ShareMethod; value: number }[],
+  detail: { id: string; method: ShareMethod; value: number; memberDateCreated: string }[],
 ): ShareDetail[] => {
   let rest = bn(total);
 
   const resPercentage = detail
     .filter((v) => v.method === ShareMethod.Percentage)
-    .map((v) => ({ id: v.id, method: v.method, amount: rest.times(v.value).div(100).dp(2) }));
+    .map((v) => ({
+      id: v.id,
+      method: v.method,
+      amount: rest.times(v.value).div(100).dp(2),
+      memberDateCreated: v.memberDateCreated,
+    }));
   rest = rest.minus(resPercentage.reduce((prev, current) => prev.plus(current.amount), bn(0)));
 
   const resAmount = detail
     .filter((v) => v.method === ShareMethod.Amount)
-    .map((v) => ({ id: v.id, method: v.method, value: v.value, amount: bn(v.value) }));
+    .map((v) => ({
+      id: v.id,
+      method: v.method,
+      value: v.value,
+      amount: bn(v.value),
+      memberDateCreated: v.memberDateCreated,
+    }));
   rest = rest.minus(resAmount.reduce((prev, current) => prev.plus(current.amount), bn(0)));
 
   const totalWeight = detail
@@ -76,6 +93,7 @@ export const calculateAmount = (
       method: v.method,
       value: v.value,
       amount: rest.times(v.value).div(totalWeight).dp(2),
+      memberDateCreated: v.memberDateCreated,
     }));
   rest = rest.minus(resultWeight.reduce((prev, current) => prev.plus(current.amount), bn(0)));
 
@@ -121,12 +139,61 @@ export const addBill = async (bookId: string) => {
       bookId,
       {
         date: billFormData.date,
-        type: billFormData.type,
+        type: billFormData.type as BillType,
         descr: billFormData.descr,
         amount: billFormData.amount,
         former: billFormData.former,
         latter: billFormData.latter,
-        memo: billFormData.memo,
+        memo: billFormData.memo === '' ? undefined : billFormData.memo,
+      },
+      book?.code ?? 'xx',
+    );
+
+    const { books } = getState().book;
+    const updatedBooks = (books ?? []).map((v) =>
+      v.id === bookId
+        ? {
+            ...v,
+            members: res.data.members,
+            transactions: [res.data.transaction, ...(v.transactions ?? [])],
+          }
+        : v,
+    );
+    dispatch(setBooks(updatedBooks));
+
+    return res.data.transaction.id;
+  } finally {
+    dispatch(finishWaiting());
+  }
+};
+
+export const reviseBill = async (bookId: string, billId: string) => {
+  try {
+    dispatch(startWaiting());
+
+    const { billFormData } = getState().form;
+    const book = getLocalBookById(bookId);
+    if (
+      billFormData.date === undefined ||
+      billFormData.type === undefined ||
+      billFormData.descr === undefined ||
+      billFormData.amount === undefined ||
+      billFormData.former === undefined ||
+      billFormData.latter === undefined
+    )
+      return;
+
+    const res = await bookEndpoint.putBookIdBill(
+      bookId,
+      billId,
+      {
+        date: billFormData.date,
+        type: billFormData.type as BillType,
+        descr: billFormData.descr,
+        amount: billFormData.amount,
+        former: billFormData.former,
+        latter: billFormData.latter,
+        memo: billFormData.memo === '' ? undefined : billFormData.memo,
       },
       book?.code ?? 'xx',
     );

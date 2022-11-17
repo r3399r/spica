@@ -34,7 +34,7 @@ export type TransactionBill = {
   bookId: string;
   date: string;
   type: 'in' | 'out';
-  descr: string | null;
+  descr: string;
   amount: number;
   former: ShareDetail[];
   latter: ShareDetail[];

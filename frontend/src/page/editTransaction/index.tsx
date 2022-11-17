@@ -2,7 +2,7 @@ import { BillType } from '@y-celestial/spica-service';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Button from 'src/component/celestial-ui/Button';
 import DatetimePicker from 'src/component/celestial-ui/DatetimePicker';
 import Select from 'src/component/celestial-ui/Select';
@@ -12,17 +12,20 @@ import { Page } from 'src/constant/Page';
 import { saveBillFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { loadBookById } from 'src/service/bookService';
-import { addBill, isTxSubmittable } from 'src/service/transactionService';
+import { addBill, isTxSubmittable, reviseBill } from 'src/service/transactionService';
 import BillForm from './BilForm';
 
 const EidtTransaction = () => {
   const { id } = useParams();
   const { t } = useTranslation();
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [type, setType] = useState<string>('out');
   const { billFormData } = useSelector((rootState: RootState) => rootState.form);
   const disabled = useMemo(() => !isTxSubmittable(), [billFormData]);
+  const state = location.state as { isEdit: string } | null;
+  const isEdit = useMemo(() => state !== null, [location.state]);
 
   useEffect(() => {
     if (id === undefined) return;
@@ -40,20 +43,25 @@ const EidtTransaction = () => {
   };
 
   const onSubmit = () => {
-    addBill(id ?? 'xx').then((res) => navigate(`${Page.Book}/${id}/tx/${res}`, { replace: true }));
+    if (isEdit) reviseBill(id ?? 'xx', state?.isEdit ?? 'yy').then(() => navigate(-1));
+    else
+      addBill(id ?? 'xx').then((res) =>
+        navigate(`${Page.Book}/${id}/tx/${res}`, { replace: true }),
+      );
   };
 
   return (
     <>
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
-          <NavbarVanilla text={t('editTx.back')} />
+          <NavbarVanilla text={isEdit ? t('editTx.backToTx') : t('editTx.backToList')} />
           <div className="flex gap-4 pb-4">
             <div className="w-[108px]">
               <Select
                 label={t('editTx.type')}
                 defaultValue={type}
                 onChange={(v) => onSelectType(v)}
+                disabled={isEdit}
               >
                 <SelectOption value="out">{t('desc.out')}</SelectOption>
                 <SelectOption value="in">{t('desc.in')}</SelectOption>

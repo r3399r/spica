@@ -23,7 +23,7 @@ export class ViewBillShareEntity implements ViewBillShare {
   type!: BillType;
 
   @ViewColumn()
-  descr: string | null = null;
+  descr!: string;
 
   @ViewColumn()
   amount!: number;

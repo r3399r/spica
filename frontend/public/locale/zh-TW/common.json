@@ -92,7 +92,8 @@
     "wrongCode": "錯誤的通行碼"
   },
   "editTx": {
-    "back": "回帳本",
+    "backToList": "回帳本",
+    "backToTx": "回帳目",
     "type": "類別",
     "date": "日期",
     "descr": "項目",

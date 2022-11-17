@@ -367,6 +367,7 @@ export class BookService {
         const diff = this.compareTxBill(lastTx, tx);
         res[idx] = {
           ...tx,
+          dateCreated: lastTx.dateCreated,
           former: tx.former.sort(compare('memberDateCreated')),
           latter: tx.latter.sort(compare('memberDateCreated')),
           history: [diff, ...lastTx.history],

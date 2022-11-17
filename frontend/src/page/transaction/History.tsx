@@ -23,27 +23,42 @@ const History = () => {
       let from = value.from;
       let to = value.to;
 
-      if (from === null) {
-        const memberId = String(to).split(':')[0];
-        const amount = bn(String(to).split(':')[1]).abs().toFormat();
+      if (key === 'former' || key === 'latter') {
+        if (from === null) {
+          const memberId = String(to).split(':')[0];
+          const amount = bn(String(to).split(':')[1]).abs().toFormat();
 
-        return t('transaction.createContent', {
-          key: t(`transaction.key.${key}`),
-          to: `${book?.members?.find((v) => v.id === memberId)?.nickname}(${
-            book?.symbol
-          }${amount})`,
-        });
+          return t('transaction.createContent', {
+            key: t(`transaction.key.${key}`),
+            to: `${book?.members?.find((v) => v.id === memberId)?.nickname}(${
+              book?.symbol
+            }${amount})`,
+          });
+        }
+        if (to === null) {
+          const memberId = String(from).split(':')[0];
+          const amount = bn(String(from).split(':')[1]).abs().toFormat();
+
+          return t('transaction.removeContent', {
+            key: t(`transaction.key.${key}`),
+            from: `${book?.members?.find((v) => v.id === memberId)?.nickname}(${
+              book?.symbol
+            }${amount})`,
+          });
+        }
       }
-      if (to === null) {
-        const memberId = String(from).split(':')[0];
-        const amount = bn(String(from).split(':')[1]).abs().toFormat();
 
-        return t('transaction.removeContent', {
-          key: t(`transaction.key.${key}`),
-          from: `${book?.members?.find((v) => v.id === memberId)?.nickname}(${
-            book?.symbol
-          }${amount})`,
-        });
+      if (key === 'memo') {
+        if (from === null)
+          return t('transaction.createContent', {
+            key: t(`transaction.key.memo`),
+            to,
+          });
+        if (to === null)
+          return t('transaction.removeContent', {
+            key: t(`transaction.key.memo`),
+            from,
+          });
       }
 
       if (key === 'date' && from && to) {
