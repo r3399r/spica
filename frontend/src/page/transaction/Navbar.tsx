@@ -23,18 +23,20 @@ const Navbar = () => {
     <>
       <div className="mt-[15px] mb-5 relative">
         <BackButton text={t('transaction.back')} />
-        <div className="absolute top-0 right-0">
-          {tx && tx.dateDeleted === null ? (
-            <div className="flex gap-[15px]">
-              <img src={IcRemove} onClick={() => setOpen(true)} />
-              <img src={IcEdit} />
-            </div>
-          ) : (
-            <Body size="s" className="text-white bg-tomato-700 py-1 px-[10px]">
-              {t('transaction.deleted')}
-            </Body>
-          )}
-        </div>
+        {tx && (
+          <div className="absolute top-0 right-0">
+            {tx.dateDeleted === null ? (
+              <div className="flex gap-[15px]">
+                <img src={IcRemove} onClick={() => setOpen(true)} />
+                <img src={IcEdit} />
+              </div>
+            ) : (
+              <Body size="s" className="text-white bg-tomato-700 py-1 px-[10px]">
+                {t('transaction.deleted')}
+              </Body>
+            )}
+          </div>
+        )}
       </div>
       <ModalDelete open={open} handleClose={() => setOpen(false)} tx={tx} />
     </>

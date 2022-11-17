@@ -15,7 +15,7 @@ import { loadBookById } from 'src/service/bookService';
 import { addBill, isTxSubmittable } from 'src/service/transactionService';
 import BillForm from './BilForm';
 
-const NewTransaction = () => {
+const EidtTransaction = () => {
   const { id } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -47,10 +47,14 @@ const NewTransaction = () => {
     <>
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
-          <NavbarVanilla text={t('newTx.back')} />
+          <NavbarVanilla text={t('editTx.back')} />
           <div className="flex gap-4 pb-4">
             <div className="w-[108px]">
-              <Select label={t('newTx.type')} defaultValue={type} onChange={(v) => onSelectType(v)}>
+              <Select
+                label={t('editTx.type')}
+                defaultValue={type}
+                onChange={(v) => onSelectType(v)}
+              >
                 <SelectOption value="out">{t('desc.out')}</SelectOption>
                 <SelectOption value="in">{t('desc.in')}</SelectOption>
                 <SelectOption value="transfer">{t('desc.transfer')}</SelectOption>
@@ -58,7 +62,7 @@ const NewTransaction = () => {
             </div>
             <div className="flex-1">
               <DatetimePicker
-                label={t('newTx.date')}
+                label={t('editTx.date')}
                 initDate={new Date()}
                 onChange={onPickDatetime}
                 cancelTxt={t('act.cancel')}
@@ -80,4 +84,4 @@ const NewTransaction = () => {
   );
 };
 
-export default NewTransaction;
+export default EidtTransaction;

@@ -91,7 +91,7 @@
     "code": "通行碼",
     "wrongCode": "錯誤的通行碼"
   },
-  "newTx": {
+  "editTx": {
     "back": "回帳本",
     "type": "類別",
     "date": "日期",

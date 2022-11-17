@@ -91,7 +91,7 @@
     "code": "Code",
     "wrongCode": "Wrong Code"
   },
-  "newTx": {
+  "editTx": {
     "back": "Back",
     "type": "Type",
     "date": "Date",

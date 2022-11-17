@@ -29,12 +29,15 @@ const BillForm = () => {
   return (
     <>
       <div className="pb-4">
-        <Input label={t('newTx.descr')} onChange={(e) => saveFormData({ descr: e.target.value })} />
+        <Input
+          label={t('editTx.descr')}
+          onChange={(e) => saveFormData({ descr: e.target.value })}
+        />
       </div>
       <div className="pb-4">
         <NumberInput
           decimal={2}
-          label={t('newTx.amount')}
+          label={t('editTx.amount')}
           onChange={(e) => saveFormData({ amount: Number(e.target.value) })}
         />
       </div>
@@ -43,7 +46,7 @@ const BillForm = () => {
       <Body className="mb-[5px] text-navy-700">{t('desc.sharer')}</Body>
       <div className="flex justify-between gap-[10px]">
         <div className="ml-[10px] flex justify-between flex-1">
-          <Body size="l">{t('newTx.allShare')}</Body>
+          <Body size="l">{t('editTx.allShare')}</Body>
         </div>
         <div>
           <img src={IcEdit} className="cursor-pointer" />

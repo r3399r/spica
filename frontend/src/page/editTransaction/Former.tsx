@@ -45,7 +45,7 @@ const Former = () => {
         <div className="ml-[10px] flex justify-between flex-1">
           <Body size="l">{former.nickname}</Body>
           <Body size="l" className="text-navy-300">
-            {t('newTx.all')}
+            {t('editTx.all')}
           </Body>
         </div>
         <div>
