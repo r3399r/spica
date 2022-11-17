@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import H2 from 'src/component/celestial-ui/typography/H2';
+import NavbarVanilla from 'src/component/NavbarVanilla';
 import { Page } from 'src/constant/Page';
 import { loadBookById } from 'src/service/bookService';
 import MemberList from './MemberList';
-import Navbar from './Navbar';
 import NewMemberForm from './NewMemberForm';
 import Share from './Share';
 
@@ -21,7 +21,7 @@ const Member = () => {
 
   return (
     <div className="max-w-[640px] mx-[15px] sm:mx-auto">
-      <Navbar />
+      <NavbarVanilla text={t('member.back')} />
       <H2>{t('member.head')}</H2>
       <NewMemberForm />
       <MemberList />

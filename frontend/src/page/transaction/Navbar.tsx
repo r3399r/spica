@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import BackButton from 'src/component/BackButton';
 import Body from 'src/component/celestial-ui/typography/Body';
-import { Page } from 'src/constant/Page';
 import IcEdit from 'src/image/ic-edit.svg';
 import IcRemove from 'src/image/ic-remove.svg';
 import { RootState } from 'src/redux/store';
@@ -23,7 +22,7 @@ const Navbar = () => {
   return (
     <>
       <div className="mt-[15px] mb-5 relative">
-        <BackButton text={t('transaction.back')} to={`${Page.Book}/${id}`} />
+        <BackButton text={t('transaction.back')} />
         <div className="absolute top-0 right-0">
           {tx && tx.dateDeleted === null ? (
             <div className="flex gap-[15px]">

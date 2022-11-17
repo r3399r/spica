@@ -7,13 +7,13 @@ import Button from 'src/component/celestial-ui/Button';
 import DatetimePicker from 'src/component/celestial-ui/DatetimePicker';
 import Select from 'src/component/celestial-ui/Select';
 import SelectOption from 'src/component/celestial-ui/SelectOption';
+import NavbarVanilla from 'src/component/NavbarVanilla';
 import { Page } from 'src/constant/Page';
 import { saveBillFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { loadBookById } from 'src/service/bookService';
 import { addBill, isTxSubmittable } from 'src/service/transactionService';
 import BillForm from './BilForm';
-import Navbar from './Navbar';
 
 const NewTransaction = () => {
   const { id } = useParams();
@@ -47,7 +47,7 @@ const NewTransaction = () => {
     <>
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
-          <Navbar />
+          <NavbarVanilla text={t('newTx.back')} />
           <div className="flex gap-4 pb-4">
             <div className="w-[108px]">
               <Select label={t('newTx.type')} defaultValue={type} onChange={(v) => onSelectType(v)}>

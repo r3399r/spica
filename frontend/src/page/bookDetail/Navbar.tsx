@@ -11,7 +11,7 @@ const Navbar = () => {
 
   return (
     <div className="flex justify-between mt-[15px] mb-5">
-      <BackButton text={t('bookDetail.back')} to={Page.Book} />
+      <BackButton text={t('bookDetail.back')} />
       <div className="cursor-pointer" onClick={() => navigate(`${Page.Book}/${id}/setting`)}>
         <img src={IcSetting} />
       </div>
