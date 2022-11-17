@@ -26,7 +26,7 @@ const EidtTransaction = () => {
 
   useEffect(() => {
     if (id === undefined) return;
-    loadBookById(id).catch(() => navigate(Page.Book));
+    loadBookById(id).catch(() => navigate(Page.Book, { replace: true }));
   }, [id]);
 
   const onSelectType = (value: string) => {
@@ -40,7 +40,7 @@ const EidtTransaction = () => {
   };
 
   const onSubmit = () => {
-    addBill(id ?? 'xx').then((res) => navigate(`${Page.Book}/${id}/tx/${res}`));
+    addBill(id ?? 'xx').then((res) => navigate(`${Page.Book}/${id}/tx/${res}`, { replace: true }));
   };
 
   return (

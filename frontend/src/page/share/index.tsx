@@ -25,20 +25,20 @@ const Share = () => {
     if (id === undefined) return;
     init(id)
       .then((res) => {
-        if (res === undefined) navigate(`${Page.Book}/${id}`);
+        if (res === undefined) navigate(`${Page.Book}/${id}`, { replace: true });
         else {
           setName(res);
           methods.setValue('code', query.code);
           if (query.code) onSubmit({ code: query.code });
         }
       })
-      .catch(() => navigate(Page.Book));
+      .catch(() => navigate(Page.Book, { replace: true }));
   }, [id]);
 
   const onSubmit = (data: ShareForm) => {
     if (!id) return;
     setShareBook(id, data.code)
-      .then(() => navigate(`${Page.Book}/${id}`))
+      .then(() => navigate(`${Page.Book}/${id}`, { replace: true }))
       .catch(() =>
         methods.setError('code', { message: t('share.wrongCode') }, { shouldFocus: true }),
       );

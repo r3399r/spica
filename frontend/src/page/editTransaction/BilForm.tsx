@@ -5,11 +5,10 @@ import Divider from 'src/component/celestial-ui/Divider';
 import Input from 'src/component/celestial-ui/Input';
 import NumberInput from 'src/component/celestial-ui/NumberInput';
 import Textarea from 'src/component/celestial-ui/Textarea';
-import Body from 'src/component/celestial-ui/typography/Body';
-import IcEdit from 'src/image/ic-edit-tx.svg';
 import { BillForm as Form } from 'src/model/Form';
 import { resetBillFormData, saveBillFormData } from 'src/redux/formSlice';
 import Former from './Former';
+import Latter from './Latter';
 
 const BillForm = () => {
   const { t } = useTranslation();
@@ -43,15 +42,7 @@ const BillForm = () => {
       </div>
       <Former />
       <Divider className="my-[15px]" />
-      <Body className="mb-[5px] text-navy-700">{t('desc.sharer')}</Body>
-      <div className="flex justify-between gap-[10px]">
-        <div className="ml-[10px] flex justify-between flex-1">
-          <Body size="l">{t('editTx.allShare')}</Body>
-        </div>
-        <div>
-          <img src={IcEdit} className="cursor-pointer" />
-        </div>
-      </div>
+      <Latter />
       <Divider className="my-[15px]" />
       <Textarea label={t('desc.memo')} onChange={(e) => saveFormData({ memo: e.target.value })} />
     </>

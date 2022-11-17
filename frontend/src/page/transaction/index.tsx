@@ -12,7 +12,7 @@ const Transaction = () => {
 
   useEffect(() => {
     if (id === undefined) return;
-    loadBookById(id).catch(() => navigate(Page.Book));
+    loadBookById(id).catch(() => navigate(Page.Book, { replace: true }));
   }, [id]);
 
   return (
