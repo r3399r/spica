@@ -264,7 +264,7 @@ export class BookService {
           srcMemberId: tx.srcMemberId,
           dstMemberId: tx.dstMemberId,
           memo: tx.memo,
-          dateCreated: tx.dateCreated,
+          dateCreated: lastTx.dateCreated,
           dateUpdated: tx.dateUpdated,
           dateDeleted: tx.dateDeleted,
           history: [diff, ...lastTx.history],
