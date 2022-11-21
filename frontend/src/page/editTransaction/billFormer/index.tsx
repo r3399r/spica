@@ -2,10 +2,10 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import AmountInput from 'src/component/AmountInput';
 import Button from 'src/component/celestial-ui/Button';
 import Checkbox from 'src/component/celestial-ui/Checkbox';
 import Divider from 'src/component/celestial-ui/Divider';
-import NumberInput from 'src/component/celestial-ui/NumberInput';
 import Body from 'src/component/celestial-ui/typography/Body';
 import H2 from 'src/component/celestial-ui/typography/H2';
 import { RootState } from 'src/redux/store';
@@ -49,7 +49,7 @@ const BillFormer = () => {
               <label htmlFor={v.id} className="flex-1 pl-3 mr-3">
                 {v.nickname}
               </label>
-              <NumberInput decimal={2} className="w-[90px]" />
+              <AmountInput symbol={book?.symbol ?? '$'} decimal={2} className="w-[90px]" />
             </div>
           ))}
         </div>
