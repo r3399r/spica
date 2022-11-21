@@ -100,6 +100,7 @@
     "descr": "項目",
     "amount": "金額",
     "all": "全部",
-    "allShare": "所有人均分"
+    "allShare": "所有人均分",
+    "remaining": "尚有 {{symbol}}{{amount}} 未分配"
   }
 }

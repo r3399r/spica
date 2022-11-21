@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { resetBillFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import BillFormer from './billFormer';
+import BillLatter from './billLatter';
 import Main from './main';
 
 const EidtTransaction = () => {
@@ -20,6 +21,7 @@ const EidtTransaction = () => {
     <>
       {txState === 'main' && <Main />}
       {txState === 'former' && <BillFormer />}
+      {txState === 'latter' && <BillLatter />}
     </>
   );
 };
