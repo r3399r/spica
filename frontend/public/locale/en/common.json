@@ -5,7 +5,8 @@
     "confirm": "Confirm",
     "cancel": "Cancel",
     "submit": "Submit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "reset": "Reset"
   },
   "desc": {
     "in": "Income",

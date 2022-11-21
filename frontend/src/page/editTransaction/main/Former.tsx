@@ -7,6 +7,7 @@ import Body from 'src/component/celestial-ui/typography/Body';
 import IcEdit from 'src/image/ic-edit-tx.svg';
 import { saveBillFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
+import { setTxState } from 'src/redux/uiSlice';
 import { bn } from 'src/util/bignumber';
 
 const Former = () => {
@@ -66,7 +67,11 @@ const Former = () => {
             ))}
         </div>
         <div>
-          <img src={IcEdit} className="cursor-pointer" />
+          <img
+            src={IcEdit}
+            className="cursor-pointer"
+            onClick={() => dispatch(setTxState('former'))}
+          />
         </div>
       </div>
     </>
