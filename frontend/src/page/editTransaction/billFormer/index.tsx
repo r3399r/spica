@@ -2,7 +2,7 @@ import { ShareMethod } from '@y-celestial/spica-service';
 import classNames from 'classnames';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import AmountInput from 'src/component/AmountInput';
 import Button from 'src/component/celestial-ui/Button';
@@ -11,13 +11,16 @@ import Divider from 'src/component/celestial-ui/Divider';
 import Body from 'src/component/celestial-ui/typography/Body';
 import H2 from 'src/component/celestial-ui/typography/H2';
 import { MemberFormer } from 'src/model/Book';
+import { saveBillFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
+import { setTxState } from 'src/redux/uiSlice';
 import { addMemberToBillFormer, removeMemberFromBillFormer } from 'src/service/transactionService';
 import Navbar from './Navbar';
 
 const BillFormer = () => {
   const { id } = useParams();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const {
     book: { books },
     form: { billFormData },
@@ -25,6 +28,7 @@ const BillFormer = () => {
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
   const members = useMemo(() => books?.find((v) => v.id === id)?.members ?? [], [books]);
   const [input, setInput] = useState<MemberFormer[]>([]);
+  const initialFormer = useMemo(() => billFormData.former, []);
 
   useEffect(() => {
     setInput(
@@ -90,11 +94,41 @@ const BillFormer = () => {
     }
   };
 
+  const onReset = () => {
+    if (!members || members.length === 0) return;
+    dispatch(
+      saveBillFormData({
+        former: [
+          {
+            id: members[0].id,
+            method: ShareMethod.Weight,
+            value: 1,
+            amount: billFormData.amount ?? 0,
+          },
+        ],
+      }),
+    );
+    setInput(
+      members.map((v, i) => ({
+        id: v.id,
+        checked: i === 0 ? true : false,
+        nickname: v.nickname,
+        amount: i === 0 ? `${billFormData.amount ?? 0}` : '0',
+        customAmount: false,
+      })),
+    );
+  };
+
   return (
     <>
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
-          <Navbar />
+          <Navbar
+            onCancel={() => {
+              dispatch(setTxState('main'));
+              dispatch(saveBillFormData({ former: initialFormer }));
+            }}
+          />
           <div className="flex justify-between items-center">
             <H2>{`${book?.symbol}${billFormData.amount ?? 0}`}</H2>
             <Body>{`${t('editTx.remaining', {
@@ -133,10 +167,15 @@ const BillFormer = () => {
       </div>
       <div className="fixed bottom-0 h-[104px] w-full flex justify-center">
         <div className="max-w-[640px] w-full mx-9 flex gap-5">
-          <Button className="mt-5 w-full h-12 text-base" appearance="secondary">
+          <Button className="mt-5 w-full h-12 text-base" appearance="secondary" onClick={onReset}>
             {t('act.reset')}
           </Button>
-          <Button className="mt-5 w-full h-12 text-base">{t('act.confirm')}</Button>
+          <Button
+            className="mt-5 w-full h-12 text-base"
+            onClick={() => dispatch(setTxState('main'))}
+          >
+            {t('act.confirm')}
+          </Button>
         </div>
       </div>
     </>
