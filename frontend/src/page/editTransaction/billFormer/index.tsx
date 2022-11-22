@@ -104,24 +104,13 @@ const BillFormer = () => {
 
   const onReset = () => {
     if (!members || members.length === 0) return;
-    dispatch(
-      saveBillFormData({
-        former: [
-          {
-            id: members[0].id,
-            method: ShareMethod.Weight,
-            value: 1,
-            amount: billFormData.amount ?? 0,
-          },
-        ],
-      }),
-    );
+    dispatch(saveBillFormData({ former: [] }));
     setInput(
-      members.map((v, i) => ({
+      members.map((v) => ({
         id: v.id,
-        checked: i === 0 ? true : false,
+        checked: false,
         nickname: v.nickname,
-        amount: i === 0 ? `${billFormData.amount ?? 0}` : '0',
+        amount: '0',
         customAmount: false,
       })),
     );

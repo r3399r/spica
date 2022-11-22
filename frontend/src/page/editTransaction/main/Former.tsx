@@ -1,11 +1,10 @@
-import { BillType, ShareDetail, ShareMethod } from '@y-celestial/spica-service';
-import { useEffect, useMemo } from 'react';
+import { BillType } from '@y-celestial/spica-service';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Body from 'src/component/celestial-ui/typography/Body';
 import IcEdit from 'src/image/ic-edit-tx.svg';
-import { saveBillFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { setTxState } from 'src/redux/uiSlice';
 import { bn } from 'src/util/bignumber';
@@ -21,25 +20,7 @@ const Former = () => {
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
   const members = useMemo(() => books?.find((v) => v.id === id)?.members, [id, books]);
   const isAll = billFormData.former?.length === 1;
-
-  const former: ShareDetail[] = useMemo(() => {
-    if (billFormData.former) return billFormData.former;
-    if (!members || members.length === 0) return [];
-
-    return [
-      {
-        id: members[0].id,
-        method: ShareMethod.Weight,
-        value: 1,
-        amount: billFormData.amount ?? 0,
-      },
-    ];
-  }, [members, billFormData.amount]);
-
-  useEffect(() => {
-    if (!members || former.length === 0) return;
-    dispatch(saveBillFormData({ former }));
-  }, [former]);
+  const former = useMemo(() => billFormData.former ?? [], [billFormData.former]);
 
   return (
     <>
@@ -57,14 +38,18 @@ const Former = () => {
             </div>
           )}
           {!isAll &&
-            former.map((v) => (
-              <div key={v.id} className="ml-[10px] flex justify-between">
-                <Body size="l">{members?.find((o) => o.id === v.id)?.nickname}</Body>
-                <Body size="l" className="text-navy-300">
-                  {`${book?.symbol}${bn(v.amount).abs().toFormat()}`}
-                </Body>
-              </div>
-            ))}
+            members
+              ?.filter((v) => former.map((o) => o.id).includes(v.id))
+              .map((v) => (
+                <div key={v.id} className="ml-[10px] flex justify-between">
+                  <Body size="l">{v.nickname}</Body>
+                  <Body size="l" className="text-navy-300">
+                    {`${book?.symbol}${bn(former.find((o) => o.id === v.id)?.amount ?? 0)
+                      .abs()
+                      .toFormat()}`}
+                  </Body>
+                </div>
+              ))}
         </div>
         <div>
           <img
