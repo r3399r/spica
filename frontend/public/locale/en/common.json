@@ -101,6 +101,7 @@
     "amount": "Amount",
     "all": "All",
     "allShare": "All Share Equally",
-    "remaining": "remaining {{symbol}}{{amount}}"
+    "lessThan": "remaining {{symbol}}{{amount}}",
+    "greaterThan": "over {{symbol}}{{amount}}"
   }
 }

@@ -101,6 +101,7 @@
     "amount": "金额",
     "all": "全部",
     "allShare": "所有人均分",
-    "remaining": "尚有 {{symbol}}{{amount}} 未分配"
+    "lessThan": "尚有 {{symbol}}{{amount}} 未分配",
+    "greaterThan": "多分配 {{symbol}}{{amount}}"
   }
 }

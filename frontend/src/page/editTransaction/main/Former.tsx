@@ -23,7 +23,7 @@ const Former = () => {
   const isAll = billFormData.former?.length === 1;
 
   const former: ShareDetail[] = useMemo(() => {
-    if (billFormData.former && billFormData.former.length > 1) return billFormData.former;
+    if (billFormData.former) return billFormData.former;
     if (!members || members.length === 0) return [];
 
     return [

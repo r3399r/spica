@@ -120,6 +120,12 @@ export const calculateAmount = (total: number, detail: Detail[]): ShareDetail[] 
   return result.map((v) => ({ ...v, amount: v.amount.toNumber() }));
 };
 
+export const remainingAmount = (total: number, shareDetail: ShareDetail[]) => {
+  const sum = shareDetail.reduce((prev, current) => prev.plus(current.amount), bn(0));
+
+  return sum.minus(total).toNumber();
+};
+
 export const addBill = async (bookId: string) => {
   try {
     dispatch(startWaiting());

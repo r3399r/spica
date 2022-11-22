@@ -14,7 +14,11 @@ import { MemberFormer } from 'src/model/Book';
 import { saveBillFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { setTxState } from 'src/redux/uiSlice';
-import { addMemberToBillFormer, removeMemberFromBillFormer } from 'src/service/transactionService';
+import {
+  addMemberToBillFormer,
+  remainingAmount,
+  removeMemberFromBillFormer,
+} from 'src/service/transactionService';
 import Navbar from './Navbar';
 
 const BillFormer = () => {
@@ -29,6 +33,10 @@ const BillFormer = () => {
   const members = useMemo(() => books?.find((v) => v.id === id)?.members ?? [], [books]);
   const [input, setInput] = useState<MemberFormer[]>([]);
   const initialFormer = useMemo(() => billFormData.former, []);
+  const remaining = useMemo(
+    () => remainingAmount(billFormData.amount ?? 0, billFormData.former ?? []),
+    [billFormData.former],
+  );
 
   useEffect(() => {
     setInput(
@@ -131,10 +139,13 @@ const BillFormer = () => {
           />
           <div className="flex justify-between items-center">
             <H2>{`${book?.symbol}${billFormData.amount ?? 0}`}</H2>
-            <Body>{`${t('editTx.remaining', {
-              symbol: book?.symbol,
-              amount: '-',
-            })}`}</Body>
+            <Body className={classNames({ 'text-tomato-500': remaining !== 0 })}>{`${t(
+              remaining > 0 ? 'editTx.greaterThan' : 'editTx.lessThan',
+              {
+                symbol: book?.symbol,
+                amount: remaining > 0 ? remaining : remaining * -1,
+              },
+            )}`}</Body>
           </div>
           <Divider className="my-[15px]" />
           <div className="flex">
@@ -173,6 +184,7 @@ const BillFormer = () => {
           <Button
             className="mt-5 w-full h-12 text-base"
             onClick={() => dispatch(setTxState('main'))}
+            disabled={remaining !== 0}
           >
             {t('act.confirm')}
           </Button>
