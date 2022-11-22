@@ -1,4 +1,6 @@
-import { useMemo } from 'react';
+import { ShareMethod } from '@y-celestial/spica-service';
+import classNames from 'classnames';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -8,7 +10,9 @@ import Checkbox from 'src/component/celestial-ui/Checkbox';
 import Divider from 'src/component/celestial-ui/Divider';
 import Body from 'src/component/celestial-ui/typography/Body';
 import H2 from 'src/component/celestial-ui/typography/H2';
+import { MemberFormer } from 'src/model/Book';
 import { RootState } from 'src/redux/store';
+import { addMemberToBillFormer, removeMemberFromBillFormer } from 'src/service/transactionService';
 import Navbar from './Navbar';
 
 const BillFormer = () => {
@@ -20,6 +24,71 @@ const BillFormer = () => {
   } = useSelector((rootState: RootState) => rootState);
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
   const members = useMemo(() => books?.find((v) => v.id === id)?.members ?? [], [books]);
+  const [input, setInput] = useState<MemberFormer[]>([]);
+
+  useEffect(() => {
+    setInput(
+      members.map((v) => ({
+        id: v.id,
+        checked: billFormData.former?.find((o) => o.id === v.id) !== undefined,
+        nickname: v.nickname,
+        amount: `${billFormData.former?.find((o) => o.id === v.id)?.amount ?? 0}`,
+        customAmount:
+          billFormData.former?.find((o) => o.id === v.id)?.method === ShareMethod.Amount,
+      })),
+    );
+  }, [members]);
+
+  useEffect(() => {
+    if (input.length > 0)
+      setInput(
+        input.map((v) => ({
+          ...v,
+          checked: billFormData.former?.find((o) => o.id === v.id) !== undefined,
+          amount: v.customAmount
+            ? v.amount
+            : `${billFormData.former?.find((o) => o.id === v.id)?.amount ?? 0}`,
+        })),
+      );
+  }, [billFormData.former]);
+
+  const onInput = (memberId: string) => (v: ChangeEvent<HTMLInputElement>) => {
+    setInput(
+      input.map((o) =>
+        o.id === memberId
+          ? {
+              ...o,
+              checked: Number(v.target.value) > 0,
+              amount: v.target.value,
+              customAmount: true,
+            }
+          : o,
+      ),
+    );
+    addMemberToBillFormer(memberId, {
+      id: memberId,
+      method: ShareMethod.Amount,
+      amount: Number(v.target.value),
+    });
+  };
+
+  const onCheck = (memberId: string) => (v: ChangeEvent<HTMLInputElement>) => {
+    if (v.target.checked) addMemberToBillFormer(memberId);
+    else {
+      removeMemberFromBillFormer(memberId);
+      setInput(
+        input.map((o) =>
+          o.id === memberId
+            ? {
+                ...o,
+                amount: '0',
+                customAmount: false,
+              }
+            : o,
+        ),
+      );
+    }
+  };
 
   return (
     <>
@@ -40,22 +109,30 @@ const BillFormer = () => {
               {t('editTx.amount')}
             </Body>
           </div>
-          {members.map((v) => (
-            <div key={v.id} className="flex h-[60px] items-center">
-              <Checkbox
-                id={v.id}
-                defaultChecked={billFormData.former?.find((o) => o.id === v.id) !== undefined}
+          {input.map((v) => (
+            <div key={v.id} className="flex h-[60px] items-center gap-3">
+              <div className="flex flex-1 items-center">
+                <Checkbox id={v.id} checked={v.checked} onChange={onCheck(v.id)} />
+                <label htmlFor={v.id} className="pl-3 break-all w-full">
+                  {v.nickname}
+                </label>
+              </div>
+              <AmountInput
+                symbol={book?.symbol ?? '$'}
+                decimal={2}
+                className={classNames('w-[90px]', {
+                  'text-navy-900': v.customAmount,
+                  'text-navy-100': !v.customAmount,
+                })}
+                value={`${book?.symbol}${v.amount}`}
+                onChange={onInput(v.id)}
               />
-              <label htmlFor={v.id} className="flex-1 pl-3 mr-3">
-                {v.nickname}
-              </label>
-              <AmountInput symbol={book?.symbol ?? '$'} decimal={2} className="w-[90px]" />
             </div>
           ))}
         </div>
       </div>
-      <div className="fixed bottom-0 h-[104px] w-full">
-        <div className="mx-10 flex gap-5">
+      <div className="fixed bottom-0 h-[104px] w-full flex justify-center">
+        <div className="max-w-[640px] w-full mx-9 flex gap-5">
           <Button className="mt-5 w-full h-12 text-base" appearance="secondary">
             {t('act.reset')}
           </Button>

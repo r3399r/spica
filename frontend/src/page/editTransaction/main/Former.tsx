@@ -29,9 +29,9 @@ const Former = () => {
     return [
       {
         id: members[0].id,
-        method: ShareMethod.Amount,
+        method: ShareMethod.Weight,
+        value: 1,
         amount: billFormData.amount ?? 0,
-        memberDateCreated: members[0].dateCreated ?? '',
       },
     ];
   }, [members, billFormData.amount]);

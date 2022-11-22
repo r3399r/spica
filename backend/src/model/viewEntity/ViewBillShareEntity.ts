@@ -51,7 +51,4 @@ export class ViewBillShareEntity implements ViewBillShare {
 
   @ViewColumn({ name: 'member_amount' })
   memberAmount!: number;
-
-  @ViewColumn({ name: 'member_date_created' })
-  memberDateCreated!: string;
 }

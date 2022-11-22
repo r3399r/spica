@@ -6,7 +6,9 @@ import {
   Transaction,
 } from '@y-celestial/spica-service';
 import bookEndpoint from 'src/api/bookEndpoint';
+import { Detail } from 'src/model/Book';
 import { setBooks } from 'src/redux/bookSlice';
+import { saveBillFormData } from 'src/redux/formSlice';
 import { dispatch, getState } from 'src/redux/store';
 import { finishWaiting, startWaiting } from 'src/redux/uiSlice';
 import { getMaxIndex, getMinIndex } from 'src/util/algorithm';
@@ -56,10 +58,7 @@ export const isTxSubmittable = () => {
   return true;
 };
 
-export const calculateAmount = (
-  total: number,
-  detail: { id: string; method: ShareMethod; value: number; memberDateCreated: string }[],
-): ShareDetail[] => {
+export const calculateAmount = (total: number, detail: Detail[]): ShareDetail[] => {
   let rest = bn(total);
 
   const resPercentage = detail
@@ -68,7 +67,6 @@ export const calculateAmount = (
       id: v.id,
       method: v.method,
       amount: rest.times(v.value).div(100).dp(2),
-      memberDateCreated: v.memberDateCreated,
     }));
   rest = rest.minus(resPercentage.reduce((prev, current) => prev.plus(current.amount), bn(0)));
 
@@ -79,7 +77,6 @@ export const calculateAmount = (
       method: v.method,
       value: v.value,
       amount: bn(v.value),
-      memberDateCreated: v.memberDateCreated,
     }));
   rest = rest.minus(resAmount.reduce((prev, current) => prev.plus(current.amount), bn(0)));
 
@@ -88,33 +85,37 @@ export const calculateAmount = (
     .reduce((prev, current) => prev.plus(current.value), bn(0));
   const resultWeight = detail
     .filter((v) => v.method === ShareMethod.Weight)
-    .map((v) => ({
-      id: v.id,
-      method: v.method,
-      value: v.value,
-      amount: rest.times(v.value).div(totalWeight).dp(2),
-      memberDateCreated: v.memberDateCreated,
-    }));
+    .map((v) => {
+      const amount = rest.times(v.value).div(totalWeight).dp(2);
+
+      return {
+        id: v.id,
+        method: v.method,
+        value: v.value,
+        amount: amount.gt(0) ? amount : bn(0),
+      };
+    });
   rest = rest.minus(resultWeight.reduce((prev, current) => prev.plus(current.amount), bn(0)));
 
   let result = [...resPercentage, ...resAmount, ...resultWeight];
   const n = rest.abs().times(100).integerValue().toNumber();
-  for (let i = 0; i < n; i++)
-    if (rest.gt(0)) {
-      const minIndex = getMinIndex(result.map((v) => v.amount));
-      const index = minIndex.length === 1 ? minIndex[0] : randomPick(minIndex);
-      result = result.map((v, i) => ({
-        ...v,
-        amount: i === index ? v.amount.plus(0.01) : v.amount,
-      }));
-    } else {
-      const maxIndex = getMaxIndex(result.map((v) => v.amount));
-      const index = maxIndex.length === 1 ? maxIndex[0] : randomPick(maxIndex);
-      result = result.map((v, i) => ({
-        ...v,
-        amount: i === index ? v.amount.minus(0.01) : v.amount,
-      }));
-    }
+  if (n < detail.length)
+    for (let i = 0; i < n; i++)
+      if (rest.gt(0)) {
+        const minIndex = getMinIndex(result.map((v) => v.amount));
+        const index = minIndex.length === 1 ? minIndex[0] : randomPick(minIndex);
+        result = result.map((v, i) => ({
+          ...v,
+          amount: i === index ? v.amount.plus(0.01) : v.amount,
+        }));
+      } else {
+        const maxIndex = getMaxIndex(result.map((v) => v.amount));
+        const index = maxIndex.length === 1 ? maxIndex[0] : randomPick(maxIndex);
+        result = result.map((v, i) => ({
+          ...v,
+          amount: i === index ? v.amount.minus(0.01) : v.amount,
+        }));
+      }
 
   return result.map((v) => ({ ...v, amount: v.amount.toNumber() }));
 };
@@ -214,4 +215,51 @@ export const reviseBill = async (bookId: string, billId: string) => {
   } finally {
     dispatch(finishWaiting());
   }
+};
+
+const getDetail = (shareDetail: ShareDetail): Detail => ({
+  id: shareDetail.id,
+  method: shareDetail.method,
+  value: shareDetail.method === ShareMethod.Amount ? shareDetail.amount : shareDetail.value ?? 0,
+});
+
+export const addMemberToBillFormer = (memberId: string, shareDetail?: ShareDetail) => {
+  const {
+    form: { billFormData },
+  } = getState();
+
+  const newShareDetail: Detail = shareDetail
+    ? getDetail(shareDetail)
+    : {
+        id: memberId,
+        method: ShareMethod.Weight,
+        value: 1,
+      };
+
+  let former: Detail[] = [];
+  if (billFormData.former?.find((v) => v.id === memberId))
+    former = billFormData.former?.map((v) => (v.id === memberId ? newShareDetail : getDetail(v)));
+  else former = [...(billFormData.former ?? []).map((v) => getDetail(v)), newShareDetail];
+
+  dispatch(saveBillFormData({ former: calculateAmount(billFormData.amount ?? 0, former) }));
+};
+
+export const removeMemberFromBillFormer = (memberId: string) => {
+  const {
+    form: { billFormData },
+  } = getState();
+  dispatch(
+    saveBillFormData({
+      former: calculateAmount(
+        billFormData.amount ?? 0,
+        (billFormData.former ?? [])
+          .filter((v) => v.id !== memberId)
+          .map((v) => ({
+            id: v.id,
+            method: v.method,
+            value: v.method === ShareMethod.Amount ? v.amount : v.value ?? 0,
+          })),
+      ),
+    }),
+  );
 };

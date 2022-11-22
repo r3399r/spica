@@ -300,7 +300,6 @@ export class BookService {
                   method: share.method,
                   value: share.value ?? undefined,
                   amount: share.memberAmount,
-                  memberDateCreated: share.memberDateCreated,
                 },
               ]
             : [],
@@ -311,7 +310,6 @@ export class BookService {
                   method: share.method,
                   value: share.value ?? undefined,
                   amount: share.memberAmount,
-                  memberDateCreated: share.memberDateCreated,
                 },
               ]
             : [],
@@ -332,7 +330,6 @@ export class BookService {
                   method: share.method,
                   value: share.value ?? undefined,
                   amount: share.memberAmount,
-                  memberDateCreated: share.memberDateCreated,
                 },
                 ...lastBill.former,
               ]
@@ -344,7 +341,6 @@ export class BookService {
                   method: share.method,
                   value: share.value ?? undefined,
                   amount: share.memberAmount,
-                  memberDateCreated: share.memberDateCreated,
                 },
                 ...lastBill.latter,
               ]
@@ -359,8 +355,8 @@ export class BookService {
       if (idx < 0)
         res.push({
           ...tx,
-          former: tx.former.sort(compare('memberDateCreated')),
-          latter: tx.latter.sort(compare('memberDateCreated')),
+          former: tx.former,
+          latter: tx.latter,
         });
       else {
         const lastTx = res[idx];
@@ -368,8 +364,8 @@ export class BookService {
         res[idx] = {
           ...tx,
           dateCreated: lastTx.dateCreated,
-          former: tx.former.sort(compare('memberDateCreated')),
-          latter: tx.latter.sort(compare('memberDateCreated')),
+          former: tx.former,
+          latter: tx.latter,
           history: [diff, ...lastTx.history],
         };
       }

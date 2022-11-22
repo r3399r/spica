@@ -35,7 +35,6 @@ const Latter = () => {
         id: v.id,
         method: ShareMethod.Weight,
         value: 1,
-        memberDateCreated: v.dateCreated ?? '',
       })),
     );
   }, [members, billFormData.amount]);
