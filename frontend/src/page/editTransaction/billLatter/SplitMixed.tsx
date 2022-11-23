@@ -12,7 +12,11 @@ import { RootState } from 'src/redux/store';
 import { addMemberToBillLatter, removeMemberFromBillLatter } from 'src/service/transactionService';
 import SplitModal from './SplitModal';
 
-const SplitMixed = () => {
+type Props = {
+  mode: 'weight' | 'pct';
+};
+
+const SplitMixed = ({ mode }: Props) => {
   const { id } = useParams();
   const { t } = useTranslation();
   const {
@@ -144,6 +148,7 @@ const SplitMixed = () => {
         open={targetId !== undefined}
         onClose={() => setTargetId(undefined)}
         member={members.find((v) => v.id === targetId)}
+        mode={mode}
       />
     </>
   );

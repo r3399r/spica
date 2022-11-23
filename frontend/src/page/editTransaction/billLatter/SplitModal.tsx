@@ -17,12 +17,13 @@ type Props = {
   open: boolean;
   onClose: () => void;
   member?: Member;
+  mode: 'weight' | 'pct';
 };
 
-const SplitModal = ({ open, onClose, member }: Props) => {
+const SplitModal = ({ open, onClose, member, mode }: Props) => {
   const { t } = useTranslation();
   const methods = useForm<SplitForm>();
-  const [tab, setTab] = useState<'weight' | 'pct'>('weight');
+  const [tab, setTab] = useState<'weight' | 'pct'>(mode);
 
   const handleClose = () => {
     methods.reset();

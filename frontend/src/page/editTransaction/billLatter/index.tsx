@@ -15,6 +15,7 @@ import { saveBillFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { setTxState } from 'src/redux/uiSlice';
 import { calculateAmount, remainingAmount } from 'src/service/transactionService';
+import { bn } from 'src/util/bignumber';
 import Navbar from './Navbar';
 import Percentage from './Percentage';
 import PlusMinus from './PlusMinus';
@@ -35,9 +36,18 @@ const BillLatter = () => {
     () => remainingAmount(billFormData.amount ?? 0, billFormData.latter ?? []),
     [billFormData.latter],
   );
+  const sharedPct = useMemo(() => bn(100).div(members.length).dp(2).toNumber(), [members]);
+  const isAllShare =
+    members.length ===
+      billFormData.latter?.filter((v) => v.method === ShareMethod.Weight && v.value === 1).length ||
+    members.length ===
+      billFormData.latter?.filter(
+        (v) => v.method === ShareMethod.Percentage && v.value === sharedPct,
+      ).length;
 
   const onReset = () => {
     if (!members || members.length === 0) return;
+    setTab('weight');
     dispatch(
       saveBillFormData({
         latter: calculateAmount(
@@ -46,6 +56,42 @@ const BillLatter = () => {
             id: v.id,
             method: ShareMethod.Weight,
             value: 1,
+          })),
+        ),
+      }),
+    );
+  };
+
+  const onClickWeight = () => {
+    setTab('weight');
+    if ((billFormData.latter && !isAllShare) || !members) return;
+
+    dispatch(
+      saveBillFormData({
+        latter: calculateAmount(
+          billFormData.amount ?? 0,
+          members.map((v) => ({
+            id: v.id,
+            method: ShareMethod.Weight,
+            value: 1,
+          })),
+        ),
+      }),
+    );
+  };
+
+  const onClickPct = () => {
+    setTab('pct');
+    if ((billFormData.latter && !isAllShare) || !members) return;
+
+    dispatch(
+      saveBillFormData({
+        latter: calculateAmount(
+          billFormData.amount ?? 0,
+          members.map((v) => ({
+            id: v.id,
+            method: ShareMethod.Percentage,
+            value: sharedPct,
           })),
         ),
       }),
@@ -71,7 +117,7 @@ const BillLatter = () => {
                   'bg-grey-200': tab !== 'weight',
                 },
               )}
-              onClick={() => setTab('weight')}
+              onClick={onClickWeight}
             >
               <img src={tab === 'weight' ? IcWeight : IcWeightInactive} />
             </div>
@@ -83,7 +129,7 @@ const BillLatter = () => {
                   'bg-grey-200': tab !== 'pct',
                 },
               )}
-              onClick={() => setTab('pct')}
+              onClick={onClickPct}
             >
               <img src={tab === 'pct' ? IcPct : IcPctInactive} />
             </div>

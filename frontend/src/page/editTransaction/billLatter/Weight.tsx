@@ -18,7 +18,7 @@ const Weight = () => {
       </div>
       <Amount />
       <Divider className="my-[15px]" />
-      <SplitMixed />
+      <SplitMixed mode="weight" />
     </>
   );
 };

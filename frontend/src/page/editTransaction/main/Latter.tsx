@@ -26,7 +26,7 @@ const Latter = () => {
     billFormData.latter?.filter((v) => v.method === ShareMethod.Weight && v.value === 1).length;
 
   const latter: ShareDetail[] = useMemo(() => {
-    if (billFormData.latter) return billFormData.latter;
+    if (billFormData.latter && !isAllShare) return billFormData.latter;
     if (!members) return [];
 
     return calculateAmount(
