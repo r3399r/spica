@@ -56,17 +56,7 @@ const SplitAdjust = () => {
   }, [billFormData.latter]);
 
   const onInput = (memberId: string) => (v: ChangeEvent<HTMLInputElement>) => {
-    setInput(
-      input.map((o) =>
-        o.id === memberId
-          ? {
-              ...o,
-              checked: Number(v.target.value) > 0,
-              value: v.target.value,
-            }
-          : o,
-      ),
-    );
+    setInput(input.map((o) => (o.id === memberId ? { ...o, value: v.target.value } : o)));
     addMemberToBillLatter(memberId, 'pm', {
       id: memberId,
       method: ShareMethod.PlusMinus,
@@ -81,7 +71,10 @@ const SplitAdjust = () => {
         method: ShareMethod.PlusMinus,
         value: 0,
       });
-    else removeMemberFromBillLatter(memberId, 'pm');
+    else {
+      setInput(input.map((o) => (o.id === memberId ? { ...o, value: '0' } : o)));
+      removeMemberFromBillLatter(memberId, 'pm');
+    }
   };
 
   return (

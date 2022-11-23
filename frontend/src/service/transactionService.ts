@@ -148,7 +148,7 @@ export const calculateAdjust = (total: number, detail: Detail[]): ShareDetail[] 
       id: v.id,
       method: v.method,
       value: v.value,
-      amount: amount.plus(v.value),
+      amount: amount.gt(0) ? amount.plus(v.value) : bn(v.value),
     };
   });
   rest = rest.minus(result.reduce((prev, current) => prev.plus(current.amount), bn(0)));

@@ -38,7 +38,9 @@ const SplitMixed = ({ mode }: Props) => {
           id: v.id,
           checked: shareDetail !== undefined,
           nickname: v.nickname,
-          method: shareDetail?.method ?? ShareMethod.Weight,
+          method:
+            shareDetail?.method ??
+            (mode === 'weight' ? ShareMethod.Weight : ShareMethod.Percentage),
           value: shareDetail?.value ? String(shareDetail.value) : null,
           amount: `${shareDetail?.amount ?? 0}`,
           customAmount: shareDetail?.method === ShareMethod.Amount,
@@ -56,7 +58,9 @@ const SplitMixed = ({ mode }: Props) => {
           return {
             ...v,
             checked: shareDetail !== undefined,
-            method: shareDetail?.method ?? ShareMethod.Weight,
+            method:
+              shareDetail?.method ??
+              (mode === 'weight' ? ShareMethod.Weight : ShareMethod.Percentage),
             value: shareDetail?.value ? String(shareDetail.value) : null,
             amount: v.customAmount ? v.amount : `${shareDetail?.amount ?? 0}`,
             customAmount: shareDetail?.method === ShareMethod.Amount,
@@ -71,9 +75,6 @@ const SplitMixed = ({ mode }: Props) => {
         o.id === memberId
           ? {
               ...o,
-              checked: Number(v.target.value) > 0,
-              method: ShareMethod.Amount,
-              value: null,
               amount: v.target.value,
               customAmount: true,
             }
@@ -103,9 +104,7 @@ const SplitMixed = ({ mode }: Props) => {
       setInput(input.map((o) => (o.id === memberId ? { ...o, customAmount: false } : o)));
     } else {
       removeMemberFromBillLatter(memberId);
-      setInput(
-        input.map((o) => (o.id === memberId ? { ...o, value: null, customAmount: false } : o)),
-      );
+      setInput(input.map((o) => (o.id === memberId ? { ...o, customAmount: false } : o)));
     }
   };
 

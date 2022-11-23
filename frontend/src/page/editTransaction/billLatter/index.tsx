@@ -53,14 +53,14 @@ const BillLatter = () => {
 
   const onClickWeight = () => {
     setTab('weight');
-    if ((billFormData.latter && !isAllShare) || !members) return;
-    saveBillDataEvenly(billFormData.amount ?? 0, members, { mode: 'weight' });
+    if (!billFormData.latter || isAllShare || tab === 'pm')
+      saveBillDataEvenly(billFormData.amount ?? 0, members, { mode: 'weight' });
   };
 
   const onClickPct = () => {
     setTab('pct');
-    if ((billFormData.latter && !isAllShare) || !members) return;
-    saveBillDataEvenly(billFormData.amount ?? 0, members, { mode: 'pct', sharedPct });
+    if (!billFormData.latter || isAllShare || tab === 'pm')
+      saveBillDataEvenly(billFormData.amount ?? 0, members, { mode: 'pct', sharedPct });
   };
 
   const onClickPm = () => {
