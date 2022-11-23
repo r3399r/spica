@@ -325,3 +325,32 @@ export const removeMemberFromBillLatter = (memberId: string) => {
     }),
   );
 };
+
+export const saveBillDataEvenly = (amount: number, members: Member[], sharedPct?: number) => {
+  if (sharedPct)
+    dispatch(
+      saveBillFormData({
+        latter: calculateAmount(
+          amount,
+          members.map((v) => ({
+            id: v.id,
+            method: ShareMethod.Percentage,
+            value: sharedPct,
+          })),
+        ),
+      }),
+    );
+  else
+    dispatch(
+      saveBillFormData({
+        latter: calculateAmount(
+          amount,
+          members.map((v) => ({
+            id: v.id,
+            method: ShareMethod.Weight,
+            value: 1,
+          })),
+        ),
+      }),
+    );
+};

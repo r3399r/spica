@@ -14,7 +14,7 @@ import IcWeight from 'src/image/ic-method-weight.svg';
 import { saveBillFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { setTxState } from 'src/redux/uiSlice';
-import { calculateAmount, remainingAmount } from 'src/service/transactionService';
+import { remainingAmount, saveBillDataEvenly } from 'src/service/transactionService';
 import { bn } from 'src/util/bignumber';
 import Navbar from './Navbar';
 import Percentage from './Percentage';
@@ -48,54 +48,19 @@ const BillLatter = () => {
   const onReset = () => {
     if (!members || members.length === 0) return;
     setTab('weight');
-    dispatch(
-      saveBillFormData({
-        latter: calculateAmount(
-          billFormData.amount ?? 0,
-          members.map((v) => ({
-            id: v.id,
-            method: ShareMethod.Weight,
-            value: 1,
-          })),
-        ),
-      }),
-    );
+    saveBillDataEvenly(billFormData.amount ?? 0, members);
   };
 
   const onClickWeight = () => {
     setTab('weight');
     if ((billFormData.latter && !isAllShare) || !members) return;
-
-    dispatch(
-      saveBillFormData({
-        latter: calculateAmount(
-          billFormData.amount ?? 0,
-          members.map((v) => ({
-            id: v.id,
-            method: ShareMethod.Weight,
-            value: 1,
-          })),
-        ),
-      }),
-    );
+    saveBillDataEvenly(billFormData.amount ?? 0, members);
   };
 
   const onClickPct = () => {
     setTab('pct');
     if ((billFormData.latter && !isAllShare) || !members) return;
-
-    dispatch(
-      saveBillFormData({
-        latter: calculateAmount(
-          billFormData.amount ?? 0,
-          members.map((v) => ({
-            id: v.id,
-            method: ShareMethod.Percentage,
-            value: sharedPct,
-          })),
-        ),
-      }),
-    );
+    saveBillDataEvenly(billFormData.amount ?? 0, members, sharedPct);
   };
 
   return (
