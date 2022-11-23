@@ -54,6 +54,20 @@ export const isTxSubmittable = () => {
   const { billFormData } = getState().form;
   if (!billFormData.descr) return false;
   if (!billFormData.amount) return false;
+  if (
+    !billFormData.former ||
+    !billFormData.former
+      .reduce((prev, current) => prev.plus(current.amount), bn(0))
+      .eq(billFormData.amount)
+  )
+    return false;
+  if (
+    !billFormData.latter ||
+    !billFormData.latter
+      .reduce((prev, current) => prev.plus(current.amount), bn(0))
+      .eq(billFormData.amount)
+  )
+    return false;
 
   return true;
 };
@@ -66,6 +80,7 @@ export const calculateAmount = (total: number, detail: Detail[]): ShareDetail[] 
     .map((v) => ({
       id: v.id,
       method: v.method,
+      value: v.value,
       amount: rest.times(v.value).div(100).dp(2),
     }));
   rest = rest.minus(resPercentage.reduce((prev, current) => prev.plus(current.amount), bn(0)));
@@ -75,7 +90,6 @@ export const calculateAmount = (total: number, detail: Detail[]): ShareDetail[] 
     .map((v) => ({
       id: v.id,
       method: v.method,
-      value: v.value,
       amount: bn(v.value),
     }));
   rest = rest.minus(resAmount.reduce((prev, current) => prev.plus(current.amount), bn(0)));
@@ -211,13 +225,14 @@ export const reviseBill = async (bookId: string, billId: string) => {
         ? {
             ...v,
             members: res.data.members,
-            transactions: [res.data.transaction, ...(v.transactions ?? [])],
+            transactions:
+              v.transactions?.map((o) =>
+                o.id === res.data.transaction.id ? res.data.transaction : o,
+              ) ?? null,
           }
         : v,
     );
     dispatch(setBooks(updatedBooks));
-
-    return res.data.transaction.id;
   } finally {
     dispatch(finishWaiting());
   }
@@ -229,13 +244,13 @@ const getDetail = (shareDetail: ShareDetail): Detail => ({
   value: shareDetail.method === ShareMethod.Amount ? shareDetail.amount : shareDetail.value ?? 0,
 });
 
-export const addMemberToBillFormer = (memberId: string, shareDetail?: ShareDetail) => {
+export const addMemberToBillFormer = (memberId: string, detail?: Detail) => {
   const {
     form: { billFormData },
   } = getState();
 
-  const newShareDetail: Detail = shareDetail
-    ? getDetail(shareDetail)
+  const newShareDetail: Detail = detail
+    ? detail
     : {
         id: memberId,
         method: ShareMethod.Weight,
@@ -250,6 +265,27 @@ export const addMemberToBillFormer = (memberId: string, shareDetail?: ShareDetai
   dispatch(saveBillFormData({ former: calculateAmount(billFormData.amount ?? 0, former) }));
 };
 
+export const addMemberToBillLatter = (memberId: string, detail?: Detail) => {
+  const {
+    form: { billFormData },
+  } = getState();
+
+  const newShareDetail: Detail = detail
+    ? detail
+    : {
+        id: memberId,
+        method: ShareMethod.Weight,
+        value: 1,
+      };
+
+  let latter: Detail[] = [];
+  if (billFormData.latter?.find((v) => v.id === memberId))
+    latter = billFormData.latter?.map((v) => (v.id === memberId ? newShareDetail : getDetail(v)));
+  else latter = [...(billFormData.latter ?? []).map((v) => getDetail(v)), newShareDetail];
+
+  dispatch(saveBillFormData({ latter: calculateAmount(billFormData.amount ?? 0, latter) }));
+};
+
 export const removeMemberFromBillFormer = (memberId: string) => {
   const {
     form: { billFormData },
@@ -259,6 +295,26 @@ export const removeMemberFromBillFormer = (memberId: string) => {
       former: calculateAmount(
         billFormData.amount ?? 0,
         (billFormData.former ?? [])
+          .filter((v) => v.id !== memberId)
+          .map((v) => ({
+            id: v.id,
+            method: v.method,
+            value: v.method === ShareMethod.Amount ? v.amount : v.value ?? 0,
+          })),
+      ),
+    }),
+  );
+};
+
+export const removeMemberFromBillLatter = (memberId: string) => {
+  const {
+    form: { billFormData },
+  } = getState();
+  dispatch(
+    saveBillFormData({
+      latter: calculateAmount(
+        billFormData.amount ?? 0,
+        (billFormData.latter ?? [])
           .filter((v) => v.id !== memberId)
           .map((v) => ({
             id: v.id,

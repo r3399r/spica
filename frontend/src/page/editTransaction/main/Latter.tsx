@@ -22,11 +22,11 @@ const Latter = () => {
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
   const members = useMemo(() => books?.find((v) => v.id === id)?.members, [books]);
   const isAllShare =
-    billFormData.latter?.length ===
+    members?.length ===
     billFormData.latter?.filter((v) => v.method === ShareMethod.Weight && v.value === 1).length;
 
   const latter: ShareDetail[] = useMemo(() => {
-    if (billFormData.latter && !isAllShare) return billFormData.latter;
+    if (billFormData.latter) return billFormData.latter;
     if (!members) return [];
 
     return calculateAmount(

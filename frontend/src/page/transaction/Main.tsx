@@ -15,10 +15,7 @@ const Main = () => {
   const { t } = useTranslation();
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
-  const tx = useMemo(
-    () => books?.find((v) => v.id === id)?.transactions?.find((v) => v.id === tid),
-    [id, tid, books],
-  );
+  const tx = useMemo(() => book?.transactions?.find((v) => v.id === tid), [id, tid, book]);
 
   if (!tx || !book) return <></>;
 

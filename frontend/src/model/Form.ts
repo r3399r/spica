@@ -29,3 +29,7 @@ export type TransferForm = {
   to: string;
   memo: string;
 };
+
+export type SplitForm = {
+  value: string;
+};

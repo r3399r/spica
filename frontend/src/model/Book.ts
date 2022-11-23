@@ -24,3 +24,13 @@ export type MemberFormer = {
   amount: string;
   customAmount: boolean;
 };
+
+export type MemberLatter = {
+  id: string;
+  checked: boolean;
+  nickname: string;
+  method: ShareMethod;
+  value: string | null;
+  amount: string;
+  customAmount: boolean;
+};

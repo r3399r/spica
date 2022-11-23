@@ -80,7 +80,7 @@ const BillFormer = () => {
     addMemberToBillFormer(memberId, {
       id: memberId,
       method: ShareMethod.Amount,
-      amount: Number(v.target.value),
+      value: Number(v.target.value),
     });
   };
 
@@ -88,32 +88,13 @@ const BillFormer = () => {
     if (v.target.checked) addMemberToBillFormer(memberId);
     else {
       removeMemberFromBillFormer(memberId);
-      setInput(
-        input.map((o) =>
-          o.id === memberId
-            ? {
-                ...o,
-                amount: '0',
-                customAmount: false,
-              }
-            : o,
-        ),
-      );
+      setInput(input.map((o) => (o.id === memberId ? { ...o, customAmount: false } : o)));
     }
   };
 
   const onReset = () => {
-    if (!members || members.length === 0) return;
-    dispatch(saveBillFormData({ former: [] }));
-    setInput(
-      members.map((v) => ({
-        id: v.id,
-        checked: false,
-        nickname: v.nickname,
-        amount: '0',
-        customAmount: false,
-      })),
-    );
+    dispatch(saveBillFormData({ former: undefined }));
+    setInput(input.map((v) => ({ ...v, customAmount: false })));
   };
 
   return (

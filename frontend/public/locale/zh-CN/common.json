@@ -99,9 +99,19 @@
     "date": "日期",
     "descr": "项目",
     "amount": "金额",
+    "share": "分配",
     "all": "全部",
     "allShare": "所有人均分",
     "lessThan": "尚有 {{symbol}}{{amount}} 未分配",
-    "greaterThan": "多分配 {{symbol}}{{amount}}"
+    "greaterThan": "多分配 {{symbol}}{{amount}}",
+    "weight": "份数",
+    "pct": "百分比",
+    "pm": "金额调整",
+    "weightDesc": "按照每人持有的份数分配，如输入金额则以金额为优先。",
+    "pctDesc": "按照每人佔的百分比分配，也可输入金额。",
+    "pmDesc": "扣除个人额外的金额后，剩馀的款项由所有人平分。",
+    "unitWeight": "份",
+    "unitPct": "%",
+    "modalTitle": "{{nickname}}的分配"
   }
 }

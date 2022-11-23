@@ -99,9 +99,19 @@
     "date": "Date",
     "descr": "Item",
     "amount": "Amount",
+    "share": "Shares",
     "all": "All",
     "allShare": "All Share Equally",
     "lessThan": "remaining {{symbol}}{{amount}}",
-    "greaterThan": "over {{symbol}}{{amount}}"
+    "greaterThan": "over {{symbol}}{{amount}}",
+    "weight": "Shares",
+    "pct": "Percentages",
+    "pm": "Adjustment",
+    "weightDesc": "It is distributed according to the number of shares held by each person, and if the amount is entered, the amount will take priority.",
+    "pctDesc": "Distribute according to the percentage of each person, and you can also enter the amount.",
+    "pmDesc": "After deducting the personal extra amount, the remaining amount is divided equally among all the owners.",
+    "unitWeight": "x",
+    "unitPct": "%",
+    "modalTitle": "Share of {{nickname}}"
   }
 }
