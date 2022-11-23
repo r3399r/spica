@@ -20,7 +20,7 @@ type Props = {
   mode: 'weight' | 'pct';
 };
 
-const SplitModal = ({ open, onClose, member, mode }: Props) => {
+const SplitMixModal = ({ open, onClose, member, mode }: Props) => {
   const { t } = useTranslation();
   const methods = useForm<SplitForm>();
   const [tab, setTab] = useState<'weight' | 'pct'>(mode);
@@ -32,7 +32,7 @@ const SplitModal = ({ open, onClose, member, mode }: Props) => {
 
   const onSubmit = (data: SplitForm) => {
     if (!member) return;
-    addMemberToBillLatter(member.id, {
+    addMemberToBillLatter(member.id, mode, {
       id: member.id,
       method: tab === 'weight' ? ShareMethod.Weight : ShareMethod.Percentage,
       value: Number(data.value),
@@ -97,4 +97,4 @@ const SplitModal = ({ open, onClose, member, mode }: Props) => {
   );
 };
 
-export default SplitModal;
+export default SplitMixModal;

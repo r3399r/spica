@@ -3,7 +3,7 @@ import Divider from 'src/component/celestial-ui/Divider';
 import Body from 'src/component/celestial-ui/typography/Body';
 import H5 from 'src/component/celestial-ui/typography/H5';
 import Amount from './Amount';
-import SplitMixed from './SplitMixed';
+import SplitMix from './SplitMix';
 
 const Weight = () => {
   const { t } = useTranslation();
@@ -18,7 +18,7 @@ const Weight = () => {
       </div>
       <Amount />
       <Divider className="my-[15px]" />
-      <SplitMixed mode="weight" />
+      <SplitMix mode="weight" />
     </>
   );
 };

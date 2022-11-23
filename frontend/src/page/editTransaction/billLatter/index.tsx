@@ -48,19 +48,24 @@ const BillLatter = () => {
   const onReset = () => {
     if (!members || members.length === 0) return;
     setTab('weight');
-    saveBillDataEvenly(billFormData.amount ?? 0, members);
+    saveBillDataEvenly(billFormData.amount ?? 0, members, { mode: 'weight' });
   };
 
   const onClickWeight = () => {
     setTab('weight');
     if ((billFormData.latter && !isAllShare) || !members) return;
-    saveBillDataEvenly(billFormData.amount ?? 0, members);
+    saveBillDataEvenly(billFormData.amount ?? 0, members, { mode: 'weight' });
   };
 
   const onClickPct = () => {
     setTab('pct');
     if ((billFormData.latter && !isAllShare) || !members) return;
-    saveBillDataEvenly(billFormData.amount ?? 0, members, sharedPct);
+    saveBillDataEvenly(billFormData.amount ?? 0, members, { mode: 'pct', sharedPct });
+  };
+
+  const onClickPm = () => {
+    setTab('pm');
+    saveBillDataEvenly(billFormData.amount ?? 0, members, { mode: 'pm' });
   };
 
   return (
@@ -106,7 +111,7 @@ const BillLatter = () => {
                   'bg-grey-200': tab !== 'pm',
                 },
               )}
-              onClick={() => setTab('pm')}
+              onClick={onClickPm}
             >
               <img src={tab === 'pm' ? IcPm : IcPmInactive} />
             </div>

@@ -34,3 +34,11 @@ export type MemberLatter = {
   amount: string;
   customAmount: boolean;
 };
+
+export type MemberAdjust = {
+  id: string;
+  checked: boolean;
+  nickname: string;
+  value: string;
+  amount: string;
+};

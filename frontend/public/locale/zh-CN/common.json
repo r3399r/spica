@@ -100,6 +100,7 @@
     "descr": "项目",
     "amount": "金额",
     "share": "分配",
+    "adjust": "调整",
     "all": "全部",
     "allShare": "所有人均分",
     "lessThan": "尚有 {{symbol}}{{amount}} 未分配",

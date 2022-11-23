@@ -3,7 +3,7 @@ import Divider from 'src/component/celestial-ui/Divider';
 import Body from 'src/component/celestial-ui/typography/Body';
 import H5 from 'src/component/celestial-ui/typography/H5';
 import Amount from './Amount';
-import SplitMixed from './SplitMixed';
+import SplitMix from './SplitMix';
 
 const Percentage = () => {
   const { t } = useTranslation();
@@ -18,7 +18,7 @@ const Percentage = () => {
       </div>
       <Amount />
       <Divider className="my-[15px]" />
-      <SplitMixed mode="pct" />
+      <SplitMix mode="pct" />
     </>
   );
 };

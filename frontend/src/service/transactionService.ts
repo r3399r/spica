@@ -134,6 +134,47 @@ export const calculateAmount = (total: number, detail: Detail[]): ShareDetail[] 
   return result.map((v) => ({ ...v, amount: v.amount.toNumber() }));
 };
 
+export const calculateAdjust = (total: number, detail: Detail[]): ShareDetail[] => {
+  let rest = bn(total);
+
+  const adjust = detail.filter((v) => v.method === ShareMethod.PlusMinus);
+  if (adjust.length !== detail.length) throw Error('unexpected error');
+  const totalAdjust = adjust.reduce((prev, current) => prev.plus(current.value), bn(0));
+
+  let result = adjust.map((v) => {
+    const amount = rest.minus(totalAdjust).div(detail.length).dp(2);
+
+    return {
+      id: v.id,
+      method: v.method,
+      value: v.value,
+      amount: amount.plus(v.value),
+    };
+  });
+  rest = rest.minus(result.reduce((prev, current) => prev.plus(current.amount), bn(0)));
+
+  const n = rest.abs().times(100).integerValue().toNumber();
+  if (n < detail.length)
+    for (let i = 0; i < n; i++)
+      if (rest.gt(0)) {
+        const minIndex = getMinIndex(result.map((v) => v.amount));
+        const index = minIndex.length === 1 ? minIndex[0] : randomPick(minIndex);
+        result = result.map((v, i) => ({
+          ...v,
+          amount: i === index ? v.amount.plus(0.01) : v.amount,
+        }));
+      } else {
+        const maxIndex = getMaxIndex(result.map((v) => v.amount));
+        const index = maxIndex.length === 1 ? maxIndex[0] : randomPick(maxIndex);
+        result = result.map((v, i) => ({
+          ...v,
+          amount: i === index ? v.amount.minus(0.01) : v.amount,
+        }));
+      }
+
+  return result.map((v) => ({ ...v, amount: v.amount.toNumber() }));
+};
+
 export const remainingAmount = (total: number, shareDetail: ShareDetail[]) => {
   const sum = shareDetail.reduce((prev, current) => prev.plus(current.amount), bn(0));
 
@@ -265,7 +306,11 @@ export const addMemberToBillFormer = (memberId: string, detail?: Detail) => {
   dispatch(saveBillFormData({ former: calculateAmount(billFormData.amount ?? 0, former) }));
 };
 
-export const addMemberToBillLatter = (memberId: string, detail?: Detail) => {
+export const addMemberToBillLatter = (
+  memberId: string,
+  mode: 'weight' | 'pct' | 'pm',
+  detail?: Detail,
+) => {
   const {
     form: { billFormData },
   } = getState();
@@ -283,7 +328,14 @@ export const addMemberToBillLatter = (memberId: string, detail?: Detail) => {
     latter = billFormData.latter?.map((v) => (v.id === memberId ? newShareDetail : getDetail(v)));
   else latter = [...(billFormData.latter ?? []).map((v) => getDetail(v)), newShareDetail];
 
-  dispatch(saveBillFormData({ latter: calculateAmount(billFormData.amount ?? 0, latter) }));
+  dispatch(
+    saveBillFormData({
+      latter:
+        mode === 'pm'
+          ? calculateAdjust(billFormData.amount ?? 0, latter)
+          : calculateAmount(billFormData.amount ?? 0, latter),
+    }),
+  );
 };
 
 export const removeMemberFromBillFormer = (memberId: string) => {
@@ -306,28 +358,60 @@ export const removeMemberFromBillFormer = (memberId: string) => {
   );
 };
 
-export const removeMemberFromBillLatter = (memberId: string) => {
+export const removeMemberFromBillLatter = (memberId: string, mode?: 'weight' | 'pct' | 'pm') => {
   const {
     form: { billFormData },
   } = getState();
   dispatch(
     saveBillFormData({
-      latter: calculateAmount(
-        billFormData.amount ?? 0,
-        (billFormData.latter ?? [])
-          .filter((v) => v.id !== memberId)
-          .map((v) => ({
-            id: v.id,
-            method: v.method,
-            value: v.method === ShareMethod.Amount ? v.amount : v.value ?? 0,
-          })),
-      ),
+      latter:
+        mode === 'pm'
+          ? calculateAdjust(
+              billFormData.amount ?? 0,
+              (billFormData.latter ?? [])
+                .filter((v) => v.id !== memberId)
+                .map((v) => ({
+                  id: v.id,
+                  method: v.method,
+                  value: v.method === ShareMethod.Amount ? v.amount : v.value ?? 0,
+                })),
+            )
+          : calculateAmount(
+              billFormData.amount ?? 0,
+              (billFormData.latter ?? [])
+                .filter((v) => v.id !== memberId)
+                .map((v) => ({
+                  id: v.id,
+                  method: v.method,
+                  value: v.method === ShareMethod.Amount ? v.amount : v.value ?? 0,
+                })),
+            ),
     }),
   );
 };
 
-export const saveBillDataEvenly = (amount: number, members: Member[], sharedPct?: number) => {
-  if (sharedPct)
+export const saveBillDataEvenly = (
+  amount: number,
+  members: Member[],
+  options: {
+    mode: 'weight' | 'pct' | 'pm';
+    sharedPct?: number;
+  },
+) => {
+  if (options.mode === 'pm')
+    dispatch(
+      saveBillFormData({
+        latter: calculateAdjust(
+          amount,
+          members.map((v) => ({
+            id: v.id,
+            method: ShareMethod.PlusMinus,
+            value: 0,
+          })),
+        ),
+      }),
+    );
+  else if (options.sharedPct)
     dispatch(
       saveBillFormData({
         latter: calculateAmount(
@@ -335,7 +419,7 @@ export const saveBillDataEvenly = (amount: number, members: Member[], sharedPct?
           members.map((v) => ({
             id: v.id,
             method: ShareMethod.Percentage,
-            value: sharedPct,
+            value: options.sharedPct ?? 0,
           })),
         ),
       }),

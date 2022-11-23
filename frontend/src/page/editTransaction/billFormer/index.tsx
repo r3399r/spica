@@ -19,6 +19,7 @@ import {
   remainingAmount,
   removeMemberFromBillFormer,
 } from 'src/service/transactionService';
+import { bn, bnFormat } from 'src/util/bignumber';
 import Navbar from './Navbar';
 
 const BillFormer = () => {
@@ -108,12 +109,12 @@ const BillFormer = () => {
             }}
           />
           <div className="flex justify-between items-center">
-            <H2>{`${book?.symbol}${billFormData.amount ?? 0}`}</H2>
+            <H2>{`${book?.symbol}${bnFormat(billFormData.amount ?? 0)}`}</H2>
             <Body className={classNames({ 'text-tomato-500': remaining !== 0 })}>{`${t(
               remaining > 0 ? 'editTx.greaterThan' : 'editTx.lessThan',
               {
                 symbol: book?.symbol,
-                amount: remaining > 0 ? remaining : remaining * -1,
+                amount: bn(remaining).abs().toFormat(),
               },
             )}`}</Body>
           </div>

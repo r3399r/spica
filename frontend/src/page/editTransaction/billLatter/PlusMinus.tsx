@@ -3,6 +3,7 @@ import Divider from 'src/component/celestial-ui/Divider';
 import Body from 'src/component/celestial-ui/typography/Body';
 import H5 from 'src/component/celestial-ui/typography/H5';
 import Amount from './Amount';
+import SplitAdjust from './SplitAdjust';
 
 const PlusMinus = () => {
   const { t } = useTranslation();
@@ -17,6 +18,7 @@ const PlusMinus = () => {
       </div>
       <Amount />
       <Divider className="my-[15px]" />
+      <SplitAdjust />
     </>
   );
 };

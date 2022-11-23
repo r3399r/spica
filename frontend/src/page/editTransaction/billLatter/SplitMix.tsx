@@ -10,7 +10,8 @@ import Body from 'src/component/celestial-ui/typography/Body';
 import { MemberLatter } from 'src/model/Book';
 import { RootState } from 'src/redux/store';
 import { addMemberToBillLatter, removeMemberFromBillLatter } from 'src/service/transactionService';
-import SplitModal from './SplitModal';
+import { bn } from 'src/util/bignumber';
+import SplitMixModal from './SplitMixModal';
 
 type Props = {
   mode: 'weight' | 'pct';
@@ -79,7 +80,7 @@ const SplitMixed = ({ mode }: Props) => {
           : o,
       ),
     );
-    addMemberToBillLatter(memberId, {
+    addMemberToBillLatter(memberId, mode, {
       id: memberId,
       method: ShareMethod.Amount,
       value: Number(v.target.value),
@@ -88,14 +89,18 @@ const SplitMixed = ({ mode }: Props) => {
 
   const onCheck = (memberId: string) => (v: ChangeEvent<HTMLInputElement>) => {
     if (v.target.checked) {
-      addMemberToBillLatter(memberId);
-      setInput(
-        input.map((o) =>
-          o.id === memberId
-            ? { ...o, method: ShareMethod.Weight, value: '1', customAmount: false }
-            : o,
-        ),
+      addMemberToBillLatter(
+        memberId,
+        mode,
+        mode === 'weight'
+          ? undefined
+          : {
+              id: memberId,
+              method: ShareMethod.Percentage,
+              value: bn(100).div(members.length).dp(2).toNumber(),
+            },
       );
+      setInput(input.map((o) => (o.id === memberId ? { ...o, customAmount: false } : o)));
     } else {
       removeMemberFromBillLatter(memberId);
       setInput(
@@ -106,7 +111,7 @@ const SplitMixed = ({ mode }: Props) => {
 
   return (
     <>
-      <div className="flex gap-3">
+      <div className="flex gap-[10px]">
         <div className="flex-1" />
         <Body className="w-[72px]" size="s">
           {t('editTx.share')}
@@ -116,7 +121,7 @@ const SplitMixed = ({ mode }: Props) => {
         </Body>
       </div>
       {input.map((v) => (
-        <div key={v.id} className="flex h-[60px] items-center gap-3">
+        <div key={v.id} className="flex h-[60px] items-center gap-[10px]">
           <div className="flex flex-1 items-center">
             <Checkbox id={v.id} checked={v.checked} onChange={onCheck(v.id)} />
             <label htmlFor={v.id} className="pl-3 break-all w-full">
@@ -144,7 +149,7 @@ const SplitMixed = ({ mode }: Props) => {
           />
         </div>
       ))}
-      <SplitModal
+      <SplitMixModal
         open={targetId !== undefined}
         onClose={() => setTargetId(undefined)}
         member={members.find((v) => v.id === targetId)}
