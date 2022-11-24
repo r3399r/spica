@@ -1,6 +1,6 @@
 import { ShareMethod } from '@y-celestial/spica-service';
 import classNames from 'classnames';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -44,6 +44,14 @@ const BillLatter = () => {
       billFormData.latter?.filter(
         (v) => v.method === ShareMethod.Percentage && v.value === sharedPct,
       ).length;
+
+  useEffect(() => {
+    if (!billFormData.latter) return;
+    const numLatterPm = billFormData.latter.filter(
+      (v) => v.method === ShareMethod.PlusMinus,
+    ).length;
+    if (numLatterPm > 0 && numLatterPm === billFormData.latter.length) setTab('pm');
+  }, []);
 
   const onReset = () => {
     if (!members || members.length === 0) return;
