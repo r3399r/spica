@@ -8,7 +8,8 @@ import Body from 'src/component/celestial-ui/typography/Body';
 import H2 from 'src/component/celestial-ui/typography/H2';
 import H4 from 'src/component/celestial-ui/typography/H4';
 import { RootState } from 'src/redux/store';
-import { bn } from 'src/util/bignumber';
+import { bn, bnFormat } from 'src/util/bignumber';
+import { compare } from 'src/util/compare';
 
 const Main = () => {
   const { id, tid } = useParams();
@@ -16,6 +17,29 @@ const Main = () => {
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
   const tx = useMemo(() => book?.transactions?.find((v) => v.id === tid), [id, tid, book]);
+
+  const txFormer = useMemo(() => {
+    if (!tx || tx.type === 'transfer') return [];
+
+    return tx.former
+      .map((v) => {
+        const member = book?.members?.find((o) => o.id === v.id);
+
+        return { ...v, ...member };
+      })
+      .sort(compare('dateCreated'));
+  }, [tx, book]);
+  const txLatter = useMemo(() => {
+    if (!tx || tx.type === 'transfer') return [];
+
+    return tx.latter
+      .map((v) => {
+        const member = book?.members?.find((o) => o.id === v.id);
+
+        return { ...v, ...member };
+      })
+      .sort(compare('dateCreated'));
+  }, [tx, book]);
 
   if (!tx || !book) return <></>;
 
@@ -27,7 +51,7 @@ const Main = () => {
         <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:mm')}</Body>
         <H2 className="text-right mt-[10px] pb-[18px] border-b-[1px] border-b-grey-300">{`${
           book.symbol
-        }${bn(tx.amount).toFormat()}`}</H2>
+        }${bnFormat(tx.amount)}`}</H2>
         <div className="py-[15px] border-b-[1px] border-b-grey-300">
           <Body size="s" className="mb-[5px] text-navy-300">
             {t('desc.sender')}
@@ -36,9 +60,9 @@ const Main = () => {
             <Body size="l" className="text-navy-700">
               {book.members?.find((m) => m.id === tx.srcMemberId)?.nickname}
             </Body>
-            <Body size="l" className="text-green-700">{`${book.symbol}${bn(
+            <Body size="l" className="text-green-700">{`${book.symbol}${bnFormat(
               tx.amount,
-            ).toFormat()}`}</Body>
+            )}`}</Body>
           </div>
         </div>
         <div className="py-[15px] border-b-[1px] border-b-grey-300">
@@ -49,9 +73,9 @@ const Main = () => {
             <Body size="l" className="text-navy-700">
               {book.members?.find((m) => m.id === tx.dstMemberId)?.nickname}
             </Body>
-            <Body size="l" className="text-tomato-700">{`${book.symbol}${bn(
+            <Body size="l" className="text-tomato-700">{`${book.symbol}${bnFormat(
               tx.amount,
-            ).toFormat()}`}</Body>
+            )}`}</Body>
           </div>
         </div>
         <div className="py-[15px] border-b-[1px] border-b-grey-300">
@@ -77,15 +101,15 @@ const Main = () => {
       <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:mm')}</Body>
       <H2 className="text-right mt-[10px] pb-[18px] border-b-[1px] border-b-grey-300">{`${
         book.symbol
-      }${bn(tx.amount).toFormat()}`}</H2>
+      }${bnFormat(tx.amount)}`}</H2>
       <div className="py-[15px] border-b-[1px] border-b-grey-300">
         <Body size="s" className="mb-[5px] text-navy-300">
           {tx.type === 'out' ? t('desc.payer') : t('desc.receiver')}
         </Body>
-        {tx.former.map((v) => (
+        {txFormer.map((v) => (
           <div key={v.id} className="py-[5px] pl-[10px] flex justify-between">
             <Body size="l" className="text-navy-700">
-              {book.members?.find((m) => m.id === v.id)?.nickname}
+              {v.nickname}
             </Body>
             <Body size="l" className="text-green-700">{`${book.symbol}${bn(v.amount)
               .abs()
@@ -97,10 +121,10 @@ const Main = () => {
         <Body size="s" className="mb-[5px] text-navy-300">
           {t('desc.sharer')}
         </Body>
-        {tx.latter.map((v) => (
+        {txLatter.map((v) => (
           <div key={v.id} className="py-[5px] pl-[10px] flex justify-between">
             <Body size="l" className="text-navy-700">
-              {book.members?.find((m) => m.id === v.id)?.nickname}
+              {v.nickname}
             </Body>
             <Body size="l" className="text-tomato-700">{`${book.symbol}${bn(v.amount)
               .abs()
