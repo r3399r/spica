@@ -50,7 +50,7 @@ const Navbar = () => {
         }),
       );
     }
-    navigate(`${Page.Book}/${id}/tx`, { state: { isEdit: tx.id } });
+    navigate(`${Page.Book}/${id}/tx`, { state: { txId: tx.id } });
   };
 
   return (

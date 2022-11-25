@@ -191,35 +191,35 @@ export const remainingAmount = (total: number, shareDetail: ShareDetail[]) => {
   return sum.minus(total).toNumber();
 };
 
-export const addBill = async (bookId: string) => {
+const getBillData = () => {
+  const { billFormData } = getState().form;
+  if (
+    billFormData.date === undefined ||
+    billFormData.type === undefined ||
+    billFormData.descr === undefined ||
+    billFormData.amount === undefined ||
+    billFormData.former === undefined ||
+    billFormData.latter === undefined
+  )
+    throw new Error('unexpected');
+
+  return {
+    date: billFormData.date,
+    type: billFormData.type as BillType,
+    descr: billFormData.descr,
+    amount: billFormData.amount,
+    former: billFormData.former,
+    latter: billFormData.latter,
+    memo: billFormData.memo === '' ? undefined : billFormData.memo,
+  };
+};
+
+const addBill = async (bookId: string) => {
   try {
     dispatch(startWaiting());
 
-    const { billFormData } = getState().form;
     const book = getLocalBookById(bookId);
-    if (
-      billFormData.date === undefined ||
-      billFormData.type === undefined ||
-      billFormData.descr === undefined ||
-      billFormData.amount === undefined ||
-      billFormData.former === undefined ||
-      billFormData.latter === undefined
-    )
-      return;
-
-    const res = await bookEndpoint.postBookIdBill(
-      bookId,
-      {
-        date: billFormData.date,
-        type: billFormData.type as BillType,
-        descr: billFormData.descr,
-        amount: billFormData.amount,
-        former: billFormData.former,
-        latter: billFormData.latter,
-        memo: billFormData.memo === '' ? undefined : billFormData.memo,
-      },
-      book?.code ?? 'xx',
-    );
+    const res = await bookEndpoint.postBookIdBill(bookId, getBillData(), book?.code ?? 'xx');
 
     const { books } = getState().book;
     const updatedBooks = (books ?? []).map((v) =>
@@ -239,36 +239,12 @@ export const addBill = async (bookId: string) => {
   }
 };
 
-export const reviseBill = async (bookId: string, billId: string) => {
+const reviseBill = async (bookId: string, billId: string) => {
   try {
     dispatch(startWaiting());
 
-    const { billFormData } = getState().form;
     const book = getLocalBookById(bookId);
-    if (
-      billFormData.date === undefined ||
-      billFormData.type === undefined ||
-      billFormData.descr === undefined ||
-      billFormData.amount === undefined ||
-      billFormData.former === undefined ||
-      billFormData.latter === undefined
-    )
-      return;
-
-    const res = await bookEndpoint.putBookIdBill(
-      bookId,
-      billId,
-      {
-        date: billFormData.date,
-        type: billFormData.type as BillType,
-        descr: billFormData.descr,
-        amount: billFormData.amount,
-        former: billFormData.former,
-        latter: billFormData.latter,
-        memo: billFormData.memo === '' ? undefined : billFormData.memo,
-      },
-      book?.code ?? 'xx',
-    );
+    const res = await bookEndpoint.putBookIdBill(bookId, billId, getBillData(), book?.code ?? 'xx');
 
     const { books } = getState().book;
     const updatedBooks = (books ?? []).map((v) =>
@@ -289,29 +265,33 @@ export const reviseBill = async (bookId: string, billId: string) => {
   }
 };
 
-export const addTransfer = async (bookId: string) => {
+const getTransferData = () => {
+  const { transferFormData } = getState().form;
+  if (
+    transferFormData.date === undefined ||
+    transferFormData.amount === undefined ||
+    transferFormData.srcMemberId === undefined ||
+    transferFormData.dstMemberId === undefined
+  )
+    throw new Error('unexpected');
+
+  return {
+    date: transferFormData.date,
+    amount: transferFormData.amount,
+    srcMemberId: transferFormData.srcMemberId,
+    dstMemberId: transferFormData.dstMemberId,
+    memo: transferFormData.memo === '' ? undefined : transferFormData.memo,
+  };
+};
+
+const addTransfer = async (bookId: string) => {
   try {
     dispatch(startWaiting());
 
-    const { transferFormData } = getState().form;
     const book = getLocalBookById(bookId);
-    if (
-      transferFormData.date === undefined ||
-      transferFormData.amount === undefined ||
-      transferFormData.srcMemberId === undefined ||
-      transferFormData.dstMemberId === undefined
-    )
-      return;
-
     const res = await bookEndpoint.postBookIdTransfer(
       bookId,
-      {
-        date: transferFormData.date,
-        amount: transferFormData.amount,
-        srcMemberId: transferFormData.srcMemberId,
-        dstMemberId: transferFormData.dstMemberId,
-        memo: transferFormData.memo === '' ? undefined : transferFormData.memo,
-      },
+      getTransferData(),
       book?.code ?? 'xx',
     );
 
@@ -333,30 +313,15 @@ export const addTransfer = async (bookId: string) => {
   }
 };
 
-export const reviseTransfer = async (bookId: string, billId: string) => {
+const reviseTransfer = async (bookId: string, transferId: string) => {
   try {
     dispatch(startWaiting());
 
-    const { transferFormData } = getState().form;
     const book = getLocalBookById(bookId);
-    if (
-      transferFormData.date === undefined ||
-      transferFormData.amount === undefined ||
-      transferFormData.srcMemberId === undefined ||
-      transferFormData.dstMemberId === undefined
-    )
-      return;
-
     const res = await bookEndpoint.putBookIdTransfer(
       bookId,
-      billId,
-      {
-        date: transferFormData.date,
-        amount: transferFormData.amount,
-        srcMemberId: transferFormData.srcMemberId,
-        dstMemberId: transferFormData.dstMemberId,
-        memo: transferFormData.memo === '' ? undefined : transferFormData.memo,
-      },
+      transferId,
+      getTransferData(),
       book?.code ?? 'xx',
     );
 
@@ -377,6 +342,18 @@ export const reviseTransfer = async (bookId: string, billId: string) => {
   } finally {
     dispatch(finishWaiting());
   }
+};
+
+export const addTransaction = async (bookId: string) => {
+  const { txFormType } = getState().form;
+  if (txFormType === 'bill') return await addBill(bookId);
+  else return await addTransfer(bookId);
+};
+
+export const reviseTransaction = async (bookId: string, txId: string) => {
+  const { txFormType } = getState().form;
+  if (txFormType === 'bill') await reviseBill(bookId, txId);
+  else await reviseTransfer(bookId, txId);
 };
 
 const getDetail = (shareDetail: ShareDetail): Detail => ({

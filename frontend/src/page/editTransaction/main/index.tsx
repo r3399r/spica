@@ -12,13 +12,7 @@ import { Page } from 'src/constant/Page';
 import { saveBillFormData, setTxFormType } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { loadBookById } from 'src/service/bookService';
-import {
-  addBill,
-  addTransfer,
-  isTxSubmittable,
-  reviseBill,
-  reviseTransfer,
-} from 'src/service/transactionService';
+import { addTransaction, isTxSubmittable, reviseTransaction } from 'src/service/transactionService';
 import BillForm from './BilForm';
 import TransferForm from './TransferForm';
 
@@ -32,7 +26,7 @@ const Main = () => {
     (rootState: RootState) => rootState.form,
   );
   const disabled = useMemo(() => !isTxSubmittable(), [txFormType, billFormData, transferFormData]);
-  const state = location.state as { isEdit: string } | null;
+  const state = location.state as { txId: string } | null;
   const isEdit = useMemo(() => state !== null, [location.state]);
 
   useEffect(() => {
@@ -52,15 +46,9 @@ const Main = () => {
   };
 
   const onSubmit = () => {
-    if (txFormType === 'bill')
-      if (isEdit) reviseBill(id ?? 'xx', state?.isEdit ?? 'yy').then(() => navigate(-1));
-      else
-        addBill(id ?? 'xx').then((res) =>
-          navigate(`${Page.Book}/${id}/tx/${res}`, { replace: true }),
-        );
-    else if (isEdit) reviseTransfer(id ?? 'xx', state?.isEdit ?? 'yy').then(() => navigate(-1));
+    if (isEdit) reviseTransaction(id ?? 'xx', state?.txId ?? 'yy').then(() => navigate(-1));
     else
-      addTransfer(id ?? 'xx').then((res) =>
+      addTransaction(id ?? 'xx').then((res) =>
         navigate(`${Page.Book}/${id}/tx/${res}`, { replace: true }),
       );
   };
