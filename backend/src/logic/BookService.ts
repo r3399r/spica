@@ -722,13 +722,13 @@ export class BookService {
 
       await this.updateMember(data.srcMemberId, bn(data.amount));
       await this.updateMember(data.dstMemberId, bn(data.amount).negated());
-      await this.transferAccess.save(transfer);
+      const newTransfer = await this.transferAccess.save(transfer);
 
       await this.dbAccess.commitTransaction();
 
       return {
         members: await this.getMemberByBook(id),
-        transaction: { ...transfer, type: 'transfer', history: [] },
+        transaction: { ...newTransfer, type: 'transfer', history: [] },
       };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();

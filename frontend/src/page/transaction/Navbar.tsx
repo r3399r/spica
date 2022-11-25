@@ -43,6 +43,7 @@ const Navbar = () => {
       dispatch(
         saveTransferFormData({
           date: tx.date,
+          amount: tx.amount,
           srcMemberId: tx.srcMemberId,
           dstMemberId: tx.dstMemberId,
           memo: tx.memo ?? undefined,

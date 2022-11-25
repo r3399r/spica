@@ -289,6 +289,96 @@ export const reviseBill = async (bookId: string, billId: string) => {
   }
 };
 
+export const addTransfer = async (bookId: string) => {
+  try {
+    dispatch(startWaiting());
+
+    const { transferFormData } = getState().form;
+    const book = getLocalBookById(bookId);
+    if (
+      transferFormData.date === undefined ||
+      transferFormData.amount === undefined ||
+      transferFormData.srcMemberId === undefined ||
+      transferFormData.dstMemberId === undefined
+    )
+      return;
+
+    const res = await bookEndpoint.postBookIdTransfer(
+      bookId,
+      {
+        date: transferFormData.date,
+        amount: transferFormData.amount,
+        srcMemberId: transferFormData.srcMemberId,
+        dstMemberId: transferFormData.dstMemberId,
+        memo: transferFormData.memo === '' ? undefined : transferFormData.memo,
+      },
+      book?.code ?? 'xx',
+    );
+
+    const { books } = getState().book;
+    const updatedBooks = (books ?? []).map((v) =>
+      v.id === bookId
+        ? {
+            ...v,
+            members: res.data.members,
+            transactions: [res.data.transaction, ...(v.transactions ?? [])],
+          }
+        : v,
+    );
+    dispatch(setBooks(updatedBooks));
+
+    return res.data.transaction.id;
+  } finally {
+    dispatch(finishWaiting());
+  }
+};
+
+export const reviseTransfer = async (bookId: string, billId: string) => {
+  try {
+    dispatch(startWaiting());
+
+    const { transferFormData } = getState().form;
+    const book = getLocalBookById(bookId);
+    if (
+      transferFormData.date === undefined ||
+      transferFormData.amount === undefined ||
+      transferFormData.srcMemberId === undefined ||
+      transferFormData.dstMemberId === undefined
+    )
+      return;
+
+    const res = await bookEndpoint.putBookIdTransfer(
+      bookId,
+      billId,
+      {
+        date: transferFormData.date,
+        amount: transferFormData.amount,
+        srcMemberId: transferFormData.srcMemberId,
+        dstMemberId: transferFormData.dstMemberId,
+        memo: transferFormData.memo === '' ? undefined : transferFormData.memo,
+      },
+      book?.code ?? 'xx',
+    );
+
+    const { books } = getState().book;
+    const updatedBooks = (books ?? []).map((v) =>
+      v.id === bookId
+        ? {
+            ...v,
+            members: res.data.members,
+            transactions:
+              v.transactions?.map((o) =>
+                o.id === res.data.transaction.id ? res.data.transaction : o,
+              ) ?? null,
+          }
+        : v,
+    );
+    dispatch(setBooks(updatedBooks));
+  } finally {
+    dispatch(finishWaiting());
+  }
+};
+
 const getDetail = (shareDetail: ShareDetail): Detail => ({
   id: shareDetail.id,
   method: shareDetail.method,

@@ -12,7 +12,13 @@ import { Page } from 'src/constant/Page';
 import { saveBillFormData, setTxFormType } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { loadBookById } from 'src/service/bookService';
-import { addBill, isTxSubmittable, reviseBill } from 'src/service/transactionService';
+import {
+  addBill,
+  addTransfer,
+  isTxSubmittable,
+  reviseBill,
+  reviseTransfer,
+} from 'src/service/transactionService';
 import BillForm from './BilForm';
 import TransferForm from './TransferForm';
 
@@ -46,9 +52,15 @@ const Main = () => {
   };
 
   const onSubmit = () => {
-    if (isEdit) reviseBill(id ?? 'xx', state?.isEdit ?? 'yy').then(() => navigate(-1));
+    if (txFormType === 'bill')
+      if (isEdit) reviseBill(id ?? 'xx', state?.isEdit ?? 'yy').then(() => navigate(-1));
+      else
+        addBill(id ?? 'xx').then((res) =>
+          navigate(`${Page.Book}/${id}/tx/${res}`, { replace: true }),
+        );
+    else if (isEdit) reviseTransfer(id ?? 'xx', state?.isEdit ?? 'yy').then(() => navigate(-1));
     else
-      addBill(id ?? 'xx').then((res) =>
+      addTransfer(id ?? 'xx').then((res) =>
         navigate(`${Page.Book}/${id}/tx/${res}`, { replace: true }),
       );
   };
