@@ -7,7 +7,7 @@ import Body from 'src/component/celestial-ui/typography/Body';
 import { Page } from 'src/constant/Page';
 import IcEdit from 'src/image/ic-edit.svg';
 import IcRemove from 'src/image/ic-remove.svg';
-import { saveBillFormData } from 'src/redux/formSlice';
+import { saveBillFormData, saveTransferFormData, setTxFormType } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { bn } from 'src/util/bignumber';
 import ModalDelete from './ModalDelete';
@@ -38,6 +38,17 @@ const Navbar = () => {
           memo: tx.memo ?? undefined,
         }),
       );
+    else if (tx.type === 'transfer') {
+      dispatch(setTxFormType('transfer'));
+      dispatch(
+        saveTransferFormData({
+          date: tx.date,
+          srcMemberId: tx.srcMemberId,
+          dstMemberId: tx.dstMemberId,
+          memo: tx.memo ?? undefined,
+        }),
+      );
+    }
     navigate(`${Page.Book}/${id}/tx`, { state: { isEdit: tx.id } });
   };
 

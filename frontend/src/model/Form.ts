@@ -23,11 +23,11 @@ export type BillForm = {
 };
 
 export type TransferForm = {
-  date: Date;
-  amount: string;
-  from: string;
-  to: string;
-  memo: string;
+  date: string;
+  amount: number;
+  srcMemberId: string;
+  dstMemberId: string;
+  memo?: string;
 };
 
 export type SplitForm = {

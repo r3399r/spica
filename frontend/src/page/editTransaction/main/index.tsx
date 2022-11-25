@@ -9,11 +9,12 @@ import Select from 'src/component/celestial-ui/Select';
 import SelectOption from 'src/component/celestial-ui/SelectOption';
 import NavbarVanilla from 'src/component/NavbarVanilla';
 import { Page } from 'src/constant/Page';
-import { saveBillFormData } from 'src/redux/formSlice';
+import { saveBillFormData, setTxFormType } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { loadBookById } from 'src/service/bookService';
 import { addBill, isTxSubmittable, reviseBill } from 'src/service/transactionService';
 import BillForm from './BilForm';
+import TransferForm from './TransferForm';
 
 const Main = () => {
   const { id } = useParams();
@@ -21,8 +22,10 @@ const Main = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { billFormData } = useSelector((rootState: RootState) => rootState.form);
-  const disabled = useMemo(() => !isTxSubmittable(), [billFormData]);
+  const { txFormType, billFormData, transferFormData } = useSelector(
+    (rootState: RootState) => rootState.form,
+  );
+  const disabled = useMemo(() => !isTxSubmittable(), [txFormType, billFormData, transferFormData]);
   const state = location.state as { isEdit: string } | null;
   const isEdit = useMemo(() => state !== null, [location.state]);
 
@@ -32,8 +35,10 @@ const Main = () => {
   }, [id]);
 
   const onSelectType = (value: string) => {
-    if (value === BillType.In || value === BillType.Out)
+    if (value === BillType.In || value === BillType.Out) {
       dispatch(saveBillFormData({ type: value }));
+      dispatch(setTxFormType('bill'));
+    } else if (value === 'transfer') dispatch(setTxFormType('transfer'));
   };
 
   const onPickDatetime = (date: Date) => {
@@ -76,11 +81,7 @@ const Main = () => {
               />
             </div>
           </div>
-          {billFormData.type === 'in' || billFormData.type === 'out' ? (
-            <BillForm />
-          ) : (
-            <div>transfer</div>
-          )}
+          {txFormType === 'bill' ? <BillForm /> : <TransferForm />}
         </div>
       </div>
       <div className="fixed bottom-0 h-[104px] w-full">

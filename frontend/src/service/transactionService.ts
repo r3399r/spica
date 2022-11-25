@@ -51,23 +51,33 @@ export const deleteTx = async (bookId: string, type: 'in' | 'out' | 'transfer', 
 };
 
 export const isTxSubmittable = () => {
-  const { billFormData } = getState().form;
-  if (!billFormData.descr) return false;
-  if (!billFormData.amount) return false;
-  if (
-    !billFormData.former ||
-    !billFormData.former
-      .reduce((prev, current) => prev.plus(current.amount), bn(0))
-      .eq(billFormData.amount)
-  )
-    return false;
-  if (
-    !billFormData.latter ||
-    !billFormData.latter
-      .reduce((prev, current) => prev.plus(current.amount), bn(0))
-      .eq(billFormData.amount)
-  )
-    return false;
+  const { txFormType, billFormData, transferFormData } = getState().form;
+  if (txFormType === 'bill') {
+    if (!billFormData.descr) return false;
+    if (!billFormData.amount) return false;
+    if (
+      !billFormData.former ||
+      !billFormData.former
+        .reduce((prev, current) => prev.plus(current.amount), bn(0))
+        .eq(billFormData.amount)
+    )
+      return false;
+    if (
+      !billFormData.latter ||
+      !billFormData.latter
+        .reduce((prev, current) => prev.plus(current.amount), bn(0))
+        .eq(billFormData.amount)
+    )
+      return false;
+  } else {
+    if (!transferFormData.amount) return false;
+    if (
+      !transferFormData.srcMemberId ||
+      !transferFormData.dstMemberId ||
+      transferFormData.srcMemberId === transferFormData.dstMemberId
+    )
+      return false;
+  }
 
   return true;
 };
