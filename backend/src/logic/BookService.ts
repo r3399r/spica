@@ -8,10 +8,12 @@ import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
 import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
 import { ViewBookAccess } from 'src/access/ViewBookAccess';
+import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
 import {
   BadRequestError,
   UnauthorizedError,
 } from 'src/celestial-service/error';
+import { Pagination } from 'src/celestial-service/model/Pagination';
 import { compare } from 'src/celestial-service/util/compare';
 import {
   differenceBy,
@@ -21,6 +23,7 @@ import { BillType } from 'src/constant/Book';
 import {
   DeleteBookBillResponse,
   DeleteBookTransferResponse,
+  GetBookIdParams,
   GetBookIdResponse,
   GetBookNameResponse,
   GetBookParams,
@@ -87,6 +90,9 @@ export class BookService {
 
   @inject(ViewBillShareAccess)
   private readonly vBillShareAccess!: ViewBillShareAccess;
+
+  @inject(ViewTransactionAccess)
+  private readonly vTransactionAccess!: ViewTransactionAccess;
 
   public async cleanup() {
     await this.dbAccess.cleanup();
@@ -380,21 +386,43 @@ export class BookService {
     return members.sort(compare('dateCreated'));
   }
 
-  public async getBook(id: string, code: string): Promise<GetBookIdResponse> {
+  public async getBook(
+    id: string,
+    code: string,
+    params: GetBookIdParams | null
+  ): Promise<Pagination<GetBookIdResponse>> {
+    const limit = isNaN(Number(params?.limit)) ? 10 : Number(params?.limit);
+    const offset = isNaN(Number(params?.offset)) ? 0 : Number(params?.offset);
+
     const book = await this.validateBook(id, code);
-    const [members, transfers, billShares] = await Promise.all([
+    const [members, { data: tx, count }] = await Promise.all([
       this.getMemberByBook(id),
-      this.transferAccess.findByBookId(id),
-      this.vBillShareAccess.findByBookId(id),
+      this.vTransactionAccess.findAndCountByBookId(id, {
+        order: { date: 'desc' },
+        take: limit,
+        skip: offset,
+      }),
+    ]);
+
+    const [transfers, billShares] = await Promise.all([
+      this.transferAccess.findByIds(
+        tx.filter((v) => v.type === 'transfer').map((v) => v.id)
+      ),
+      this.vBillShareAccess.findByBillIds(
+        tx.filter((v) => v.type === 'bill').map((v) => v.id)
+      ),
     ]);
 
     return {
-      ...book,
-      members,
-      transactions: [
-        ...this.handleTransfer(transfers),
-        ...this.handleBill(billShares),
-      ].sort(compare('date', 'desc')),
+      paginate: { count, limit, offset },
+      data: {
+        ...book,
+        members,
+        transactions: [
+          ...this.handleTransfer(transfers),
+          ...this.handleBill(billShares),
+        ].sort(compare('date', 'desc')),
+      },
     };
   }
 

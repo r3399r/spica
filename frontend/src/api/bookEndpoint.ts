@@ -1,6 +1,7 @@
 import {
   DeleteBookBillResponse,
   DeleteBookTransferResponse,
+  GetBookIdParams,
   GetBookIdResponse,
   GetBookNameResponse,
   GetBookParams,
@@ -33,8 +34,8 @@ const postBook = async (data: PostBookRequest) =>
 const putBookId = async (id: string, data: PutBookRequest, code: string) =>
   await http.put<PutBookResponse>(`book/${id}`, { data, headers: { 'x-api-code': code } });
 
-const getBookId = async (id: string, code: string) =>
-  await http.get<GetBookIdResponse>(`book/${id}`, { headers: { 'x-api-code': code } });
+const getBookId = async (id: string, code: string, params?: GetBookIdParams) =>
+  await http.get<GetBookIdResponse>(`book/${id}`, { headers: { 'x-api-code': code }, params });
 
 const postBookIdBill = async (id: string, data: PostBookBillRequest, code: string) =>
   await http.post<PostBookBillResponse>(`book/${id}/bill`, {

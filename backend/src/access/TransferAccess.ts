@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { IsNull } from 'typeorm';
+import { In, IsNull } from 'typeorm';
 import { BadRequestError } from 'src/celestial-service/error';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
@@ -29,11 +29,12 @@ export class TransferAccess {
     });
   }
 
-  public async findByBookId(bookId: string) {
+  public async findByIds(ids: string[]) {
     const qr = await this.database.getQueryRunner();
 
     return await qr.manager.find<Transfer>(TransferEntity.name, {
-      where: { bookId },
+      where: { id: In(ids) },
+      order: { ver: 'ASC' },
     });
   }
 

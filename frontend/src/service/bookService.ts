@@ -39,7 +39,7 @@ export const loadBookList = async () => {
     const updatedBooks = res.data.map((v) => {
       const savedBook = books?.find((o) => o.id === v.id);
 
-      return { ...v, members: null, transactions: null, ...savedBook };
+      return { ...v, members: null, transactions: null, txCount: null, ...savedBook };
     });
 
     dispatch(setBooks(updatedBooks));
@@ -72,6 +72,7 @@ export const createBook = async (name: string) => {
         lastDateUpdated: new Date().toISOString(),
         members: null,
         transactions: null,
+        txCount: 0,
       }),
     );
     localStorage.setItem(
@@ -94,13 +95,44 @@ export const loadBookById = async (id: string) => {
     if (savedBook && savedBook.members !== null && savedBook.transactions !== null) return;
 
     const code = getLocalBookById(id)?.code ?? '';
-    const res = await bookEndpoint.getBookId(id, code);
+    const res = await bookEndpoint.getBookId(id, code, { limit: '50', offset: '0' });
 
     const index = books?.findIndex((v) => v.id === id) ?? -1;
-    if (books === null || index === -1) dispatch(appendBook(res.data));
+    if (books === null || index === -1)
+      dispatch(appendBook({ ...res.data, txCount: Number(res.headers['x-pagination-count']) }));
     else {
       const tmp = [...books];
-      tmp[index] = res.data;
+      tmp[index] = { ...res.data, txCount: Number(res.headers['x-pagination-count']) };
+      dispatch(setBooks(tmp));
+    }
+  } finally {
+    dispatch(finishWaiting());
+  }
+};
+
+export const loadMoreBookById = async (id: string) => {
+  try {
+    dispatch(startWaiting());
+    const { books } = getState().book;
+
+    const savedBook = books?.find((v) => v.id === id);
+
+    const code = getLocalBookById(id)?.code ?? '';
+    const res = await bookEndpoint.getBookId(id, code, {
+      limit: '50',
+      offset: String(savedBook?.transactions?.length),
+    });
+
+    const index = books?.findIndex((v) => v.id === id) ?? -1;
+    if (books === null || index === -1)
+      dispatch(appendBook({ ...res.data, txCount: Number(res.headers['x-pagination-count']) }));
+    else {
+      const tmp = [...books];
+      tmp[index] = {
+        ...res.data,
+        transactions: [...(tmp[index].transactions ?? []), ...res.data.transactions],
+        txCount: Number(res.headers['x-pagination-count']),
+      };
       dispatch(setBooks(tmp));
     }
   } finally {

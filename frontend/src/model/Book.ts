@@ -3,6 +3,7 @@ import { Member, ShareMethod, Transaction, ViewBook } from '@y-celestial/spica-s
 export type SavedBook = ViewBook & {
   members: Member[] | null;
   transactions: Transaction[] | null;
+  txCount: number | null;
 };
 
 export type LocalBook = {

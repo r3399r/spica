@@ -11,6 +11,7 @@ import {
 } from 'src/celestial-service/model/Lambda';
 import { BookService } from 'src/logic/BookService';
 import {
+  GetBookIdParams,
   GetBookParams,
   PostBookBillRequest,
   PostBookMemberRequest,
@@ -103,7 +104,8 @@ async function apiBookId(event: LambdaEvent, service: BookService) {
     case 'GET':
       return service.getBook(
         event.pathParameters.id,
-        event.headers['x-api-code']
+        event.headers['x-api-code'],
+        event.queryStringParameters as GetBookIdParams | null
       );
     case 'PUT':
       if (event.body === null)

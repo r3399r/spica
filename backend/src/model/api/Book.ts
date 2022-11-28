@@ -1,3 +1,4 @@
+import { PaginationParams } from 'src/celestial-service/model/Pagination';
 import { Book } from 'src/model/entity/Book';
 import { Member } from 'src/model/entity/Member';
 import { BillData, Transaction, TransferData } from 'src/model/type/Book';
@@ -18,6 +19,8 @@ export type PutBookRequest = {
   name?: string;
   symbol?: string;
 };
+
+export type GetBookIdParams = PaginationParams;
 
 export type GetBookIdResponse = ViewBook & {
   members: Member[];

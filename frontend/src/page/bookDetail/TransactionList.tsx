@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Body from 'src/component/celestial-ui/typography/Body';
 import { Page } from 'src/constant/Page';
 import { RootState } from 'src/redux/store';
-import { aggregateTransactions } from 'src/service/bookService';
+import { aggregateTransactions, loadMoreBookById } from 'src/service/bookService';
 import { bnFormat } from 'src/util/bignumber';
 
 const TransactionList = () => {
@@ -123,6 +123,11 @@ const TransactionList = () => {
             <>{transactions[v].map(items)}</>
           </div>
         ))}
+        {book.transactions.length !== book.txCount && (
+          <div className="text-center" onClick={() => loadMoreBookById(id ?? 'xx')}>
+            -- loadmore --
+          </div>
+        )}
       </div>
     );
 
