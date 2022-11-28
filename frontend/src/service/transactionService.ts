@@ -228,6 +228,7 @@ const addBill = async (bookId: string) => {
             ...v,
             members: res.data.members,
             transactions: [res.data.transaction, ...(v.transactions ?? [])],
+            txCount: v.txCount ? v.txCount + 1 : 1,
           }
         : v,
     );
@@ -302,6 +303,7 @@ const addTransfer = async (bookId: string) => {
             ...v,
             members: res.data.members,
             transactions: [res.data.transaction, ...(v.transactions ?? [])],
+            txCount: v.txCount ? v.txCount + 1 : 1,
           }
         : v,
     );
