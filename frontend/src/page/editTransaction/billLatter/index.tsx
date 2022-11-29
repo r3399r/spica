@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Button from 'src/component/celestial-ui/Button';
+import Button from 'src/celestial-ui/Button';
 import IcPctInactive from 'src/image/ic-method-pct-inactive.svg';
 import IcPct from 'src/image/ic-method-pct.svg';
 import IcPmInactive from 'src/image/ic-method-pm-inactive.svg';

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import Body from 'src/component/celestial-ui/typography/Body';
-import H5 from 'src/component/celestial-ui/typography/H5';
+import Body from 'src/celestial-ui/typography/Body';
+import H5 from 'src/celestial-ui/typography/H5';
 import IcCross from 'src/image/ic-cross.svg';
 
 type Props = {

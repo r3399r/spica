@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import ModalVanilla from 'src/component/celestial-ui/ModalVanilla';
-import Body from 'src/component/celestial-ui/typography/Body';
+import ModalVanilla from 'src/celestial-ui/ModalVanilla';
+import Body from 'src/celestial-ui/typography/Body';
 import { Page } from 'src/constant/Page';
 import IcWarning from 'src/image/ic-warning.svg';
 import { SavedBook } from 'src/model/Book';

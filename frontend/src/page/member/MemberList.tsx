@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Body from 'src/component/celestial-ui/typography/Body';
+import Body from 'src/celestial-ui/typography/Body';
 import IcEdit from 'src/image/ic-edit.svg';
 import IcRemoveDisabled from 'src/image/ic-remove-disabled.svg';
 import IcRemove from 'src/image/ic-remove.svg';

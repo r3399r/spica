@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import QRCode from 'react-qr-code';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Button from 'src/component/celestial-ui/Button';
-import Body from 'src/component/celestial-ui/typography/Body';
-import H4 from 'src/component/celestial-ui/typography/H4';
+import Button from 'src/celestial-ui/Button';
+import Body from 'src/celestial-ui/typography/Body';
+import H4 from 'src/celestial-ui/typography/H4';
 import { RootState } from 'src/redux/store';
 
 const Share = () => {

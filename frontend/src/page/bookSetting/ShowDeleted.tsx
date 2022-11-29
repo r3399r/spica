@@ -1,8 +1,8 @@
 import { ChangeEvent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import Switch from 'src/component/celestial-ui/Switch';
-import H4 from 'src/component/celestial-ui/typography/H4';
+import Switch from 'src/celestial-ui/Switch';
+import H4 from 'src/celestial-ui/typography/H4';
 import { getLocalBookById, setShowDeleted } from 'src/util/localStorage';
 
 const ShowDeleted = () => {

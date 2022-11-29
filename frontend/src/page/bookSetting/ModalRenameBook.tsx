@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import FormInput from 'src/component/celestial-ui/FormInput';
-import ModalForm from 'src/component/celestial-ui/ModalForm';
+import FormInput from 'src/celestial-ui/FormInput';
+import ModalForm from 'src/celestial-ui/ModalForm';
 import { SavedBook } from 'src/model/Book';
 import { RenameBookForm } from 'src/model/Form';
 import { renameBook } from 'src/service/settingService';

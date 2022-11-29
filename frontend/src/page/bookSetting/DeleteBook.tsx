@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import H4 from 'src/component/celestial-ui/typography/H4';
+import H4 from 'src/celestial-ui/typography/H4';
 import IcRemove from 'src/image/ic-remove.svg';
 import { RootState } from 'src/redux/store';
 import ModalDeleteBook from './ModalDeleteBook';

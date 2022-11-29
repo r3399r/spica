@@ -1,9 +1,9 @@
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import Button from 'src/component/celestial-ui/Button';
-import Form from 'src/component/celestial-ui/Form';
-import FormInput from 'src/component/celestial-ui/FormInput';
+import Button from 'src/celestial-ui/Button';
+import Form from 'src/celestial-ui/Form';
+import FormInput from 'src/celestial-ui/FormInput';
 import { NewMemberForm as FormType } from 'src/model/Form';
 import { addMember } from 'src/service/memberService';
 

@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Body from 'src/component/celestial-ui/typography/Body';
-import H6 from 'src/component/celestial-ui/typography/H6';
+import Body from 'src/celestial-ui/typography/Body';
+import H6 from 'src/celestial-ui/typography/H6';
 import { RootState } from 'src/redux/store';
 
 const SystemHint = () => {
