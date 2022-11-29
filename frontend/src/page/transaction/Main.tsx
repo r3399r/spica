@@ -4,12 +4,12 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Body from 'src/celestial-ui/typography/Body';
-import H2 from 'src/celestial-ui/typography/H2';
-import H4 from 'src/celestial-ui/typography/H4';
+import Body from 'src/celestial-ui/component/typography/Body';
+import H2 from 'src/celestial-ui/component/typography/H2';
+import H4 from 'src/celestial-ui/component/typography/H4';
+import { compare } from 'src/celestial-ui/util/compare';
 import { RootState } from 'src/redux/store';
 import { bn, bnFormat } from 'src/util/bignumber';
-import { compare } from 'src/util/compare';
 
 const Main = () => {
   const { id, tid } = useParams();

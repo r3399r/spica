@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Body from 'src/celestial-ui/typography/Body';
+import Body from 'src/celestial-ui/component/typography/Body';
 import IcEdit from 'src/image/ic-edit-tx.svg';
 import { saveBillFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';

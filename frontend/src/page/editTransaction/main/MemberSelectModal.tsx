@@ -1,7 +1,7 @@
 import { Member } from '@y-celestial/spica-service';
 import { useDispatch, useSelector } from 'react-redux';
-import ListItem from 'src/celestial-ui/ListItem';
-import Modal from 'src/celestial-ui/Modal';
+import ListItem from 'src/celestial-ui/component/ListItem';
+import Modal from 'src/celestial-ui/component/Modal';
 import { saveTransferFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 

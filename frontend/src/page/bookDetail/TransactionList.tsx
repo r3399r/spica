@@ -4,7 +4,7 @@ import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import Body from 'src/celestial-ui/typography/Body';
+import Body from 'src/celestial-ui/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import { RootState } from 'src/redux/store';
 import { aggregateTransactions, loadMoreBookById } from 'src/service/bookService';

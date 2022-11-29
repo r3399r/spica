@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import FormInput from 'src/celestial-ui/FormInput';
-import ModalForm from 'src/celestial-ui/ModalForm';
+import FormInput from 'src/celestial-ui/component/FormInput';
+import ModalForm from 'src/celestial-ui/component/ModalForm';
 import { NewBookForm } from 'src/model/Form';
 import { createBook } from 'src/service/bookService';
 

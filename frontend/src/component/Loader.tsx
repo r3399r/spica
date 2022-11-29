@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import CelestialLoader from 'src/celestial-ui/Loader';
+import CelestialLoader from 'src/celestial-ui/component/Loader';
 import { RootState } from 'src/redux/store';
 
 const Loader = () => {

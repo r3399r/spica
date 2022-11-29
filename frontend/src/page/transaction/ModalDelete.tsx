@@ -1,6 +1,6 @@
 import { Transaction } from '@y-celestial/spica-service';
 import { useTranslation } from 'react-i18next';
-import ModalVanilla from 'src/celestial-ui/ModalVanilla';
+import ModalVanilla from 'src/celestial-ui/component/ModalVanilla';
 import { deleteTx } from 'src/service/transactionService';
 
 type Props = {

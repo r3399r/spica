@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import ModalForm from 'src/celestial-ui/ModalForm';
-import Radio from 'src/celestial-ui/Radio';
+import ModalForm from 'src/celestial-ui/component/ModalForm';
+import Radio from 'src/celestial-ui/component/Radio';
 import { SavedBook } from 'src/model/Book';
 import { ReviseSymbolForm } from 'src/model/Form';
 import { resetSymbol } from 'src/service/settingService';

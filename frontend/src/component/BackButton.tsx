@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import Body from 'src/celestial-ui/typography/Body';
+import Body from 'src/celestial-ui/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import IcBack from 'src/image/ic-back.svg';
 
