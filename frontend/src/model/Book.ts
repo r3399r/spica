@@ -43,3 +43,9 @@ export type MemberAdjust = {
   value: string;
   amount: string;
 };
+
+export type Check = {
+  amount: string;
+  formerNickname: string;
+  latterNickname: string;
+};

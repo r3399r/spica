@@ -119,6 +119,7 @@
     "back": "回帐本",
     "head": "结算",
     "check": "结帐",
-    "balance": "个人收支"
+    "balance": "个人收支",
+    "shouldPay": "需支付"
   }
 }

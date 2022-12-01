@@ -119,6 +119,7 @@
     "back": "Back",
     "head": "Settlement",
     "check": "Check",
-    "balance": "Balance"
+    "balance": "Balance",
+    "shouldPay": "Should pay"
   }
 }
