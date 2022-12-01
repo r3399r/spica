@@ -36,7 +36,7 @@
     "billOutNote": "{{member}} 支付了 {{symbol}}{{amount}}",
     "billInNote": "{{member}} 收取了 {{symbol}}{{amount}}",
     "transferNote": "{{srcMember}} 转帐 {{symbol}}{{amount}} 给 {{dstMember}}",
-    "check": "结帐",
+    "settlement": "结算",
     "shouldReceive": "须收款",
     "shouldPay": "须还款",
     "deleted": "已删除"
@@ -114,5 +114,11 @@
     "unitWeight": "份",
     "unitPct": "%",
     "modalTitle": "{{nickname}}的分配"
+  },
+  "settlement": {
+    "back": "回帐本",
+    "head": "结算",
+    "check": "结帐",
+    "balance": "个人收支"
   }
 }

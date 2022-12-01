@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Body from 'src/celestial-ui/component/typography/Body';
 import H4 from 'src/celestial-ui/component/typography/H4';
+import { Page } from 'src/constant/Page';
 import IcGo from 'src/image/ic-go.svg';
 import { RootState } from 'src/redux/store';
 import { bn, bnFormat } from 'src/util/bignumber';
@@ -11,6 +12,7 @@ import { bn, bnFormat } from 'src/util/bignumber';
 const BalanceCard = () => {
   const { id } = useParams();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
   const former = useMemo(() => book?.members?.filter((v) => v.balance >= 0) ?? [], [book]);
@@ -20,9 +22,12 @@ const BalanceCard = () => {
     <div className="rounded-[15px] p-[10px] bg-grey-200 my-[10px] text-navy-700">
       <div className="mb-[10px] flex justify-between">
         <H4>{t('bookDetail.balance')}</H4>
-        <div className="flex items-center h-[21px]">
+        <div
+          className="flex items-center h-[21px]"
+          onClick={() => navigate(`${Page.Book}/${id}/settlement`)}
+        >
           <Body bold className="text-navy-300">
-            {t('bookDetail.check')}
+            {t('bookDetail.settlement')}
           </Body>
           <img src={IcGo} />
         </div>

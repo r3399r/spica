@@ -36,7 +36,7 @@
     "billOutNote": "{{member}} paid {{symbol}}{{amount}}",
     "billInNote": "{{member}} received {{symbol}}{{amount}}",
     "transferNote": "{{srcMember}} transferred {{symbol}}{{amount}} to {{dstMember}}",
-    "check": "Check",
+    "settlement": "Settlement",
     "shouldReceive": "Should Receive",
     "shouldPay": "Should Pay",
     "deleted": "Deleted"
@@ -114,5 +114,11 @@
     "unitWeight": "x",
     "unitPct": "%",
     "modalTitle": "Share of {{nickname}}"
+  },
+  "settlement": {
+    "back": "Back",
+    "head": "Settlement",
+    "check": "Check",
+    "balance": "Balance"
   }
 }
