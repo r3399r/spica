@@ -120,6 +120,7 @@
     "head": "結算",
     "check": "結帳",
     "balance": "個人收支",
-    "shouldPay": "需支付"
+    "shouldPay": "需支付",
+    "isCleared": "所有款項已結清"
   }
 }

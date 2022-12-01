@@ -16,6 +16,9 @@ const Check = () => {
   const members = useMemo(() => books?.find((v) => v.id === id)?.members ?? [], [id, books]);
   const checkResult = useMemo(() => check(members), [members]);
 
+  if (checkResult.length === 0)
+    return <Body className="text-navy-300 text-center">{t('settlement.isCleared')}</Body>;
+
   return (
     <>
       {checkResult.map((v, i) => (

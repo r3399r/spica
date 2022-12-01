@@ -120,6 +120,7 @@
     "head": "Settlement",
     "check": "Check",
     "balance": "Balance",
-    "shouldPay": "Should pay"
+    "shouldPay": "Should pay",
+    "isCleared": "All bills are cleared"
   }
 }
