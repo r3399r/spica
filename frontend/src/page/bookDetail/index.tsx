@@ -1,13 +1,14 @@
 import classNames from 'classnames';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'src/celestial-ui/component/Button';
 import Body from 'src/celestial-ui/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import IcAdd from 'src/image/ic-add.svg';
 import { RootState } from 'src/redux/store';
+import { setTxPageScroll } from 'src/redux/uiSlice';
 import { loadBookById } from 'src/service/bookService';
 import BalanceCard from './BalanceCard';
 import MainCard from './MainCard';
@@ -18,14 +19,23 @@ const BookDetail = () => {
   const { id } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
+  const dispatch = useDispatch();
+  const {
+    book: { books },
+    ui: { txPageScroll },
+  } = useSelector((rootState: RootState) => rootState);
   const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
   const noMember = useMemo(() => book?.members?.length === 0, [book]);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (id === undefined) return;
     loadBookById(id).catch(() => navigate(Page.Book, { replace: true }));
   }, [id]);
+
+  useEffect(() => {
+    if (ref.current) ref.current.scrollTop = txPageScroll;
+  }, []);
 
   return (
     <>
@@ -33,6 +43,8 @@ const BookDetail = () => {
         className={classNames('fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto', {
           'h-full': noMember,
         })}
+        ref={ref}
+        onScroll={(e) => dispatch(setTxPageScroll(e.currentTarget.scrollTop))}
       >
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
           <Navbar />

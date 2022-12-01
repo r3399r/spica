@@ -2,6 +2,7 @@ import { Transaction } from '@y-celestial/spica-service';
 import { format } from 'date-fns';
 import { validate as uuidValidate } from 'uuid';
 import bookEndpoint from 'src/api/bookEndpoint';
+import { compare } from 'src/celestial-ui/util/compare';
 import { appendBook, setBooks } from 'src/redux/bookSlice';
 import { dispatch, getState } from 'src/redux/store';
 import { finishWaiting, startWaiting } from 'src/redux/uiSlice';
@@ -148,9 +149,10 @@ export const getBookIndex = (id: string) => {
 
 export const aggregateTransactions = (id: string, transactions: Transaction[]) => {
   const showDeleted = getLocalBookById(id)?.showDeleted;
-
+  const tmp = [...transactions];
   const map: { [key: string]: Transaction[] } = {};
-  transactions.forEach((v) => {
+
+  tmp.sort(compare('date', 'desc')).forEach((v) => {
     if (v.dateDeleted !== null && !showDeleted) return;
 
     const date = format(new Date(v.date), 'yyyy-MM-dd');

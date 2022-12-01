@@ -28,6 +28,11 @@ const Main = () => {
   const disabled = useMemo(() => !isTxSubmittable(), [txFormType, billFormData, transferFormData]);
   const state = location.state as { txId: string } | null;
   const isEdit = useMemo(() => state !== null, [location.state]);
+  const date = useMemo(() => {
+    const formDate = txFormType === 'bill' ? billFormData.date : transferFormData.date;
+
+    return formDate ? new Date(formDate) : new Date();
+  }, [txFormType]);
 
   useEffect(() => {
     if (id === undefined) return;
@@ -74,7 +79,7 @@ const Main = () => {
             <div className="flex-1">
               <DatetimePicker
                 label={t('editTx.date')}
-                initDate={new Date()}
+                initDate={date}
                 onChange={onPickDatetime}
                 cancelTxt={t('act.cancel')}
                 confirmTxt={t('act.confirm')}

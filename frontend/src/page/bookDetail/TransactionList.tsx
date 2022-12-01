@@ -125,7 +125,7 @@ const TransactionList = () => {
         ))}
         {book.transactions.length !== book.txCount && (
           <div className="text-center" onClick={() => loadMoreBookById(id ?? 'xx')}>
-            -- loadmore --
+            -- load more --
           </div>
         )}
       </div>

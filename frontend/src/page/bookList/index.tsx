@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from 'src/celestial-ui/component/Button';
 import Body from 'src/celestial-ui/component/typography/Body';
@@ -11,17 +11,20 @@ import IcAdd from 'src/image/ic-add.svg';
 import IcBook from 'src/image/ic-book.svg';
 import PicBookHero from 'src/image/pic-book-hero.svg';
 import { RootState } from 'src/redux/store';
+import { setTxPageScroll } from 'src/redux/uiSlice';
 import { loadBookList } from 'src/service/bookService';
 import ModalNewBook from './ModalNewBook';
 
 const BookList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
     loadBookList();
+    dispatch(setTxPageScroll(0));
   }, []);
 
   return (

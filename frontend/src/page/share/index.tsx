@@ -57,7 +57,7 @@ const Share = () => {
       </div>
       <Form className="mt-5 flex gap-[10px]" methods={methods} onSubmit={onSubmit}>
         <div className="flex-1 pt-4">
-          <FormInput name="code" placeholder={t('share.code')} required />
+          <FormInput name="code" placeholder={t('share.code')} required inputMode="numeric" />
         </div>
         <div className="pt-4">
           <Button type="submit" appearance="default">
