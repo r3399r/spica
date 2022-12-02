@@ -1,15 +1,17 @@
+import { bindings } from 'src/bindings';
 import {
   BadRequestError,
-  errorOutput,
   InternalServerError,
+} from 'src/celestial-service/error';
+import { errorOutput, successOutput } from 'src/celestial-service/LambdaOutput';
+import {
   LambdaContext,
   LambdaEvent,
   LambdaOutput,
-  successOutput,
-} from '@y-celestial/service';
-import { bindings } from 'src/bindings';
+} from 'src/celestial-service/model/Lambda';
 import { BookService } from 'src/logic/BookService';
 import {
+  GetBookIdParams,
   GetBookParams,
   PostBookBillRequest,
   PostBookMemberRequest,
@@ -100,9 +102,10 @@ async function apiBookId(event: LambdaEvent, service: BookService) {
     throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
     case 'GET':
-      return service.getBookDetail(
+      return service.getBook(
         event.pathParameters.id,
-        event.headers['x-api-code']
+        event.headers['x-api-code'],
+        event.queryStringParameters as GetBookIdParams | null
       );
     case 'PUT':
       if (event.body === null)

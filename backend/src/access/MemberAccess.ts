@@ -1,5 +1,5 @@
-import { BadRequestError } from '@y-celestial/service';
 import { inject, injectable } from 'inversify';
+import { BadRequestError } from 'src/celestial-service/error';
 import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
 import { Database } from 'src/util/Database';
@@ -50,5 +50,11 @@ export class MemberAccess {
     const res = await qr.manager.delete(MemberEntity.name, id);
 
     if (res.affected === 0) throw new BadRequestError('nothing happened.');
+  }
+
+  public async hardDeleteByBookId(id: string) {
+    const qr = await this.database.getQueryRunner();
+
+    await qr.manager.delete(MemberEntity.name, { bookId: id });
   }
 }

@@ -27,4 +27,10 @@ export class BillShareAccess {
       ver,
     });
   }
+
+  public async hardDeleteByBillId(id: string) {
+    const qr = await this.database.getQueryRunner();
+
+    await qr.manager.delete(BillShareEntity.name, { billId: id });
+  }
 }

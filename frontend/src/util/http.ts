@@ -1,8 +1,8 @@
-import axios, { AxiosRequestConfig, AxiosRequestHeaders } from 'axios';
+import axios, { AxiosRequestConfig, RawAxiosRequestHeaders } from 'axios';
 
 // eslint-disable-next-line
 type Options<D = any, P = any> = {
-  headers?: AxiosRequestHeaders;
+  headers?: RawAxiosRequestHeaders;
   data?: D;
   params?: P;
 };
@@ -12,7 +12,7 @@ const defaultConfig: AxiosRequestConfig = {
   timeout: 30000,
 };
 
-const defaultHeader: AxiosRequestHeaders = {
+const defaultHeader: RawAxiosRequestHeaders = {
   'Content-type': 'application/json',
   Accept: 'application/json',
 };
@@ -44,7 +44,7 @@ const privateRequestConfig = <D = unknown, P = any>(
   headers: {
     ...defaultHeader,
     ...options?.headers,
-    'x-api-code': localStorage.getItem('token') ?? '',
+    ...({ ['x-api-code']: localStorage.getItem('token') ?? '' } as RawAxiosRequestHeaders),
   },
   data: options?.data,
   params: options?.params,

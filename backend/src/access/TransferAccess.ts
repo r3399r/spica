@@ -1,6 +1,6 @@
-import { BadRequestError } from '@y-celestial/service';
 import { inject, injectable } from 'inversify';
-import { IsNull } from 'typeorm';
+import { In, IsNull } from 'typeorm';
+import { BadRequestError } from 'src/celestial-service/error';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
 import { Database } from 'src/util/Database';
@@ -19,6 +19,23 @@ export class TransferAccess {
     Object.assign(entity, input);
 
     return await qr.manager.save(entity);
+  }
+
+  public async findById(id: string) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.find<Transfer>(TransferEntity.name, {
+      where: { id },
+    });
+  }
+
+  public async findByIds(ids: string[]) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.find<Transfer>(TransferEntity.name, {
+      where: { id: In(ids) },
+      order: { ver: 'ASC' },
+    });
   }
 
   public async findUndeletedById(id: string) {
@@ -42,5 +59,11 @@ export class TransferAccess {
     );
 
     if (res.affected === 0) throw new BadRequestError('nothing happened.');
+  }
+
+  public async hardDeleteByBookId(id: string) {
+    const qr = await this.database.getQueryRunner();
+
+    await qr.manager.delete(TransferEntity.name, { bookId: id });
   }
 }

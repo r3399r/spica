@@ -1,10 +1,11 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, Generated } from 'typeorm';
+import { ShareMethod } from 'src/constant/Book';
 import { BillShare } from './BillShare';
 
 @Entity({ name: 'bill_share' })
 export class BillShareEntity implements BillShare {
-  @Column({ primary: true, type: 'bigint' })
-  @Generated('rowid')
+  @Column({ primary: true })
+  @Generated('uuid')
   id!: string;
 
   @Column({ type: 'int8', name: 'bill_id' })
@@ -16,22 +17,28 @@ export class BillShareEntity implements BillShare {
   @Column({ type: 'int8', name: 'member_id' })
   memberId!: string;
 
+  @Column({ type: 'text' })
+  method!: ShareMethod;
+
+  @Column({ type: 'float' })
+  value: number | null = null;
+
   @Column({ type: 'float' })
   amount!: number;
 
   @Column({ type: 'timestamp', name: 'date_created', default: null })
-  dateCreated!: Date;
+  dateCreated!: string;
 
   @Column({ type: 'timestamp', name: 'date_updated', default: null })
-  dateUpdated: Date | null = null;
+  dateUpdated: string | null = null;
 
   @BeforeInsert()
   setDateCreated(): void {
-    this.dateCreated = new Date();
+    this.dateCreated = new Date().toISOString();
   }
 
   @BeforeUpdate()
   setDateUpdated(): void {
-    this.dateUpdated = new Date();
+    this.dateUpdated = new Date().toISOString();
   }
 }

@@ -1,4 +1,3 @@
-import { BadRequestError, UnauthorizedError } from '@y-celestial/service';
 import { BigNumber } from 'bignumber.js';
 import { inject, injectable } from 'inversify';
 import { BillAccess } from 'src/access/BillAccess';
@@ -8,9 +7,23 @@ import { DbAccess } from 'src/access/DbAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
 import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
+import { ViewBookAccess } from 'src/access/ViewBookAccess';
 import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
+import {
+  BadRequestError,
+  UnauthorizedError,
+} from 'src/celestial-service/error';
+import { Pagination } from 'src/celestial-service/model/Pagination';
+import { compare } from 'src/celestial-service/util/compare';
+import {
+  differenceBy,
+  intersectionBy,
+} from 'src/celestial-service/util/setTheory';
 import { BillType } from 'src/constant/Book';
 import {
+  DeleteBookBillResponse,
+  DeleteBookTransferResponse,
+  GetBookIdParams,
   GetBookIdResponse,
   GetBookNameResponse,
   GetBookParams,
@@ -37,12 +50,15 @@ import { BillShareEntity } from 'src/model/entity/BillShareEntity';
 import { BookEntity } from 'src/model/entity/BookEntity';
 import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
+import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
-import { ShareDetail } from 'src/model/type/Book';
 import {
-  ViewTransactionBill,
-  ViewTransactionTransfer,
-} from 'src/model/viewEntity/ViewTransaction';
+  History,
+  ShareDetail,
+  TransactionBill,
+  TransactionTransfer,
+} from 'src/model/type/Book';
+import { ViewBillShare } from 'src/model/viewEntity/ViewBillShare';
 import { bn } from 'src/util/bignumber';
 import { randomBase10 } from 'src/util/random';
 
@@ -69,11 +85,14 @@ export class BookService {
   @inject(TransferAccess)
   private readonly transferAccess!: TransferAccess;
 
+  @inject(ViewBookAccess)
+  private readonly vBookAccess!: ViewBookAccess;
+
   @inject(ViewBillShareAccess)
-  private readonly viewBillShareAccess!: ViewBillShareAccess;
+  private readonly vBillShareAccess!: ViewBillShareAccess;
 
   @inject(ViewTransactionAccess)
-  private readonly viewTransactionAccess!: ViewTransactionAccess;
+  private readonly vTransactionAccess!: ViewTransactionAccess;
 
   public async cleanup() {
     await this.dbAccess.cleanup();
@@ -83,12 +102,13 @@ export class BookService {
     const book = new BookEntity();
     book.name = data.name;
     book.code = randomBase10(6);
+    book.symbol = data.symbol ?? '$';
 
     return await this.bookAccess.save(book);
   }
 
   private async validateBook(id: string, code: string) {
-    const book = await this.bookAccess.findById(id);
+    const book = await this.vBookAccess.findById(id);
     if (book.code !== code.toLowerCase()) throw new UnauthorizedError();
 
     return book;
@@ -103,79 +123,306 @@ export class BookService {
     if (idArray.length !== codeArray.length)
       throw new BadRequestError('bad request');
 
-    const books = await this.bookAccess.findByIds(idArray);
+    const books = await this.vBookAccess.findByIds(idArray);
 
-    return books.filter((v) => {
-      const idx = idArray.findIndex((id) => id === v.id);
-      if (idx === -1 || codeArray[idx] !== v.code) return false;
+    return books
+      .filter((v) => {
+        const idx = idArray.findIndex((id) => id === v.id);
+        if (idx === -1 || codeArray[idx] !== v.code) return false;
 
-      return true;
-    });
+        return true;
+      })
+      .sort(compare('dateCreated'));
   }
 
   public async getBookNameById(id: string): Promise<GetBookNameResponse> {
-    const book = await this.bookAccess.findById(id);
+    const book = await this.vBookAccess.findById(id);
 
     return { id: book.id, name: book.name };
   }
 
-  public async getBookDetail(
-    id: string,
-    code: string
-  ): Promise<GetBookIdResponse> {
-    const book = await this.validateBook(id, code);
+  private compareTxTransfer = (
+    oldTx: TransactionTransfer,
+    newTx: Transfer
+  ): History => {
+    const items: History['items'] = [];
+    if (String(oldTx.date) !== String(newTx.date))
+      items.push({ key: 'date', from: oldTx.date, to: newTx.date });
+    if (oldTx.amount !== newTx.amount)
+      items.push({ key: 'amount', from: oldTx.amount, to: newTx.amount });
+    if (oldTx.srcMemberId !== newTx.srcMemberId)
+      items.push({
+        key: 'srcMemberId',
+        from: oldTx.srcMemberId,
+        to: newTx.srcMemberId,
+      });
+    if (oldTx.dstMemberId !== newTx.dstMemberId)
+      items.push({
+        key: 'dstMemberId',
+        from: oldTx.dstMemberId,
+        to: newTx.dstMemberId,
+      });
+    if (oldTx.memo !== newTx.memo)
+      items.push({ key: 'memo', from: oldTx.memo, to: newTx.memo });
 
+    return { date: oldTx.dateUpdated, items };
+  };
+
+  private compareTxBill = (
+    oldTx: TransactionBill,
+    newTx: TransactionBill
+  ): History => {
+    const items: History['items'] = [];
+    if (String(oldTx.date) !== String(newTx.date))
+      items.push({ key: 'date', from: oldTx.date, to: newTx.date });
+    if (oldTx.amount !== newTx.amount)
+      items.push({ key: 'amount', from: oldTx.amount, to: newTx.amount });
+    if (oldTx.descr !== newTx.descr)
+      items.push({ key: 'descr', from: oldTx.descr, to: newTx.descr });
+    if (oldTx.memo !== newTx.memo)
+      items.push({ key: 'memo', from: oldTx.memo, to: newTx.memo });
+
+    const sameFormer = intersectionBy(newTx.former, oldTx.former, 'id');
+    for (const former of sameFormer) {
+      const old = oldTx.former.find((v) => v.id === former.id);
+      if (old?.amount !== former.amount)
+        items.push({
+          key: 'former',
+          from: `${old?.id}:${old?.amount}`,
+          to: `${former.id}:${former.amount}`,
+        });
+    }
+    const addFormer = differenceBy(newTx.former, oldTx.former, 'id');
+    for (const former of addFormer)
+      items.push({
+        key: 'former',
+        from: null,
+        to: `${former.id}:${former.amount}`,
+      });
+
+    const minusFormer = differenceBy(oldTx.former, newTx.former, 'id');
+    for (const former of minusFormer)
+      items.push({
+        key: 'former',
+        from: `${former.id}:${former.amount}`,
+        to: null,
+      });
+
+    const sameLatter = intersectionBy(newTx.latter, oldTx.latter, 'id');
+    for (const latter of sameLatter) {
+      const old = oldTx.latter.find((v) => v.id === latter.id);
+      if (old?.amount !== latter.amount)
+        items.push({
+          key: 'latter',
+          from: `${old?.id}:${old?.amount}`,
+          to: `${latter.id}:${latter.amount}`,
+        });
+    }
+    const addLatter = differenceBy(newTx.latter, oldTx.latter, 'id');
+    for (const latter of addLatter)
+      items.push({
+        key: 'latter',
+        from: null,
+        to: `${latter.id}:${latter.amount}`,
+      });
+
+    const minusLatter = differenceBy(oldTx.latter, newTx.latter, 'id');
+    for (const latter of minusLatter)
+      items.push({
+        key: 'latter',
+        from: `${latter.id}:${latter.amount}`,
+        to: null,
+      });
+
+    return { date: oldTx.dateUpdated, items };
+  };
+
+  private handleTransfer = (transfers: Transfer[]) => {
+    const res: TransactionTransfer[] = [];
+    for (const tx of transfers) {
+      const idx = res.findIndex((v) => v.id === tx.id);
+      if (idx < 0)
+        res.push({
+          id: tx.id,
+          ver: tx.ver,
+          bookId: tx.bookId,
+          date: tx.date,
+          type: 'transfer',
+          amount: tx.amount,
+          srcMemberId: tx.srcMemberId,
+          dstMemberId: tx.dstMemberId,
+          memo: tx.memo,
+          dateCreated: tx.dateCreated,
+          dateUpdated: tx.dateUpdated,
+          dateDeleted: tx.dateDeleted,
+          history: [],
+        });
+      else {
+        const lastTx = res[idx];
+        const diff = this.compareTxTransfer(lastTx, tx);
+        res[idx] = {
+          id: tx.id,
+          ver: tx.ver,
+          bookId: tx.bookId,
+          date: tx.date,
+          type: 'transfer',
+          amount: tx.amount,
+          srcMemberId: tx.srcMemberId,
+          dstMemberId: tx.dstMemberId,
+          memo: tx.memo,
+          dateCreated: lastTx.dateCreated,
+          dateUpdated: tx.dateUpdated,
+          dateDeleted: tx.dateDeleted,
+          history: [diff, ...lastTx.history],
+        };
+      }
+    }
+
+    return res;
+  };
+
+  private handleBill = (billShares: ViewBillShare[]) => {
+    const bills: TransactionBill[] = [];
+    for (const share of billShares) {
+      const idx = bills.findIndex(
+        (v) => v.id === share.billId && v.ver === share.ver
+      );
+      const isFormer =
+        (share.type === 'out' && share.memberAmount > 0) ||
+        (share.type === 'in' && share.memberAmount < 0);
+      if (idx < 0)
+        bills.push({
+          id: share.billId,
+          ver: share.ver,
+          bookId: share.bookId,
+          date: share.date,
+          type: share.type,
+          descr: share.descr,
+          amount: share.amount,
+          former: isFormer
+            ? [
+                {
+                  id: share.memberId,
+                  method: share.method,
+                  value: share.value ?? undefined,
+                  amount: share.memberAmount,
+                },
+              ]
+            : [],
+          latter: !isFormer
+            ? [
+                {
+                  id: share.memberId,
+                  method: share.method,
+                  value: share.value ?? undefined,
+                  amount: share.memberAmount,
+                },
+              ]
+            : [],
+          memo: share.memo,
+          dateCreated: share.dateCreated,
+          dateUpdated: share.dateUpdated,
+          dateDeleted: share.dateDeleted,
+          history: [],
+        });
+      else {
+        const lastBill = bills[idx];
+        bills[idx] = {
+          ...lastBill,
+          former: isFormer
+            ? [
+                {
+                  id: share.memberId,
+                  method: share.method,
+                  value: share.value ?? undefined,
+                  amount: share.memberAmount,
+                },
+                ...lastBill.former,
+              ]
+            : [...lastBill.former],
+          latter: !isFormer
+            ? [
+                {
+                  id: share.memberId,
+                  method: share.method,
+                  value: share.value ?? undefined,
+                  amount: share.memberAmount,
+                },
+                ...lastBill.latter,
+              ]
+            : [...lastBill.latter],
+        };
+      }
+    }
+
+    const res: TransactionBill[] = [];
+    for (const tx of bills) {
+      const idx = res.findIndex((v) => v.id === tx.id);
+      if (idx < 0)
+        res.push({
+          ...tx,
+          former: tx.former,
+          latter: tx.latter,
+        });
+      else {
+        const lastTx = res[idx];
+        const diff = this.compareTxBill(lastTx, tx);
+        res[idx] = {
+          ...tx,
+          dateCreated: lastTx.dateCreated,
+          former: tx.former,
+          latter: tx.latter,
+          history: [diff, ...lastTx.history],
+        };
+      }
+    }
+
+    return res;
+  };
+
+  private async getMemberByBook(id: string) {
     const members = await this.memberAccess.findByBookId(id);
-    const billShares = await this.viewBillShareAccess.findByBookId(id);
-    const transactions = (await this.viewTransactionAccess.findByBookId(
-      id
-    )) as (ViewTransactionBill | ViewTransactionTransfer)[];
+
+    return members.sort(compare('dateCreated'));
+  }
+
+  public async getBook(
+    id: string,
+    code: string,
+    params: GetBookIdParams | null
+  ): Promise<Pagination<GetBookIdResponse>> {
+    const limit = isNaN(Number(params?.limit)) ? 10 : Number(params?.limit);
+    const offset = isNaN(Number(params?.offset)) ? 0 : Number(params?.offset);
+
+    const book = await this.validateBook(id, code);
+    const [members, { data: tx, count }] = await Promise.all([
+      this.getMemberByBook(id),
+      this.vTransactionAccess.findAndCountByBookId(id, {
+        order: { date: 'desc' },
+        take: limit,
+        skip: offset,
+      }),
+    ]);
+
+    const [transfers, billShares] = await Promise.all([
+      this.transferAccess.findByIds(
+        tx.filter((v) => v.type === 'transfer').map((v) => v.id)
+      ),
+      this.vBillShareAccess.findByBillIds(
+        tx.filter((v) => v.type === 'bill').map((v) => v.id)
+      ),
+    ]);
 
     return {
-      ...book,
-      members,
-      transactions: transactions.map((v) => {
-        if (v.type === 'transfer')
-          return {
-            id: v.id,
-            ver: v.ver,
-            bookId: v.bookId,
-            date: v.date,
-            amount: v.amount,
-            srcMemberId: v.srcMemberId,
-            dstMemberId: v.dstMemberId,
-            memo: v.memo,
-            dateCreated: v.dateCreated,
-            dateUpdated: v.dateUpdated,
-            dateDeleted: v.dateDeleted,
-          };
-        else
-          return {
-            id: v.id,
-            ver: v.ver,
-            bookId: v.bookId,
-            date: v.date,
-            type: v.type as BillType,
-            descr: v.descr,
-            amount: v.amount,
-            memo: v.memo,
-            dateCreated: v.dateCreated,
-            dateUpdated: v.dateUpdated,
-            dateDeleted: v.dateDeleted,
-            detail: billShares
-              .filter((o) => o.billId === v.id && o.ver === v.ver)
-              .map((o) => {
-                const {
-                  bookId: ignoredBookId,
-                  billId: ignoredBillId,
-                  ver: ignoredVer,
-                  ...rest
-                } = o;
-
-                return rest;
-              }),
-          };
-      }),
+      paginate: { count, limit, offset },
+      data: {
+        ...book,
+        members,
+        transactions: [
+          ...this.handleTransfer(transfers),
+          ...this.handleBill(billShares),
+        ].sort(compare('date', 'desc')),
+      },
     };
   }
 
@@ -188,7 +435,8 @@ export class BookService {
 
     const book = new BookEntity();
     book.id = id;
-    book.name = data.name;
+    book.name = data.name ?? oldBook.name;
+    book.symbol = data.symbol ?? oldBook.symbol;
     book.code = oldBook.code;
 
     await this.bookAccess.update(book);
@@ -206,6 +454,7 @@ export class BookService {
     const member = new MemberEntity();
     member.bookId = id;
     member.nickname = data.nickname;
+    member.total = 0;
     member.balance = 0;
     member.deletable = true;
 
@@ -242,28 +491,21 @@ export class BookService {
   }
 
   private validateDetail(amount: number, data: ShareDetail[]) {
-    if (!BigNumber.sum(...data.map((v) => v.amount)).eq(0))
-      throw new BadRequestError('sum should be 0');
-
-    if (
-      !BigNumber.sum(
-        ...data.filter((v) => v.amount > 0).map((v) => v.amount)
-      ).eq(amount)
-    )
-      throw new BadRequestError('positive sum not consistent');
-
-    if (
-      !BigNumber.sum(...data.filter((v) => v.amount < 0).map((v) => v.amount))
-        .negated()
-        .eq(amount)
-    )
-      throw new BadRequestError('negative sum not consistent');
+    if (!BigNumber.sum(...data.map((v) => v.amount)).eq(amount))
+      throw new BadRequestError('sum is not consistent');
   }
 
-  private async updateMemberBalance(id: string, amount: number | BigNumber) {
+  private async updateMember(
+    id: string,
+    amount: number | BigNumber,
+    updateTotal = false
+  ) {
     const oldMember = await this.memberAccess.findById(id);
     const newMember: Member = {
       ...oldMember,
+      total: updateTotal
+        ? bn(oldMember.total).plus(amount).toNumber()
+        : oldMember.total,
       balance: bn(oldMember.balance).plus(amount).toNumber(),
       deletable: false,
     };
@@ -285,64 +527,62 @@ export class BookService {
       const bill = new BillEntity();
       bill.ver = '1';
       bill.bookId = id;
-      bill.date = new Date(data.date);
+      bill.date = data.date;
       bill.type = data.type;
       bill.descr = data.descr;
       bill.amount = data.amount;
       bill.memo = data.memo ?? null;
 
       const newBill = await this.billAccess.save(bill);
-      this.validateDetail(data.amount, data.detail);
+      this.validateDetail(data.amount, data.former);
+      this.validateDetail(data.amount, data.latter);
 
-      const former = data.detail.filter((v) => v.amount > 0);
-      const latter = data.detail.filter((v) => v.amount < 0);
+      await Promise.all(
+        data.former.map(async (v) => {
+          let amount = v.amount;
+          if (data.type === BillType.In) amount = v.amount * -1;
 
-      const resFormer = await Promise.all(
-        former.map(async (v) => {
           const billShare = new BillShareEntity();
           billShare.billId = newBill.id;
           billShare.ver = '1';
           billShare.memberId = v.id;
-          billShare.amount = v.amount;
+          billShare.method = v.method;
+          billShare.value = v.value ?? null;
+          billShare.amount = amount;
 
-          const member = await this.updateMemberBalance(v.id, v.amount);
-          const newBillShare = await this.billShareAccess.save(billShare);
-          const {
-            billId: ignoredBillId,
-            ver: ignoredVer,
-            ...rest
-          } = newBillShare;
+          await this.billShareAccess.save(billShare);
 
-          return { member, detail: rest };
+          return await this.updateMember(v.id, amount);
         })
       );
-      const resLatter = await Promise.all(
-        latter.map(async (v) => {
+      await Promise.all(
+        data.latter.map(async (v) => {
+          let amount = v.amount;
+          if (data.type === BillType.Out) amount = v.amount * -1;
+
           const billShare = new BillShareEntity();
           billShare.billId = newBill.id;
           billShare.ver = '1';
           billShare.memberId = v.id;
-          billShare.amount = v.amount;
+          billShare.method = v.method;
+          billShare.value = v.value ?? null;
+          billShare.amount = amount;
 
-          const member = await this.updateMemberBalance(v.id, v.amount);
-          const newBillShare = await this.billShareAccess.save(billShare);
-          const {
-            billId: ignoredBillId,
-            ver: ignoredVer,
-            ...rest
-          } = newBillShare;
+          await this.billShareAccess.save(billShare);
 
-          return { member, detail: rest };
+          return await this.updateMember(v.id, amount, true);
         })
       );
 
       await this.dbAccess.commitTransaction();
 
       return {
-        members: [...resFormer, ...resLatter].map((v) => v.member),
+        members: await this.getMemberByBook(id),
         transaction: {
           ...newBill,
-          detail: [...resFormer, ...resLatter].map((v) => v.detail),
+          former: data.former,
+          latter: data.latter,
+          history: [],
         },
       };
     } catch (e) {
@@ -354,7 +594,7 @@ export class BookService {
   private async deleteOldBill(oldBill: Bill) {
     await this.billAccess.update({
       ...oldBill,
-      dateDeleted: new Date(),
+      dateDeleted: new Date().toISOString(),
     });
 
     const oldBillShares = await this.billShareAccess.findByBill(
@@ -366,23 +606,31 @@ export class BookService {
     const negative = oldBillShares.filter((v) => v.amount < 0);
     await Promise.all(
       positive.map((v) =>
-        this.updateMemberBalance(v.memberId, bn(v.amount).negated())
+        this.updateMember(
+          v.memberId,
+          bn(v.amount).negated(),
+          oldBill.type === BillType.In
+        )
       )
     );
     await Promise.all(
       negative.map((v) =>
-        this.updateMemberBalance(v.memberId, bn(v.amount).negated())
+        this.updateMember(
+          v.memberId,
+          bn(v.amount).negated(),
+          oldBill.type === BillType.Out
+        )
       )
     );
   }
 
   public async updateBill(
-    bid: string,
+    bookId: string,
     billId: string,
     data: PutBookBillRequest,
     code: string
   ): Promise<PutBookBillResponse> {
-    await this.validateBook(bid, code);
+    await this.validateBook(bookId, code);
 
     try {
       await this.dbAccess.startTransaction();
@@ -393,66 +641,61 @@ export class BookService {
       const bill = new BillEntity();
       bill.id = billId;
       bill.ver = bn(oldBill.ver).plus(1).toString();
-      bill.bookId = bid;
-      bill.date = new Date(data.date);
+      bill.bookId = bookId;
+      bill.date = data.date;
       bill.type = data.type;
       bill.descr = data.descr;
       bill.amount = data.amount;
       bill.memo = data.memo ?? null;
 
       const newBill = await this.billAccess.save(bill);
-      this.validateDetail(data.amount, data.detail);
+      this.validateDetail(data.amount, data.former);
+      this.validateDetail(data.amount, data.latter);
 
-      const former = data.detail.filter((v) => v.amount > 0);
-      const latter = data.detail.filter((v) => v.amount < 0);
+      await Promise.all(
+        data.former.map(async (v) => {
+          let amount = v.amount;
+          if (data.type === BillType.In) amount = v.amount * -1;
 
-      const resFormer = await Promise.all(
-        former.map(async (v) => {
           const billShare = new BillShareEntity();
           billShare.billId = newBill.id;
           billShare.ver = bn(oldBill.ver).plus(1).toString();
           billShare.memberId = v.id;
-          billShare.amount = v.amount;
+          billShare.method = v.method;
+          billShare.value = v.value ?? null;
+          billShare.amount = amount;
 
-          const member = await this.updateMemberBalance(v.id, v.amount);
-          const newBillShare = await this.billShareAccess.save(billShare);
-          const {
-            billId: ignoredBillId,
-            ver: ignoredVer,
-            ...rest
-          } = newBillShare;
+          await this.billShareAccess.save(billShare);
 
-          return { member, detail: rest };
+          return await this.updateMember(v.id, amount);
         })
       );
-      const resLatter = await Promise.all(
-        latter.map(async (v) => {
+      await Promise.all(
+        data.latter.map(async (v) => {
+          let amount = v.amount;
+          if (data.type === BillType.Out) amount = v.amount * -1;
+
           const billShare = new BillShareEntity();
           billShare.billId = newBill.id;
           billShare.ver = bn(oldBill.ver).plus(1).toString();
           billShare.memberId = v.id;
-          billShare.amount = v.amount;
+          billShare.method = v.method;
+          billShare.value = v.value ?? null;
+          billShare.amount = amount;
 
-          const member = await this.updateMemberBalance(v.id, v.amount);
-          const newBillShare = await this.billShareAccess.save(billShare);
-          const {
-            billId: ignoredBillId,
-            ver: ignoredVer,
-            ...rest
-          } = newBillShare;
+          await this.billShareAccess.save(billShare);
 
-          return { member, detail: rest };
+          return await this.updateMember(v.id, amount, true);
         })
       );
 
       await this.dbAccess.commitTransaction();
 
+      const billShares = await this.vBillShareAccess.findByBillId(newBill.id);
+
       return {
-        members: [...resFormer, ...resLatter].map((v) => v.member),
-        transaction: {
-          ...newBill,
-          detail: [...resFormer, ...resLatter].map((v) => v.detail),
-        },
+        members: await this.getMemberByBook(bookId),
+        transaction: this.handleBill(billShares)[0],
       };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
@@ -460,8 +703,12 @@ export class BookService {
     }
   }
 
-  public async deleteBill(bid: string, billId: string, code: string) {
-    await this.validateBook(bid, code);
+  public async deleteBill(
+    bookId: string,
+    billId: string,
+    code: string
+  ): Promise<DeleteBookBillResponse> {
+    await this.validateBook(bookId, code);
 
     try {
       await this.dbAccess.startTransaction();
@@ -469,6 +716,13 @@ export class BookService {
       await this.deleteOldBill(bill);
 
       await this.dbAccess.commitTransaction();
+
+      const billShares = await this.vBillShareAccess.findByBillId(billId);
+
+      return {
+        members: await this.getMemberByBook(bookId),
+        transaction: this.handleBill(billShares)[0],
+      };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
@@ -488,25 +742,22 @@ export class BookService {
       const transfer = new TransferEntity();
       transfer.ver = '1';
       transfer.bookId = id;
-      transfer.date = new Date(data.date);
+      transfer.date = data.date;
       transfer.amount = data.amount;
       transfer.srcMemberId = data.srcMemberId;
       transfer.dstMemberId = data.dstMemberId;
       transfer.memo = data.memo ?? null;
 
-      const member1 = await this.updateMemberBalance(
-        data.srcMemberId,
-        bn(data.amount)
-      );
-      const member2 = await this.updateMemberBalance(
-        data.dstMemberId,
-        bn(data.amount).negated()
-      );
-      const res = await this.transferAccess.save(transfer);
+      await this.updateMember(data.srcMemberId, bn(data.amount));
+      await this.updateMember(data.dstMemberId, bn(data.amount).negated());
+      const newTransfer = await this.transferAccess.save(transfer);
 
       await this.dbAccess.commitTransaction();
 
-      return { members: [member1, member2], transaction: res };
+      return {
+        members: await this.getMemberByBook(id),
+        transaction: { ...newTransfer, type: 'transfer', history: [] },
+      };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
@@ -514,77 +765,86 @@ export class BookService {
   }
 
   public async updateTransfer(
-    bid: string,
-    tid: string,
+    bookId: string,
+    transferId: string,
     data: PostBookTransferRequest,
     code: string
   ): Promise<PutBookTransferResponse> {
-    await this.validateBook(bid, code);
+    await this.validateBook(bookId, code);
 
     try {
       await this.dbAccess.startTransaction();
-      const oldTransfer = await this.transferAccess.findUndeletedById(tid);
+      const oldTransfer = await this.transferAccess.findUndeletedById(
+        transferId
+      );
 
       await this.transferAccess.update({
         ...oldTransfer,
-        dateDeleted: new Date(),
+        dateDeleted: new Date().toISOString(),
       });
-      await this.updateMemberBalance(
+      await this.updateMember(
         oldTransfer.srcMemberId,
         bn(oldTransfer.amount).negated()
       );
-      await this.updateMemberBalance(
-        oldTransfer.dstMemberId,
-        bn(oldTransfer.amount)
-      );
+      await this.updateMember(oldTransfer.dstMemberId, bn(oldTransfer.amount));
 
       const newTransfer = new TransferEntity();
-      newTransfer.id = tid;
+      newTransfer.id = transferId;
       newTransfer.ver = bn(oldTransfer.ver).plus(1).toString();
-      newTransfer.bookId = bid;
-      newTransfer.date = new Date(data.date);
+      newTransfer.bookId = bookId;
+      newTransfer.date = data.date;
       newTransfer.amount = data.amount;
       newTransfer.srcMemberId = data.srcMemberId;
       newTransfer.dstMemberId = data.dstMemberId;
       newTransfer.memo = data.memo ?? null;
 
-      const member1 = await this.updateMemberBalance(
-        data.srcMemberId,
-        bn(data.amount)
-      );
-      const member2 = await this.updateMemberBalance(
-        data.dstMemberId,
-        bn(data.amount).negated()
-      );
-      const res = await this.transferAccess.save(newTransfer);
+      await this.updateMember(data.srcMemberId, bn(data.amount));
+      await this.updateMember(data.dstMemberId, bn(data.amount).negated());
+      await this.transferAccess.save(newTransfer);
 
       await this.dbAccess.commitTransaction();
 
-      return { members: [member1, member2], transaction: res };
+      const transfers = await this.transferAccess.findById(transferId);
+
+      return {
+        members: await this.getMemberByBook(bookId),
+        transaction: this.handleTransfer(transfers)[0],
+      };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
     }
   }
 
-  public async deleteTransfer(bid: string, tid: string, code: string) {
-    await this.validateBook(bid, code);
+  public async deleteTransfer(
+    bookId: string,
+    transferId: string,
+    code: string
+  ): Promise<DeleteBookTransferResponse> {
+    await this.validateBook(bookId, code);
 
     try {
       await this.dbAccess.startTransaction();
-      const transfer = await this.transferAccess.findUndeletedById(tid);
+      const transfer = await this.transferAccess.findUndeletedById(transferId);
 
-      await this.updateMemberBalance(
+      await this.updateMember(
         transfer.srcMemberId,
         bn(transfer.amount).negated()
       );
-      await this.updateMemberBalance(transfer.dstMemberId, bn(transfer.amount));
+      await this.updateMember(transfer.dstMemberId, bn(transfer.amount));
       await this.transferAccess.update({
         ...transfer,
-        dateDeleted: new Date(),
+        dateDeleted: new Date().toISOString(),
       });
 
       await this.dbAccess.commitTransaction();
+
+      const transfers = await this.transferAccess.findById(transferId);
+
+      return {
+        members: await this.getMemberByBook(bookId),
+        transaction: this.handleTransfer(transfers)[0],
+      };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;

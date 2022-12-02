@@ -1,0 +1,125 @@
+{
+  "appName": "Bitop",
+  "language": "繁體中文",
+  "act": {
+    "confirm": "確認",
+    "cancel": "取消",
+    "submit": "送出",
+    "delete": "刪除",
+    "reset": "重置"
+  },
+  "desc": {
+    "in": "收入",
+    "out": "支出",
+    "transfer": "轉帳",
+    "payer": "付款者",
+    "sharer": "分攤者",
+    "sender": "匯款者",
+    "receiver": "收款者",
+    "memo": "備註"
+  },
+  "bookList": {
+    "bookList": "帳本清單",
+    "newBook": "建立新帳本",
+    "noBook": "尚未建立帳本",
+    "name": "名稱"
+  },
+  "bookDetail": {
+    "back": "回清單",
+    "totalOut": "總支出",
+    "totalIn": "總收入",
+    "member": "成員",
+    "balance": "餘額",
+    "noMemberHint": "請先至「成員」中新增一起分帳的夥伴，才能開始記帳喔！",
+    "newTransaction": "新增帳目",
+    "multiple": "多人",
+    "billOutNote": "{{member}} 支付了 {{symbol}}{{amount}}",
+    "billInNote": "{{member}} 收取了 {{symbol}}{{amount}}",
+    "transferNote": "{{srcMember}} 轉帳 {{symbol}}{{amount}} 給 {{dstMember}}",
+    "settlement": "結算",
+    "shouldReceive": "須收款",
+    "shouldPay": "須還款",
+    "deleted": "已刪除"
+  },
+  "bookSetting": {
+    "back": "回帳本",
+    "head": "設定",
+    "bookName": "帳本名稱",
+    "currency": "幣別",
+    "deleteBook": "刪除帳本",
+    "showDeleted": "顯示已刪除帳目",
+    "systemDeleteDate": "系統移除日期",
+    "systemDeleteHint": "若此帳本累積 100 天未更新，則系統將自動移除此帳本所有資料。",
+    "rename": "重新命名",
+    "deleteHint": "此處僅能刪除這台裝置當中的記錄，其他裝置的記錄不受影響"
+  },
+  "transaction": {
+    "back": "回帳本",
+    "deleted": "已刪除",
+    "deleteHint": "要刪除這筆紀錄嗎？",
+    "createdAt": "於 {{date}} 建立",
+    "updatedAt": "於 {{date}} 更新",
+    "deletedAt": "於 {{date}} 刪除",
+    "updateContent": "- {{key}} 從 {{from}} 變更成 {{to}}",
+    "removeContent": "- {{key}} 移除 {{from}}",
+    "createContent": "- {{key}} 新增 {{to}}",
+    "key": {
+      "date": "日期",
+      "amount": "金額",
+      "memo": "備註",
+      "descr": "項目",
+      "former": "付款者",
+      "latter": "分攤者",
+      "srcMemberId": "匯款者",
+      "dstMemberId": "收款者"
+    }
+  },
+  "member": {
+    "head": "帳本成員",
+    "back": "回帳本",
+    "create": "新增",
+    "nickname": "暱稱",
+    "noMemberHint": "尚未有成員，請輸入暱稱來新增成員吧！",
+    "shareWithFriend": "與好友共享",
+    "scanHint": "讓好友掃描此 QR Code 或",
+    "shareLink": "分享連結",
+    "codeHint": "並輸入通行碼：",
+    "edit": "編輯資料",
+    "deleteHint": "要刪除「{{nickname}}」嗎？"
+  },
+  "share": {
+    "join": "加入此帳本？",
+    "code": "通行碼",
+    "wrongCode": "錯誤的通行碼"
+  },
+  "editTx": {
+    "back": "回上頁",
+    "type": "類別",
+    "date": "日期",
+    "descr": "項目",
+    "amount": "金額",
+    "share": "分配",
+    "adjust": "調整",
+    "all": "全部",
+    "allShare": "所有人均分",
+    "lessThan": "尚有 {{symbol}}{{amount}} 未分配",
+    "greaterThan": "多分配 {{symbol}}{{amount}}",
+    "weight": "份數",
+    "pct": "百分比",
+    "pm": "金額調整",
+    "weightDesc": "按照每人持有的份數分配，如輸入金額則以金額為優先。",
+    "pctDesc": "按照每人佔的百分比分配，也可輸入金額。",
+    "pmDesc": "扣除個人額外的金額後，剩餘的款項由所有人平分。",
+    "unitWeight": "份",
+    "unitPct": "%",
+    "modalTitle": "{{nickname}}的分配"
+  },
+  "settlement": {
+    "back": "回帳本",
+    "head": "結算",
+    "check": "結帳",
+    "balance": "個人收支",
+    "shouldPay": "需支付",
+    "isCleared": "所有款項已結清"
+  }
+}

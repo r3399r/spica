@@ -1,4 +1,7 @@
 import {
+  DeleteBookBillResponse,
+  DeleteBookTransferResponse,
+  GetBookIdParams,
   GetBookIdResponse,
   GetBookNameResponse,
   GetBookParams,
@@ -31,8 +34,8 @@ const postBook = async (data: PostBookRequest) =>
 const putBookId = async (id: string, data: PutBookRequest, code: string) =>
   await http.put<PutBookResponse>(`book/${id}`, { data, headers: { 'x-api-code': code } });
 
-const getBookId = async (id: string, code: string) =>
-  await http.get<GetBookIdResponse>(`book/${id}`, { headers: { 'x-api-code': code } });
+const getBookId = async (id: string, code: string, params?: GetBookIdParams) =>
+  await http.get<GetBookIdResponse>(`book/${id}`, { headers: { 'x-api-code': code }, params });
 
 const postBookIdBill = async (id: string, data: PostBookBillRequest, code: string) =>
   await http.post<PostBookBillResponse>(`book/${id}/bill`, {
@@ -47,7 +50,7 @@ const putBookIdBill = async (id: string, bid: string, data: PutBookBillRequest, 
   });
 
 const deleteBookIdBill = async (id: string, bid: string, code: string) =>
-  await http.delete(`book/${id}/bill/${bid}`, {
+  await http.delete<DeleteBookBillResponse>(`book/${id}/bill/${bid}`, {
     headers: { 'x-api-code': code },
   });
 
@@ -88,7 +91,7 @@ const putBookIdTransfer = async (
   });
 
 const deleteBookIdTransfer = async (id: string, tid: string, code: string) =>
-  await http.delete(`book/${id}/transfer/${tid}`, {
+  await http.delete<DeleteBookTransferResponse>(`book/${id}/transfer/${tid}`, {
     headers: { 'x-api-code': code },
   });
 

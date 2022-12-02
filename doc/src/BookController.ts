@@ -36,10 +36,10 @@ import {
 } from '@y-celestial/spica-service';
 
 @Route('book')
-@Tags('帳簿')
+@Tags('帳本')
 export class BookController extends Controller {
   /**
-   * @summary 取得多個帳簿
+   * @summary 取得多個帳本
    * @example _ids "book-id,book-id2"
    */
   @Example<GetBookResponse>([
@@ -57,7 +57,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * @summary 建立新帳簿
+   * @summary 建立新帳本
    * @example _postBookRequest {
    *   "name": "book-name"
    * }
@@ -75,7 +75,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * @summary 取得指定帳簿詳情
+   * @summary 取得指定帳本詳情
    * @example _id "book-id"
    */
   @Example<GetBookIdResponse>({
@@ -101,7 +101,7 @@ export class BookController extends Controller {
         ver: '1',
         bookId: 'book-id',
         date: new Date(),
-        type: 'income' as BillType,
+        type: 'in' as BillType,
         descr: 'sample',
         amount: 100,
         memo: 'memo-bill',
@@ -146,7 +146,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * @summary 重新命名帳簿
+   * @summary 重新命名帳本
    * @example _id "book-id"
    * @example _putBookRequest {
    *   "name": "book-name-new"
@@ -172,7 +172,7 @@ export class BookController extends Controller {
    * @example _id "book-id"
    * @example _postBookBillRequest {
    *   "date": "2022-09-30T15:58:37.080Z",
-   *   "type":"income",
+   *   "type":"in",
    *   "descr":"sample",
    *   "amount":100,
    *   "former":[{
@@ -205,7 +205,7 @@ export class BookController extends Controller {
       ver: '1',
       bookId: 'book-id',
       date: new Date(),
-      type: 'income' as BillType,
+      type: 'in' as BillType,
       descr: 'sample',
       amount: 100,
       memo: 'memo-bill',
@@ -252,7 +252,7 @@ export class BookController extends Controller {
    * @example _billId "bill-id"
    * @example _putBookBillRequest {
    *   "date": "2022-09-30T15:58:37.080Z",
-   *   "type":"income",
+   *   "type":"in",
    *   "descr":"sample",
    *   "amount":100,
    *   "former":[{
@@ -285,7 +285,7 @@ export class BookController extends Controller {
       ver: '1',
       bookId: 'book-id',
       date: new Date(),
-      type: 'income' as BillType,
+      type: 'in' as BillType,
       descr: 'sample',
       amount: 100,
       memo: 'memo-bill',
@@ -320,7 +320,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * @summary 新增帳簿成員
+   * @summary 新增帳本成員
    * @example _id "book-id"
    * @example _postBookMemberRequest {
    *   "nickname": "Einstein"
@@ -378,7 +378,7 @@ export class BookController extends Controller {
     return {} as any;
   }
   /**
-   * @summary 取得指定帳簿名稱
+   * @summary 取得指定帳本名稱
    * @example _id "book-id"
    */
   @Example<GetBookNameResponse>({

@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100;300;400;700;900&display=swap');
+
 * {
-  font-size: 20px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #13284b;
+  font-family: 'Lato', 'Noto Sans TC', 'Noto Sans SC', sans-serif !important;
+}
+
+/* mui style */
+.MuiTabs-indicator {
+  background-color: #4aa6b5 !important;
+}
+.MuiPickersDay-root.Mui-selected {
+  background-color: #4aa6b5 !important;
+}
+.MuiPickersDay-today {
+  border: 1px solid #4aa6b5 !important;
+}
+.MuiClock-pin {
+  background: #4aa6b5 !important;
+}
+.MuiClockPointer-root {
+  background: #4aa6b5 !important;
+}
+.MuiClockPointer-thumb {
+  background: #4aa6b5 !important;
+  border: 16px solid #4aa6b5 !important;
 }

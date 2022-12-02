@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import { FindManyOptions } from 'typeorm';
 import { ViewTransaction } from 'src/model/viewEntity/ViewTransaction';
 import { ViewTransactionEntity } from 'src/model/viewEntity/ViewTransactionEntity';
 import { Database } from 'src/util/Database';
@@ -11,12 +12,20 @@ export class ViewTransactionAccess {
   @inject(Database)
   private readonly database!: Database;
 
-  public async findByBookId(bookId: string) {
+  public async findAndCountByBookId(
+    bookId: string,
+    findManyOptions?: FindManyOptions<ViewTransaction>
+  ) {
     const qr = await this.database.getQueryRunner();
 
-    return await qr.manager.find<ViewTransaction>(ViewTransactionEntity.name, {
-      where: { bookId },
-      order: { date: 'DESC' },
-    });
+    const res = await qr.manager.findAndCount<ViewTransaction>(
+      ViewTransactionEntity.name,
+      {
+        ...findManyOptions,
+        where: { bookId },
+      }
+    );
+
+    return { data: res[0], count: res[1] };
   }
 }

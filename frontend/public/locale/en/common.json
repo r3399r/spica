@@ -1,0 +1,125 @@
+{
+  "appName": "Bi-ll",
+  "language": "English",
+  "act": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "delete": "Delete",
+    "reset": "Reset"
+  },
+  "desc": {
+    "in": "Income",
+    "out": "Expense",
+    "transfer": "Transfer",
+    "payer": "Payer",
+    "sharer": "Sharer",
+    "sender": "Sender",
+    "receiver": "Receiver",
+    "memo": "Memo"
+  },
+  "bookList": {
+    "bookList": "Book List",
+    "newBook": "Create New Book",
+    "noBook": "No Book",
+    "name": "Name"
+  },
+  "bookDetail": {
+    "back": "Back",
+    "totalOut": "Total Expense",
+    "totalIn": "Total Income",
+    "member": "Member",
+    "balance": "Balance",
+    "noMemberHint": "Please click \"Member\" to add members, and then we can start",
+    "newTransaction": "New Bill",
+    "multiple": "Multiple People",
+    "billOutNote": "{{member}} paid {{symbol}}{{amount}}",
+    "billInNote": "{{member}} received {{symbol}}{{amount}}",
+    "transferNote": "{{srcMember}} transferred {{symbol}}{{amount}} to {{dstMember}}",
+    "settlement": "Settlement",
+    "shouldReceive": "Should Receive",
+    "shouldPay": "Should Pay",
+    "deleted": "Deleted"
+  },
+  "bookSetting": {
+    "back": "Back",
+    "head": "Settings",
+    "bookName": "Name of Book",
+    "currency": "Curreny Symbol",
+    "deleteBook": "Delete Book",
+    "showDeleted": "Show Deleted Transactions",
+    "systemDeleteDate": "System Clean up Date",
+    "systemDeleteHint": "If there is no any update for 100 days, the book would be removed by system.",
+    "rename": "Rename",
+    "deleteHint": "Note that this action would only delete the book in this device. It would not affect others' devices."
+  },
+  "transaction": {
+    "back": "Back",
+    "deleted": "Deleted",
+    "deleteHint": "Delete this record?",
+    "createdAt": "Created at {{date}}",
+    "updatedAt": "Updated at {{date}}",
+    "deletedAt": "Deleted at {{date}}",
+    "updateContent": "- {{key}} is updated from {{from}} to {{to}}",
+    "removeContent": "- {{key}} {{from}} is removed",
+    "createContent": "- {{key}} {{to}} is created",
+    "key": {
+      "date": "Date",
+      "amount": "Amount",
+      "memo": "Memo",
+      "descr": "Item",
+      "former": "Payer",
+      "latter": "Sharer",
+      "srcMemberId": "Sender",
+      "dstMemberId": "Receiver"
+    }
+  },
+  "member": {
+    "head": "Members",
+    "back": "Back",
+    "create": "Create",
+    "nickname": "nickname",
+    "noMemberHint": "Let's create new members!",
+    "shareWithFriend": "Share With Friends",
+    "scanHint": "Scan QR Code or",
+    "shareLink": "Share Link",
+    "codeHint": "and input the code:",
+    "edit": "Edit Profile",
+    "deleteHint": "Delete \"{{nickname}}\"?"
+  },
+  "share": {
+    "join": "Join this Book?",
+    "code": "Code",
+    "wrongCode": "Wrong Code"
+  },
+  "editTx": {
+    "back": "Back",
+    "type": "Type",
+    "date": "Date",
+    "descr": "Item",
+    "amount": "Amount",
+    "share": "Shares",
+    "adjust": "Adjust",
+    "all": "All",
+    "allShare": "All Share Equally",
+    "lessThan": "remaining {{symbol}}{{amount}}",
+    "greaterThan": "over {{symbol}}{{amount}}",
+    "weight": "Shares",
+    "pct": "Percentages",
+    "pm": "Adjustment",
+    "weightDesc": "It is distributed according to the number of shares held by each person, and if the amount is entered, the amount will take priority.",
+    "pctDesc": "Distribute according to the percentage of each person, and you can also enter the amount.",
+    "pmDesc": "After deducting the personal extra amount, the remaining amount is divided equally among all the owners.",
+    "unitWeight": "x",
+    "unitPct": "%",
+    "modalTitle": "Share of {{nickname}}"
+  },
+  "settlement": {
+    "back": "Back",
+    "head": "Settlement",
+    "check": "Check",
+    "balance": "Balance",
+    "shouldPay": "Should pay",
+    "isCleared": "All bills are cleared"
+  }
+}

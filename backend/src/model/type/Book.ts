@@ -1,10 +1,9 @@
-import { BillType } from 'src/constant/Book';
-import { Bill } from 'src/model/entity/Bill';
-import { BillShare } from 'src/model/entity/BillShare';
-import { Transfer } from 'src/model/entity/Transfer';
+import { BillType, ShareMethod } from 'src/constant/Book';
 
 export type ShareDetail = {
   id: string;
+  method: ShareMethod;
+  value?: number;
   amount: number;
 };
 
@@ -13,7 +12,8 @@ export type BillData = {
   type: BillType;
   descr: string;
   amount: number;
-  detail: ShareDetail[];
+  former: ShareDetail[];
+  latter: ShareDetail[];
   memo?: string;
 };
 
@@ -25,10 +25,54 @@ export type TransferData = {
   memo?: string;
 };
 
-export type Transaction = BillTransaction | TransferTransaction;
+export type Transaction = TransactionBill | TransactionTransfer;
 
-export type BillTransaction = Bill & {
-  detail: Omit<BillShare, 'billId' | 'ver'>[];
+export type TransactionBill = {
+  id: string;
+  ver: string;
+  bookId: string;
+  date: string;
+  type: 'in' | 'out';
+  descr: string;
+  amount: number;
+  former: ShareDetail[];
+  latter: ShareDetail[];
+  memo: string | null;
+  dateCreated: string | null;
+  dateUpdated: string | null;
+  dateDeleted: string | null;
+  history: History[];
 };
 
-export type TransferTransaction = Transfer;
+export type TransactionTransfer = {
+  id: string;
+  ver: string;
+  bookId: string;
+  date: string;
+  type: 'transfer';
+  amount: number;
+  srcMemberId: string;
+  dstMemberId: string;
+  memo: string | null;
+  dateCreated: string | null;
+  dateUpdated: string | null;
+  dateDeleted: string | null;
+  history: History[];
+};
+
+export type History = {
+  date: string | null;
+  items: {
+    key:
+      | 'date'
+      | 'amount'
+      | 'memo'
+      | 'srcMemberId'
+      | 'dstMemberId'
+      | 'descr'
+      | 'former'
+      | 'latter';
+    from: string | number | null;
+    to: string | number | null;
+  }[];
+};

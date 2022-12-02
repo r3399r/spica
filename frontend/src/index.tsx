@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { configStore } from './redux/store';
 import './index.css';
+import './util/i18n';
 
 const store = configStore();
 

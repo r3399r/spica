@@ -2,6 +2,7 @@ export type Book = {
   id: string;
   code: string;
   name: string;
-  dateCreated: Date | null;
-  dateUpdated: Date | null;
+  symbol: string;
+  dateCreated: string | null;
+  dateUpdated: string | null;
 };

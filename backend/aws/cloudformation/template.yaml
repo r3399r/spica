@@ -805,60 +805,91 @@ Resources:
             "postBook": {
               "type": "object",
               "properties": {
-                "name": {"type": "string"}
+                "name": {"type": "string"},
+                "symbol": {"type": "string"}
               },
               "required": ["name"]
             },
             "putBook": {
               "type": "object",
               "properties": {
-                "name": {"type": "string"}
-              },
-              "required": ["name"]
+                "name": {"type": "string"},
+                "symbol": {"type": "string"}
+              }
             },
             "postBookBill": {
               "type": "object",
               "properties": {
                 "date": {"type": "string"},
-                "type": {"type": "string", "enum": ["income","expense"]},
+                "type": {"type": "string", "enum": ["in","out"]},
                 "descr": {"type": "string"},
                 "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
-                "detail": {
+                "former": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
                       "id": {"type": "string"},
-                      "amount": {"type": "number"},
+                      "method": {"type": "string", "enum": ["%","N","$","±"]},
+                      "value": {"type": "number"},
+                      "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
                     },
-                    "required": ["id","amount"]
+                    "required": ["id","method","amount"]
+                  }
+                },
+                "latter": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "string"},
+                      "method": {"type": "string", "enum": ["%","N","$","±"]},
+                      "value": {"type": "number"},
+                      "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
+                    },
+                    "required": ["id","method","amount"]
                   }
                 },
                 "memo": {"type": "string"}
               },
-              "required": ["date","type","descr","amount","detail"]
+              "required": ["date","type","descr","amount","former","latter"]
             },
             "putBookBill": {
               "type": "object",
               "properties": {
                 "date": {"type": "string"},
-                "type": {"type": "string", "enum": ["income","expense"]},
+                "type": {"type": "string", "enum": ["in","out"]},
                 "descr": {"type": "string"},
                 "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
-                "detail": {
+                "former": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
                       "id": {"type": "string"},
-                      "amount": {"type": "number"},
+                      "method": {"type": "string", "enum": ["%","N","$","±"]},
+                      "value": {"type": "number"},
+                      "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
                     },
-                    "required": ["id","amount"]
+                    "required": ["id","method","amount"]
+                  }
+                },
+                "latter": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "string"},
+                      "method": {"type": "string", "enum": ["%","N","$","±"]},
+                      "value": {"type": "number"},
+                      "amount": {"type": "number", "minimum": 0, "exclusiveMinimum": true},
+                    },
+                    "required": ["id","method","amount"]
                   }
                 },
                 "memo": {"type": "string"}
               },
-              "required": ["date","type","descr","amount","detail"]
+              "required": ["date","type","descr","amount","former","latter"]
             },
             "postBookMember": {
               "type": "object",
@@ -933,6 +964,31 @@ Resources:
       Action: 'lambda:InvokeFunction'
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ServerlessApi}/*
+  LambdaDbClean:
+    Type: AWS::Serverless::Function
+    Properties:
+      Architectures: [arm64]
+      Handler: index.dbClean
+      Runtime: !Sub ${NodeJsVer}
+      FunctionName: !Sub ${Project}-${TargetEnvr}-dbClean
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
+      CodeUri: ../../dist/webpack/lambda
+      MemorySize: 128
+      Environment:
+        Variables:
+          PROJECT: !Sub ${Project}
+          DB_CLUSTER: !Sub '{{resolve:ssm:${TargetEnvr}-db-cluster:1}}'
+          DB_HOST: !Sub '{{resolve:ssm:${TargetEnvr}-db-host:1}}'
+          DB_PWD: !Sub '{{resolve:ssm:${TargetEnvr}-db-pwd:1}}'
+          DB_USER: !Sub '{{resolve:ssm:${TargetEnvr}-db-user:1}}'
+  InvokePermissionDbClean:
+    Type: AWS::Lambda::Permission
+    DependsOn: [EventBridge, LambdaDbClean]
+    Properties:
+      FunctionName: !Sub ${Project}-${TargetEnvr}-dbClean
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt EventBridge.Arn
   #########################################
   ##### Cloudfront and Route53 config #####
   #########################################
@@ -1028,3 +1084,16 @@ Resources:
                 }
             ]
           }'
+  #######################
+  ##### EventBridge #####
+  #######################
+  EventBridge:
+    Type: AWS::Events::Rule
+    DependsOn: [LambdaDbClean]
+    Properties:
+      Name: !Sub ${Project}-${TargetEnvr}-db-clean
+      ScheduleExpression: cron(0 0 * * ? *)
+      State: ENABLED
+      Targets: 
+        - Arn: !GetAtt LambdaDbClean.Arn
+          Id: !Sub ${Project}-${TargetEnvr}-db-clean
