@@ -26,8 +26,8 @@ const Check = () => {
     dispatch(setTxFormType('transfer'));
     dispatch(
       saveTransferFormData({
-        srcMemberId: v.former.id,
-        dstMemberId: v.latter.id,
+        srcMemberId: v.latter.id,
+        dstMemberId: v.former.id,
         amount: v.amount,
       }),
     );
