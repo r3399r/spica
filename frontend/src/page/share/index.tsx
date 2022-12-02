@@ -25,8 +25,10 @@ const Share = () => {
     if (id === undefined) return;
     init(id)
       .then((res) => {
-        if (res === undefined) navigate(`${Page.Book}/${id}`, { replace: true });
-        else {
+        if (res === undefined) {
+          navigate(Page.Book, { replace: true }); // add this to make back button work
+          navigate(`${Page.Book}/${id}`);
+        } else {
           setName(res);
           methods.setValue('code', query.code);
           if (query.code) onSubmit({ code: query.code });
@@ -38,7 +40,10 @@ const Share = () => {
   const onSubmit = (data: ShareForm) => {
     if (!id) return;
     setShareBook(id, data.code)
-      .then(() => navigate(`${Page.Book}/${id}`, { replace: true }))
+      .then(() => {
+        navigate(Page.Book, { replace: true }); // add this to make back button work
+        navigate(`${Page.Book}/${id}`);
+      })
       .catch(() =>
         methods.setError('code', { message: t('share.wrongCode') }, { shouldFocus: true }),
       );

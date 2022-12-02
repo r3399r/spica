@@ -23,7 +23,7 @@ const BalanceCard = () => {
       <div className="mb-[10px] flex justify-between">
         <H4>{t('bookDetail.balance')}</H4>
         <div
-          className="flex items-center h-[21px]"
+          className="flex items-center h-[21px] cursor-pointer"
           onClick={() => navigate(`${Page.Book}/${id}/settlement`)}
         >
           <Body bold className="text-navy-300">

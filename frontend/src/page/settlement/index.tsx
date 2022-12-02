@@ -28,7 +28,7 @@ const Settlement = () => {
       <div className="mt-5 mb-[25px] flex gap-[10px]">
         <Body
           bold
-          className={classNames('w-full text-center py-1 rounded-[4px]', {
+          className={classNames('w-full text-center py-1 rounded-[4px] cursor-pointer', {
             'bg-tan-300 text-navy-700': tab === 'check',
             'bg-grey-200 text-navy-900 text-opacity-30': tab === 'balance',
           })}
@@ -38,7 +38,7 @@ const Settlement = () => {
         </Body>
         <Body
           bold
-          className={classNames('w-full text-center py-1 rounded-[4px]', {
+          className={classNames('w-full text-center py-1 rounded-[4px] cursor-pointer', {
             'bg-tan-300 text-navy-700': tab === 'balance',
             'bg-grey-200 text-navy-900 text-opacity-30': tab === 'check',
           })}

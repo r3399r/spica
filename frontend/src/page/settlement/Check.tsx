@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Divider from 'src/celestial-ui/component/Divider';
 import Body from 'src/celestial-ui/component/typography/Body';
-// import IcGoCheck from 'src/image/ic-go-check.svg';
+import IcGoCheck from 'src/image/ic-go-check.svg';
 import { RootState } from 'src/redux/store';
 import { check } from 'src/service/settlementService';
 
@@ -22,7 +22,7 @@ const Check = () => {
   return (
     <>
       {checkResult.map((v, i) => (
-        <div key={i} className="bg-grey-100 rounded-[15px] p-[10px] mb-[10px]">
+        <div key={i} className="bg-grey-100 rounded-[15px] p-[10px] mb-[10px] cursor-pointer">
           <div className="flex gap-[10px] justify-between items-center">
             <Body size="l" className="w-[calc(50%-28px)] break-words">
               {v.latterNickname}
@@ -37,7 +37,7 @@ const Check = () => {
           <Divider className="my-[10px]" />
           <div className="flex">
             <Body size="l" className="flex-1">{`${book?.symbol}${v.amount}`}</Body>
-            {/* <img src={IcGoCheck} /> */}
+            <img src={IcGoCheck} />
           </div>
         </div>
       ))}
