@@ -93,8 +93,7 @@
     "wrongCode": "Wrong Code"
   },
   "editTx": {
-    "backToList": "Back",
-    "backToTx": "Back",
+    "back": "Back",
     "type": "Type",
     "date": "Date",
     "descr": "Item",

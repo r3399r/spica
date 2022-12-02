@@ -1,7 +1,7 @@
 import { Member } from '@y-celestial/spica-service';
 import { compare } from 'src/celestial-ui/util/compare';
 import { Check } from 'src/model/Book';
-import { bn, bnFormat } from 'src/util/bignumber';
+import { bn } from 'src/util/bignumber';
 
 export const check = (members: Member[]): Check[] => {
   let formers = members.filter((v) => v.balance > 0);
@@ -21,25 +21,25 @@ export const check = (members: Member[]): Check[] => {
       sortedFormers[0] = { ...former, balance: diff.toNumber() };
       sortedLatters.shift();
       res.push({
-        formerNickname: former.nickname,
-        latterNickname: latter.nickname,
-        amount: bn(latter.balance).abs().toFormat(),
+        former,
+        latter,
+        amount: latter.balance * -1,
       });
     } else if (diff.lt(0)) {
       sortedLatters[0] = { ...latter, balance: diff.toNumber() };
       sortedFormers.shift();
       res.push({
-        formerNickname: former.nickname,
-        latterNickname: latter.nickname,
-        amount: bnFormat(former.balance),
+        former,
+        latter,
+        amount: former.balance,
       });
     } else {
       sortedLatters.shift();
       sortedFormers.shift();
       res.push({
-        formerNickname: former.nickname,
-        latterNickname: latter.nickname,
-        amount: bnFormat(former.balance),
+        former,
+        latter,
+        amount: former.balance,
       });
     }
     formers = sortedFormers;

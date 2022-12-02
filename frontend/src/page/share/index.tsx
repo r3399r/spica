@@ -21,14 +21,17 @@ const Share = () => {
   const [name, setName] = useState<string>();
   const methods = useForm<ShareForm>();
 
+  const redirect = () => {
+    navigate(Page.Book, { replace: true }); // add this to make back button work
+    navigate(`${Page.Book}/${id}`);
+  };
+
   useEffect(() => {
     if (id === undefined) return;
     init(id)
       .then((res) => {
-        if (res === undefined) {
-          navigate(Page.Book, { replace: true }); // add this to make back button work
-          navigate(`${Page.Book}/${id}`);
-        } else {
+        if (res === undefined) redirect();
+        else {
           setName(res);
           methods.setValue('code', query.code);
           if (query.code) onSubmit({ code: query.code });
@@ -40,10 +43,7 @@ const Share = () => {
   const onSubmit = (data: ShareForm) => {
     if (!id) return;
     setShareBook(id, data.code)
-      .then(() => {
-        navigate(Page.Book, { replace: true }); // add this to make back button work
-        navigate(`${Page.Book}/${id}`);
-      })
+      .then(redirect)
       .catch(() =>
         methods.setError('code', { message: t('share.wrongCode') }, { shouldFocus: true }),
       );

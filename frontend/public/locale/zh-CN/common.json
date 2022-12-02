@@ -93,8 +93,7 @@
     "wrongCode": "错误的通行码"
   },
   "editTx": {
-    "backToList": "回帐本",
-    "backToTx": "回帐目",
+    "back": "回上页",
     "type": "类别",
     "date": "日期",
     "descr": "项目",

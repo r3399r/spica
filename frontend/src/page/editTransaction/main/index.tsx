@@ -62,12 +62,12 @@ const Main = () => {
     <>
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
-          <NavbarVanilla text={isEdit ? t('editTx.backToTx') : t('editTx.backToList')} />
+          <NavbarVanilla text={t('editTx.back')} />
           <div className="flex gap-4 pb-4">
             <div className="w-[108px]">
               <Select
                 label={t('editTx.type')}
-                defaultValue={billFormData.type}
+                defaultValue={txFormType === 'bill' ? billFormData.type : 'transfer'}
                 onChange={(v) => onSelectType(v)}
                 disabled={isEdit}
               >
