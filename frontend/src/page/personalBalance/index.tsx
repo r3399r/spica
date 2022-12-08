@@ -2,14 +2,13 @@ import { Transaction } from '@y-celestial/spica-service';
 import classNames from 'classnames';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Body from 'src/celestial-ui/component/typography/Body';
 import H2 from 'src/celestial-ui/component/typography/H2';
 import H4 from 'src/celestial-ui/component/typography/H4';
 import NavbarVanilla from 'src/component/NavbarVanilla';
 import { Page } from 'src/constant/Page';
-import { RootState } from 'src/redux/store';
+import useBook from 'src/hook/useBook';
 import { aggregateTransactions, loadBookById, loadMoreBookById } from 'src/service/bookService';
 import { bn } from 'src/util/bignumber';
 
@@ -17,12 +16,8 @@ const PersonalBalance = () => {
   const { id, uid } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
-  const member = useMemo(
-    () => books?.find((v) => v.id === id)?.members?.find((v) => v.id === uid),
-    [id, uid, books],
-  );
+  const book = useBook();
+  const member = useMemo(() => book?.members?.find((v) => v.id === uid), [uid, book]);
   const transactions = useMemo(
     () =>
       aggregateTransactions(

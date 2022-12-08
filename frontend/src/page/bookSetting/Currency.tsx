@@ -1,18 +1,14 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Body from 'src/celestial-ui/component/typography/Body';
 import H4 from 'src/celestial-ui/component/typography/H4';
+import useBook from 'src/hook/useBook';
 import IcEdit from 'src/image/ic-edit.svg';
-import { RootState } from 'src/redux/store';
 import ModalReviseSymbol from './ModalReviseSymbol';
 
 const Currency = () => {
-  const { id } = useParams();
   const { t } = useTranslation();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
+  const book = useBook();
   const [open, setOpen] = useState<boolean>(false);
 
   return (
@@ -26,7 +22,7 @@ const Currency = () => {
           {book?.symbol}
         </Body>
       </div>
-      <ModalReviseSymbol open={open} handleClose={() => setOpen(false)} book={book} />
+      <ModalReviseSymbol open={open} handleClose={() => setOpen(false)} />
     </>
   );
 };

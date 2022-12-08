@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'src/celestial-ui/component/Button';
 import Body from 'src/celestial-ui/component/typography/Body';
 import { Page } from 'src/constant/Page';
+import useBook from 'src/hook/useBook';
 import IcAdd from 'src/image/ic-add.svg';
 import { RootState } from 'src/redux/store';
 import { setTxPageScroll } from 'src/redux/uiSlice';
@@ -20,11 +21,8 @@ const BookDetail = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {
-    book: { books },
-    ui: { txPageScroll },
-  } = useSelector((rootState: RootState) => rootState);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
+  const { txPageScroll } = useSelector((rootState: RootState) => rootState.ui);
+  const book = useBook();
   const noMember = useMemo(() => book?.members?.length === 0, [book]);
   const ref = useRef<HTMLDivElement>(null);
 

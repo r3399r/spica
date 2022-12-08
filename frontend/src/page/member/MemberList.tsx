@@ -1,21 +1,18 @@
 import { Member } from '@y-celestial/spica-service';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Body from 'src/celestial-ui/component/typography/Body';
+import useBook from 'src/hook/useBook';
 import IcEdit from 'src/image/ic-edit.svg';
 import IcRemoveDisabled from 'src/image/ic-remove-disabled.svg';
 import IcRemove from 'src/image/ic-remove.svg';
-import { RootState } from 'src/redux/store';
 import ModalDeleteMember from './ModalDeleteMember';
 import ModalEditMember from './ModalEditMember';
 
 const MemberList = () => {
-  const { id } = useParams();
   const { t } = useTranslation();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
-  const members = useMemo(() => books?.find((v) => v.id === id)?.members, [books]);
+  const book = useBook();
+  const members = useMemo(() => book?.members, [book]);
   const [editTarget, setEditTarget] = useState<Member>();
   const [deleteTarget, setDeleteTarget] = useState<Member>();
 

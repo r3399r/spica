@@ -1,15 +1,14 @@
 import classNames from 'classnames';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'src/celestial-ui/component/Button';
 import Body from 'src/celestial-ui/component/typography/Body';
 import H4 from 'src/celestial-ui/component/typography/H4';
 import H5 from 'src/celestial-ui/component/typography/H5';
 import { Page } from 'src/constant/Page';
+import useBook from 'src/hook/useBook';
 import IcMember from 'src/image/ic-member.svg';
-import { RootState } from 'src/redux/store';
 import { getBookIndex } from 'src/service/bookService';
 import { bn } from 'src/util/bignumber';
 
@@ -17,8 +16,7 @@ const MainCard = () => {
   const { id } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
+  const book = useBook();
   const index = useMemo(() => getBookIndex(id ?? ''), [id]);
   const total = useMemo(
     () => book?.members?.reduce((prev, current) => prev.plus(current.total), bn(0)),

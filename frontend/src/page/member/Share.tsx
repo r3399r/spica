@@ -1,19 +1,16 @@
-import { useMemo } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 import QRCode from 'react-qr-code';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Button from 'src/celestial-ui/component/Button';
 import Body from 'src/celestial-ui/component/typography/Body';
 import H4 from 'src/celestial-ui/component/typography/H4';
-import { RootState } from 'src/redux/store';
+import useBook from 'src/hook/useBook';
 
 const Share = () => {
   const { id } = useParams();
   const { t } = useTranslation();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
+  const book = useBook();
   const link = `${location.origin}/share/${id}`;
 
   const onShareLink = () => {

@@ -17,7 +17,7 @@ const Share = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
-  const query = useQuery();
+  const query = useQuery<{ code: string }>();
   const [name, setName] = useState<string>();
   const methods = useForm<ShareForm>();
 

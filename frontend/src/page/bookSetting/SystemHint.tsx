@@ -1,17 +1,13 @@
 import { add, format } from 'date-fns';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Body from 'src/celestial-ui/component/typography/Body';
 import H6 from 'src/celestial-ui/component/typography/H6';
-import { RootState } from 'src/redux/store';
+import useBook from 'src/hook/useBook';
 
 const SystemHint = () => {
-  const { id } = useParams();
   const { t } = useTranslation();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
+  const book = useBook();
   const dateExpired = useMemo(
     () => (book ? format(add(new Date(book.lastDateUpdated), { days: 100 }), 'yyyy-MM-dd') : '-'),
     [book],

@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Divider from 'src/celestial-ui/component/Divider';
 import Body from 'src/celestial-ui/component/typography/Body';
 import { Page } from 'src/constant/Page';
+import useBook from 'src/hook/useBook';
 import IcGoCheck from 'src/image/ic-go-check.svg';
 import { Check as CheckType } from 'src/model/Book';
 import { saveTransferFormData, setTxFormType } from 'src/redux/formSlice';
-import { RootState } from 'src/redux/store';
 import { check } from 'src/service/settlementService';
 import { bnFormat } from 'src/util/bignumber';
 
@@ -17,9 +17,8 @@ const Check = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
-  const members = useMemo(() => books?.find((v) => v.id === id)?.members ?? [], [id, books]);
+  const book = useBook();
+  const members = useMemo(() => book?.members ?? [], [book]);
   const checkResult = useMemo(() => check(members), [members]);
 
   const onCheck = (v: CheckType) => () => {

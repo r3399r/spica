@@ -1,11 +1,10 @@
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Divider from 'src/celestial-ui/component/Divider';
 import Input from 'src/celestial-ui/component/Input';
 import Textarea from 'src/celestial-ui/component/Textarea';
 import AmountInput from 'src/component/AmountInput';
+import useBook from 'src/hook/useBook';
 import { BillForm as Form } from 'src/model/Form';
 import { saveBillFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
@@ -13,14 +12,10 @@ import Former from './Former';
 import Latter from './Latter';
 
 const BillForm = () => {
-  const { id } = useParams();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const {
-    book: { books },
-    form: { billFormData },
-  } = useSelector((rootState: RootState) => rootState);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
+  const { billFormData } = useSelector((rootState: RootState) => rootState.form);
+  const book = useBook();
 
   const saveFormData = (data: Partial<Form>) => {
     dispatch(saveBillFormData(data));

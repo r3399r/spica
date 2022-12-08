@@ -2,11 +2,10 @@ import { Transaction, TransactionBill, TransactionTransfer } from '@y-celestial/
 import classNames from 'classnames';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Body from 'src/celestial-ui/component/typography/Body';
 import { Page } from 'src/constant/Page';
-import { RootState } from 'src/redux/store';
+import useBook from 'src/hook/useBook';
 import { aggregateTransactions, loadMoreBookById } from 'src/service/bookService';
 import { bnFormat } from 'src/util/bignumber';
 
@@ -14,8 +13,7 @@ const TransactionList = () => {
   const { id } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
+  const book = useBook();
   const transactions = useMemo(
     () => (book?.transactions ? aggregateTransactions(book.id, book.transactions) : null),
     [book],

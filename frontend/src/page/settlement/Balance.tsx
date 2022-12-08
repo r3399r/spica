@@ -1,21 +1,19 @@
 import classNames from 'classnames';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Divider from 'src/celestial-ui/component/Divider';
 import Body from 'src/celestial-ui/component/typography/Body';
 import { Page } from 'src/constant/Page';
-import { RootState } from 'src/redux/store';
+import useBook from 'src/hook/useBook';
 import { bn } from 'src/util/bignumber';
 
 const Balance = () => {
   const { id } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
-  const members = useMemo(() => books?.find((v) => v.id === id)?.members ?? [], [id, books]);
+  const book = useBook();
+  const members = useMemo(() => book?.members ?? [], [book]);
 
   return (
     <>

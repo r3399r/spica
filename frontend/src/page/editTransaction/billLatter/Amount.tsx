@@ -2,21 +2,17 @@ import classNames from 'classnames';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Body from 'src/celestial-ui/component/typography/Body';
 import H2 from 'src/celestial-ui/component/typography/H2';
+import useBook from 'src/hook/useBook';
 import { RootState } from 'src/redux/store';
 import { remainingAmount } from 'src/service/transactionService';
 import { bn, bnFormat } from 'src/util/bignumber';
 
 const Amount = () => {
-  const { id } = useParams();
   const { t } = useTranslation();
-  const {
-    book: { books },
-    form: { billFormData },
-  } = useSelector((rootState: RootState) => rootState);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
+  const { billFormData } = useSelector((rootState: RootState) => rootState.form);
+  const book = useBook();
   const remaining = useMemo(
     () => remainingAmount(billFormData.amount ?? 0, billFormData.latter ?? []),
     [billFormData.latter],

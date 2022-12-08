@@ -3,19 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import ModalVanilla from 'src/celestial-ui/component/ModalVanilla';
 import Body from 'src/celestial-ui/component/typography/Body';
 import { Page } from 'src/constant/Page';
+import useBook from 'src/hook/useBook';
 import IcWarning from 'src/image/ic-warning.svg';
-import { SavedBook } from 'src/model/Book';
 import { deleteBook } from 'src/service/settingService';
 
 type Props = {
   open: boolean;
   handleClose: () => void;
-  book?: SavedBook;
 };
 
-const ModalDeleteBook = ({ open, handleClose, book }: Props) => {
+const ModalDeleteBook = ({ open, handleClose }: Props) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const book = useBook();
 
   const onClose = () => {
     handleClose();

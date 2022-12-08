@@ -3,29 +3,23 @@ import classNames from 'classnames';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Checkbox from 'src/celestial-ui/component/Checkbox';
 import Body from 'src/celestial-ui/component/typography/Body';
 import AmountInput from 'src/component/AmountInput';
+import useBook from 'src/hook/useBook';
 import { MemberLatter } from 'src/model/Book';
 import { RootState } from 'src/redux/store';
 import { addMemberToBillLatter, removeMemberFromBillLatter } from 'src/service/transactionService';
 import { bn } from 'src/util/bignumber';
 import SplitMixModal from './SplitMixModal';
 
-type Props = {
-  mode: 'weight' | 'pct';
-};
+type Props = { mode: 'weight' | 'pct' };
 
 const SplitMixed = ({ mode }: Props) => {
-  const { id } = useParams();
   const { t } = useTranslation();
-  const {
-    book: { books },
-    form: { billFormData },
-  } = useSelector((rootState: RootState) => rootState);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
-  const members = useMemo(() => books?.find((v) => v.id === id)?.members ?? [], [books]);
+  const { billFormData } = useSelector((rootState: RootState) => rootState.form);
+  const book = useBook();
+  const members = useMemo(() => book?.members ?? [], [book]);
   const [input, setInput] = useState<MemberLatter[]>([]);
   const [targetId, setTargetId] = useState<string>();
 
