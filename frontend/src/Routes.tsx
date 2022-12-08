@@ -5,6 +5,7 @@ import BookList from './page/bookList';
 import BookSetting from './page/bookSetting';
 import EidtTransaction from './page/editTransaction';
 import Member from './page/member';
+import PersonalBalance from './page/personalBalance';
 import Settlement from './page/settlement';
 import Share from './page/share';
 import Transaction from './page/transaction';
@@ -19,6 +20,7 @@ const AppRoutes = () => (
     <Route path={`${Page.Book}/:id/member`} element={<Member />} />
     <Route path={`${Page.Book}/:id/setting`} element={<BookSetting />} />
     <Route path={`${Page.Book}/:id/settlement`} element={<Settlement />} />
+    <Route path={`${Page.Book}/:id/settlement/:uid`} element={<PersonalBalance />} />
     <Route path={`${Page.Share}/:id`} element={<Share />} />
     <Route path="/*" element={<Navigate to={Page.Book} />} />
   </Routes>

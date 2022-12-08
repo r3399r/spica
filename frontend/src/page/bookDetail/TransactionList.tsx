@@ -60,7 +60,7 @@ const TransactionList = () => {
       return (
         <div
           key={item.id}
-          className="py-[10px] border-b-[1px] border-b-grey-300"
+          className="py-[10px] border-b-[1px] border-b-grey-300 cursor-pointer"
           onClick={() => navigate(`${Page.Book}/${id}/tx/${item.id}`)}
         >
           <div className="flex justify-between">
@@ -87,7 +87,7 @@ const TransactionList = () => {
     return (
       <div
         key={item.id}
-        className="py-[10px] border-b-[1px] border-b-grey-300"
+        className="py-[10px] border-b-[1px] border-b-grey-300 cursor-pointer"
         onClick={() => navigate(`${Page.Book}/${id}/tx/${item.id}`)}
       >
         <div className="flex justify-between">

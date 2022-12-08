@@ -6,7 +6,8 @@
     "cancel": "Cancel",
     "submit": "Submit",
     "delete": "Delete",
-    "reset": "Reset"
+    "reset": "Reset",
+    "back": "Back"
   },
   "desc": {
     "in": "Income",
@@ -93,7 +94,6 @@
     "wrongCode": "Wrong Code"
   },
   "editTx": {
-    "back": "Back",
     "type": "Type",
     "date": "Date",
     "descr": "Item",
