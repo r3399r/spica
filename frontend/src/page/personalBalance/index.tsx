@@ -11,7 +11,7 @@ import NavbarVanilla from 'src/component/NavbarVanilla';
 import { Page } from 'src/constant/Page';
 import { RootState } from 'src/redux/store';
 import { aggregateTransactions, loadBookById, loadMoreBookById } from 'src/service/bookService';
-import { bn, bnFormat } from 'src/util/bignumber';
+import { bn } from 'src/util/bignumber';
 
 const PersonalBalance = () => {
   const { id, uid } = useParams();
@@ -27,7 +27,9 @@ const PersonalBalance = () => {
     () =>
       aggregateTransactions(
         book?.id ?? 'xx',
-        book?.transactions?.filter((v) => v.type !== 'transfer') ?? [],
+        book?.transactions?.filter(
+          (v) => v.type !== 'transfer' && v.latter.map((o) => o.id).includes(uid ?? 'xx'),
+        ) ?? [],
       ),
     [book],
   );
@@ -67,7 +69,9 @@ const PersonalBalance = () => {
             </Body>
             <Body size="l" className={classNames({ 'opacity-30': item.dateDeleted })}>{`${
               book?.symbol
-            }${bnFormat(item.amount)}`}</Body>
+            }${bn(item.latter.find((v) => v.id === uid)?.amount ?? '0')
+              .abs()
+              .toFormat()}`}</Body>
           </div>
         </div>
       );
