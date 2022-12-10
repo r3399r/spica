@@ -7,7 +7,8 @@
     "submit": "送出",
     "delete": "删除",
     "reset": "重置",
-    "back": "回上页"
+    "back": "回上页",
+    "loadMore": "读取更多"
   },
   "desc": {
     "in": "收入",

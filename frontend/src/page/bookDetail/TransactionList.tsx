@@ -4,9 +4,10 @@ import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import Body from 'src/celestial-ui/component/typography/Body';
+import LoadMore from 'src/component/LoadMore';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
-import { aggregateTransactions, loadMoreBookById } from 'src/service/bookService';
+import { aggregateTransactions } from 'src/service/bookService';
 import { bnFormat } from 'src/util/bignumber';
 
 const TransactionList = () => {
@@ -121,11 +122,7 @@ const TransactionList = () => {
             <>{transactions[v].map(items)}</>
           </div>
         ))}
-        {book.transactions.length !== book.txCount && (
-          <div className="text-center" onClick={() => loadMoreBookById(id ?? 'xx')}>
-            -- load more --
-          </div>
-        )}
+        {book.transactions.length !== book.txCount && <LoadMore />}
       </div>
     );
 

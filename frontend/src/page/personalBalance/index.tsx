@@ -6,10 +6,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Body from 'src/celestial-ui/component/typography/Body';
 import H2 from 'src/celestial-ui/component/typography/H2';
 import H4 from 'src/celestial-ui/component/typography/H4';
+import LoadMore from 'src/component/LoadMore';
 import NavbarVanilla from 'src/component/NavbarVanilla';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
-import { aggregateTransactions, loadBookById, loadMoreBookById } from 'src/service/bookService';
+import { aggregateTransactions, loadBookById } from 'src/service/bookService';
 import { bn } from 'src/util/bignumber';
 
 const PersonalBalance = () => {
@@ -23,7 +24,10 @@ const PersonalBalance = () => {
       aggregateTransactions(
         book?.id ?? 'xx',
         book?.transactions?.filter(
-          (v) => v.type !== 'transfer' && v.latter.map((o) => o.id).includes(uid ?? 'xx'),
+          (v) =>
+            v.type !== 'transfer' &&
+            !v.dateDeleted &&
+            v.latter.map((o) => o.id).includes(uid ?? 'xx'),
         ) ?? [],
       ),
     [book],
@@ -39,34 +43,27 @@ const PersonalBalance = () => {
       return (
         <div
           key={item.id}
-          className="py-[10px] border-b-[1px] border-b-grey-300 cursor-pointer flex justify-between"
+          className="py-[10px] border-b-[1px] border-b-grey-300 cursor-pointer flex gap-[10px]"
           onClick={() => navigate(`${Page.Book}/${id}/tx/${item.id}`)}
         >
-          <div className="flex gap-1">
-            {item.dateDeleted && (
-              <Body size="s" className="px-1 py-[3px] bg-tomato-500 text-white">
-                {t('bookDetail.deleted')}
-              </Body>
-            )}
-            <Body size="l" bold className={classNames({ 'opacity-30': item.dateDeleted })}>
+          <Body
+            size="s"
+            className={classNames('py-[3px] px-1 bg-grey-200', {
+              'text-tomato-700': item.type === 'out',
+              'text-green-700': item.type === 'in',
+            })}
+          >
+            {item.type === 'out' ? t('desc.out') : t('desc.in')}
+          </Body>
+          <div className="flex-1 flex justify-between">
+            <Body size="l" bold>
               {item.descr}
             </Body>
-          </div>
-          <div className="flex gap-[10px]">
-            <Body
-              size="s"
-              className={classNames('py-[3px] px-1 bg-grey-200', {
-                'text-tomato-700': item.type === 'out',
-                'text-green-700': item.type === 'in',
-              })}
-            >
-              {item.type === 'out' ? t('desc.out') : t('desc.in')}
+            <Body size="l">
+              {`${book?.symbol}${bn(item.latter.find((v) => v.id === uid)?.amount ?? '0')
+                .abs()
+                .toFormat()}`}
             </Body>
-            <Body size="l" className={classNames({ 'opacity-30': item.dateDeleted })}>{`${
-              book?.symbol
-            }${bn(item.latter.find((v) => v.id === uid)?.amount ?? '0')
-              .abs()
-              .toFormat()}`}</Body>
           </div>
         </div>
       );
@@ -76,7 +73,7 @@ const PersonalBalance = () => {
     <div className="max-w-[640px] mx-[15px] sm:mx-auto">
       <NavbarVanilla text={t('act.back')} />
       <H2>{member?.nickname}</H2>
-      <div className="pt-5 flex justify-end items-center gap-[10px]">
+      <div className="pt-5 flex justify-between items-center gap-[10px]">
         <Body
           size="s"
           className={classNames('py-[3px] px-1 bg-grey-200', {
@@ -94,18 +91,14 @@ const PersonalBalance = () => {
         </H4>
       </div>
       {Object.keys(transactions).map((v) => (
-        <div key={v} className="mt-[10px]">
+        <div key={v} className="my-[10px]">
           <Body bold className="pt-[5px] text-navy-100">
             {v}
           </Body>
           <>{transactions[v].map(items)}</>
         </div>
       ))}
-      {book?.transactions?.length !== book?.txCount && (
-        <div className="text-center" onClick={() => loadMoreBookById(id ?? 'xx')}>
-          -- load more --
-        </div>
-      )}
+      {book?.transactions?.length !== book?.txCount && <LoadMore />}
     </div>
   );
 };

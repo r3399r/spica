@@ -7,7 +7,8 @@
     "submit": "Submit",
     "delete": "Delete",
     "reset": "Reset",
-    "back": "Back"
+    "back": "Back",
+    "loadMore": "Load More"
   },
   "desc": {
     "in": "Income",
