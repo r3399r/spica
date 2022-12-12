@@ -3,8 +3,8 @@ import classNames from 'classnames';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Button from 'src/celestial-ui/component/Button';
+import useBook from 'src/hook/useBook';
 import IcPctInactive from 'src/image/ic-method-pct-inactive.svg';
 import IcPct from 'src/image/ic-method-pct.svg';
 import IcPmInactive from 'src/image/ic-method-pm-inactive.svg';
@@ -22,15 +22,12 @@ import PlusMinus from './PlusMinus';
 import Weight from './Weight';
 
 const BillLatter = () => {
-  const { id } = useParams();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [tab, setTab] = useState<'weight' | 'pct' | 'pm'>('weight');
-  const {
-    book: { books },
-    form: { billFormData },
-  } = useSelector((rootState: RootState) => rootState);
-  const members = useMemo(() => books?.find((v) => v.id === id)?.members ?? [], [books]);
+  const { billFormData } = useSelector((rootState: RootState) => rootState.form);
+  const book = useBook();
+  const members = useMemo(() => book?.members ?? [], [book]);
   const initialLatter = useMemo(() => billFormData.latter, []);
   const remaining = useMemo(
     () => remainingAmount(billFormData.amount ?? 0, billFormData.latter ?? []),

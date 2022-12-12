@@ -6,7 +6,9 @@
     "cancel": "取消",
     "submit": "送出",
     "delete": "删除",
-    "reset": "重置"
+    "reset": "重置",
+    "back": "回上页",
+    "loadMore": "读取更多"
   },
   "desc": {
     "in": "收入",
@@ -93,7 +95,6 @@
     "wrongCode": "错误的通行码"
   },
   "editTx": {
-    "back": "回上页",
     "type": "类别",
     "date": "日期",
     "descr": "项目",

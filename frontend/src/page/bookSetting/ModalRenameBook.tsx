@@ -3,19 +3,19 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import FormInput from 'src/celestial-ui/component/FormInput';
 import ModalForm from 'src/celestial-ui/component/ModalForm';
-import { SavedBook } from 'src/model/Book';
+import useBook from 'src/hook/useBook';
 import { RenameBookForm } from 'src/model/Form';
 import { renameBook } from 'src/service/settingService';
 
 type Props = {
   open: boolean;
   handleClose: () => void;
-  book?: SavedBook;
 };
 
-const ModalRenameBook = ({ open, handleClose, book }: Props) => {
+const ModalRenameBook = ({ open, handleClose }: Props) => {
   const { t } = useTranslation();
   const methods = useForm<RenameBookForm>();
+  const book = useBook();
 
   useEffect(() => {
     methods.setValue('name', book?.name ?? '');

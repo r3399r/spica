@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Body from 'src/celestial-ui/component/typography/Body';
 import BackButton from 'src/component/BackButton';
 import { Page } from 'src/constant/Page';
+import useBook from 'src/hook/useBook';
 import IcEdit from 'src/image/ic-edit.svg';
 import IcRemove from 'src/image/ic-remove.svg';
 import { saveBillFormData, saveTransferFormData, setTxFormType } from 'src/redux/formSlice';
-import { RootState } from 'src/redux/store';
 import { bn } from 'src/util/bignumber';
 import ModalDelete from './ModalDelete';
 
@@ -17,12 +17,9 @@ const Navbar = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
+  const book = useBook();
   const [open, setOpen] = useState<boolean>(false);
-  const tx = useMemo(
-    () => books?.find((v) => v.id === id)?.transactions?.find((v) => v.id === tid),
-    [id, tid, books],
-  );
+  const tx = useMemo(() => book?.transactions?.find((v) => v.id === tid), [tid, book]);
 
   const onEdit = () => {
     if (!tx) return;

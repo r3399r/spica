@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Divider from 'src/celestial-ui/component/Divider';
 import Textarea from 'src/celestial-ui/component/Textarea';
 import Body from 'src/celestial-ui/component/typography/Body';
 import AmountInput from 'src/component/AmountInput';
+import useBook from 'src/hook/useBook';
 import IcEdit from 'src/image/ic-edit-tx.svg';
 import { TransferForm as Form } from 'src/model/Form';
 import { saveTransferFormData } from 'src/redux/formSlice';
@@ -13,15 +13,11 @@ import { RootState } from 'src/redux/store';
 import MemberSelectModal from './MemberSelectModal';
 
 const TransferForm = () => {
-  const { id } = useParams();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const {
-    book: { books },
-    form: { transferFormData },
-  } = useSelector((rootState: RootState) => rootState);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
-  const members = useMemo(() => books?.find((v) => v.id === id)?.members ?? [], [id, books]);
+  const { transferFormData } = useSelector((rootState: RootState) => rootState.form);
+  const book = useBook();
+  const members = useMemo(() => book?.members ?? [], [book]);
   const [side, setSide] = useState<'src' | 'dst'>();
 
   const saveFormData = (data: Partial<Form>) => {

@@ -3,13 +3,13 @@ import classNames from 'classnames';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Button from 'src/celestial-ui/component/Button';
 import Checkbox from 'src/celestial-ui/component/Checkbox';
 import Divider from 'src/celestial-ui/component/Divider';
 import Body from 'src/celestial-ui/component/typography/Body';
 import H2 from 'src/celestial-ui/component/typography/H2';
 import AmountInput from 'src/component/AmountInput';
+import useBook from 'src/hook/useBook';
 import { MemberFormer } from 'src/model/Book';
 import { saveBillFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
@@ -23,15 +23,11 @@ import { bn, bnFormat } from 'src/util/bignumber';
 import Navbar from './Navbar';
 
 const BillFormer = () => {
-  const { id } = useParams();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const {
-    book: { books },
-    form: { billFormData },
-  } = useSelector((rootState: RootState) => rootState);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
-  const members = useMemo(() => books?.find((v) => v.id === id)?.members ?? [], [books]);
+  const { billFormData } = useSelector((rootState: RootState) => rootState.form);
+  const book = useBook();
+  const members = useMemo(() => book?.members ?? [], [book]);
   const [input, setInput] = useState<MemberFormer[]>([]);
   const initialFormer = useMemo(() => billFormData.former, []);
   const remaining = useMemo(

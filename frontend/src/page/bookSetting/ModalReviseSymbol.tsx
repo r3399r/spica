@@ -3,19 +3,19 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import ModalForm from 'src/celestial-ui/component/ModalForm';
 import Radio from 'src/celestial-ui/component/Radio';
-import { SavedBook } from 'src/model/Book';
+import useBook from 'src/hook/useBook';
 import { ReviseSymbolForm } from 'src/model/Form';
 import { resetSymbol } from 'src/service/settingService';
 
 type Props = {
   open: boolean;
   handleClose: () => void;
-  book?: SavedBook;
 };
 
-const ModalReviseSymbol = ({ open, handleClose, book }: Props) => {
+const ModalReviseSymbol = ({ open, handleClose }: Props) => {
   const { t } = useTranslation();
   const methods = useForm<ReviseSymbolForm>();
+  const book = useBook();
 
   useEffect(() => {
     methods.setValue('symbol', book?.symbol ?? '');

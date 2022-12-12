@@ -2,21 +2,16 @@ import { History as HistoryType } from '@y-celestial/spica-service';
 import { format } from 'date-fns';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Body from 'src/celestial-ui/component/typography/Body';
-import { RootState } from 'src/redux/store';
+import useBook from 'src/hook/useBook';
 import { bn } from 'src/util/bignumber';
 
 const History = () => {
-  const { id, tid } = useParams();
+  const { tid } = useParams();
   const { t } = useTranslation();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
-  const tx = useMemo(
-    () => books?.find((v) => v.id === id)?.transactions?.find((v) => v.id === tid),
-    [id, tid, books],
-  );
+  const book = useBook();
+  const tx = useMemo(() => book?.transactions?.find((v) => v.id === tid), [tid, book]);
   const getDisplayText = useCallback(
     (value: HistoryType['items'][0]) => {
       const key = value.key;

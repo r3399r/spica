@@ -2,21 +2,19 @@ import classNames from 'classnames';
 import { format } from 'date-fns';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Body from 'src/celestial-ui/component/typography/Body';
 import H2 from 'src/celestial-ui/component/typography/H2';
 import H4 from 'src/celestial-ui/component/typography/H4';
 import { compare } from 'src/celestial-ui/util/compare';
-import { RootState } from 'src/redux/store';
+import useBook from 'src/hook/useBook';
 import { bn, bnFormat } from 'src/util/bignumber';
 
 const Main = () => {
-  const { id, tid } = useParams();
+  const { tid } = useParams();
   const { t } = useTranslation();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
-  const tx = useMemo(() => book?.transactions?.find((v) => v.id === tid), [id, tid, book]);
+  const book = useBook();
+  const tx = useMemo(() => book?.transactions?.find((v) => v.id === tid), [tid, book]);
 
   const txFormer = useMemo(() => {
     if (!tx || tx.type === 'transfer') return [];
@@ -82,7 +80,7 @@ const Main = () => {
           <Body size="s" className="text-navy-300">
             {t('desc.memo')}
           </Body>
-          {tx.memo && <Body className="mt-[5px] pl-[10px]">{tx.memo}</Body>}
+          {tx.memo && <Body className="mt-[5px] pl-[10px] whitespace-pre">{tx.memo}</Body>}
         </div>
       </>
     );
@@ -136,7 +134,7 @@ const Main = () => {
         <Body size="s" className="text-navy-300">
           {t('desc.memo')}
         </Body>
-        {tx.memo && <Body className="mt-[5px] pl-[10px]">{tx.memo}</Body>}
+        {tx.memo && <Body className="mt-[5px] pl-[10px] whitespace-pre">{tx.memo}</Body>}
       </div>
     </>
   );

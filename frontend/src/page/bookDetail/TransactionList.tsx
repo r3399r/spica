@@ -2,20 +2,19 @@ import { Transaction, TransactionBill, TransactionTransfer } from '@y-celestial/
 import classNames from 'classnames';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Body from 'src/celestial-ui/component/typography/Body';
+import LoadMore from 'src/component/LoadMore';
 import { Page } from 'src/constant/Page';
-import { RootState } from 'src/redux/store';
-import { aggregateTransactions, loadMoreBookById } from 'src/service/bookService';
+import useBook from 'src/hook/useBook';
+import { aggregateTransactions } from 'src/service/bookService';
 import { bnFormat } from 'src/util/bignumber';
 
 const TransactionList = () => {
   const { id } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
+  const book = useBook();
   const transactions = useMemo(
     () => (book?.transactions ? aggregateTransactions(book.id, book.transactions) : null),
     [book],
@@ -60,7 +59,7 @@ const TransactionList = () => {
       return (
         <div
           key={item.id}
-          className="py-[10px] border-b-[1px] border-b-grey-300"
+          className="py-[10px] border-b-[1px] border-b-grey-300 cursor-pointer"
           onClick={() => navigate(`${Page.Book}/${id}/tx/${item.id}`)}
         >
           <div className="flex justify-between">
@@ -87,7 +86,7 @@ const TransactionList = () => {
     return (
       <div
         key={item.id}
-        className="py-[10px] border-b-[1px] border-b-grey-300"
+        className="py-[10px] border-b-[1px] border-b-grey-300 cursor-pointer"
         onClick={() => navigate(`${Page.Book}/${id}/tx/${item.id}`)}
       >
         <div className="flex justify-between">
@@ -123,11 +122,7 @@ const TransactionList = () => {
             <>{transactions[v].map(items)}</>
           </div>
         ))}
-        {book.transactions.length !== book.txCount && (
-          <div className="text-center" onClick={() => loadMoreBookById(id ?? 'xx')}>
-            -- load more --
-          </div>
-        )}
+        {book.transactions.length !== book.txCount && <LoadMore />}
       </div>
     );
 

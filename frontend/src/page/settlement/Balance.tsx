@@ -1,25 +1,28 @@
 import classNames from 'classnames';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Divider from 'src/celestial-ui/component/Divider';
 import Body from 'src/celestial-ui/component/typography/Body';
-import { RootState } from 'src/redux/store';
+import { Page } from 'src/constant/Page';
+import useBook from 'src/hook/useBook';
 import { bn } from 'src/util/bignumber';
 
 const Balance = () => {
   const { id } = useParams();
   const { t } = useTranslation();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
-  const book = useMemo(() => books?.find((v) => v.id === id), [id, books]);
-  const members = useMemo(() => books?.find((v) => v.id === id)?.members ?? [], [id, books]);
+  const navigate = useNavigate();
+  const book = useBook();
+  const members = useMemo(() => book?.members ?? [], [book]);
 
   return (
     <>
       {members.map((v) => (
         <div key={v.id}>
-          <div className="flex py-[10px] gap-[10px] justify-between items-center">
+          <div
+            className="flex py-[10px] gap-[10px] justify-between items-center cursor-pointer"
+            onClick={() => navigate(`${Page.Book}/${id}/settlement/${v.id}`)}
+          >
             <Body size="l" className="text-navy-700">
               {v.nickname}
             </Body>

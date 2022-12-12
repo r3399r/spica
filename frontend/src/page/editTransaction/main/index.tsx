@@ -62,7 +62,7 @@ const Main = () => {
     <>
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
-          <NavbarVanilla text={t('editTx.back')} />
+          <NavbarVanilla text={t('act.back')} />
           <div className="flex gap-4 pb-4">
             <div className="w-[108px]">
               <Select
