@@ -36,7 +36,15 @@ const BillForm = () => {
           decimal={2}
           label={t('editTx.amount')}
           defaultValue={billFormData.amount}
-          onChange={(e) => saveFormData({ amount: Number(e.target.value) })}
+          onChange={(e) => {
+            saveFormData({
+              amount: Number(e.target.value),
+              former:
+                billFormData.former?.length === 1
+                  ? [{ ...billFormData.former[0], amount: Number(e.target.value) }]
+                  : billFormData.former,
+            });
+          }}
         />
       </div>
       <Former />
