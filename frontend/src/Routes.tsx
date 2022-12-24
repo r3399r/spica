@@ -4,7 +4,7 @@ import BookDetail from './page/bookDetail';
 import BookList from './page/bookList';
 import BookSetting from './page/bookSetting';
 import EidtTransaction from './page/editTransaction';
-import Landing from './page/landing/Landing';
+import Landing from './page/landing';
 import Member from './page/member';
 import PersonalBalance from './page/personalBalance';
 import Settlement from './page/settlement';

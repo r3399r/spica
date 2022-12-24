@@ -1,5 +1,4 @@
 {
-  "appName": "Bi-ll",
   "language": "English",
   "act": {
     "confirm": "Confirm",
@@ -19,6 +18,14 @@
     "sender": "Sender",
     "receiver": "Receiver",
     "memo": "Memo"
+  },
+  "landing": {
+    "title": "Bi-ll",
+    "subtitle": "Let's Split the Bill easily",
+    "start": "Get started",
+    "featureLogin": "Login free",
+    "featurePwa": "Simply \"Add to Home Screen\" and use it anytime",
+    "featureEasy": "Friendly interface and easy to use"
   },
   "bookList": {
     "bookList": "Book List",

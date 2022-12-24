@@ -1,5 +1,4 @@
 {
-  "appName": "Bitop",
   "language": "繁體中文",
   "act": {
     "confirm": "確認",
@@ -19,6 +18,14 @@
     "sender": "匯款者",
     "receiver": "收款者",
     "memo": "備註"
+  },
+  "landing": {
+    "title": "Bi-ll 必有分帳",
+    "subtitle": "為你輕鬆算好每一筆費用",
+    "start": "開始使用",
+    "featureLogin": "免登入",
+    "featurePwa": "只需將網站「加入主畫面」即可隨時使用",
+    "featureEasy": "介面友善易上手"
   },
   "bookList": {
     "bookList": "帳本清單",
