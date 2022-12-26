@@ -36,7 +36,19 @@
   "systemSetting": {
     "back": "回帳本清單",
     "head": "系統設定",
-    "language": "語言設定"
+    "language": "語言設定",
+    "add2HomeScreen": "加入手機主畫面",
+    "contactUs": "聯絡我們"
+  },
+  "add2HomeScreen": {
+    "back": "Back",
+    "iosStep1": "使用 Safari 打開本網站，並點選畫面下方的分享圖示",
+    "iosStep2": "選擇「加入主畫面」",
+    "iosStep3": "按下右上角「新增」",
+    "androidStep1": "使用 Chrome 打開本網站，並點選畫面右上方的「更多」圖示",
+    "androidStep2": "選擇「加入主畫面」",
+    "androidStep3": "按下小畫面的「新增」",
+    "done": "完成以上步驟後，便可在手機主畫面上看到 Bi-ll 的圖示了"
   },
   "bookDetail": {
     "back": "回清單",

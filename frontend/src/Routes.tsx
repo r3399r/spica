@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Page } from './constant/Page';
+import Add2HomeScreen from './page/add2HomeScreen';
 import BookDetail from './page/bookDetail';
 import BookList from './page/bookList';
 import BookSetting from './page/bookSetting';
@@ -17,6 +18,7 @@ const AppRoutes = () => (
     <Route path={Page.Landing} element={<Landing />} />
     <Route path={Page.Book} element={<BookList />} />
     <Route path={Page.Setting} element={<SystemSetting />} />
+    <Route path={`${Page.Setting}/a2hs`} element={<Add2HomeScreen />} />
     <Route path={`${Page.Book}/:id`} element={<BookDetail />} />
     <Route path={`${Page.Book}/:id/tx`} element={<EidtTransaction />} />
     <Route path={`${Page.Book}/:id/tx/:tid`} element={<Transaction />} />

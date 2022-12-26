@@ -36,7 +36,19 @@
   "systemSetting": {
     "back": "Back",
     "head": "System Setting",
-    "language": "Language"
+    "language": "Language",
+    "add2HomeScreen": "Add to Home Screen",
+    "contactUs": "Contact Us"
+  },
+  "add2HomeScreen": {
+    "back": "Back",
+    "iosStep1": "Open this website with Safari and tap the share icon at the bottom of the screen",
+    "iosStep2": "Select \"Add to Home Screen\"",
+    "iosStep3": "Click \"Add\" in the upper right corner",
+    "androidStep1": "Open this site in Chrome and click on the \"More\" icon at the top right of the screen",
+    "androidStep2": "Select \"Add to Home Screen\"",
+    "androidStep3": "Click \"Add\" on the small screen",
+    "done": "After completing the above steps, you can see the icon of Bi-ll on the main screen of the phone"
   },
   "bookDetail": {
     "back": "Back",

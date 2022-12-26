@@ -36,7 +36,19 @@
   "systemSetting": {
     "back": "回帐本清单",
     "head": "系统设定",
-    "language": "语言设定"
+    "language": "语言设定",
+    "add2HomeScreen": "加入手机主画面",
+    "contactUs": "联络我们"
+  },
+  "add2HomeScreen": {
+    "back": "Back",
+    "iosStep1": "使用 Safari 打开本网站，并点选画面下方的分享图示",
+    "iosStep2": "选择「加入主画面」",
+    "iosStep3": "按下右上角「新增」",
+    "androidStep1": "使用 Chrome 打开本网站，并点选画面右上方的「更多」图示",
+    "androidStep2": "选择「加入主画面」",
+    "androidStep3": "按下小画面的「新增」",
+    "done": "完成以上步骤后，便可在手机主画面上看到 Bi-ll 的图示了"
   },
   "bookDetail": {
     "back": "回清单",
