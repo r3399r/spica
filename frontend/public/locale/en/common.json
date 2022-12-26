@@ -33,6 +33,11 @@
     "noBook": "No Book",
     "name": "Name"
   },
+  "systemSetting": {
+    "back": "Back",
+    "head": "System Setting",
+    "language": "Language"
+  },
   "bookDetail": {
     "back": "Back",
     "totalOut": "Total Expense",

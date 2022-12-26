@@ -9,6 +9,7 @@ import H2 from 'src/celestial-ui/component/typography/H2';
 import { Page } from 'src/constant/Page';
 import IcAdd from 'src/image/ic-add.svg';
 import IcBook from 'src/image/ic-book.svg';
+import IcConfig from 'src/image/ic-config.svg';
 import PicBookHero from 'src/image/pic-book-hero.svg';
 import { RootState } from 'src/redux/store';
 import { setTxPageScroll } from 'src/redux/uiSlice';
@@ -30,10 +31,13 @@ const BookList = () => {
   return (
     <>
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
-        <div>
-          <img src={PicBookHero} className="w-full" />
-        </div>
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+          <div className="flex justify-end mt-[15px] my-[10px]">
+            <img src={IcConfig} className="cursor-pointer" onClick={() => navigate(Page.Setting)} />
+          </div>
+          <div>
+            <img src={PicBookHero} className="w-full" />
+          </div>
           <H2 className="mt-[30px] mb-5 mx-[25px]">{t('bookList.bookList')}</H2>
           {books?.length === 0 ? (
             <Body className="py-[30px] flex justify-center text-navy-300">

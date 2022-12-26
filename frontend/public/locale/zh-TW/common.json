@@ -33,6 +33,11 @@
     "noBook": "尚未建立帳本",
     "name": "名稱"
   },
+  "systemSetting": {
+    "back": "回帳本清單",
+    "head": "系統設定",
+    "language": "語言設定"
+  },
   "bookDetail": {
     "back": "回清單",
     "totalOut": "總支出",

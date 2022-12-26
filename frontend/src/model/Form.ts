@@ -1,5 +1,7 @@
 import { ShareDetail } from '@y-celestial/spica-service';
 
+export type LanguageForm = { language: string };
+
 export type NewBookForm = { name: string };
 
 export type NewMemberForm = { nickname: string };

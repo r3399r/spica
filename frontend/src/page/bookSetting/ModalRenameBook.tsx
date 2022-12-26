@@ -5,7 +5,7 @@ import FormInput from 'src/celestial-ui/component/FormInput';
 import ModalForm from 'src/celestial-ui/component/ModalForm';
 import useBook from 'src/hook/useBook';
 import { RenameBookForm } from 'src/model/Form';
-import { renameBook } from 'src/service/settingService';
+import { renameBook } from 'src/service/bookSettingService';
 
 type Props = {
   open: boolean;

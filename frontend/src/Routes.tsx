@@ -9,12 +9,14 @@ import Member from './page/member';
 import PersonalBalance from './page/personalBalance';
 import Settlement from './page/settlement';
 import Share from './page/share';
+import SystemSetting from './page/systemSetting';
 import Transaction from './page/transaction';
 
 const AppRoutes = () => (
   <Routes>
     <Route path={Page.Landing} element={<Landing />} />
     <Route path={Page.Book} element={<BookList />} />
+    <Route path={Page.Setting} element={<SystemSetting />} />
     <Route path={`${Page.Book}/:id`} element={<BookDetail />} />
     <Route path={`${Page.Book}/:id/tx`} element={<EidtTransaction />} />
     <Route path={`${Page.Book}/:id/tx/:tid`} element={<Transaction />} />

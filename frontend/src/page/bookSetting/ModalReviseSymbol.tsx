@@ -5,7 +5,7 @@ import ModalForm from 'src/celestial-ui/component/ModalForm';
 import Radio from 'src/celestial-ui/component/Radio';
 import useBook from 'src/hook/useBook';
 import { ReviseSymbolForm } from 'src/model/Form';
-import { resetSymbol } from 'src/service/settingService';
+import { resetSymbol } from 'src/service/bookSettingService';
 
 type Props = {
   open: boolean;
