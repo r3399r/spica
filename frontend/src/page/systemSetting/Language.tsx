@@ -3,11 +3,10 @@ import { useTranslation } from 'react-i18next';
 import Body from 'src/celestial-ui/component/typography/Body';
 import H4 from 'src/celestial-ui/component/typography/H4';
 import IcEdit from 'src/image/ic-edit.svg';
-import { getLanguageName } from 'src/service/systemService';
 import ModalReviseSymbol from './ModalLanguage';
 
 const Language = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [open, setOpen] = useState<boolean>(false);
 
   return (
@@ -18,7 +17,7 @@ const Language = () => {
           <img src={IcEdit} onClick={() => setOpen(true)} />
         </div>
         <Body size="l" className="text-navy-300 min-h-[24px]">
-          {getLanguageName(i18n.language)}
+          {t('language')}
         </Body>
       </div>
       <ModalReviseSymbol open={open} handleClose={() => setOpen(false)} />
