@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Body from 'src/celestial-ui/component/typography/Body';
 import NavbarVanilla from 'src/component/NavbarVanilla';
@@ -9,6 +9,10 @@ import StepIos from './StepIos';
 const Add2HomeScreen = () => {
   const { t } = useTranslation();
   const [tab, setTab] = useState<'ios' | 'android'>('ios');
+
+  useEffect(() => {
+    if (navigator.userAgent.toLowerCase().includes('android')) setTab('android');
+  }, []);
 
   return (
     <div className="max-w-[640px] mx-[15px] sm:mx-auto">
