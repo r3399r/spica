@@ -11,10 +11,13 @@ const Language = () => {
 
   return (
     <>
-      <div className="pt-5 pb-4 border-b border-b-grey-300">
+      <div
+        className="pt-5 pb-4 border-b border-b-grey-300 cursor-pointer"
+        onClick={() => setOpen(true)}
+      >
         <div className="flex justify-between mb-[5px]">
           <H4>{t('systemSetting.language')}</H4>
-          <img src={IcEdit} onClick={() => setOpen(true)} />
+          <img src={IcEdit} />
         </div>
         <Body size="l" className="text-navy-300 min-h-[24px]">
           {t('language')}
