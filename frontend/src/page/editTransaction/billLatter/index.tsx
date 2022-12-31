@@ -50,6 +50,8 @@ const BillLatter = () => {
     if (numLatterPm > 0 && numLatterPm === billFormData.latter.length) setTab('pm');
   }, []);
 
+  const onClear = () => dispatch(saveBillFormData({ latter: [] }));
+
   const onReset = () => {
     if (!members || members.length === 0) return;
     setTab('weight');
@@ -128,6 +130,9 @@ const BillLatter = () => {
       </div>
       <div className="fixed bottom-0 h-[104px] w-full flex justify-center">
         <div className="max-w-[640px] w-full mx-9 flex gap-5">
+          <Button className="mt-5 w-full h-12 text-base" appearance="secondary" onClick={onClear}>
+            {t('act.clear')}
+          </Button>
           <Button className="mt-5 w-full h-12 text-base" appearance="secondary" onClick={onReset}>
             {t('act.reset')}
           </Button>

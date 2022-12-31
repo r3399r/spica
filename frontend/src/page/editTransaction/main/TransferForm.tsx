@@ -36,22 +36,28 @@ const TransferForm = () => {
         />
       </div>
       <Body className="mb-[5px] text-navy-700">{t('desc.sender')}</Body>
-      <div className="flex justify-between gap-[10px]">
+      <div
+        className="flex justify-between gap-[10px] cursor-pointer"
+        onClick={() => setSide('src')}
+      >
         <Body size="l" className="ml-[10px]">
           {members.find((v) => v.id === transferFormData.srcMemberId)?.nickname}
         </Body>
         <div>
-          <img src={IcEdit} className="cursor-pointer" onClick={() => setSide('src')} />
+          <img src={IcEdit} />
         </div>
       </div>
       <Divider className="my-[15px]" />
       <Body className="mb-[5px] text-navy-700">{t('desc.receiver')}</Body>
-      <div className="flex justify-between gap-[10px]">
+      <div
+        className="flex justify-between gap-[10px] cursor-pointer"
+        onClick={() => setSide('dst')}
+      >
         <Body size="l" className="ml-[10px]">
           {members.find((v) => v.id === transferFormData.dstMemberId)?.nickname}
         </Body>
         <div>
-          <img src={IcEdit} className="cursor-pointer" onClick={() => setSide('dst')} />
+          <img src={IcEdit} />
         </div>
       </div>
       <Divider className="my-[15px]" />

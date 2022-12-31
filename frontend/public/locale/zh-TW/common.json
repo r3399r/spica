@@ -1,5 +1,5 @@
 {
-  "appName": "Bitop",
+  "appName": "必有分帳",
   "language": "繁體中文",
   "act": {
     "confirm": "確認",
@@ -7,6 +7,7 @@
     "submit": "送出",
     "delete": "刪除",
     "reset": "重置",
+    "clear": "清除",
     "back": "回上頁",
     "loadMore": "讀取更多"
   },
@@ -20,11 +21,36 @@
     "receiver": "收款者",
     "memo": "備註"
   },
+  "landing": {
+    "title": "Bi-ll 必有分帳",
+    "subtitle": "為你輕鬆算好每一筆費用",
+    "start": "開始使用",
+    "featureLogin": "免登入",
+    "featurePwa": "只需將網站「加入主畫面」即可隨時使用",
+    "featureEasy": "介面友善易上手"
+  },
   "bookList": {
     "bookList": "帳本清單",
     "newBook": "建立新帳本",
     "noBook": "尚未建立帳本",
     "name": "名稱"
+  },
+  "systemSetting": {
+    "back": "回帳本清單",
+    "head": "系統設定",
+    "language": "語言設定",
+    "add2HomeScreen": "加入手機主畫面",
+    "contactUs": "聯絡我們"
+  },
+  "add2HomeScreen": {
+    "back": "回系統設定",
+    "iosStep1": "使用 Safari 打開本網站，並點選畫面下方的分享圖示",
+    "iosStep2": "選擇「加入主畫面」",
+    "iosStep3": "按下右上角「新增」",
+    "androidStep1": "使用 Chrome 打開本網站，並點選畫面右上方的「更多」圖示",
+    "androidStep2": "選擇「加入主畫面」",
+    "androidStep3": "按下小畫面的「新增」",
+    "done": "完成以上步驟後，便可在手機主畫面上看到 Bi-ll 的圖示了"
   },
   "bookDetail": {
     "back": "回清單",

@@ -23,7 +23,10 @@ const Former = () => {
       <Body className="mb-[5px] text-navy-700">
         {billFormData.type === BillType.Out ? t('desc.payer') : t('desc.receiver')}
       </Body>
-      <div className="flex justify-between gap-[10px]">
+      <div
+        className="flex justify-between gap-[10px] cursor-pointer"
+        onClick={() => dispatch(setTxState('former'))}
+      >
         <div className="flex-1 flex flex-col gap-[5px]">
           {isAll && (
             <div className="ml-[10px] flex justify-between">
@@ -48,11 +51,7 @@ const Former = () => {
               ))}
         </div>
         <div>
-          <img
-            src={IcEdit}
-            className="cursor-pointer"
-            onClick={() => dispatch(setTxState('former'))}
-          />
+          <img src={IcEdit} />
         </div>
       </div>
     </>

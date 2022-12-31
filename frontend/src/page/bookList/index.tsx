@@ -6,9 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'src/celestial-ui/component/Button';
 import Body from 'src/celestial-ui/component/typography/Body';
 import H2 from 'src/celestial-ui/component/typography/H2';
+import H5 from 'src/celestial-ui/component/typography/H5';
 import { Page } from 'src/constant/Page';
 import IcAdd from 'src/image/ic-add.svg';
 import IcBook from 'src/image/ic-book.svg';
+import IcConfig from 'src/image/ic-config.svg';
+import Logo from 'src/image/logo.svg';
 import PicBookHero from 'src/image/pic-book-hero.svg';
 import { RootState } from 'src/redux/store';
 import { setTxPageScroll } from 'src/redux/uiSlice';
@@ -30,10 +33,17 @@ const BookList = () => {
   return (
     <>
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
-        <div>
-          <img src={PicBookHero} className="w-full" />
-        </div>
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+          <div className="float-right">
+            <img src={IcConfig} className="cursor-pointer" onClick={() => navigate(Page.Setting)} />
+          </div>
+          <div className="mt-[15px] mb-[10px] flex justify-center items-center gap-[5px]">
+            <img src={Logo} />
+            <H5 className="text-navy-500">{t('appName')}</H5>
+          </div>
+          <div>
+            <img src={PicBookHero} className="w-full" />
+          </div>
           <H2 className="mt-[30px] mb-5 mx-[25px]">{t('bookList.bookList')}</H2>
           {books?.length === 0 ? (
             <Body className="py-[30px] flex justify-center text-navy-300">

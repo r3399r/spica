@@ -43,7 +43,10 @@ const Latter = () => {
   return (
     <>
       <Body className="mb-[5px] text-navy-700">{t('desc.sharer')}</Body>
-      <div className="flex justify-between gap-[10px]">
+      <div
+        className="flex justify-between gap-[10px] cursor-pointer"
+        onClick={() => dispatch(setTxState('latter'))}
+      >
         <div className="flex-1 flex flex-col gap-[5px]">
           {isAllShare && (
             <div className="ml-[10px] flex justify-between flex-1">
@@ -61,11 +64,7 @@ const Latter = () => {
             ))}
         </div>
         <div>
-          <img
-            src={IcEdit}
-            className="cursor-pointer"
-            onClick={() => dispatch(setTxState('latter'))}
-          />
+          <img src={IcEdit} />
         </div>
       </div>
     </>

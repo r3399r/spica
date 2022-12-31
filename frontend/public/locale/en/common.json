@@ -1,5 +1,5 @@
 {
-  "appName": "Bi-ll",
+  "appName": "Split the Bill",
   "language": "English",
   "act": {
     "confirm": "Confirm",
@@ -7,6 +7,7 @@
     "submit": "Submit",
     "delete": "Delete",
     "reset": "Reset",
+    "clear": "Clear",
     "back": "Back",
     "loadMore": "Load More"
   },
@@ -20,11 +21,36 @@
     "receiver": "Receiver",
     "memo": "Memo"
   },
+  "landing": {
+    "title": "Bi-ll",
+    "subtitle": "Let's Split the Bill easily",
+    "start": "Get started",
+    "featureLogin": "Login free",
+    "featurePwa": "Simply \"Add to Home Screen\" and use it anytime",
+    "featureEasy": "Friendly interface and easy to use"
+  },
   "bookList": {
     "bookList": "Book List",
     "newBook": "Create New Book",
     "noBook": "No Book",
     "name": "Name"
+  },
+  "systemSetting": {
+    "back": "Back",
+    "head": "System Setting",
+    "language": "Language",
+    "add2HomeScreen": "Add to Home Screen",
+    "contactUs": "Contact Us"
+  },
+  "add2HomeScreen": {
+    "back": "Back",
+    "iosStep1": "Open this website with Safari and tap the share icon at the bottom of the screen",
+    "iosStep2": "Select \"Add to Home Screen\"",
+    "iosStep3": "Click \"Add\" in the upper right corner",
+    "androidStep1": "Open this site in Chrome and click on the \"More\" icon at the top right of the screen",
+    "androidStep2": "Select \"Add to Home Screen\"",
+    "androidStep3": "Click \"Add\" on the small screen",
+    "done": "After completing the above steps, you can see the icon of Bi-ll on the main screen of the phone"
   },
   "bookDetail": {
     "back": "Back",

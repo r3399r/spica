@@ -5,7 +5,7 @@ import Body from 'src/celestial-ui/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
 import IcWarning from 'src/image/ic-warning.svg';
-import { deleteBook } from 'src/service/settingService';
+import { deleteBook } from 'src/service/bookSettingService';
 
 type Props = {
   open: boolean;
