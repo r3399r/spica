@@ -33,8 +33,6 @@ const BookDetail = () => {
 
   useEffect(() => {
     if (ref.current) ref.current.scrollTop = txPageScroll;
-    if (typeof window === 'object')
-      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
   }, []);
 
   return (
@@ -50,36 +48,6 @@ const BookDetail = () => {
           <Navbar />
           <MainCard />
           <BalanceCard />
-          <div className="border-[1px] border-grey-500 rounded-[15px] p-2">
-            <ins
-              className="adsbygoogle"
-              style={{ display: 'block', textAlign: 'center' }}
-              data-ad-layout="in-article"
-              data-ad-format="fluid"
-              data-ad-client="ca-pub-4116238563422892"
-              data-ad-slot="4576976623"
-            />
-          </div>
-          <div className="border-[1px] border-grey-500 rounded-[15px] p-2">
-            <ins
-              className="adsbygoogle"
-              style={{ display: 'block' }}
-              data-ad-format="fluid"
-              data-ad-layout-key="-fd+5u+4s-d5+6g"
-              data-ad-client="ca-pub-4116238563422892"
-              data-ad-slot="2305807594"
-            />
-          </div>
-          <div className="border-[1px] border-grey-500 rounded-[15px] p-2">
-            <ins
-              className="adsbygoogle"
-              style={{ display: 'block' }}
-              data-ad-client="ca-pub-4116238563422892"
-              data-ad-slot="2983859207"
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            />
-          </div>
           <TransactionList />
           {noMember && (
             <Body className="mt-[30px] px-[46px] text-center text-navy-300">
