@@ -1,5 +1,5 @@
 {
-  "appName": "必有分帳",
+  "appName": "Bunny Bill",
   "language": "繁體中文",
   "act": {
     "confirm": "確認",
@@ -22,7 +22,7 @@
     "memo": "備註"
   },
   "landing": {
-    "title": "Bi-ll 必有分帳",
+    "title": "Bunny Bill",
     "subtitle": "為你輕鬆算好每一筆費用",
     "start": "開始使用",
     "featureLogin": "免登入",
@@ -50,7 +50,7 @@
     "androidStep1": "使用 Chrome 打開本網站，並點選畫面右上方的「更多」圖示",
     "androidStep2": "選擇「加入主畫面」",
     "androidStep3": "按下小畫面的「新增」",
-    "done": "完成以上步驟後，便可在手機主畫面上看到 Bi-ll 的圖示了"
+    "done": "完成以上步驟後，便可在手機主畫面上看到 Bunny Bill 的圖示了"
   },
   "bookDetail": {
     "back": "回清單",

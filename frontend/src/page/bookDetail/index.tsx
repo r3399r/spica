@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'src/celestial-ui/component/Button';
 import Body from 'src/celestial-ui/component/typography/Body';
+// import AdSense from 'src/component/AdSense';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
 import IcAdd from 'src/image/ic-add.svg';
@@ -24,6 +25,14 @@ const BookDetail = () => {
   const { txPageScroll } = useSelector((rootState: RootState) => rootState.ui);
   const book = useBook();
   const noMember = useMemo(() => book?.members?.length === 0, [book]);
+  // const showAd = useMemo(
+  //   () =>
+  //     book?.members &&
+  //     book.members.length > 0 &&
+  //     book?.transactions &&
+  //     book.transactions.length > 0,
+  //   [book],
+  // );
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -48,6 +57,11 @@ const BookDetail = () => {
           <Navbar />
           <MainCard />
           <BalanceCard />
+          {/* {showAd && (
+            <div className="my-[10px]">
+              <AdSense />
+            </div>
+          )} */}
           <TransactionList />
           {noMember && (
             <Body className="mt-[30px] px-[46px] text-center text-navy-300">

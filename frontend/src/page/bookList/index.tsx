@@ -11,7 +11,6 @@ import { Page } from 'src/constant/Page';
 import IcAdd from 'src/image/ic-add.svg';
 import IcBook from 'src/image/ic-book.svg';
 import IcConfig from 'src/image/ic-config.svg';
-import Logo from 'src/image/logo.svg';
 import PicBookHero from 'src/image/pic-book-hero.svg';
 import { RootState } from 'src/redux/store';
 import { setTxPageScroll } from 'src/redux/uiSlice';
@@ -37,10 +36,7 @@ const BookList = () => {
           <div className="float-right">
             <img src={IcConfig} className="cursor-pointer" onClick={() => navigate(Page.Setting)} />
           </div>
-          <div className="mt-[15px] mb-[10px] flex justify-center items-center gap-[5px]">
-            <img src={Logo} />
-            <H5 className="text-navy-500">{t('appName')}</H5>
-          </div>
+          <H5 className="mt-[15px] mb-[10px] text-navy-500 text-center">{t('appName')}</H5>
           <div>
             <img src={PicBookHero} className="w-full" />
           </div>

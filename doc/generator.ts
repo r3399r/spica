@@ -17,9 +17,9 @@ import packageJson from '../backend/package.json';
       },
     },
     noImplicitAdditionalProperties: 'throw-on-extras',
-    host: `bi-ll${env === 'prod' ? '' : `-${env}`}.celestialstudio.net`,
+    host: `bunnybill${env === 'prod' ? '' : `-${env}`}.celestialstudio.net`,
     basePath: 'api',
-    name: 'BI-LL API',
+    name: 'Bunny Bill API',
     specFileBaseName: 'index',
     version: packageJson.version,
   };

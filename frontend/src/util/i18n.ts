@@ -1,12 +1,13 @@
 import { init, use } from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import Backend from 'i18next-chained-backend';
-import HttpApi from 'i18next-http-backend';
+import ChainedBackend from 'i18next-chained-backend';
+import HttpBackend from 'i18next-http-backend';
+import LocalStorageBackend from 'i18next-localstorage-backend';
 import { initReactI18next } from 'react-i18next';
 import { Language } from 'src/constant/Language';
 
 // load translation using http
-use(Backend);
+use(ChainedBackend);
 // detect user language
 use(LanguageDetector);
 // pass the i18n instance to react-i18next.
@@ -38,8 +39,11 @@ init({
   },
   // options for backend plugin
   backend: {
-    backends: [HttpApi],
+    backends: [LocalStorageBackend, HttpBackend],
     backendOptions: [
+      {
+        expirationTime: 7 * 24 * 60 * 60 * 1000, // 7 days
+      },
       {
         // path where resources get loaded from
         loadPath: '/locale/{{lng}}/{{ns}}.json',
