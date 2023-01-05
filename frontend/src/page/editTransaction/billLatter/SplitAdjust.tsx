@@ -98,7 +98,6 @@ const SplitAdjust = () => {
             className="w-[78px]"
             value={`${book?.symbol}${v.value}`}
             onChange={onInput(v.id)}
-            allowNegative
           />
           <Body
             size="l"
