@@ -3,7 +3,7 @@ set -e
 
 env=$1
 project=spica
-subDomain=bi-ll
+subDomain=bunnybill
 domain=celestialstudio.net
 
 echo ====================================================================================
