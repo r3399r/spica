@@ -130,14 +130,22 @@ const BillLatter = () => {
       </div>
       <div className="fixed bottom-0 h-[104px] w-full flex justify-center">
         <div className="max-w-[640px] w-full mx-9 flex gap-5">
-          <Button className="mt-5 w-full h-12 text-base" appearance="secondary" onClick={onClear}>
+          <Button
+            className="mt-5 w-full h-12 text-base !p-[10px]"
+            appearance="secondary"
+            onClick={onClear}
+          >
             {t('act.clear')}
           </Button>
-          <Button className="mt-5 w-full h-12 text-base" appearance="secondary" onClick={onReset}>
+          <Button
+            className="mt-5 w-full h-12 text-base !p-[10px]"
+            appearance="secondary"
+            onClick={onReset}
+          >
             {t('act.reset')}
           </Button>
           <Button
-            className="mt-5 w-full h-12 text-base"
+            className="mt-5 w-full h-12 text-base !p-[10px]"
             onClick={() => dispatch(setTxState('main'))}
             disabled={remaining !== 0}
           >
