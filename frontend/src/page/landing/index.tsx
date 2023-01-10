@@ -5,6 +5,7 @@ import Body from 'src/celestial-ui/component/typography/Body';
 import H1 from 'src/celestial-ui/component/typography/H1';
 import H4 from 'src/celestial-ui/component/typography/H4';
 import H5 from 'src/celestial-ui/component/typography/H5';
+import AdSense from 'src/component/AdSense';
 import { Page } from 'src/constant/Page';
 import PicFeatureEasy from 'src/image/pic-feature-easy.svg';
 import PicFeatureLogin from 'src/image/pic-feature-login.svg';
@@ -27,6 +28,7 @@ const Landing = () => {
           {t('landing.start')}
         </Button>
       </div>
+      <AdSense />
       <div className="sm:flex">
         <div className="bg-teal-300 py-[30px] px-4 sm:w-1/3">
           <img src={PicFeatureLogin} className="mx-auto" />
