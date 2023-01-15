@@ -12,7 +12,6 @@ import {
 import { BookService } from 'src/logic/BookService';
 import {
   GetBookIdParams,
-  GetBookParams,
   PostBookBillRequest,
   PostBookMemberRequest,
   PostBookRequest,
@@ -76,15 +75,10 @@ export async function book(
 async function apiBook(event: LambdaEvent, service: BookService) {
   switch (event.httpMethod) {
     case 'GET':
-      if (event.queryStringParameters === null)
-        throw new BadRequestError('queryStringParameters should not be empty');
       if (event.headers === null)
         throw new BadRequestError('headers should not be empty');
 
-      return service.getBookList(
-        event.queryStringParameters as GetBookParams,
-        event.headers['x-api-code']
-      );
+      return service.getBookList(event.headers['x-api-device']);
     case 'POST':
       if (event.body === null)
         throw new BadRequestError('body should not be empty');

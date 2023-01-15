@@ -8,19 +8,21 @@ import Body from 'src/celestial-ui/component/typography/Body';
 import H2 from 'src/celestial-ui/component/typography/H2';
 import H5 from 'src/celestial-ui/component/typography/H5';
 import { Page } from 'src/constant/Page';
+import useQuery from 'src/hook/useQuery';
 import IcAdd from 'src/image/ic-add.svg';
 import IcBook from 'src/image/ic-book.svg';
 import IcConfig from 'src/image/ic-config.svg';
 import PicBookHero from 'src/image/pic-book-hero.svg';
 import { RootState } from 'src/redux/store';
 import { setTxPageScroll } from 'src/redux/uiSlice';
-import { loadBookList } from 'src/service/bookService';
+import { loadBookList, saveDeviceId } from 'src/service/bookService';
 import ModalNewBook from './ModalNewBook';
 
 const BookList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { id } = useQuery<{ id: string }>();
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const [open, setOpen] = useState<boolean>(false);
 
@@ -28,6 +30,10 @@ const BookList = () => {
     loadBookList();
     dispatch(setTxPageScroll(0));
   }, []);
+
+  useEffect(() => {
+    if (id) saveDeviceId(id);
+  }, [id]);
 
   return (
     <>

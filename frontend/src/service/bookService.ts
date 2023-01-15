@@ -1,6 +1,5 @@
 import { Transaction } from '@y-celestial/spica-service';
 import { format } from 'date-fns';
-import { validate as uuidValidate } from 'uuid';
 import bookEndpoint from 'src/api/bookEndpoint';
 import { compare } from 'src/celestial-ui/util/compare';
 import { appendBook, setBooks } from 'src/redux/bookSlice';
@@ -12,48 +11,50 @@ export const loadBookList = async () => {
   try {
     dispatch(startWaiting());
 
-    const { books } = getState().book;
+    // const { books } = getState().book;
 
-    const localBooks = getLocalBooks();
+    // const localBooks = getLocalBooks();
 
-    const reduxSet = new Set([...(books ?? []).map((v) => v.id)]);
-    const localSet = new Set([...localBooks.map((v) => v.id)]);
+    // const reduxSet = new Set([...(books ?? []).map((v) => v.id)]);
+    // const localSet = new Set([...localBooks.map((v) => v.id)]);
 
-    const ids = localBooks
-      .filter((v) => uuidValidate(v.id))
-      .map((v) => v.id)
-      .join();
-    const code = localBooks
-      .filter((v) => uuidValidate(v.id))
-      .map((v) => v.code)
-      .join();
+    // const ids = localBooks
+    //   .filter((v) => uuidValidate(v.id))
+    //   .map((v) => v.id)
+    //   .join();
+    // const code = localBooks
+    //   .filter((v) => uuidValidate(v.id))
+    //   .map((v) => v.code)
+    //   .join();
 
-    if (localSet.size === 0 || ids.length === 0) {
-      dispatch(setBooks([]));
+    // if (localSet.size === 0 || ids.length === 0) {
+    //   dispatch(setBooks([]));
 
-      return;
-    }
-    if (reduxSet.size === localSet.size && [...reduxSet].every((x) => localSet.has(x))) return;
+    //   return;
+    // }
+    // if (reduxSet.size === localSet.size && [...reduxSet].every((x) => localSet.has(x))) return;
+    const deviceId = localStorage.getItem('deviceId');
+    if (deviceId === null) return;
 
-    const res = await bookEndpoint.getBook({ ids }, code);
+    const res = await bookEndpoint.getBook(deviceId);
+    console.log(res);
+    // const updatedBooks = res.data.map((v) => {
+    //   const savedBook = books?.find((o) => o.id === v.id);
 
-    const updatedBooks = res.data.map((v) => {
-      const savedBook = books?.find((o) => o.id === v.id);
+    //   return { ...v, members: null, transactions: null, txCount: null, ...savedBook };
+    // });
 
-      return { ...v, members: null, transactions: null, txCount: null, ...savedBook };
-    });
-
-    dispatch(setBooks(updatedBooks));
-    localStorage.setItem(
-      'book',
-      JSON.stringify(
-        res.data.map((v) => ({
-          id: v.id,
-          code: v.code,
-          showDeleted: localBooks.find((o) => o.id === v.id)?.showDeleted ?? false,
-        })),
-      ),
-    );
+    // dispatch(setBooks(updatedBooks));
+    // localStorage.setItem(
+    //   'book',
+    //   JSON.stringify(
+    //     res.data.map((v) => ({
+    //       id: v.id,
+    //       code: v.code,
+    //       showDeleted: localBooks.find((o) => o.id === v.id)?.showDeleted ?? false,
+    //     })),
+    //   ),
+    // );
   } finally {
     dispatch(finishWaiting());
   }
@@ -161,4 +162,8 @@ export const aggregateTransactions = (id: string, transactions: Transaction[]) =
   });
 
   return map;
+};
+
+export const saveDeviceId = (id: string) => {
+  localStorage.setItem('deviceId', id);
 };

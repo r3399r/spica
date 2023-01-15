@@ -1,30 +1,17 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, Generated } from 'typeorm';
-import { ShareMethod } from 'src/constant/Book';
-import { BillShare } from './BillShare';
+import { DeviceBook } from './DeviceBook';
 
-@Entity({ name: 'bill_share' })
-export class BillShareEntity implements BillShare {
+@Entity({ name: 'device_book' })
+export class DeviceBookEntity implements DeviceBook {
   @Column({ primary: true })
   @Generated('uuid')
   id!: string;
 
-  @Column({ type: 'uuid', name: 'bill_id' })
-  billId!: string;
+  @Column({ type: 'uuid', name: 'device_id' })
+  deviceId!: string;
 
-  @Column({ type: 'int8' })
-  ver!: string;
-
-  @Column({ type: 'uuid', name: 'member_id' })
-  memberId!: string;
-
-  @Column({ type: 'text' })
-  method!: ShareMethod;
-
-  @Column({ type: 'float' })
-  value: number | null = null;
-
-  @Column({ type: 'float' })
-  amount!: number;
+  @Column({ type: 'uuid', name: 'book_id' })
+  bookId!: string;
 
   @Column({ type: 'timestamp', name: 'date_created', default: null })
   dateCreated!: string;

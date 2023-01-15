@@ -8,6 +8,7 @@ import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
 import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
 import { ViewBookAccess } from 'src/access/ViewBookAccess';
+import { ViewDeviceBookAccess } from 'src/access/ViewDeviceBookAccess';
 import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
 import {
   BadRequestError,
@@ -26,7 +27,6 @@ import {
   GetBookIdParams,
   GetBookIdResponse,
   GetBookNameResponse,
-  GetBookParams,
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
@@ -94,6 +94,9 @@ export class BookService {
   @inject(ViewTransactionAccess)
   private readonly vTransactionAccess!: ViewTransactionAccess;
 
+  @inject(ViewDeviceBookAccess)
+  private readonly viewDeviceBookAccess!: ViewDeviceBookAccess;
+
   public async cleanup() {
     await this.dbAccess.cleanup();
   }
@@ -114,25 +117,12 @@ export class BookService {
     return book;
   }
 
-  public async getBookList(
-    params: GetBookParams,
-    code: string
-  ): Promise<GetBookResponse> {
-    const idArray = params.ids.split(',');
-    const codeArray = code.split(',');
-    if (idArray.length !== codeArray.length)
-      throw new BadRequestError('bad request');
+  public async getBookList(deviceId: string): Promise<GetBookResponse> {
+    const vDeviceBooks = await this.viewDeviceBookAccess.findByDeviceId(
+      deviceId
+    );
 
-    const books = await this.vBookAccess.findByIds(idArray);
-
-    return books
-      .filter((v) => {
-        const idx = idArray.findIndex((id) => id === v.id);
-        if (idx === -1 || codeArray[idx] !== v.code) return false;
-
-        return true;
-      })
-      .sort(compare('dateCreated'));
+    return vDeviceBooks.sort(compare('dateCreated'));
   }
 
   public async getBookNameById(id: string): Promise<GetBookNameResponse> {

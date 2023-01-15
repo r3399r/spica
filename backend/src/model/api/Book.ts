@@ -3,10 +3,9 @@ import { Book } from 'src/model/entity/Book';
 import { Member } from 'src/model/entity/Member';
 import { BillData, Transaction, TransferData } from 'src/model/type/Book';
 import { ViewBook } from 'src/model/viewEntity/ViewBook';
+import { ViewDeviceBook } from 'src/model/viewEntity/ViewDeviceBook';
 
-export type GetBookParams = { ids: string };
-
-export type GetBookResponse = ViewBook[];
+export type GetBookResponse = ViewDeviceBook[];
 
 export type PostBookRequest = {
   name: string;

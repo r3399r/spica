@@ -7,7 +7,7 @@ export class MemberEntity implements Member {
   @Generated('uuid')
   id!: string;
 
-  @Column({ type: 'int8', name: 'book_id' })
+  @Column({ type: 'uuid', name: 'book_id' })
   bookId!: string;
 
   @Column({ type: 'text' })
