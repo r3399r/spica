@@ -35,4 +35,10 @@ export class DeviceBookAccess {
 
     await qr.manager.delete(DeviceBookEntity.name, { deviceId, bookId });
   }
+
+  public async hardDeleteByBookId(bookId: string) {
+    const qr = await this.database.getQueryRunner();
+
+    await qr.manager.delete(DeviceBookEntity.name, { bookId });
+  }
 }
