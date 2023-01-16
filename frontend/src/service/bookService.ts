@@ -11,50 +11,29 @@ export const loadBookList = async () => {
   try {
     dispatch(startWaiting());
 
-    // const { books } = getState().book;
-
-    // const localBooks = getLocalBooks();
-
-    // const reduxSet = new Set([...(books ?? []).map((v) => v.id)]);
-    // const localSet = new Set([...localBooks.map((v) => v.id)]);
-
-    // const ids = localBooks
-    //   .filter((v) => uuidValidate(v.id))
-    //   .map((v) => v.id)
-    //   .join();
-    // const code = localBooks
-    //   .filter((v) => uuidValidate(v.id))
-    //   .map((v) => v.code)
-    //   .join();
-
-    // if (localSet.size === 0 || ids.length === 0) {
-    //   dispatch(setBooks([]));
-
-    //   return;
-    // }
-    // if (reduxSet.size === localSet.size && [...reduxSet].every((x) => localSet.has(x))) return;
+    const { books } = getState().book;
     const deviceId = localStorage.getItem('deviceId');
     if (deviceId === null) return;
 
     const res = await bookEndpoint.getBook(deviceId);
-    console.log(res);
-    // const updatedBooks = res.data.map((v) => {
-    //   const savedBook = books?.find((o) => o.id === v.id);
+    const updatedBooks = res.data.map((v) => {
+      const savedBook = books?.find((o) => o.id === v.bookId);
 
-    //   return { ...v, members: null, transactions: null, txCount: null, ...savedBook };
-    // });
+      return {
+        id: v.bookId,
+        name: v.name,
+        code: v.code,
+        symbol: v.symbol,
+        dateCreated: v.dateCreated,
+        lastDateUpdated: v.lastDateUpdated,
+        members: null,
+        transactions: null,
+        txCount: null,
+        ...savedBook,
+      };
+    });
 
-    // dispatch(setBooks(updatedBooks));
-    // localStorage.setItem(
-    //   'book',
-    //   JSON.stringify(
-    //     res.data.map((v) => ({
-    //       id: v.id,
-    //       code: v.code,
-    //       showDeleted: localBooks.find((o) => o.id === v.id)?.showDeleted ?? false,
-    //     })),
-    //   ),
-    // );
+    dispatch(setBooks(updatedBooks));
   } finally {
     dispatch(finishWaiting());
   }
@@ -96,8 +75,10 @@ export const loadBookById = async (id: string) => {
     const savedBook = books?.find((v) => v.id === id);
     if (savedBook && savedBook.members !== null && savedBook.transactions !== null) return;
 
-    const code = getLocalBookById(id)?.code ?? '';
-    const res = await bookEndpoint.getBookId(id, code, { limit: '50', offset: '0' });
+    const deviceId = localStorage.getItem('deviceId');
+    if (deviceId === null) return;
+
+    const res = await bookEndpoint.getBookId(id, deviceId, { limit: '50', offset: '0' });
 
     const index = books?.findIndex((v) => v.id === id) ?? -1;
     if (books === null || index === -1)

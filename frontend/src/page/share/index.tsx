@@ -11,7 +11,7 @@ import { Page } from 'src/constant/Page';
 import useQuery from 'src/hook/useQuery';
 import IcBook from 'src/image/ic-book.svg';
 import { ShareForm } from 'src/model/Form';
-import { init, setShareBook } from 'src/service/shareService';
+import { addBook, init } from 'src/service/shareService';
 
 const Share = () => {
   const { t } = useTranslation();
@@ -42,7 +42,7 @@ const Share = () => {
 
   const onSubmit = (data: ShareForm) => {
     if (!id) return;
-    setShareBook(id, data.code)
+    addBook(id, data.code)
       .then(redirect)
       .catch(() =>
         methods.setError('code', { message: t('share.wrongCode') }, { shouldFocus: true }),

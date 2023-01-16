@@ -3,10 +3,11 @@ select
     db.id,
     db.device_id,
     db.book_id,
-    b.name,
-    b.code,
-    b.date_created,
-    b.date_updated
+    vb.name,
+    vb.code,
+    vb.symbol,
+    vb.date_created,
+    vb.last_date_updated
 from
     device_book db
-    left join book b on db.book_id = b.id;
+    left join v_book vb on db.book_id = vb.id;

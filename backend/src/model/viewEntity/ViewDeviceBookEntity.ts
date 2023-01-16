@@ -18,9 +18,12 @@ export class ViewDeviceBookEntity implements ViewDeviceBook {
   @ViewColumn()
   code!: string;
 
+  @ViewColumn()
+  symbol!: string;
+
   @ViewColumn({ name: 'date_created' })
   dateCreated!: string;
 
-  @ViewColumn({ name: 'date_updated' })
-  dateUpdated: string | null = null;
+  @ViewColumn({ name: 'last_date_updated' })
+  lastDateUpdated!: string;
 }

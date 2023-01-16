@@ -29,17 +29,17 @@ aws cloudformation package --template-file aws/cloudformation/template.yaml --ou
 aws cloudformation deploy --template-file packaged.yaml --stack-name $project-$env-stack --parameter-overrides TargetEnvr=$env Project=$project SubDomain=$subDomain Domain=$domain --no-fail-on-empty-changeset --s3-bucket y-cf-midway-singapore
 echo ====================================================================================
 
-# echo prepare api document...
-# cd ../doc
-# npm ci
-# npm run tsoa -- $env
-# echo ====================================================================================
+echo prepare api document...
+cd ../doc
+npm ci
+npm run tsoa -- $env
+echo ====================================================================================
 
 echo deploy frontend to S3...
 cd ../frontend
 npm i
 npm run pre:deploy
-# mkdir -p ./dist/doc
-# cp -R ../doc/index.* ./dist/doc
+mkdir -p ./dist/doc
+cp -R ../doc/index.* ./dist/doc
 aws s3 sync ./dist s3://$project-$env --delete --cache-control no-cache
 echo ====================================================================================

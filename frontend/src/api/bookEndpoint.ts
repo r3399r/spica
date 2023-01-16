@@ -7,6 +7,7 @@ import {
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
+  PostBookIdResponse,
   PostBookMemberRequest,
   PostBookMemberResponse,
   PostBookRequest,
@@ -30,11 +31,19 @@ const getBook = async (deviceId: string) =>
 const postBook = async (data: PostBookRequest) =>
   await http.post<PostBookResponse>('book', { data });
 
+const getBookId = async (id: string, deviceId: string, params?: GetBookIdParams) =>
+  await http.get<GetBookIdResponse>(`book/${id}`, {
+    headers: { 'x-api-device': deviceId },
+    params,
+  });
+
+const postBookId = async (id: string, code: string, deviceId: string) =>
+  await http.post<PostBookIdResponse>(`book/${id}`, {
+    headers: { 'x-api-code': code, 'x-api-device': deviceId },
+  });
+
 const putBookId = async (id: string, data: PutBookRequest, code: string) =>
   await http.put<PutBookResponse>(`book/${id}`, { data, headers: { 'x-api-code': code } });
-
-const getBookId = async (id: string, code: string, params?: GetBookIdParams) =>
-  await http.get<GetBookIdResponse>(`book/${id}`, { headers: { 'x-api-code': code }, params });
 
 const postBookIdBill = async (id: string, data: PostBookBillRequest, code: string) =>
   await http.post<PostBookBillResponse>(`book/${id}/bill`, {
@@ -97,8 +106,9 @@ const deleteBookIdTransfer = async (id: string, tid: string, code: string) =>
 export default {
   getBook,
   postBook,
-  putBookId,
   getBookId,
+  postBookId,
+  putBookId,
   postBookIdBill,
   putBookIdBill,
   deleteBookIdBill,

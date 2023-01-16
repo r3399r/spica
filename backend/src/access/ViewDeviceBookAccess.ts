@@ -18,4 +18,15 @@ export class ViewDeviceBookAccess {
       where: { deviceId },
     });
   }
+
+  public async findByDeviceIdAndBookId(deviceId: string, bookId: string) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.findOneOrFail<ViewDeviceBook>(
+      ViewDeviceBookEntity.name,
+      {
+        where: { deviceId, bookId },
+      }
+    );
+  }
 }

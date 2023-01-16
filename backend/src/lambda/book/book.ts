@@ -98,7 +98,7 @@ async function apiBookId(event: LambdaEvent, service: BookService) {
     case 'GET':
       return service.getBook(
         event.pathParameters.id,
-        event.headers['x-api-code'],
+        event.headers['x-api-device'],
         event.queryStringParameters as GetBookIdParams | null
       );
     case 'PUT':
@@ -109,6 +109,12 @@ async function apiBookId(event: LambdaEvent, service: BookService) {
         event.pathParameters.id,
         JSON.parse(event.body) as PutBookRequest,
         event.headers['x-api-code']
+      );
+    case 'POST':
+      return service.addDeviceBook(
+        event.pathParameters.id,
+        event.headers['x-api-code'],
+        event.headers['x-api-device']
       );
     default:
       throw new InternalServerError('unknown http method');

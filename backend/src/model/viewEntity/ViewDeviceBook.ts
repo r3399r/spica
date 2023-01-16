@@ -4,6 +4,7 @@ export type ViewDeviceBook = {
   bookId: string;
   name: string;
   code: string;
+  symbol: string;
   dateCreated: string | null;
-  dateUpdated: string | null;
+  lastDateUpdated: string;
 };

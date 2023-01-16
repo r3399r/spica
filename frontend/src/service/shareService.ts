@@ -18,14 +18,15 @@ export const init = async (id: string) => {
   }
 };
 
-export const setShareBook = async (id: string, code: string) => {
+export const addBook = async (id: string, code: string) => {
   try {
     dispatch(startWaiting());
-    const res = await bookEndpoint.getBookId(id, code, { limit: '50', offset: '0' });
-    dispatch(appendBook({ ...res.data, txCount: Number(res.headers['x-pagination-count']) }));
 
-    const localBooks = getLocalBooks();
-    localStorage.setItem('book', JSON.stringify([...localBooks, { id, code }]));
+    const deviceId = localStorage.getItem('deviceId');
+    if (deviceId === null) return;
+
+    const res = await bookEndpoint.postBookId(id, code, deviceId);
+    dispatch(appendBook({ ...res.data, txCount: Number(res.headers['x-pagination-count']) }));
   } finally {
     dispatch(finishWaiting());
   }

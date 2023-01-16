@@ -4,6 +4,7 @@ import { BillAccess } from 'src/access/BillAccess';
 import { BillShareAccess } from 'src/access/BillShareAccess';
 import { BookAccess } from 'src/access/BookAccess';
 import { DbAccess } from 'src/access/DbAccess';
+import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
 import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
@@ -14,7 +15,10 @@ import {
   BadRequestError,
   UnauthorizedError,
 } from 'src/celestial-service/error';
-import { Pagination } from 'src/celestial-service/model/Pagination';
+import {
+  Pagination,
+  PaginationParams,
+} from 'src/celestial-service/model/Pagination';
 import { compare } from 'src/celestial-service/util/compare';
 import {
   differenceBy,
@@ -48,17 +52,20 @@ import { Bill } from 'src/model/entity/Bill';
 import { BillEntity } from 'src/model/entity/BillEntity';
 import { BillShareEntity } from 'src/model/entity/BillShareEntity';
 import { BookEntity } from 'src/model/entity/BookEntity';
+import { DeviceBookEntity } from 'src/model/entity/DeviceBookEntity';
 import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
 import {
+  BookDetail,
   History,
   ShareDetail,
   TransactionBill,
   TransactionTransfer,
 } from 'src/model/type/Book';
 import { ViewBillShare } from 'src/model/viewEntity/ViewBillShare';
+import { ViewBook } from 'src/model/viewEntity/ViewBook';
 import { bn } from 'src/util/bignumber';
 import { randomBase10 } from 'src/util/random';
 
@@ -69,6 +76,9 @@ import { randomBase10 } from 'src/util/random';
 export class BookService {
   @inject(DbAccess)
   private readonly dbAccess!: DbAccess;
+
+  @inject(DeviceBookAccess)
+  private readonly deviceBookAccess!: DeviceBookAccess;
 
   @inject(BookAccess)
   private readonly bookAccess!: BookAccess;
@@ -95,7 +105,7 @@ export class BookService {
   private readonly vTransactionAccess!: ViewTransactionAccess;
 
   @inject(ViewDeviceBookAccess)
-  private readonly viewDeviceBookAccess!: ViewDeviceBookAccess;
+  private readonly vDeviceBookAccess!: ViewDeviceBookAccess;
 
   public async cleanup() {
     await this.dbAccess.cleanup();
@@ -118,9 +128,7 @@ export class BookService {
   }
 
   public async getBookList(deviceId: string): Promise<GetBookResponse> {
-    const vDeviceBooks = await this.viewDeviceBookAccess.findByDeviceId(
-      deviceId
-    );
+    const vDeviceBooks = await this.vDeviceBookAccess.findByDeviceId(deviceId);
 
     return vDeviceBooks.sort(compare('dateCreated'));
   }
@@ -376,18 +384,16 @@ export class BookService {
     return members.sort(compare('dateCreated'));
   }
 
-  public async getBook(
-    id: string,
-    code: string,
-    params: GetBookIdParams | null
-  ): Promise<Pagination<GetBookIdResponse>> {
-    const limit = isNaN(Number(params?.limit)) ? 10 : Number(params?.limit);
-    const offset = isNaN(Number(params?.offset)) ? 0 : Number(params?.offset);
+  private async getBookDetail(
+    book: ViewBook,
+    paginate?: PaginationParams | null
+  ): Promise<Pagination<BookDetail>> {
+    const limit = paginate ? Number(paginate.limit) : 50;
+    const offset = paginate ? Number(paginate.offset) : 0;
 
-    const book = await this.validateBook(id, code);
     const [members, { data: tx, count }] = await Promise.all([
-      this.getMemberByBook(id),
-      this.vTransactionAccess.findAndCountByBookId(id, {
+      this.getMemberByBook(book.id),
+      this.vTransactionAccess.findAndCountByBookId(book.id, {
         order: { date: 'desc' },
         take: limit,
         skip: offset,
@@ -414,6 +420,41 @@ export class BookService {
         ].sort(compare('date', 'desc')),
       },
     };
+  }
+
+  public async getBook(
+    id: string,
+    deviceId: string,
+    params: GetBookIdParams | null
+  ): Promise<Pagination<GetBookIdResponse>> {
+    const deviceBook = await this.vDeviceBookAccess.findByDeviceIdAndBookId(
+      deviceId,
+      id
+    );
+
+    return await this.getBookDetail(
+      {
+        id: deviceBook.bookId,
+        name: deviceBook.name,
+        code: deviceBook.code,
+        symbol: deviceBook.symbol,
+        dateCreated: deviceBook.dateCreated,
+        lastDateUpdated: deviceBook.lastDateUpdated,
+      },
+      params
+    );
+  }
+
+  public async addDeviceBook(id: string, code: string, deviceId: string) {
+    const book = await this.validateBook(id, code);
+
+    const deviceBook = new DeviceBookEntity();
+    deviceBook.deviceId = deviceId;
+    deviceBook.bookId = book.id;
+
+    await this.deviceBookAccess.save(deviceBook);
+
+    return await this.getBookDetail(book);
   }
 
   public async reviseBook(
