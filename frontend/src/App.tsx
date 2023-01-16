@@ -6,6 +6,7 @@ import { getDeviceId, setDeviceId } from './service/appService';
 
 const App = () => {
   const { id } = useQuery<{ id: string }>();
+
   useEffect(() => {
     setDeviceId(id);
     const deviceId = getDeviceId();

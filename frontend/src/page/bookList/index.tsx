@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,6 @@ import Body from 'src/celestial-ui/component/typography/Body';
 import H2 from 'src/celestial-ui/component/typography/H2';
 import H5 from 'src/celestial-ui/component/typography/H5';
 import { Page } from 'src/constant/Page';
-import useQuery from 'src/hook/useQuery';
 import IcAdd from 'src/image/ic-add.svg';
 import IcBook from 'src/image/ic-book.svg';
 import IcConfig from 'src/image/ic-config.svg';
@@ -23,10 +22,9 @@ const BookList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { id } = useQuery<{ id: string }>();
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const [open, setOpen] = useState<boolean>(false);
-  const deviceId = useMemo(() => getLocalDeviceId(), [id]);
+  const deviceId = getLocalDeviceId();
 
   useEffect(() => {
     dispatch(setTxPageScroll(0));
