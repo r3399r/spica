@@ -121,6 +121,12 @@ Resources:
                 }
               },
               "post": {
+                "parameters": [{
+                  "name": "x-api-device",
+                  "in": "header",
+                  "required": true,
+                  "schema": {"type": "string"}
+                }],
                 "requestBody": {
                   "content": {
                     "application/json": {
@@ -220,7 +226,7 @@ Resources:
                   "required": true,
                   "schema": {"type": "string"}
                 },{
-                  "name": "x-api-code",
+                  "name": "x-api-device",
                   "in": "header",
                   "required": true,
                   "schema": {"type": "string"}
@@ -319,6 +325,52 @@ Resources:
                   "passthroughBehavior": "when_no_match",
                   "contentHandling": "CONVERT_TO_TEXT"
                 }
+              },
+              "delete": {
+                "parameters": [{
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "string"}
+                },{
+                  "name": "x-api-device",
+                  "in": "header",
+                  "required": true,
+                  "schema": {"type": "string"}
+                }],
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "headers": {
+                      "Access-Control-Allow-Origin": {
+                        "schema": {"type": "string"}
+                      }
+                    },
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/Empty"
+                        }
+                      }
+                    }
+                  }
+                },
+                "x-amazon-apigateway-request-validator" : "Validate query string parameters and headers",
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:278497686406:function:${Project}-${TargetEnvr}-book/invocations",
+                  "responses": {
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                      }
+                    }
+                  },
+                  "passthroughBehavior": "when_no_match",
+                  "contentHandling": "CONVERT_TO_TEXT"
+                }
               }
             },
             "/api/book/{id}/bill": {
@@ -329,7 +381,7 @@ Resources:
                   "required": true,
                   "schema": {"type": "string"}
                 },{
-                  "name": "x-api-code",
+                  "name": "x-api-device",
                   "in": "header",
                   "required": true,
                   "schema": {"type": "string"}
@@ -392,7 +444,7 @@ Resources:
                   "required": true,
                   "schema": {"type": "string"}
                 },{
-                  "name": "x-api-code",
+                  "name": "x-api-device",
                   "in": "header",
                   "required": true,
                   "schema": {"type": "string"}
@@ -453,7 +505,7 @@ Resources:
                   "required": true,
                   "schema": {"type": "string"}
                 },{
-                  "name": "x-api-code",
+                  "name": "x-api-device",
                   "in": "header",
                   "required": true,
                   "schema": {"type": "string"}
@@ -501,7 +553,7 @@ Resources:
                   "required": true,
                   "schema": {"type": "string"}
                 },{
-                  "name": "x-api-code",
+                  "name": "x-api-device",
                   "in": "header",
                   "required": true,
                   "schema": {"type": "string"}
@@ -564,7 +616,7 @@ Resources:
                   "required": true,
                   "schema": {"type": "string"}
                 },{
-                  "name": "x-api-code",
+                  "name": "x-api-device",
                   "in": "header",
                   "required": true,
                   "schema": {"type": "string"}
@@ -625,7 +677,7 @@ Resources:
                   "required": true,
                   "schema": {"type": "string"}
                 },{
-                  "name": "x-api-code",
+                  "name": "x-api-device",
                   "in": "header",
                   "required": true,
                   "schema": {"type": "string"}
@@ -707,6 +759,48 @@ Resources:
                 }
               }
             },
+            "/api/book/{id}/showDelete": {
+              "put": {
+                "parameters": [{
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "string"}
+                }],
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "headers": {
+                      "Access-Control-Allow-Origin": {
+                        "schema": {"type": "string"}
+                      }
+                    },
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/Empty"
+                        }
+                      }
+                    }
+                  }
+                },
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:278497686406:function:${Project}-${TargetEnvr}-book/invocations",
+                  "responses": {
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                      }
+                    }
+                  },
+                  "passthroughBehavior": "when_no_match",
+                  "contentHandling": "CONVERT_TO_TEXT"
+                }
+              }
+            },
             "/api/book/{id}/transfer": {
               "post": {
                 "parameters": [{
@@ -715,7 +809,7 @@ Resources:
                   "required": true,
                   "schema": {"type": "string"}
                 },{
-                  "name": "x-api-code",
+                  "name": "x-api-device",
                   "in": "header",
                   "required": true,
                   "schema": {"type": "string"}
@@ -778,7 +872,7 @@ Resources:
                   "required": true,
                   "schema": {"type": "string"}
                 },{
-                  "name": "x-api-code",
+                  "name": "x-api-device",
                   "in": "header",
                   "required": true,
                   "schema": {"type": "string"}
@@ -839,7 +933,7 @@ Resources:
                   "required": true,
                   "schema": {"type": "string"}
                 },{
-                  "name": "x-api-code",
+                  "name": "x-api-device",
                   "in": "header",
                   "required": true,
                   "schema": {"type": "string"}

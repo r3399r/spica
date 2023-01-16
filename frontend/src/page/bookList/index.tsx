@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,8 @@ import IcConfig from 'src/image/ic-config.svg';
 import PicBookHero from 'src/image/pic-book-hero.svg';
 import { RootState } from 'src/redux/store';
 import { setTxPageScroll } from 'src/redux/uiSlice';
-import { loadBookList, saveDeviceId } from 'src/service/bookService';
+import { loadBookList } from 'src/service/bookService';
+import { getLocalDeviceId } from 'src/util/localStorage';
 import ModalNewBook from './ModalNewBook';
 
 const BookList = () => {
@@ -25,15 +26,15 @@ const BookList = () => {
   const { id } = useQuery<{ id: string }>();
   const { books } = useSelector((rootState: RootState) => rootState.book);
   const [open, setOpen] = useState<boolean>(false);
+  const deviceId = useMemo(() => getLocalDeviceId(), [id]);
 
   useEffect(() => {
-    loadBookList();
     dispatch(setTxPageScroll(0));
   }, []);
 
   useEffect(() => {
-    if (id) saveDeviceId(id);
-  }, [id]);
+    if (deviceId) loadBookList();
+  }, [deviceId]);
 
   return (
     <>

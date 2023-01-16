@@ -1,12 +1,7 @@
-import { v4 as uuidv4 } from 'uuid';
+import { getLocalDeviceId, setLocalDeviceId } from 'src/util/localStorage';
 
-export const getDeviceId = () => {
-  const existingId = localStorage.getItem('deviceId');
+export const getDeviceId = () => getLocalDeviceId();
 
-  if (existingId !== null) return existingId;
-
-  const id = uuidv4();
-  localStorage.setItem('deviceId', id);
-
-  return id;
+export const setDeviceId = (id?: string) => {
+  setLocalDeviceId(id);
 };

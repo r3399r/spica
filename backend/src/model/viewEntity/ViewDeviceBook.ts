@@ -5,6 +5,7 @@ export type ViewDeviceBook = {
   name: string;
   code: string;
   symbol: string;
+  showDelete: boolean;
   dateCreated: string | null;
   lastDateUpdated: string;
 };

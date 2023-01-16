@@ -2,15 +2,14 @@ import bookEndpoint from 'src/api/bookEndpoint';
 import { setBooks } from 'src/redux/bookSlice';
 import { dispatch, getState } from 'src/redux/store';
 import { finishWaiting, startWaiting } from 'src/redux/uiSlice';
-import { getLocalBooks } from 'src/util/localStorage';
+import { getLocalDeviceId } from 'src/util/localStorage';
 
 export const addMember = async (id: string, nickname: string) => {
   try {
     dispatch(startWaiting());
 
-    const localBooks = getLocalBooks();
-    const code = localBooks.find((v) => id === v.id)?.code ?? 'xx';
-    const res = await bookEndpoint.postBookIdMember(id, { nickname }, code);
+    const deviceId = getLocalDeviceId() ?? 'xx';
+    const res = await bookEndpoint.postBookIdMember(id, { nickname }, deviceId);
 
     const { books } = getState().book;
     const updatedBooks = (books ?? []).map((v) => {
@@ -33,9 +32,8 @@ export const renameMember = async (bookId: string, memberId: string, nickname: s
   try {
     dispatch(startWaiting());
 
-    const localBooks = getLocalBooks();
-    const code = localBooks.find((v) => bookId === v.id)?.code ?? 'xx';
-    const res = await bookEndpoint.putBookIdName(bookId, memberId, { nickname }, code);
+    const deviceId = getLocalDeviceId() ?? 'xx';
+    const res = await bookEndpoint.putBookIdMember(bookId, memberId, { nickname }, deviceId);
 
     const { books } = getState().book;
     const updatedBooks = (books ?? []).map((v) => {
@@ -61,9 +59,8 @@ export const deleteMember = async (bookId: string, memberId: string) => {
   try {
     dispatch(startWaiting());
 
-    const localBooks = getLocalBooks();
-    const code = localBooks.find((v) => bookId === v.id)?.code ?? 'xx';
-    await bookEndpoint.deleteBookIdMember(bookId, memberId, code);
+    const deviceId = getLocalDeviceId() ?? 'xx';
+    await bookEndpoint.deleteBookIdMember(bookId, memberId, deviceId);
 
     const { books } = getState().book;
     const updatedBooks = (books ?? []).map((v) => {

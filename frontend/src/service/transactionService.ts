@@ -13,23 +13,23 @@ import { dispatch, getState } from 'src/redux/store';
 import { finishWaiting, startWaiting } from 'src/redux/uiSlice';
 import { getMaxIndex, getMinIndex } from 'src/util/algorithm';
 import { bn } from 'src/util/bignumber';
-import { getLocalBookById, getLocalBooks } from 'src/util/localStorage';
+import { getLocalDeviceId } from 'src/util/localStorage';
 import { randomPick } from 'src/util/random';
 
 export const deleteTx = async (bookId: string, type: 'in' | 'out' | 'transfer', txId: string) => {
   try {
     dispatch(startWaiting());
 
-    const localBooks = getLocalBooks();
-    const code = localBooks.find((v) => bookId === v.id)?.code ?? 'xx';
+    const deviceId = getLocalDeviceId() ?? 'xx';
+
     let members: Member[];
     let transaction: Transaction;
     if (type === 'transfer') {
-      const res = await bookEndpoint.deleteBookIdTransfer(bookId, txId, code);
+      const res = await bookEndpoint.deleteBookIdTransfer(bookId, txId, deviceId);
       members = res.data.members;
       transaction = res.data.transaction;
     } else {
-      const res = await bookEndpoint.deleteBookIdBill(bookId, txId, code);
+      const res = await bookEndpoint.deleteBookIdBill(bookId, txId, deviceId);
       members = res.data.members;
       transaction = res.data.transaction;
     }
@@ -218,8 +218,8 @@ const addBill = async (bookId: string) => {
   try {
     dispatch(startWaiting());
 
-    const book = getLocalBookById(bookId);
-    const res = await bookEndpoint.postBookIdBill(bookId, getBillData(), book?.code ?? 'xx');
+    const deviceId = getLocalDeviceId() ?? 'xx';
+    const res = await bookEndpoint.postBookIdBill(bookId, getBillData(), deviceId);
 
     const { books } = getState().book;
     const updatedBooks = (books ?? []).map((v) =>
@@ -244,8 +244,8 @@ const reviseBill = async (bookId: string, billId: string) => {
   try {
     dispatch(startWaiting());
 
-    const book = getLocalBookById(bookId);
-    const res = await bookEndpoint.putBookIdBill(bookId, billId, getBillData(), book?.code ?? 'xx');
+    const deviceId = getLocalDeviceId() ?? 'xx';
+    const res = await bookEndpoint.putBookIdBill(bookId, billId, getBillData(), deviceId);
 
     const { books } = getState().book;
     const updatedBooks = (books ?? []).map((v) =>
@@ -289,12 +289,8 @@ const addTransfer = async (bookId: string) => {
   try {
     dispatch(startWaiting());
 
-    const book = getLocalBookById(bookId);
-    const res = await bookEndpoint.postBookIdTransfer(
-      bookId,
-      getTransferData(),
-      book?.code ?? 'xx',
-    );
+    const deviceId = getLocalDeviceId() ?? 'xx';
+    const res = await bookEndpoint.postBookIdTransfer(bookId, getTransferData(), deviceId);
 
     const { books } = getState().book;
     const updatedBooks = (books ?? []).map((v) =>
@@ -319,12 +315,12 @@ const reviseTransfer = async (bookId: string, transferId: string) => {
   try {
     dispatch(startWaiting());
 
-    const book = getLocalBookById(bookId);
+    const deviceId = getLocalDeviceId() ?? 'xx';
     const res = await bookEndpoint.putBookIdTransfer(
       bookId,
       transferId,
       getTransferData(),
-      book?.code ?? 'xx',
+      deviceId,
     );
 
     const { books } = getState().book;

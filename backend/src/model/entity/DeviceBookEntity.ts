@@ -13,6 +13,9 @@ export class DeviceBookEntity implements DeviceBook {
   @Column({ type: 'uuid', name: 'book_id' })
   bookId!: string;
 
+  @Column({ type: 'bool', name: 'show_delete' })
+  showDelete!: boolean;
+
   @Column({ type: 'timestamp', name: 'date_created', default: null })
   dateCreated!: string;
 

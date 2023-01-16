@@ -6,6 +6,7 @@ select
     vb.name,
     vb.code,
     vb.symbol,
+    db.show_delete,
     vb.date_created,
     vb.last_date_updated
 from

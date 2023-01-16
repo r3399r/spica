@@ -17,7 +17,7 @@ const MainCard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const book = useBook();
-  const index = useMemo(() => getBookIndex(id ?? ''), [id]);
+  const index = useMemo(() => getBookIndex(id ?? ''), [book, id]);
   const total = useMemo(
     () => book?.members?.reduce((prev, current) => prev.plus(current.total), bn(0)),
     [book],

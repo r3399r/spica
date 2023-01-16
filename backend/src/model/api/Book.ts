@@ -48,6 +48,8 @@ export type GetBookNameResponse = {
   name: string;
 };
 
+export type PutBookShowDeleteResponse = ViewDeviceBook;
+
 export type PostBookBillRequest = BillData;
 
 export type PostBookBillResponse = {

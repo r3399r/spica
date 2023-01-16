@@ -34,6 +34,7 @@ import {
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
+  PostBookIdResponse,
   PostBookMemberRequest,
   PostBookMemberResponse,
   PostBookRequest,
@@ -46,6 +47,7 @@ import {
   PutBookMemberResponse,
   PutBookRequest,
   PutBookResponse,
+  PutBookShowDeleteResponse,
   PutBookTransferResponse,
 } from 'src/model/api/Book';
 import { Bill } from 'src/model/entity/Bill';
@@ -111,13 +113,25 @@ export class BookService {
     await this.dbAccess.cleanup();
   }
 
-  public async createBook(data: PostBookRequest): Promise<PostBookResponse> {
+  public async createBook(
+    data: PostBookRequest,
+    deviceId: string
+  ): Promise<PostBookResponse> {
     const book = new BookEntity();
     book.name = data.name;
     book.code = randomBase10(6);
     book.symbol = data.symbol ?? '$';
 
-    return await this.bookAccess.save(book);
+    const newBook = await this.bookAccess.save(book);
+
+    const deviceBook = new DeviceBookEntity();
+    deviceBook.deviceId = deviceId;
+    deviceBook.bookId = newBook.id;
+    deviceBook.showDelete = false;
+
+    await this.deviceBookAccess.save(deviceBook);
+
+    return newBook;
   }
 
   private async validateBook(id: string, code: string) {
@@ -127,8 +141,28 @@ export class BookService {
     return book;
   }
 
+  private async checkDeviceHasBook(
+    deviceId: string,
+    bookId: string
+  ): Promise<ViewBook> {
+    const deviceBook = await this.vDeviceBookAccess.findByDeviceIdAndBookId(
+      deviceId,
+      bookId
+    );
+
+    return {
+      id: deviceBook.bookId,
+      name: deviceBook.name,
+      code: deviceBook.code,
+      symbol: deviceBook.symbol,
+      dateCreated: deviceBook.dateCreated,
+      lastDateUpdated: deviceBook.lastDateUpdated,
+    };
+  }
+
   public async getBookList(deviceId: string): Promise<GetBookResponse> {
     const vDeviceBooks = await this.vDeviceBookAccess.findByDeviceId(deviceId);
+    console.log(vDeviceBooks);
 
     return vDeviceBooks.sort(compare('dateCreated'));
   }
@@ -427,42 +461,58 @@ export class BookService {
     deviceId: string,
     params: GetBookIdParams | null
   ): Promise<Pagination<GetBookIdResponse>> {
-    const deviceBook = await this.vDeviceBookAccess.findByDeviceIdAndBookId(
-      deviceId,
-      id
-    );
+    const book = await this.checkDeviceHasBook(deviceId, id);
 
-    return await this.getBookDetail(
-      {
-        id: deviceBook.bookId,
-        name: deviceBook.name,
-        code: deviceBook.code,
-        symbol: deviceBook.symbol,
-        dateCreated: deviceBook.dateCreated,
-        lastDateUpdated: deviceBook.lastDateUpdated,
-      },
-      params
-    );
+    return await this.getBookDetail(book, params);
   }
 
-  public async addDeviceBook(id: string, code: string, deviceId: string) {
+  public async addDeviceBook(
+    id: string,
+    code: string,
+    deviceId: string
+  ): Promise<Pagination<PostBookIdResponse>> {
     const book = await this.validateBook(id, code);
 
     const deviceBook = new DeviceBookEntity();
     deviceBook.deviceId = deviceId;
     deviceBook.bookId = book.id;
+    deviceBook.showDelete = false;
 
     await this.deviceBookAccess.save(deviceBook);
 
     return await this.getBookDetail(book);
   }
 
+  public async deleteDeviceBook(id: string, deviceId: string) {
+    await this.deviceBookAccess.hardDeleteByDeviceIdAndBookId(deviceId, id);
+  }
+
+  public async setDeviceBookShowDelete(
+    bookId: string,
+    deviceId: string
+  ): Promise<PutBookShowDeleteResponse> {
+    const oldDeviceBook = await this.vDeviceBookAccess.findByDeviceIdAndBookId(
+      deviceId,
+      bookId
+    );
+
+    const deviceBook = new DeviceBookEntity();
+    deviceBook.id = oldDeviceBook.id;
+    deviceBook.deviceId = deviceId;
+    deviceBook.bookId = bookId;
+    deviceBook.showDelete = !oldDeviceBook.showDelete;
+
+    await this.deviceBookAccess.update(deviceBook);
+
+    return { ...oldDeviceBook, showDelete: !oldDeviceBook.showDelete };
+  }
+
   public async reviseBook(
     id: string,
     data: PutBookRequest,
-    code: string
+    deviceId: string
   ): Promise<PutBookResponse> {
-    const oldBook = await this.validateBook(id, code);
+    const oldBook = await this.checkDeviceHasBook(deviceId, id);
 
     const book = new BookEntity();
     book.id = id;
@@ -478,9 +528,9 @@ export class BookService {
   public async addMember(
     id: string,
     data: PostBookMemberRequest,
-    code: string
+    deviceId: string
   ): Promise<PostBookMemberResponse> {
-    await this.validateBook(id, code);
+    await this.checkDeviceHasBook(deviceId, id);
 
     const member = new MemberEntity();
     member.bookId = id;
@@ -496,9 +546,9 @@ export class BookService {
     bid: string,
     mid: string,
     data: PutBookMemberRequest,
-    code: string
+    deviceId: string
   ): Promise<PutBookMemberResponse> {
-    await this.validateBook(bid, code);
+    await this.checkDeviceHasBook(deviceId, bid);
 
     const oldMember = await this.memberAccess.findById(mid);
     if (oldMember.bookId !== bid) throw new BadRequestError('bad request');
@@ -512,8 +562,8 @@ export class BookService {
     return newMember;
   }
 
-  public async deleteMember(bid: string, mid: string, code: string) {
-    await this.validateBook(bid, code);
+  public async deleteMember(bid: string, mid: string, deviceId: string) {
+    await this.checkDeviceHasBook(deviceId, bid);
     const member = await this.memberAccess.findById(mid);
     if (member.bookId !== bid) throw new BadRequestError('bad request');
     if (member.deletable === false) throw new BadRequestError('not deletable');
@@ -548,9 +598,9 @@ export class BookService {
   public async addBill(
     id: string,
     data: PostBookBillRequest,
-    code: string
+    deviceId: string
   ): Promise<PostBookBillResponse> {
-    await this.validateBook(id, code);
+    await this.checkDeviceHasBook(deviceId, id);
 
     try {
       await this.dbAccess.startTransaction();
@@ -659,9 +709,9 @@ export class BookService {
     bookId: string,
     billId: string,
     data: PutBookBillRequest,
-    code: string
+    deviceId: string
   ): Promise<PutBookBillResponse> {
-    await this.validateBook(bookId, code);
+    await this.checkDeviceHasBook(deviceId, bookId);
 
     try {
       await this.dbAccess.startTransaction();
@@ -737,9 +787,9 @@ export class BookService {
   public async deleteBill(
     bookId: string,
     billId: string,
-    code: string
+    deviceId: string
   ): Promise<DeleteBookBillResponse> {
-    await this.validateBook(bookId, code);
+    await this.checkDeviceHasBook(deviceId, bookId);
 
     try {
       await this.dbAccess.startTransaction();
@@ -763,9 +813,9 @@ export class BookService {
   public async addTransfer(
     id: string,
     data: PostBookTransferRequest,
-    code: string
+    deviceId: string
   ): Promise<PostBookTransferResponse> {
-    await this.validateBook(id, code);
+    await this.checkDeviceHasBook(deviceId, id);
 
     try {
       await this.dbAccess.startTransaction();
@@ -799,9 +849,9 @@ export class BookService {
     bookId: string,
     transferId: string,
     data: PostBookTransferRequest,
-    code: string
+    deviceId: string
   ): Promise<PutBookTransferResponse> {
-    await this.validateBook(bookId, code);
+    await this.checkDeviceHasBook(deviceId, bookId);
 
     try {
       await this.dbAccess.startTransaction();
@@ -850,9 +900,9 @@ export class BookService {
   public async deleteTransfer(
     bookId: string,
     transferId: string,
-    code: string
+    deviceId: string
   ): Promise<DeleteBookTransferResponse> {
-    await this.validateBook(bookId, code);
+    await this.checkDeviceHasBook(deviceId, bookId);
 
     try {
       await this.dbAccess.startTransaction();

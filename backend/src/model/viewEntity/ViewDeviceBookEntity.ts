@@ -21,6 +21,9 @@ export class ViewDeviceBookEntity implements ViewDeviceBook {
   @ViewColumn()
   symbol!: string;
 
+  @ViewColumn({ name: 'show_delete' })
+  showDelete!: boolean;
+
   @ViewColumn({ name: 'date_created' })
   dateCreated!: string;
 

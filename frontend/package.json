@@ -59,7 +59,7 @@
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.38.0",
     "@typescript-eslint/parser": "^5.38.0",
-    "@y-celestial/spica-service": "^1.1.4",
+    "@y-celestial/spica-service": "^1.1.6",
     "autoprefixer": "^10.4.12",
     "cross-env": "^7.0.3",
     "del-cli": "^5.0.0",
