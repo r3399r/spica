@@ -9,7 +9,6 @@ export async function manifest(
   event: LambdaEvent,
   _context?: LambdaContext
 ): Promise<LambdaOutput> {
-  console.log(JSON.stringify(event));
   const res = {
     short_name: 'Bunny Bill',
     name: 'Bunny Bill',

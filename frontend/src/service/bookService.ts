@@ -18,7 +18,6 @@ export const loadBookList = async () => {
     const res = await bookEndpoint.getBook(deviceId);
     const updatedBooks = res.data.map((v) => {
       const savedBook = books?.find((o) => o.id === v.bookId);
-      console.log(v);
 
       return {
         id: v.bookId,

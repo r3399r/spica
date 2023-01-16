@@ -162,7 +162,6 @@ export class BookService {
 
   public async getBookList(deviceId: string): Promise<GetBookResponse> {
     const vDeviceBooks = await this.vDeviceBookAccess.findByDeviceId(deviceId);
-    console.log(vDeviceBooks);
 
     return vDeviceBooks.sort(compare('dateCreated'));
   }
