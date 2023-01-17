@@ -109,9 +109,9 @@
     "nickname": "nickname",
     "noMemberHint": "Let's create new members!",
     "shareWithFriend": "Share With Friends",
-    "scanHint": "Scan QR Code or",
+    "shareText": "I'd like to share \"{{book}}\" with you. Please click and input the code.",
     "shareLink": "Share Link",
-    "codeHint": "and input the code:",
+    "codeHint": "code:",
     "edit": "Edit Profile",
     "deleteHint": "Delete \"{{nickname}}\"?"
   },
