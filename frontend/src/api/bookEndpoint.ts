@@ -7,6 +7,7 @@ import {
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
+  PostBookIdRequest,
   PostBookIdResponse,
   PostBookMemberRequest,
   PostBookMemberResponse,
@@ -38,9 +39,10 @@ const getBookId = async (id: string, deviceId: string, params?: GetBookIdParams)
     params,
   });
 
-const postBookId = async (id: string, code: string, deviceId: string) =>
+const postBookId = async (id: string, data: PostBookIdRequest, deviceId: string) =>
   await http.post<PostBookIdResponse>(`book/${id}`, {
-    headers: { 'x-api-code': code, 'x-api-device': deviceId },
+    data,
+    headers: { 'x-api-device': deviceId },
   });
 
 const putBookId = async (id: string, data: PutBookRequest, deviceId: string) =>

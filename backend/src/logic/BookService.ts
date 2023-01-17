@@ -34,6 +34,7 @@ import {
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
+  PostBookIdRequest,
   PostBookIdResponse,
   PostBookMemberRequest,
   PostBookMemberResponse,
@@ -467,10 +468,10 @@ export class BookService {
 
   public async addDeviceBook(
     id: string,
-    code: string,
+    data: PostBookIdRequest,
     deviceId: string
   ): Promise<Pagination<PostBookIdResponse>> {
-    const book = await this.validateBook(id, code);
+    const book = await this.validateBook(id, data.code);
 
     const deviceBook = new DeviceBookEntity();
     deviceBook.deviceId = deviceId;

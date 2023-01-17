@@ -27,6 +27,8 @@ export type GetBookIdParams = PaginationParams;
 
 export type GetBookIdResponse = BookDetail;
 
+export type PostBookIdRequest = { code: string };
+
 export type PostBookIdResponse = BookDetail;
 
 export type PutBookResponse = Book;

@@ -24,7 +24,7 @@ const Landing = () => {
       </div>
       <div className="mt-5 mb-10 sm:mb-11 flex justify-center">
         <Button className="w-64 h-12 text-base" onClick={() => navigate(Page.Book)}>
-          start!
+          20230117
         </Button>
       </div>
       <div className="sm:flex">

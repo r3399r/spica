@@ -22,7 +22,7 @@ export const addBook = async (id: string, code: string) => {
     const deviceId = localStorage.getItem('deviceId');
     if (deviceId === null) return;
 
-    const res = await bookEndpoint.postBookId(id, code, deviceId);
+    const res = await bookEndpoint.postBookId(id, { code }, deviceId);
     dispatch(
       appendBook({
         ...res.data,
