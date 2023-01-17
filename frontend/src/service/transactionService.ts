@@ -20,7 +20,7 @@ export const deleteTx = async (bookId: string, type: 'in' | 'out' | 'transfer', 
   try {
     dispatch(startWaiting());
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
 
     let members: Member[];
     let transaction: Transaction;
@@ -218,7 +218,7 @@ const addBill = async (bookId: string) => {
   try {
     dispatch(startWaiting());
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.postBookIdBill(bookId, getBillData(), deviceId);
 
     const { books } = getState().book;
@@ -244,7 +244,7 @@ const reviseBill = async (bookId: string, billId: string) => {
   try {
     dispatch(startWaiting());
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.putBookIdBill(bookId, billId, getBillData(), deviceId);
 
     const { books } = getState().book;
@@ -289,7 +289,7 @@ const addTransfer = async (bookId: string) => {
   try {
     dispatch(startWaiting());
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.postBookIdTransfer(bookId, getTransferData(), deviceId);
 
     const { books } = getState().book;
@@ -315,7 +315,7 @@ const reviseTransfer = async (bookId: string, transferId: string) => {
   try {
     dispatch(startWaiting());
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.putBookIdTransfer(
       bookId,
       transferId,

@@ -9,4 +9,9 @@ export const setLocalDeviceId = (id?: string) => {
   localStorage.setItem('deviceId', newId);
 };
 
-export const getLocalDeviceId = () => localStorage.getItem('deviceId');
+export const getLocalDeviceId = () => {
+  const id = localStorage.getItem('deviceId');
+  if (id === null) throw Error('no device id');
+
+  return id;
+};

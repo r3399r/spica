@@ -15,24 +15,25 @@ import PicBookHero from 'src/image/pic-book-hero.svg';
 import { RootState } from 'src/redux/store';
 import { setTxPageScroll } from 'src/redux/uiSlice';
 import { loadBookList } from 'src/service/bookService';
-import { getLocalDeviceId } from 'src/util/localStorage';
 import ModalNewBook from './ModalNewBook';
 
 const BookList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
+  const {
+    book: { books },
+    ui: { isDeviceReady },
+  } = useSelector((rootState: RootState) => rootState);
   const [open, setOpen] = useState<boolean>(false);
-  const deviceId = getLocalDeviceId();
 
   useEffect(() => {
     dispatch(setTxPageScroll(0));
   }, []);
 
   useEffect(() => {
-    if (deviceId) loadBookList();
-  }, [deviceId]);
+    if (isDeviceReady) loadBookList();
+  }, [isDeviceReady]);
 
   return (
     <>

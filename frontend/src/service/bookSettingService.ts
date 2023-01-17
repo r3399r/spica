@@ -8,7 +8,7 @@ export const renameBook = async (id: string, name: string) => {
   try {
     dispatch(startWaiting());
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.putBookId(id, { name }, deviceId);
 
     const { books } = getState().book;
@@ -30,7 +30,7 @@ export const resetSymbol = async (id: string, symbol: string) => {
   try {
     dispatch(startWaiting());
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.putBookId(id, { symbol }, deviceId);
 
     const { books } = getState().book;
@@ -54,7 +54,7 @@ export const toggleShowDelete = async (id: string) => {
     dispatch(startWaiting());
     const { books } = getState().book;
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.putBookIdShowDelete(id, deviceId);
 
     const updatedBooks = (books ?? []).map((v) => {
@@ -73,7 +73,7 @@ export const deleteBook = async (id: string) => {
     dispatch(startWaiting());
     const { books } = getState().book;
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     await bookEndpoint.deleteBookId(id, deviceId);
 
     const updatedBooks = (books ?? []).filter((v) => v.id !== id);

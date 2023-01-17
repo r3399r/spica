@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type UiState = {
+  isDeviceReady: boolean;
   workload: number;
   txState: 'main' | 'former' | 'latter';
   txPageScroll: number;
@@ -8,6 +9,7 @@ export type UiState = {
 };
 
 const initialState: UiState = {
+  isDeviceReady: false,
   workload: 0,
   txState: 'main',
   txPageScroll: 0,
@@ -18,6 +20,9 @@ export const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
+    setDeviceReady: (state: UiState) => {
+      state.isDeviceReady = true;
+    },
     startWaiting: (state: UiState) => {
       state.workload = state.workload + 1;
     },
@@ -36,7 +41,13 @@ export const uiSlice = createSlice({
   },
 });
 
-export const { startWaiting, finishWaiting, setTxState, setTxPageScroll, setSettlementTab } =
-  uiSlice.actions;
+export const {
+  setDeviceReady,
+  startWaiting,
+  finishWaiting,
+  setTxState,
+  setTxPageScroll,
+  setSettlementTab,
+} = uiSlice.actions;
 
 export default uiSlice.reducer;

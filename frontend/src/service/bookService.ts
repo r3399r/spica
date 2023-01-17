@@ -13,7 +13,7 @@ export const loadBookList = async () => {
 
     const { books } = getState().book;
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
 
     const res = await bookEndpoint.getBook(deviceId);
     const updatedBooks = res.data.map((v) => {
@@ -44,7 +44,7 @@ export const createBook = async (name: string) => {
   try {
     dispatch(startWaiting());
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.postBook({ name }, deviceId);
     const book = res.data;
 
@@ -73,7 +73,7 @@ export const loadBookById = async (id: string) => {
     const savedBook = books?.find((v) => v.id === id);
     if (savedBook && savedBook.members !== null && savedBook.transactions !== null) return;
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.getBookId(id, deviceId, { limit: '50', offset: '0' });
 
     const index = books?.findIndex((v) => v.id === id) ?? -1;
@@ -106,7 +106,7 @@ export const loadMoreBookById = async (id: string) => {
 
     const savedBook = books?.find((v) => v.id === id);
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.getBookId(id, deviceId, {
       limit: '50',
       offset: String(savedBook?.transactions?.length),

@@ -8,7 +8,7 @@ export const addMember = async (id: string, nickname: string) => {
   try {
     dispatch(startWaiting());
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.postBookIdMember(id, { nickname }, deviceId);
 
     const { books } = getState().book;
@@ -32,7 +32,7 @@ export const renameMember = async (bookId: string, memberId: string, nickname: s
   try {
     dispatch(startWaiting());
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.putBookIdMember(bookId, memberId, { nickname }, deviceId);
 
     const { books } = getState().book;
@@ -59,7 +59,7 @@ export const deleteMember = async (bookId: string, memberId: string) => {
   try {
     dispatch(startWaiting());
 
-    const deviceId = getLocalDeviceId() ?? 'xx';
+    const deviceId = getLocalDeviceId();
     await bookEndpoint.deleteBookIdMember(bookId, memberId, deviceId);
 
     const { books } = getState().book;
