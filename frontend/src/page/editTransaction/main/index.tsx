@@ -31,8 +31,8 @@ const Main = () => {
   const date = useMemo(() => {
     const formDate = txFormType === 'bill' ? billFormData.date : transferFormData.date;
 
-    return formDate ? new Date(formDate) : new Date();
-  }, [txFormType]);
+    return isEdit && formDate ? new Date(formDate) : new Date();
+  }, []);
 
   useEffect(() => {
     if (id === undefined) return;
