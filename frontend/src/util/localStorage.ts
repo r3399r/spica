@@ -1,32 +1,17 @@
-import { LocalBook } from 'src/model/Book';
+import { v4 as uuidv4 } from 'uuid';
 
-export const getLocalBooks = (): LocalBook[] => {
-  const local = localStorage.getItem('book');
+export const setLocalDeviceId = (id?: string) => {
+  const existingId = localStorage.getItem('deviceId');
 
-  if (local === null) return [];
+  if (existingId !== null) return;
 
-  try {
-    if (Array.isArray(JSON.parse(local))) return JSON.parse(local);
-    throw new Error();
-  } catch {
-    localStorage.removeItem('book');
-
-    return [];
-  }
+  const newId = id ?? uuidv4();
+  localStorage.setItem('deviceId', newId);
 };
 
-export const getLocalBookById = (id: string): LocalBook | undefined => {
-  const localBooks = getLocalBooks();
+export const getLocalDeviceId = () => {
+  const id = localStorage.getItem('deviceId');
+  if (id === null) throw Error('no device id');
 
-  return localBooks.find((v) => v.id === id);
-};
-
-export const setShowDeleted = (id: string, showDeleted: boolean) => {
-  const localBooks = getLocalBooks();
-  const idx = localBooks.findIndex((v) => v.id === id);
-  if (idx >= 0) {
-    const tmp = [...localBooks];
-    tmp[idx] = { ...tmp[idx], showDeleted };
-    localStorage.setItem('book', JSON.stringify(tmp));
-  }
+  return id;
 };

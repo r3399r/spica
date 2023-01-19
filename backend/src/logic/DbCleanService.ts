@@ -3,6 +3,7 @@ import { BillAccess } from 'src/access/BillAccess';
 import { BillShareAccess } from 'src/access/BillShareAccess';
 import { BookAccess } from 'src/access/BookAccess';
 import { DbAccess } from 'src/access/DbAccess';
+import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
 import { ViewBookAccess } from 'src/access/ViewBookAccess';
@@ -33,6 +34,9 @@ export class DbCleanService {
   @inject(BookAccess)
   private readonly bookAccess!: BookAccess;
 
+  @inject(DeviceBookAccess)
+  private readonly deviceBookAccess!: DeviceBookAccess;
+
   public async cleanup() {
     await this.dbAccess.cleanup();
   }
@@ -58,6 +62,9 @@ export class DbCleanService {
 
           // delete member
           await this.memberAccess.hardDeleteByBookId(book.id);
+
+          // delete device book pair
+          await this.deviceBookAccess.hardDeleteByBookId(book.id);
 
           // delete book
           await this.bookAccess.hardDeleteById(book.id);

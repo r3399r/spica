@@ -109,9 +109,9 @@
     "nickname": "暱称",
     "noMemberHint": "尚未有成员，请输入暱称来新增成员吧！",
     "shareWithFriend": "与好友共享",
-    "scanHint": "让好友扫描此 QR Code 或",
+    "shareText": "与你共享帐本「{{book}}」，请于点击连结后输入通行码",
     "shareLink": "分享连结",
-    "codeHint": "并输入通行码：",
+    "codeHint": "通行码：",
     "edit": "编辑资料",
     "deleteHint": "要删除「{{nickname}}」吗？"
   },

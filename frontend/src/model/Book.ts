@@ -1,15 +1,10 @@
 import { Member, ShareMethod, Transaction, ViewBook } from '@y-celestial/spica-service';
 
 export type SavedBook = ViewBook & {
+  showDelete: boolean;
   members: Member[] | null;
   transactions: Transaction[] | null;
   txCount: number | null;
-};
-
-export type LocalBook = {
-  id: string;
-  code: string;
-  showDeleted: boolean;
 };
 
 export type Detail = {

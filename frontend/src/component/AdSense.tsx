@@ -11,7 +11,7 @@ const AdSense = () => {
       className="adsbygoogle"
       style={{ display: 'block' }}
       data-ad-format="fluid"
-      data-ad-layout-key="-fe+5q+5j-cy+3o"
+      data-ad-layout-key="-fg+5r+5f-cv+3r"
       data-ad-client="ca-pub-4116238563422892"
       data-ad-slot="2305807594"
     />

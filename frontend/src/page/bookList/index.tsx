@@ -21,13 +21,19 @@ const BookList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { books } = useSelector((rootState: RootState) => rootState.book);
+  const {
+    book: { books },
+    ui: { isDeviceReady },
+  } = useSelector((rootState: RootState) => rootState);
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    loadBookList();
     dispatch(setTxPageScroll(0));
   }, []);
+
+  useEffect(() => {
+    if (isDeviceReady) loadBookList();
+  }, [isDeviceReady]);
 
   return (
     <>
