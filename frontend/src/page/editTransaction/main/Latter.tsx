@@ -22,16 +22,26 @@ const Latter = () => {
     billFormData.latter?.filter((v) => v.method === ShareMethod.Weight && v.value === 1).length;
 
   const latter: ShareDetail[] = useMemo(() => {
-    if (billFormData.latter && !isAllShare) return billFormData.latter;
+    if (
+      billFormData.latter &&
+      billFormData.latter.find((v) => v.method === ShareMethod.PlusMinus) !== undefined
+    )
+      return billFormData.latter;
     if (!members) return [];
 
     return calculateAmount(
       billFormData.amount ?? 0,
-      members.map((v) => ({
-        id: v.id,
-        method: ShareMethod.Weight,
-        value: 1,
-      })),
+      billFormData.latter
+        ? billFormData.latter.map((v) => ({
+            id: v.id,
+            method: v.method,
+            value: v.value ?? v.amount,
+          }))
+        : members.map((v) => ({
+            id: v.id,
+            method: ShareMethod.Weight,
+            value: 1,
+          })),
     );
   }, [members, billFormData.amount]);
 
