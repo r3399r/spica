@@ -167,7 +167,14 @@ export class BookService {
     return vDeviceBooks.sort(compare('dateCreated'));
   }
 
-  public async getBookNameById(id: string): Promise<GetBookNameResponse> {
+  public async getBookNameById(
+    id: string,
+    deviceId: string
+  ): Promise<GetBookNameResponse> {
+    const vDeviceBooks = await this.vDeviceBookAccess.findByDeviceId(deviceId);
+    if (vDeviceBooks.find((v) => v.bookId === id) !== undefined)
+      throw new BadRequestError('already own');
+
     const book = await this.vBookAccess.findById(id);
 
     return { id: book.id, name: book.name };
