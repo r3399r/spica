@@ -9,7 +9,7 @@ import Select from 'src/celestial-ui/component/Select';
 import SelectOption from 'src/celestial-ui/component/SelectOption';
 import NavbarVanilla from 'src/component/NavbarVanilla';
 import { Page } from 'src/constant/Page';
-import { saveBillFormData, setTxFormType } from 'src/redux/formSlice';
+import { saveBillFormData, saveTransferFormData, setTxFormType } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { loadBookById } from 'src/service/bookService';
 import { addTransaction, isTxSubmittable, reviseTransaction } from 'src/service/transactionService';
@@ -48,6 +48,7 @@ const Main = () => {
 
   const onPickDatetime = (date: Date) => {
     dispatch(saveBillFormData({ date: date.toISOString() }));
+    dispatch(saveTransferFormData({ date: date.toISOString() }));
   };
 
   const onSubmit = () => {
