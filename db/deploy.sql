@@ -2,5 +2,4 @@
 \i ./view/v_bill_share.sql
 \i ./view/v_book.sql
 \i ./view/v_transaction.sql
-\i ./table/device_book.sql
 \i ./view/v_device_book.sql

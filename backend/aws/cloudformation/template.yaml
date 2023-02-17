@@ -729,6 +729,11 @@ Resources:
                   "in": "path",
                   "required": true,
                   "schema": {"type": "string"}
+                }, {
+                  "name": "x-api-device",
+                  "in": "header",
+                  "required": true,
+                  "schema": {"type": "string"}
                 }],
                 "responses": {
                   "200": {

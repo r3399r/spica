@@ -7,7 +7,10 @@ export const init = async (id: string) => {
   try {
     dispatch(startWaiting());
 
-    const res = await bookEndpoint.getBookIdName(id);
+    const deviceId = localStorage.getItem('deviceId');
+    if (deviceId === null) return;
+
+    const res = await bookEndpoint.getBookIdName(id, deviceId);
 
     return res.data.name;
   } finally {

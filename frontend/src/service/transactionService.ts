@@ -144,7 +144,7 @@ export const calculateAmount = (total: number, detail: Detail[]): ShareDetail[] 
   return result.map((v) => ({ ...v, amount: v.amount.toNumber() }));
 };
 
-export const calculateAdjust = (total: number, detail: Detail[]): ShareDetail[] => {
+const calculateAdjust = (total: number, detail: Detail[]): ShareDetail[] => {
   let rest = bn(total);
 
   const adjust = detail.filter((v) => v.method === ShareMethod.PlusMinus);

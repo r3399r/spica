@@ -232,9 +232,14 @@ async function apiBookIdMemberId(event: LambdaEvent, service: BookService) {
 async function apiBookIdName(event: LambdaEvent, service: BookService) {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
+  if (event.headers === null)
+    throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
     case 'GET':
-      return service.getBookNameById(event.pathParameters.id);
+      return service.getBookNameById(
+        event.pathParameters.id,
+        event.headers['x-api-device']
+      );
     default:
       throw new InternalServerError('unknown http method');
   }
