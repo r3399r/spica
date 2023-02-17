@@ -39,6 +39,11 @@ const Main = () => {
     loadBookById(id).catch(() => navigate(Page.Book, { replace: true }));
   }, [id]);
 
+  useEffect(() => {
+    dispatch(saveBillFormData({ date: date.toISOString() }));
+    dispatch(saveTransferFormData({ date: date.toISOString() }));
+  }, [date]);
+
   const onSelectType = (value: string) => {
     if (value === BillType.In || value === BillType.Out) {
       dispatch(saveBillFormData({ type: value }));
