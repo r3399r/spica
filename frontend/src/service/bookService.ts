@@ -1,5 +1,5 @@
 import { Transaction } from '@y-celestial/spica-service';
-import { format } from 'date-fns';
+import format from 'date-fns/format';
 import bookEndpoint from 'src/api/bookEndpoint';
 import { compare } from 'src/celestial-ui/util/compare';
 import { appendBook, setBooks } from 'src/redux/bookSlice';

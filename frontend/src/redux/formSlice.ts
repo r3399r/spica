@@ -12,11 +12,8 @@ const initialState: FormState = {
   txFormType: 'bill',
   billFormData: {
     type: BillType.Out,
-    date: new Date().toISOString(),
   },
-  transferFormData: {
-    date: new Date().toISOString(),
-  },
+  transferFormData: {},
 };
 
 export const formSlice = createSlice({

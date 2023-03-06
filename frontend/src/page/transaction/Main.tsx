@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { format } from 'date-fns';
+import format from 'date-fns/format';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
