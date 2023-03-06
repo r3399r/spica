@@ -1,4 +1,5 @@
-import { add, format } from 'date-fns';
+import add from 'date-fns/add';
+import format from 'date-fns/format';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Body from 'src/celestial-ui/component/typography/Body';
