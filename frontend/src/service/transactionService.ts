@@ -509,3 +509,5 @@ export const saveBillDataEvenly = (
       }),
     );
 };
+
+export const getDeviceId = () => getLocalDeviceId();

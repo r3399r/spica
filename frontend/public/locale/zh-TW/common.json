@@ -115,7 +115,10 @@
     "shareLink": "分享連結",
     "codeHint": "通行碼：",
     "edit": "編輯資料",
-    "deleteHint": "要刪除「{{nickname}}」嗎？"
+    "deleteHint": "要刪除「{{nickname}}」嗎？",
+    "self": "我",
+    "selfHint1": "將「{{nickname}}」設定為我的暱稱",
+    "selfHint2": "「{{nickname}}」不再是我的暱稱"
   },
   "share": {
     "join": "加入此帳本？",

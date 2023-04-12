@@ -115,7 +115,10 @@
     "shareLink": "Share Link",
     "codeHint": "code:",
     "edit": "Edit Profile",
-    "deleteHint": "Delete \"{{nickname}}\"?"
+    "deleteHint": "Delete \"{{nickname}}\"?",
+    "self": "Me",
+    "selfHint1": "set \"{{nickname}}\" as me",
+    "selfHint2": "\"{{nickname}}\" is not me"
   },
   "share": {
     "join": "Join this Book?",

@@ -581,6 +581,25 @@ export class BookService {
     await this.memberAccess.hardDeleteById(mid);
   }
 
+  public async reviseMemberSelf(
+    bid: string,
+    mid: string,
+    deviceId: string
+  ): Promise<PutBookMemberResponse> {
+    await this.checkDeviceHasBook(deviceId, bid);
+
+    const oldMember = await this.memberAccess.findById(mid);
+    if (oldMember.bookId !== bid) throw new BadRequestError('bad request');
+
+    const newMember: Member = {
+      ...oldMember,
+      deviceId: oldMember.deviceId === null ? deviceId : null,
+    };
+    await this.memberAccess.update(newMember);
+
+    return newMember;
+  }
+
   private validateDetail(amount: number, data: ShareDetail[]) {
     if (!BigNumber.sum(...data.map((v) => v.amount)).eq(amount))
       throw new BadRequestError('sum is not consistent');

@@ -90,6 +90,11 @@ const deleteBookIdMember = async (id: string, mid: string, deviceId: string) =>
     headers: { 'x-api-device': deviceId },
   });
 
+const putBookIdMemberSelf = async (id: string, mid: string, deviceId: string) =>
+  await http.put<PutBookMemberResponse>(`book/${id}/member/${mid}/self`, {
+    headers: { 'x-api-device': deviceId },
+  });
+
 const getBookIdName = async (id: string, deviceId: string) =>
   await http.get<GetBookNameResponse>(`book/${id}/name`, {
     headers: { 'x-api-device': deviceId },
@@ -135,6 +140,7 @@ export default {
   postBookIdMember,
   putBookIdMember,
   deleteBookIdMember,
+  putBookIdMemberSelf,
   getBookIdName,
   putBookIdShowDelete,
   postBookIdTransfer,
