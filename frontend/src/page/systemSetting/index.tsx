@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import H2 from 'src/celestial-ui/component/typography/H2';
-import H4 from 'src/celestial-ui/component/typography/H4';
 import NavbarVanilla from 'src/component/NavbarVanilla';
+import H2 from 'src/component/typography/H2';
+import H4 from 'src/component/typography/H4';
 import { Language as Lang } from 'src/constant/Language';
 import { Page } from 'src/constant/Page';
 import IcGo from 'src/image/ic-go-small.svg';

@@ -1,6 +1,6 @@
-import { PaginationParams } from 'src/celestial-service/model/Pagination';
 import { Book } from 'src/model/entity/Book';
 import { Member } from 'src/model/entity/Member';
+import { PaginationParams } from 'src/model/Pagination';
 import {
   BillData,
   BookDetail,
@@ -12,8 +12,8 @@ import { ViewDeviceBook } from 'src/model/viewEntity/ViewDeviceBook';
 export type GetBookResponse = ViewDeviceBook[];
 
 export type PostBookRequest = {
-  name: string;
-  symbol?: string;
+  bookName: string;
+  nickname?: string;
 };
 
 export type PostBookResponse = Book;

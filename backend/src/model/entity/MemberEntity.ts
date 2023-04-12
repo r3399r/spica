@@ -13,6 +13,9 @@ export class MemberEntity implements Member {
   @Column({ type: 'text' })
   nickname!: string;
 
+  @Column({ type: 'uuid', name: 'device_id' })
+  deviceId!: string;
+
   @Column({ type: 'float' })
   total!: number;
 

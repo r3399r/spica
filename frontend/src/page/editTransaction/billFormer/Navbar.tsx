@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import Body from 'src/celestial-ui/component/typography/Body';
-import H5 from 'src/celestial-ui/component/typography/H5';
+import Body from 'src/component/typography/Body';
+import H5 from 'src/component/typography/H5';
 import IcCross from 'src/image/ic-cross.svg';
 import { RootState } from 'src/redux/store';
 

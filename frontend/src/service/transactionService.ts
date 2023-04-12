@@ -1,11 +1,7 @@
-import {
-  BillType,
-  Member,
-  ShareDetail,
-  ShareMethod,
-  Transaction,
-} from '@y-celestial/spica-service';
 import bookEndpoint from 'src/api/bookEndpoint';
+import { BillType, ShareMethod } from 'src/constant/backend/Book';
+import { Member } from 'src/model/backend/entity/Member';
+import { ShareDetail, Transaction } from 'src/model/backend/type/Book';
 import { Detail } from 'src/model/Book';
 import { setBooks } from 'src/redux/bookSlice';
 import { saveBillFormData } from 'src/redux/formSlice';

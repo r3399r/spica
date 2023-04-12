@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import Body from 'src/celestial-ui/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import IcBack from 'src/image/ic-back.svg';
+import Body from './typography/Body';
 
 type Props = {
   text: string;

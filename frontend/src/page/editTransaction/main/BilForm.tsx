@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import Divider from 'src/celestial-ui/component/Divider';
-import Input from 'src/celestial-ui/component/Input';
-import Textarea from 'src/celestial-ui/component/Textarea';
 import AmountInput from 'src/component/AmountInput';
+import Divider from 'src/component/Divider';
+import Input from 'src/component/Input';
+import Textarea from 'src/component/Textarea';
 import useBook from 'src/hook/useBook';
 import { BillForm as Form } from 'src/model/Form';
 import { saveBillFormData } from 'src/redux/formSlice';

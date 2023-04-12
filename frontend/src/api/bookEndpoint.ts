@@ -24,8 +24,8 @@ import {
   PutBookShowDeleteResponse,
   PutBookTransferRequest,
   PutBookTransferResponse,
-} from '@y-celestial/spica-service';
-import http from 'src/celestial-ui/util/http';
+} from 'src/model/backend/api/Book';
+import http from 'src/util/http';
 
 const getBook = async (deviceId: string) =>
   await http.get<GetBookResponse>('book', { headers: { 'x-api-device': deviceId } });

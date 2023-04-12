@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Body from 'src/celestial-ui/component/typography/Body';
-import H4 from 'src/celestial-ui/component/typography/H4';
+import Body from 'src/component/typography/Body';
+import H4 from 'src/component/typography/H4';
 import useBook from 'src/hook/useBook';
 import IcEdit from 'src/image/ic-edit.svg';
 import ModalRenameBook from './ModalRenameBook';

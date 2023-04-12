@@ -1,6 +1,6 @@
-import { Member } from '@y-celestial/spica-service';
 import { useTranslation } from 'react-i18next';
-import ModalVanilla from 'src/celestial-ui/component/ModalVanilla';
+import ModalVanilla from 'src/component/ModalVanilla';
+import { Member } from 'src/model/backend/entity/Member';
 import { deleteMember } from 'src/service/memberService';
 
 type Props = {

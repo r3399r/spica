@@ -1,9 +1,5 @@
-import { successOutput } from 'src/celestial-service/LambdaOutput';
-import {
-  LambdaContext,
-  LambdaEvent,
-  LambdaOutput,
-} from 'src/celestial-service/model/Lambda';
+import { LambdaContext, LambdaEvent, LambdaOutput } from 'src/model/Lambda';
+import { successOutput } from 'src/util/LambdaOutput';
 
 export async function manifest(
   event: LambdaEvent,

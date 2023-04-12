@@ -1,13 +1,13 @@
-import { BillType } from '@y-celestial/spica-service';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import Button from 'src/celestial-ui/component/Button';
-import DatetimePicker from 'src/celestial-ui/component/DatetimePicker';
-import Select from 'src/celestial-ui/component/Select';
-import SelectOption from 'src/celestial-ui/component/SelectOption';
+import Button from 'src/component/Button';
+import DatetimePicker from 'src/component/DatetimePicker';
 import NavbarVanilla from 'src/component/NavbarVanilla';
+import Select from 'src/component/Select';
+import SelectOption from 'src/component/SelectOption';
+import { BillType } from 'src/constant/backend/Book';
 import { Page } from 'src/constant/Page';
 import { saveBillFormData, saveTransferFormData, setTxFormType } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';

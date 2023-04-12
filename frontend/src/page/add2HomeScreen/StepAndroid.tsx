@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import Body from 'src/celestial-ui/component/typography/Body';
-import H4 from 'src/celestial-ui/component/typography/H4';
+import H4 from 'src//component/typography/H4';
+import Body from 'src/component/typography/Body';
 import PicStep1 from 'src/image/pic-android-step-1.svg';
 import PicStep2 from 'src/image/pic-android-step-2.svg';
 

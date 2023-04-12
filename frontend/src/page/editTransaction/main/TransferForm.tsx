@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import Divider from 'src/celestial-ui/component/Divider';
-import Textarea from 'src/celestial-ui/component/Textarea';
-import Body from 'src/celestial-ui/component/typography/Body';
 import AmountInput from 'src/component/AmountInput';
+import Divider from 'src/component/Divider';
+import Textarea from 'src/component/Textarea';
+import Body from 'src/component/typography/Body';
 import useBook from 'src/hook/useBook';
 import IcEdit from 'src/image/ic-edit-tx.svg';
 import { TransferForm as Form } from 'src/model/Form';

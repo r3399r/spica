@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import Button from 'src/celestial-ui/component/Button';
-import Body from 'src/celestial-ui/component/typography/Body';
-import H1 from 'src/celestial-ui/component/typography/H1';
-import H4 from 'src/celestial-ui/component/typography/H4';
-import H5 from 'src/celestial-ui/component/typography/H5';
+import Button from 'src/component/Button';
+import Body from 'src/component/typography/Body';
+import H1 from 'src/component/typography/H1';
+import H4 from 'src/component/typography/H4';
+import H5 from 'src/component/typography/H5';
 import { Page } from 'src/constant/Page';
 import PicFeatureEasy from 'src/image/pic-feature-easy.svg';
 import PicFeatureLogin from 'src/image/pic-feature-login.svg';

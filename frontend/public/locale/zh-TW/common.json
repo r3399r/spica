@@ -33,7 +33,9 @@
     "bookList": "帳本清單",
     "newBook": "建立新帳本",
     "noBook": "尚未建立帳本",
-    "name": "名稱"
+    "bookName": "帳本名稱*",
+    "nickname": "我的暱稱",
+    "nicknameHelper": "可先不填，之後再去「成員」中新增"
   },
   "systemSetting": {
     "back": "回帳本清單",

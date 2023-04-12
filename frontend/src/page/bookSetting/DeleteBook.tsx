@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import H4 from 'src/celestial-ui/component/typography/H4';
+import H4 from 'src/component/typography/H4';
 import IcRemove from 'src/image/ic-remove.svg';
 import ModalDeleteBook from './ModalDeleteBook';
 

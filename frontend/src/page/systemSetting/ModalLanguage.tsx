@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import ModalForm from 'src/celestial-ui/component/ModalForm';
-import Radio from 'src/celestial-ui/component/Radio';
+import ModalForm from 'src/component/ModalForm';
+import Radio from 'src/component/Radio';
 import { Language } from 'src/constant/Language';
 import { LanguageForm } from 'src/model/Form';
 

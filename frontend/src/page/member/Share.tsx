@@ -1,9 +1,9 @@
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import Button from 'src/celestial-ui/component/Button';
-import Body from 'src/celestial-ui/component/typography/Body';
-import H4 from 'src/celestial-ui/component/typography/H4';
+import Button from 'src/component/Button';
+import Body from 'src/component/typography/Body';
+import H4 from 'src/component/typography/H4';
 import useBook from 'src/hook/useBook';
 
 const Share = () => {

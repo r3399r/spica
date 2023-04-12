@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import FormInput from 'src/celestial-ui/component/FormInput';
-import ModalForm from 'src/celestial-ui/component/ModalForm';
+import FormInput from 'src/component/FormInput';
+import ModalForm from 'src/component/ModalForm';
 import { NewBookForm } from 'src/model/Form';
 import { createBook } from 'src/service/bookService';
 
@@ -20,7 +20,10 @@ const ModalNewBook = ({ open, handleClose }: Props) => {
   };
 
   const onSubmit = (data: NewBookForm) => {
-    createBook(data.name).then(onClose);
+    createBook({
+      bookName: data.bookName,
+      nickname: data.nickname.length > 0 ? data.nickname : undefined,
+    }).then(onClose);
   };
 
   return (
@@ -33,7 +36,20 @@ const ModalNewBook = ({ open, handleClose }: Props) => {
       cancelBtn={t('act.cancel')}
       confirmBtn={t('act.submit')}
     >
-      <FormInput name="name" placeholder={t('bookList.name')} autoFocus required />
+      <>
+        <FormInput
+          name="bookName"
+          placeholder={t('bookList.bookName')}
+          autoFocus
+          required
+          className="mb-5"
+        />
+        <FormInput
+          name="nickname"
+          placeholder={t('bookList.nickname')}
+          helper={t('bookList.nicknameHelper')}
+        />
+      </>
     </ModalForm>
   );
 };

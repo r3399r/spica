@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { BillType } from '@y-celestial/spica-service';
+import { BillType } from 'src/constant/backend/Book';
 import { BillForm, TransferForm } from 'src/model/Form';
 
 export type FormState = {

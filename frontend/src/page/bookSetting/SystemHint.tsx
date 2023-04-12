@@ -1,9 +1,8 @@
-import add from 'date-fns/add';
-import format from 'date-fns/format';
+import { add, format } from 'date-fns';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import Body from 'src/celestial-ui/component/typography/Body';
-import H6 from 'src/celestial-ui/component/typography/H6';
+import Body from 'src/component/typography/Body';
+import H6 from 'src/component/typography/H6';
 import useBook from 'src/hook/useBook';
 
 const SystemHint = () => {

@@ -1,15 +1,15 @@
-import { Transaction } from '@y-celestial/spica-service';
 import classNames from 'classnames';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import Body from 'src/celestial-ui/component/typography/Body';
-import H2 from 'src/celestial-ui/component/typography/H2';
-import H4 from 'src/celestial-ui/component/typography/H4';
 import LoadMore from 'src/component/LoadMore';
 import NavbarVanilla from 'src/component/NavbarVanilla';
+import Body from 'src/component/typography/Body';
+import H2 from 'src/component/typography/H2';
+import H4 from 'src/component/typography/H4';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
+import { Transaction } from 'src/model/backend/type/Book';
 import { aggregateTransactions, loadBookById } from 'src/service/bookService';
 import { bn } from 'src/util/bignumber';
 

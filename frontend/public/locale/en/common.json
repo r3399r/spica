@@ -33,7 +33,9 @@
     "bookList": "Book List",
     "newBook": "Create New Book",
     "noBook": "No Book",
-    "name": "Name"
+    "bookName": "Book Name*",
+    "nickname": "my nickname",
+    "nicknameHelper": "optional, can add member later"
   },
   "systemSetting": {
     "back": "Back",

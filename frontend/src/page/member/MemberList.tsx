@@ -1,11 +1,11 @@
-import { Member } from '@y-celestial/spica-service';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Body from 'src/celestial-ui/component/typography/Body';
+import Body from 'src/component/typography/Body';
 import useBook from 'src/hook/useBook';
 import IcEdit from 'src/image/ic-edit.svg';
 import IcRemoveDisabled from 'src/image/ic-remove-disabled.svg';
 import IcRemove from 'src/image/ic-remove.svg';
+import { Member } from 'src/model/backend/entity/Member';
 import ModalDeleteMember from './ModalDeleteMember';
 import ModalEditMember from './ModalEditMember';
 

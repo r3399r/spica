@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import H2 from 'src/celestial-ui/component/typography/H2';
 import NavbarVanilla from 'src/component/NavbarVanilla';
+import H2 from 'src/component/typography/H2';
 import { Page } from 'src/constant/Page';
 import { loadBookById } from 'src/service/bookService';
 import MemberList from './MemberList';

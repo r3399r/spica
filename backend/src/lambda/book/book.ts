@@ -1,14 +1,4 @@
 import { bindings } from 'src/bindings';
-import {
-  BadRequestError,
-  InternalServerError,
-} from 'src/celestial-service/error';
-import { errorOutput, successOutput } from 'src/celestial-service/LambdaOutput';
-import {
-  LambdaContext,
-  LambdaEvent,
-  LambdaOutput,
-} from 'src/celestial-service/model/Lambda';
 import { BookService } from 'src/logic/BookService';
 import {
   GetBookIdParams,
@@ -22,6 +12,9 @@ import {
   PutBookRequest,
   PutBookTransferRequest,
 } from 'src/model/api/Book';
+import { BadRequestError, InternalServerError } from 'src/model/error';
+import { LambdaContext, LambdaEvent, LambdaOutput } from 'src/model/Lambda';
+import { errorOutput, successOutput } from 'src/util/LambdaOutput';
 
 export async function book(
   event: LambdaEvent,

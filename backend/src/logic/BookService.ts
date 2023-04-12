@@ -11,19 +11,6 @@ import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
 import { ViewBookAccess } from 'src/access/ViewBookAccess';
 import { ViewDeviceBookAccess } from 'src/access/ViewDeviceBookAccess';
 import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
-import {
-  BadRequestError,
-  UnauthorizedError,
-} from 'src/celestial-service/error';
-import {
-  Pagination,
-  PaginationParams,
-} from 'src/celestial-service/model/Pagination';
-import { compare } from 'src/celestial-service/util/compare';
-import {
-  differenceBy,
-  intersectionBy,
-} from 'src/celestial-service/util/setTheory';
 import { BillType } from 'src/constant/Book';
 import {
   DeleteBookBillResponse,
@@ -60,6 +47,8 @@ import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
+import { BadRequestError, UnauthorizedError } from 'src/model/error';
+import { Pagination, PaginationParams } from 'src/model/Pagination';
 import {
   BookDetail,
   History,
@@ -70,7 +59,9 @@ import {
 import { ViewBillShare } from 'src/model/viewEntity/ViewBillShare';
 import { ViewBook } from 'src/model/viewEntity/ViewBook';
 import { bn } from 'src/util/bignumber';
+import { compare } from 'src/util/compare';
 import { randomBase10 } from 'src/util/random';
+import { differenceBy, intersectionBy } from 'src/util/setTheory';
 
 /**
  * Service class for Book
@@ -119,9 +110,9 @@ export class BookService {
     deviceId: string
   ): Promise<PostBookResponse> {
     const book = new BookEntity();
-    book.name = data.name;
+    book.name = data.bookName;
     book.code = randomBase10(6);
-    book.symbol = data.symbol ?? '$';
+    book.symbol = '$';
 
     const newBook = await this.bookAccess.save(book);
 
@@ -131,6 +122,18 @@ export class BookService {
     deviceBook.showDelete = false;
 
     await this.deviceBookAccess.save(deviceBook);
+
+    if (data.nickname) {
+      const member = new MemberEntity();
+      member.bookId = newBook.id;
+      member.nickname = data.nickname;
+      member.deviceId = deviceId;
+      member.total = 0;
+      member.balance = 0;
+      member.deletable = true;
+
+      await this.memberAccess.save(member);
+    }
 
     return newBook;
   }

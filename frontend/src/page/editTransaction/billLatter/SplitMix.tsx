@@ -1,11 +1,11 @@
-import { ShareMethod } from '@y-celestial/spica-service';
 import classNames from 'classnames';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import Checkbox from 'src/celestial-ui/component/Checkbox';
-import Body from 'src/celestial-ui/component/typography/Body';
 import AmountInput from 'src/component/AmountInput';
+import Checkbox from 'src/component/Checkbox';
+import Body from 'src/component/typography/Body';
+import { ShareMethod } from 'src/constant/backend/Book';
 import useBook from 'src/hook/useBook';
 import { MemberLatter } from 'src/model/Book';
 import { RootState } from 'src/redux/store';

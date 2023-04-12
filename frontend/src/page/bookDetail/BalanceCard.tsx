@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import Body from 'src/celestial-ui/component/typography/Body';
-import H4 from 'src/celestial-ui/component/typography/H4';
+import Body from 'src/component/typography/Body';
+import H4 from 'src/component/typography/H4';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
 import IcGo from 'src/image/ic-go.svg';

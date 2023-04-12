@@ -1,4 +1,4 @@
-import NumberInput, { Props as InputProps } from 'src/celestial-ui/component/NumberInput';
+import NumberInput, { Props as InputProps } from './NumberInput';
 
 type Props = InputProps & {
   symbol: string;

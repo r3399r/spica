@@ -1,7 +1,7 @@
-import { Member } from '@y-celestial/spica-service';
-import { compare } from 'src/celestial-ui/util/compare';
+import { Member } from 'src/model/backend/entity/Member';
 import { Check } from 'src/model/Book';
 import { bn } from 'src/util/bignumber';
+import { compare } from 'src/util/compare';
 
 export const check = (members: Member[]): Check[] => {
   let formers = members.filter((v) => v.balance > 0);

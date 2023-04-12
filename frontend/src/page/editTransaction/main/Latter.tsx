@@ -1,10 +1,11 @@
-import { ShareDetail, ShareMethod } from '@y-celestial/spica-service';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import Body from 'src/celestial-ui/component/typography/Body';
+import Body from 'src/component/typography/Body';
+import { ShareMethod } from 'src/constant/backend/Book';
 import useBook from 'src/hook/useBook';
 import IcEdit from 'src/image/ic-edit-tx.svg';
+import { ShareDetail } from 'src/model/backend/type/Book';
 import { saveBillFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { setTxState } from 'src/redux/uiSlice';

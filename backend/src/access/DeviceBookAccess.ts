@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
-import { BadRequestError } from 'src/celestial-service/error';
 import { DeviceBook } from 'src/model/entity/DeviceBook';
 import { DeviceBookEntity } from 'src/model/entity/DeviceBookEntity';
+import { BadRequestError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
