@@ -3,7 +3,6 @@ import {
   DeleteBookTransferResponse,
   GetBookIdParams,
   GetBookIdResponse,
-  GetBookNameResponse,
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
@@ -95,11 +94,6 @@ const putBookIdMemberSelf = async (id: string, mid: string, deviceId: string) =>
     headers: { 'x-api-device': deviceId },
   });
 
-const getBookIdName = async (id: string, deviceId: string) =>
-  await http.get<GetBookNameResponse>(`book/${id}/name`, {
-    headers: { 'x-api-device': deviceId },
-  });
-
 const putBookIdShowDelete = async (id: string, deviceId: string) =>
   await http.put<PutBookShowDeleteResponse>(`book/${id}/showDelete`, {
     headers: { 'x-api-device': deviceId },
@@ -141,7 +135,6 @@ export default {
   putBookIdMember,
   deleteBookIdMember,
   putBookIdMemberSelf,
-  getBookIdName,
   putBookIdShowDelete,
   postBookIdTransfer,
   putBookIdTransfer,

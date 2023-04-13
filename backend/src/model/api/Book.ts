@@ -45,11 +45,6 @@ export type PutBookMemberRequest = {
 
 export type PutBookMemberResponse = Member;
 
-export type GetBookNameResponse = {
-  id: string;
-  name: string;
-};
-
 export type PutBookShowDeleteResponse = ViewDeviceBook;
 
 export type PostBookBillRequest = BillData;

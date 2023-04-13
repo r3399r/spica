@@ -1,77 +1,30 @@
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import Button from 'src/component/Button';
-import Form from 'src/component/Form';
-import FormInput from 'src/component/FormInput';
-import H2 from 'src/component/typography/H2';
-import H5 from 'src/component/typography/H5';
 import { Page } from 'src/constant/Page';
 import useQuery from 'src/hook/useQuery';
-import IcBook from 'src/image/ic-book.svg';
-import { ShareForm } from 'src/model/Form';
-import { addBook, init } from 'src/service/shareService';
+import { RootState } from 'src/redux/store';
+import { addBook } from 'src/service/shareService';
 
 const Share = () => {
-  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
-  const query = useQuery<{ code: string }>();
-  const [name, setName] = useState<string>();
-  const methods = useForm<ShareForm>();
-
-  const redirect = () => {
-    navigate(Page.Book, { replace: true }); // add this to make back button work
-    navigate(`${Page.Book}/${id}`);
-  };
+  const { isDeviceReady } = useSelector((rootState: RootState) => rootState.ui);
+  const query = useQuery<{ code?: string }>();
 
   useEffect(() => {
-    if (id === undefined) return;
-    init(id)
-      .then((res) => {
-        if (res === undefined) redirect();
-        else {
-          setName(res);
-          methods.setValue('code', query.code);
-          if (query.code) onSubmit({ code: query.code });
-        }
-      })
-      .catch(() => navigate(Page.Book, { replace: true }));
-  }, [id]);
+    if (id === undefined || !isDeviceReady) return;
+    if (query.code === undefined) navigate(Page.Book, { replace: true });
+    else
+      addBook(id, query.code)
+        .then(() => {
+          navigate(Page.Book, { replace: true }); // add this to make back button work
+          navigate(`${Page.Book}/${id}`);
+        })
+        .catch(() => navigate(Page.Book, { replace: true }));
+  }, [id, isDeviceReady]);
 
-  const onSubmit = (data: ShareForm) => {
-    if (!id) return;
-    addBook(id, data.code)
-      .then(redirect)
-      .catch(() =>
-        methods.setError('code', { message: t('share.wrongCode') }, { shouldFocus: true }),
-      );
-  };
-
-  if (name === undefined) return <></>;
-
-  return (
-    <div className="max-w-[640px] mx-[15px] sm:mx-auto">
-      <H2 className="mt-[60px] mb-5">{t('share.join')}</H2>
-      <div className="flex gap-[10px] p-[10px] flex-wrap bg-beige-300 rounded-[15px] items-center">
-        <div className="bg-white w-fit h-fit rounded-full">
-          <img src={IcBook} />
-        </div>
-        <H5>{name}</H5>
-      </div>
-      <Form className="mt-5 flex gap-[10px]" methods={methods} onSubmit={onSubmit}>
-        <div className="flex-1 pt-4">
-          <FormInput name="code" placeholder={t('share.code')} required inputMode="numeric" />
-        </div>
-        <div className="pt-4">
-          <Button type="submit" appearance="default">
-            {t('act.submit')}
-          </Button>
-        </div>
-      </Form>
-    </div>
-  );
+  return <></>;
 };
 
 export default Share;
