@@ -52,7 +52,7 @@ const BookDetail = () => {
         ref={ref}
         onScroll={(e) => dispatch(setTxPageScroll(e.currentTarget.scrollTop))}
       >
-        <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+        <div className="max-w-[640px] mx-[15px] sm:mx-auto" id="pdf-overall-content">
           <Navbar />
           <MainCard />
           <BalanceCard />

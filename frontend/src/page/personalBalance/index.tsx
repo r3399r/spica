@@ -3,7 +3,6 @@ import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import LoadMore from 'src/component/LoadMore';
-import NavbarVanilla from 'src/component/NavbarVanilla';
 import Body from 'src/component/typography/Body';
 import H2 from 'src/component/typography/H2';
 import H4 from 'src/component/typography/H4';
@@ -12,6 +11,7 @@ import useBook from 'src/hook/useBook';
 import { Transaction } from 'src/model/backend/type/Book';
 import { aggregateTransactions, loadBookById } from 'src/service/bookService';
 import { bn } from 'src/util/bignumber';
+import Navbar from './Navbar';
 
 const PersonalBalance = () => {
   const { id, uid } = useParams();
@@ -70,8 +70,8 @@ const PersonalBalance = () => {
   };
 
   return (
-    <div className="max-w-[640px] mx-[15px] sm:mx-auto">
-      <NavbarVanilla text={t('act.back')} />
+    <div className="max-w-[640px] mx-[15px] sm:mx-auto" id="pdf-personal-content">
+      <Navbar />
       <H2>{member?.nickname}</H2>
       <div className="pt-5 flex justify-between items-center gap-[10px]">
         <Body

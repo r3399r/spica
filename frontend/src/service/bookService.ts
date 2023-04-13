@@ -7,6 +7,7 @@ import { dispatch, getState } from 'src/redux/store';
 import { finishWaiting, startWaiting } from 'src/redux/uiSlice';
 import { compare } from 'src/util/compare';
 import { getLocalDeviceId } from 'src/util/localStorage';
+import { exportPdf } from 'src/util/pdfHelper';
 
 export const loadBookList = async () => {
   try {
@@ -159,4 +160,21 @@ export const aggregateTransactions = (id: string, transactions: Transaction[]) =
   });
 
   return map;
+};
+
+export const exportPersonalPdf = (id: string, userId: string) => {
+  const { books } = getState().book;
+  const savedBook = books?.find((v) => v.id === id);
+  const user = savedBook?.members?.find((v) => v.id === userId);
+  if (savedBook === undefined || user === undefined) return;
+
+  exportPdf('pdf-personal-content', `${savedBook.name}-${user.nickname}.pdf`);
+};
+
+export const exportOverallPdf = (id: string) => {
+  const { books } = getState().book;
+  const savedBook = books?.find((v) => v.id === id);
+  if (savedBook === undefined) return;
+
+  exportPdf('pdf-overall-content', `${savedBook.name}.pdf`);
 };

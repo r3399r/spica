@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import Button from 'src/component/Button';
 import Body from 'src/component/typography/Body';
 import H4 from 'src/component/typography/H4';
 import H5 from 'src/component/typography/H5';
@@ -43,18 +42,15 @@ const MainCard = () => {
           </H5>
         </div>
         <div>
-          <Button
-            appearance="default"
-            className="!p-[5px] !rounded-md"
+          <div
+            className="p-[5px] rounded-md flex gap-[5px] cursor-pointer bg-teal-500 text-white active:bg-teal-400 disabled:bg-teal-300 disabled:text-opacity-70"
             onClick={() => navigate(`${Page.Book}/${id}/member`)}
           >
-            <div className="flex gap-[5px]">
-              <img src={IcMember} />
-              <Body bold className="pr-[5px] text-white">
-                {t('bookDetail.member')}
-              </Body>
-            </div>
-          </Button>
+            <img src={IcMember} />
+            <Body bold className="pr-[5px] text-white">
+              {t('bookDetail.member')}
+            </Body>
+          </div>
         </div>
       </div>
     </div>
