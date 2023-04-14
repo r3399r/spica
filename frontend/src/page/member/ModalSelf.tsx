@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import ModalVanilla from 'src/component/ModalVanilla';
+import Body from 'src/component/typography/Body';
 import { Member } from 'src/model/backend/entity/Member';
 import { setMemberAsSelf } from 'src/service/memberService';
 
@@ -26,11 +27,11 @@ const ModalSelf = ({ open, handleClose, target, isSelf }: Props) => {
       confirmBtn={t('act.confirm')}
       onConfirm={onConfirm}
     >
-      <div>
+      <Body size="l" className="mb-5">
         {isSelf
           ? t('member.selfHint2', { nickname: target?.nickname })
           : t('member.selfHint1', { nickname: target?.nickname })}
-      </div>
+      </Body>
     </ModalVanilla>
   );
 };

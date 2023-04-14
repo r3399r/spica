@@ -35,3 +35,7 @@ export type TransferForm = {
 export type SplitForm = {
   value: string;
 };
+
+export type FriendForm = {
+  id: string;
+};

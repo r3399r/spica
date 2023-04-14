@@ -4,7 +4,7 @@ import jsPDF from 'jspdf';
 export const exportPdf = (elementId: string, filename: string) => {
   const input = document.getElementById(elementId);
   if (input === null) return;
-  console.log(input);
+
   html2canvas(input).then((canvas) => {
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF({ unit: 'px', format: [canvas.width, canvas.height] });

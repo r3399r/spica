@@ -41,6 +41,7 @@
     "back": "回帳本清單",
     "head": "系統設定",
     "language": "語言設定",
+    "myId": "我的 ID",
     "add2HomeScreen": "加入手機主畫面",
     "contactUs": "聯絡我們"
   },
@@ -110,15 +111,17 @@
     "create": "新增",
     "nickname": "暱稱",
     "noMemberHint": "尚未有成員，請輸入暱稱來新增成員吧！",
-    "shareWithFriend": "與好友共享",
-    "shareText": "與你共享帳本「{{book}}」，請於點擊連結後輸入通行碼",
+    "shareWithFriend": "與好友共享帳本",
+    "shareText": "與你共享帳本「{{book}}」，請點擊連結",
     "shareLink": "分享連結",
-    "codeHint": "通行碼：",
+    "inputId": "輸入好友 ID",
     "edit": "編輯資料",
     "deleteHint": "要刪除「{{nickname}}」嗎？",
     "self": "我",
     "selfHint1": "將「{{nickname}}」設定為我的暱稱",
-    "selfHint2": "「{{nickname}}」不再是我的暱稱"
+    "selfHint2": "「{{nickname}}」不再是我的暱稱",
+    "friendPlaceholder": "好友 ID",
+    "friendHint": "使用者ID顯示在系統設定中"
   },
   "share": {
     "join": "加入此帳本？",

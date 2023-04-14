@@ -41,6 +41,7 @@
     "back": "Back",
     "head": "System Setting",
     "language": "Language",
+    "myId": "My ID",
     "add2HomeScreen": "Add to Home Screen",
     "contactUs": "Contact Us"
   },
@@ -111,14 +112,16 @@
     "nickname": "nickname",
     "noMemberHint": "Let's create new members!",
     "shareWithFriend": "Share With Friends",
-    "shareText": "I'd like to share \"{{book}}\" with you. Please click and input the code.",
+    "shareText": "I'd like to share \"{{book}}\" with you. Please click the link.",
     "shareLink": "Share Link",
-    "codeHint": "code:",
+    "inputId": "Input friend ID",
     "edit": "Edit Profile",
     "deleteHint": "Delete \"{{nickname}}\"?",
     "self": "Me",
     "selfHint1": "set \"{{nickname}}\" as me",
-    "selfHint2": "\"{{nickname}}\" is not me"
+    "selfHint2": "\"{{nickname}}\" is not me",
+    "friendPlaceholder": "Friend ID",
+    "friendHint": "The ID can be found in system setting"
   },
   "share": {
     "join": "Join this Book?",
