@@ -24,7 +24,9 @@ const NewMemberForm = () => {
         <FormInput name="nickname" placeholder={t('member.nickname')} required />
       </div>
       <div className="pt-4">
-        <Button disabled={!formData.nickname}>{t('member.create')}</Button>
+        <Button disabled={!formData.nickname} appearance="default">
+          {t('member.create')}
+        </Button>
       </div>
     </Form>
   );

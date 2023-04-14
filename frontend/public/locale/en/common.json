@@ -42,8 +42,24 @@
     "head": "System Setting",
     "language": "Language",
     "myId": "My ID",
+    "dataTransfer": "Data Transfer",
     "add2HomeScreen": "Add to Home Screen",
     "contactUs": "Contact Us"
+  },
+  "transfer": {
+    "back": "Back",
+    "head": "Data Transfer",
+    "outHead": "Transfer Out",
+    "outHint": "Enter the key into other devices to copy the data on this device to the new device.",
+    "outBtn": "Generate Key",
+    "inHead": "Transfer In",
+    "inHint": "Enter the key from another device to import data.",
+    "inBtn": "Enter key",
+    "modalOutHead": "Key",
+    "modalOutHint": "The key will be expired in 24 hours",
+    "modalOutClose": "Close",
+    "nodalOutCopy": "Copy Key",
+    "modalInLabel": "Enter Key"
   },
   "add2HomeScreen": {
     "back": "Back",
@@ -114,7 +130,7 @@
     "shareWithFriend": "Share With Friends",
     "shareText": "I'd like to share \"{{book}}\" with you. Please click the link.",
     "shareLink": "Share Link",
-    "inputId": "Input friend ID",
+    "inputId": "Enter friend ID",
     "edit": "Edit Profile",
     "deleteHint": "Delete \"{{nickname}}\"?",
     "self": "Me",

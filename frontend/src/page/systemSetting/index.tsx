@@ -44,6 +44,13 @@ const SystemSetting = () => {
       </div>
       <div
         className="pt-5 pb-4 border-b border-b-grey-300 flex justify-between cursor-pointer"
+        onClick={() => navigate(`${Page.Setting}/transfer`)}
+      >
+        <H4>{t('systemSetting.dataTransfer')}</H4>
+        <img src={IcGo} />
+      </div>
+      <div
+        className="pt-5 pb-4 border-b border-b-grey-300 flex justify-between cursor-pointer"
         onClick={() => navigate(`${Page.Setting}/a2hs`)}
       >
         <H4>{t('systemSetting.add2HomeScreen')}</H4>

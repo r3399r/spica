@@ -42,8 +42,24 @@
     "head": "系統設定",
     "language": "語言設定",
     "myId": "我的 ID",
+    "dataTransfer": "資料轉移",
     "add2HomeScreen": "加入手機主畫面",
     "contactUs": "聯絡我們"
+  },
+  "transfer": {
+    "back": "回系統設定",
+    "head": "資料轉移",
+    "outHead": "資料轉出",
+    "outHint": "將密鑰輸入其他裝置，可將此裝置上的資料拷貝到新的裝置上",
+    "outBtn": "產生密鑰",
+    "inHead": "資料匯入",
+    "inHint": "輸入其他裝置的密鑰即可匯入資料",
+    "inBtn": "輸入密鑰",
+    "modalOutHead": "密鑰",
+    "modalOutHint": "此密鑰將於 24 小時後失效",
+    "modalOutClose": "關閉",
+    "nodalOutCopy": "拷貝密鑰",
+    "modalInLabel": "輸入密鑰"
   },
   "add2HomeScreen": {
     "back": "回系統設定",
