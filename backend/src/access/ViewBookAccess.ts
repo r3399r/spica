@@ -17,7 +17,9 @@ export class ViewBookAccess {
 
     return await qr.manager.find<ViewBook>(ViewBookEntity.name, {
       where: {
-        lastDateUpdated: Raw((alias) => `${alias} < NOW() - interval '95 day'`),
+        lastDateUpdated: Raw(
+          (alias) => `${alias} < NOW() - interval '100 day'`
+        ),
       },
     });
   }
