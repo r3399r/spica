@@ -41,5 +41,5 @@ export type FriendForm = {
 };
 
 export type DataTransferForm = {
-  key: string;
+  token: string;
 };

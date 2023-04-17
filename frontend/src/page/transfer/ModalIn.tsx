@@ -1,10 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import FormInput from 'src/component/FormInput';
 import ModalForm from 'src/component/ModalForm';
-import { DataTransferForm, FriendForm } from 'src/model/Form';
-import { addFriendIntoBook } from 'src/service/memberService';
+import { DataTransferForm } from 'src/model/Form';
+import { sendToken } from 'src/service/transferService';
 
 type Props = {
   open: boolean;
@@ -12,7 +11,6 @@ type Props = {
 };
 
 const ModalIn = ({ open, handleClose }: Props) => {
-  const { id } = useParams();
   const { t } = useTranslation();
   const methods = useForm<DataTransferForm>();
 
@@ -22,9 +20,7 @@ const ModalIn = ({ open, handleClose }: Props) => {
   };
 
   const onSubmit = (data: DataTransferForm) => {
-    // addFriendIntoBook(id ?? 'xx', data.id)
-    //   .then(onClose)
-    //   .catch(() => methods.setError('id', {}));
+    sendToken(data.token).then(onClose);
   };
 
   return (
@@ -37,7 +33,7 @@ const ModalIn = ({ open, handleClose }: Props) => {
       confirmBtn={t('act.submit')}
     >
       <FormInput
-        name="key"
+        name="token"
         label={t('transfer.modalInLabel')}
         autoFocus
         required

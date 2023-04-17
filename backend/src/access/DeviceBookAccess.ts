@@ -41,4 +41,12 @@ export class DeviceBookAccess {
 
     await qr.manager.delete(DeviceBookEntity.name, { bookId });
   }
+
+  public async findByDeviceId(deviceId: string) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.find<DeviceBook>(DeviceBookEntity.name, {
+      where: { deviceId },
+    });
+  }
 }

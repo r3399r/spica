@@ -22,6 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "bignumber.js": "^9.1.0",
+    "date-fns": "^2.29.3",
     "inversify": "^6.0.1",
     "pg": "^8.8.0",
     "pg-native": "^3.0.1",
