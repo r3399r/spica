@@ -30,7 +30,7 @@ const DatetimePicker = ({ label, initDate, onChange, cancelTxt, confirmTxt }: Pr
     <div className="w-full">
       {label && <div className="text-[14px] leading-normal text-navy-700 mb-[5px]">{label}</div>}
       <div
-        className="rounded bg-grey-200 outline-none p-2 h-[40px] cursor-pointer flex justify-between"
+        className="rounded bg-grey-200 outline-none p-2 h-[40px] cursor-pointer flex justify-between items-center"
         onClick={() => setOpen(true)}
       >
         <div>{format(date, 'yyyy/MM/dd HH:mm')}</div>

@@ -64,7 +64,7 @@ const Select = ({
         )}
         <div
           className={classNames(
-            'rounded bg-grey-200 outline-none p-2 h-[40px] flex justify-between',
+            'rounded bg-grey-200 outline-none p-2 h-[40px] flex justify-between items-center',
             {
               'cursor-pointer': !disabled,
               'cursor-not-allowed': !!disabled,
