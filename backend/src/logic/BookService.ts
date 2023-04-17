@@ -579,7 +579,7 @@ export class BookService {
 
     const newMember: Member = {
       ...oldMember,
-      deviceId: oldMember.deviceId === null ? deviceId : null,
+      deviceId: oldMember.deviceId === deviceId ? null : deviceId,
     };
     await this.memberAccess.update(newMember);
 
