@@ -1,4 +1,4 @@
-import { PostTransferResponse, PutTransferRequest } from 'src/model/backend/model/api/Transfer';
+import { PostTransferResponse, PutTransferRequest } from 'src/model/backend/api/Transfer';
 import http from 'src/util/http';
 
 const postTransfer = async (deviceId: string) =>
