@@ -58,7 +58,7 @@
     "modalOutHead": "Key",
     "modalOutHint": "The key will be expired in 24 hours",
     "modalOutClose": "Close",
-    "nodalOutCopy": "Copy Key",
+    "modalOutCopy": "Copy Key",
     "modalInLabel": "Enter Key"
   },
   "add2HomeScreen": {

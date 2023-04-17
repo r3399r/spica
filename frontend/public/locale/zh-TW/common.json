@@ -58,7 +58,7 @@
     "modalOutHead": "密鑰",
     "modalOutHint": "此密鑰將於 24 小時後失效",
     "modalOutClose": "關閉",
-    "nodalOutCopy": "拷貝密鑰",
+    "modalOutCopy": "拷貝密鑰",
     "modalInLabel": "輸入密鑰"
   },
   "add2HomeScreen": {

@@ -35,7 +35,7 @@ const ModalOut = ({ open, handleClose }: Props) => {
           </Button>
           <CopyToClipboard text={token ?? ''}>
             <Button appearance="default" type="button">
-              {t('transfer.nodalOutCopy')}
+              {t('transfer.modalOutCopy')}
             </Button>
           </CopyToClipboard>
         </div>
