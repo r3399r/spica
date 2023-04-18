@@ -51,7 +51,7 @@ const MemberList = () => {
                 </Body>
               )}
             </div>
-            <div className="flex gap-[15px]">
+            <div className="w-fit flex gap-[15px]">
               {(v.id === self || !self) && (
                 <img src={IcCrown} className="cursor-pointer" onClick={() => setSelfTarget(v)} />
               )}
