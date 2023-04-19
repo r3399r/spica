@@ -56,7 +56,7 @@ export class DeviceTokenAccess {
 
     return await qr.manager.find<DeviceToken>(DeviceTokenEntity.name, {
       where: {
-        dateExpired: Raw((alias) => `${alias} < NOW() - interval '1 day'`),
+        dateExpired: Raw((alias) => `${alias} < NOW()`),
       },
     });
   }
