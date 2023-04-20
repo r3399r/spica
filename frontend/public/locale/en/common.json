@@ -137,7 +137,7 @@
     "selfHint1": "set \"{{nickname}}\" as me",
     "selfHint2": "\"{{nickname}}\" is not me",
     "friendPlaceholder": "Friend ID",
-    "friendHint": "The ID can be found in system setting"
+    "friendHint": "The ID can be found in System Setting"
   },
   "share": {
     "join": "Join this Book?",

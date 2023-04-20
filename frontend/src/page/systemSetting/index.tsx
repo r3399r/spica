@@ -3,12 +3,14 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import Img from 'src/component/Img';
 import NavbarVanilla from 'src/component/NavbarVanilla';
 import Body from 'src/component/typography/Body';
 import H2 from 'src/component/typography/H2';
 import H4 from 'src/component/typography/H4';
 import { Language as Lang } from 'src/constant/Language';
 import { Page } from 'src/constant/Page';
+import IcCopyActive from 'src/image/ic-copy-active.svg';
 import IcCopy from 'src/image/ic-copy.svg';
 import IcGo from 'src/image/ic-go-small.svg';
 import { RootState } from 'src/redux/store';
@@ -31,17 +33,17 @@ const SystemSetting = () => {
       <NavbarVanilla text={t('systemSetting.back')} />
       <H2>{t('systemSetting.head')}</H2>
       <Language />
-      <div className="pt-5 pb-4 border-b border-b-grey-300">
-        <div className="flex justify-between mb-[5px]">
-          <H4>{t('systemSetting.myId')}</H4>
-          <CopyToClipboard text={deviceId}>
-            <img src={IcCopy} className="cursor-pointer" />
-          </CopyToClipboard>
+      <CopyToClipboard text={deviceId}>
+        <div className="pt-5 pb-4 border-b border-b-grey-300 cursor-pointer">
+          <div className="flex justify-between mb-[5px]">
+            <H4>{t('systemSetting.myId')}</H4>
+            <Img src={IcCopy} srcActive={IcCopyActive} />
+          </div>
+          <Body size="l" className="break-all">
+            {deviceId}
+          </Body>
         </div>
-        <Body size="l" className="break-all">
-          {deviceId}
-        </Body>
-      </div>
+      </CopyToClipboard>
       <div
         className="pt-5 pb-4 border-b border-b-grey-300 flex justify-between cursor-pointer"
         onClick={() => navigate(`${Page.Setting}/transfer`)}

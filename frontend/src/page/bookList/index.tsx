@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from 'src/component/Button';
+import Img from 'src/component/Img';
 import Body from 'src/component/typography/Body';
 import H2 from 'src/component/typography/H2';
 import H5 from 'src/component/typography/H5';
 import { Page } from 'src/constant/Page';
 import IcAdd from 'src/image/ic-add.svg';
 import IcBook from 'src/image/ic-book.svg';
+import IcConfigActive from 'src/image/ic-config-active.svg';
 import IcConfig from 'src/image/ic-config.svg';
 import PicBookHero from 'src/image/pic-book-hero.svg';
 import { RootState } from 'src/redux/store';
@@ -40,7 +42,12 @@ const BookList = () => {
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
         <div className="max-w-[640px] mx-[15px] sm:mx-auto">
           <div className="float-right">
-            <img src={IcConfig} className="cursor-pointer" onClick={() => navigate(Page.Setting)} />
+            <Img
+              src={IcConfig}
+              srcActive={IcConfigActive}
+              className="cursor-pointer"
+              onClick={() => navigate(Page.Setting)}
+            />
           </div>
           <H5 className="mt-[15px] mb-[10px] text-navy-500 text-center">{t('appName')}</H5>
           <div>

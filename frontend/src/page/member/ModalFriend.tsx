@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import FormInput from 'src/component/FormInput';
 import ModalForm from 'src/component/ModalForm';
+import Body from 'src/component/typography/Body';
+import IcConfig from 'src/image/ic-config.svg';
 import { FriendForm } from 'src/model/Form';
 import { addFriendIntoBook } from 'src/service/memberService';
 
@@ -36,13 +38,13 @@ const ModalFriend = ({ open, handleClose }: Props) => {
       cancelBtn={t('act.cancel')}
       confirmBtn={t('act.submit')}
     >
-      <FormInput
-        name="id"
-        placeholder={t('member.friendPlaceholder')}
-        helper={t('member.friendHint')}
-        autoFocus
-        required
-      />
+      <>
+        <div className="flex gap-1 items-center mb-[30px]">
+          <Body size="l">{t('member.friendHint')}</Body>
+          <img src={IcConfig} />
+        </div>
+        <FormInput name="id" placeholder={t('member.friendPlaceholder')} autoFocus required />
+      </>
     </ModalForm>
   );
 };

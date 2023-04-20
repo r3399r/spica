@@ -137,7 +137,7 @@
     "selfHint1": "將「{{nickname}}」設定為我的暱稱",
     "selfHint2": "「{{nickname}}」不再是我的暱稱",
     "friendPlaceholder": "好友 ID",
-    "friendHint": "使用者ID顯示在系統設定中"
+    "friendHint": "使用者ID顯示在系統設定"
   },
   "share": {
     "join": "加入此帳本？",

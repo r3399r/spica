@@ -3,10 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import BackButton from 'src/component/BackButton';
+import Img from 'src/component/Img';
 import Body from 'src/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
+import IcEditActive from 'src/image/ic-edit-active.svg';
 import IcEdit from 'src/image/ic-edit.svg';
+import IcRemoveActive from 'src/image/ic-remove-active.svg';
 import IcRemove from 'src/image/ic-remove.svg';
 import { saveBillFormData, saveTransferFormData, setTxFormType } from 'src/redux/formSlice';
 import { bn } from 'src/util/bignumber';
@@ -58,8 +61,18 @@ const Navbar = () => {
           <div className="absolute top-0 right-0">
             {tx.dateDeleted === null ? (
               <div className="flex gap-[15px]">
-                <img src={IcRemove} onClick={() => setOpen(true)} className="cursor-pointer" />
-                <img src={IcEdit} onClick={onEdit} className="cursor-pointer" />
+                <Img
+                  src={IcRemove}
+                  srcActive={IcRemoveActive}
+                  onClick={() => setOpen(true)}
+                  className="cursor-pointer"
+                />
+                <Img
+                  src={IcEdit}
+                  srcActive={IcEditActive}
+                  onClick={onEdit}
+                  className="cursor-pointer"
+                />
               </div>
             ) : (
               <Body size="s" className="text-white bg-tomato-700 py-1 px-[10px]">

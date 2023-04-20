@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Img from 'src/component/Img';
 import Body from 'src/component/typography/Body';
 import H4 from 'src/component/typography/H4';
+import IcEditActive from 'src/image/ic-edit-active.svg';
 import IcEdit from 'src/image/ic-edit.svg';
 import ModalReviseSymbol from './ModalLanguage';
 
@@ -17,7 +19,7 @@ const Language = () => {
       >
         <div className="flex justify-between mb-[5px]">
           <H4>{t('systemSetting.language')}</H4>
-          <img src={IcEdit} />
+          <Img src={IcEdit} srcActive={IcEditActive} />
         </div>
         <Body size="l" className="text-navy-300 min-h-[24px]">
           {t('language')}
