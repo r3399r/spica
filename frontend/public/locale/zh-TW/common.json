@@ -19,7 +19,8 @@
     "sharer": "分攤者",
     "sender": "匯款者",
     "receiver": "收款者",
-    "memo": "備註"
+    "memo": "備註",
+    "copy": "複製成功！"
   },
   "landing": {
     "title": "Bunny Bill",
@@ -58,7 +59,7 @@
     "modalOutHead": "密鑰",
     "modalOutHint": "此密鑰將於 24 小時後失效",
     "modalOutClose": "關閉",
-    "modalOutCopy": "拷貝密鑰",
+    "modalOutCopy": "複製密鑰",
     "modalInLabel": "輸入密鑰"
   },
   "add2HomeScreen": {

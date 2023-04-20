@@ -1,57 +1,33 @@
-import { SnackbarUnstyled, SnackbarUnstyledProps } from '@mui/base';
-import classNames from 'classnames';
-import { ReactElement, useRef, useState } from 'react';
-import { Transition } from 'react-transition-group';
+import { Snackbar as MuiSnackbar } from '@mui/material';
+import { SyntheticEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
+import { setSnackbarMessage } from 'src/redux/uiSlice';
+import Body from './typography/Body';
 
-type Props = SnackbarUnstyledProps & {
-  children: ReactElement;
-};
+const Snackbar = () => {
+  const dispatch = useDispatch();
+  const { snackbarMessage } = useSelector((rootState: RootState) => rootState.ui);
 
-const Snackbar = ({ open, children, ...props }: Props) => {
-  const [exited, setExited] = useState(true);
-  const nodeRef = useRef(null);
-
-  const handleOnEnter = () => {
-    setExited(false);
-  };
-
-  const handleOnExited = () => {
-    setExited(true);
+  const onClose = (event: SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') return;
+    dispatch(setSnackbarMessage(undefined));
   };
 
   return (
-    <SnackbarUnstyled
-      className="fixed z-50 bottom-4 w-full"
-      autoHideDuration={4000}
-      exited={exited}
-      open={open}
-      {...props}
+    <MuiSnackbar
+      classes={{ root: '!bottom-[100px]' }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      open={snackbarMessage !== undefined}
+      onClose={onClose}
+      autoHideDuration={2000}
     >
-      <Transition
-        timeout={{ enter: 400, exit: 400 }}
-        in={open}
-        appear
-        unmountOnExit
-        onEnter={handleOnEnter}
-        onExited={handleOnExited}
-        nodeRef={nodeRef}
-      >
-        {(status) => (
-          <div
-            className={classNames(
-              'bg-tomato-500 text-white rounded-lg w-3/4 mx-auto p-2 text-center transition-transform duration-300',
-              {
-                'translate-y-0': ['entering', 'entered'].includes(status),
-                'translate-y-[150px]': ['exiting', 'exited', 'unmounted'].includes(status),
-              },
-            )}
-            ref={nodeRef}
-          >
-            {children}
-          </div>
-        )}
-      </Transition>
-    </SnackbarUnstyled>
+      <div>
+        <Body size="l" className="bg-navy-300 text-white px-5 py-[10px] rounded-[4px] shadow-md">
+          {snackbarMessage}
+        </Body>
+      </div>
+    </MuiSnackbar>
   );
 };
 

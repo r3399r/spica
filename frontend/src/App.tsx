@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Loader from './component/Loader';
+import Snackbar from './component/Snackbar';
 import useQuery from './hook/useQuery';
 import { RootState } from './redux/store';
 import Routes from './Routes';
@@ -26,6 +27,7 @@ const App = () => {
     <>
       <Routes />
       <Loader />
+      <Snackbar />
     </>
   );
 };

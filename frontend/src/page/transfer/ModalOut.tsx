@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import Button from 'src/component/Button';
 import Modal from 'src/component/Modal';
 import Body from 'src/component/typography/Body';
+import { setSnackbarMessage } from 'src/redux/uiSlice';
 import { getToken } from 'src/service/transferService';
 
 type Props = {
@@ -13,6 +15,7 @@ type Props = {
 
 const ModalOut = ({ open, handleClose }: Props) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const [token, setToken] = useState<string>();
 
   useEffect(() => {
@@ -33,7 +36,10 @@ const ModalOut = ({ open, handleClose }: Props) => {
           <Button appearance="secondary" onClick={handleClose} type="button">
             {t('transfer.modalOutClose')}
           </Button>
-          <CopyToClipboard text={token ?? ''}>
+          <CopyToClipboard
+            text={token ?? ''}
+            onCopy={() => dispatch(setSnackbarMessage(t('desc.copy')))}
+          >
             <Button appearance="default" type="button">
               {t('transfer.modalOutCopy')}
             </Button>

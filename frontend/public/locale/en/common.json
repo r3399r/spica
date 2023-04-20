@@ -19,7 +19,8 @@
     "sharer": "Sharer",
     "sender": "Sender",
     "receiver": "Receiver",
-    "memo": "Memo"
+    "memo": "Memo",
+    "copy": "Copied!"
   },
   "landing": {
     "title": "Bunny Bill",
