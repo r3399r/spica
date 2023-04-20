@@ -41,7 +41,7 @@ const SystemSetting = () => {
             <H4>{t('systemSetting.myId')}</H4>
             <Img src={IcCopy} srcActive={IcCopyActive} />
           </div>
-          <Body size="l" className="break-all">
+          <Body size="l" className="break-all text-navy-300">
             {deviceId}
           </Body>
         </div>
