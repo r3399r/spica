@@ -10,10 +10,10 @@ import { getLocalDeviceId } from 'src/util/localStorage';
 import { exportPdf } from 'src/util/pdfHelper';
 
 export const loadBookList = async () => {
+  const { books } = getState().book;
+  const loading = books === null;
   try {
-    dispatch(startWaiting());
-
-    const { books } = getState().book;
+    if (loading) dispatch(startWaiting());
 
     const deviceId = getLocalDeviceId();
 
@@ -38,7 +38,7 @@ export const loadBookList = async () => {
 
     dispatch(setBooks(updatedBooks));
   } finally {
-    dispatch(finishWaiting());
+    if (loading) dispatch(finishWaiting());
   }
 };
 
