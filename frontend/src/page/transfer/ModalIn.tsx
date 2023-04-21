@@ -20,7 +20,9 @@ const ModalIn = ({ open, handleClose }: Props) => {
   };
 
   const onSubmit = (data: DataTransferForm) => {
-    sendToken(data.token).then(onClose);
+    sendToken(data.token)
+      .then(onClose)
+      .catch(() => methods.setError('token', {}));
   };
 
   return (

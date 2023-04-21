@@ -1,19 +1,22 @@
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
-export const exportPdf = (elementId: string, filename: string) => {
+export const exportPdf = (elementId: string, filename: string, margin = 40) => {
   const input = document.getElementById(elementId);
   if (input === null) return;
 
   html2canvas(input).then((canvas) => {
     const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF({ unit: 'px', format: [canvas.width, canvas.height] });
 
+    const orientation = canvas.width > canvas.height ? 'l' : 'p';
+    const pdf = new jsPDF({
+      orientation,
+      unit: 'px',
+      format: [canvas.height + 2 * margin, canvas.width + 2 * margin],
+    });
     const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    const width = pdf.internal.pageSize.getWidth();
-    pdf.addImage(imgData, 'PNG', 40, 40, width - 80, pdfHeight - 80);
+
+    pdf.addImage(imgData, 'PNG', margin, margin, imgProps.width, imgProps.height);
     pdf.save(filename);
   });
 };

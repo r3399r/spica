@@ -70,35 +70,37 @@ const PersonalBalance = () => {
   };
 
   return (
-    <div className="max-w-[640px] mx-[15px] sm:mx-auto" id="pdf-personal-content">
+    <div className="max-w-[640px] mx-[15px] sm:mx-auto">
       <Navbar />
-      <H2>{member?.nickname}</H2>
-      <div className="pt-5 flex justify-between items-center gap-[10px]">
-        <Body
-          size="s"
-          className={classNames('py-[3px] px-1 bg-grey-200', {
-            'text-tomato-700': member?.total && member.total < 0,
-            'text-green-700': member?.total && member.total >= 0,
-          })}
-        >
-          {member?.total && member.total < 0 ? t('desc.out') : t('desc.in')}
-        </Body>
-        <H4>
-          {book?.symbol}
-          {bn(member?.total ?? '0')
-            .abs()
-            .toFormat()}
-        </H4>
-      </div>
-      {Object.keys(transactions).map((v) => (
-        <div key={v} className="my-[10px]">
-          <Body bold className="pt-[5px] text-navy-100">
-            {v}
+      <div id="pdf-personal-content">
+        <H2>{member?.nickname}</H2>
+        <div className="pt-5 flex justify-between items-center gap-[10px]">
+          <Body
+            size="s"
+            className={classNames('py-[3px] px-1 bg-grey-200', {
+              'text-tomato-700': member?.total && member.total < 0,
+              'text-green-700': member?.total && member.total >= 0,
+            })}
+          >
+            {member?.total && member.total < 0 ? t('desc.out') : t('desc.in')}
           </Body>
-          <>{transactions[v].map(items)}</>
+          <H4>
+            {book?.symbol}
+            {bn(member?.total ?? '0')
+              .abs()
+              .toFormat()}
+          </H4>
         </div>
-      ))}
-      {book?.transactions?.length !== book?.txCount && <LoadMore />}
+        {Object.keys(transactions).map((v) => (
+          <div key={v} className="my-[10px]">
+            <Body bold className="pt-[5px] text-navy-100">
+              {v}
+            </Body>
+            <>{transactions[v].map(items)}</>
+          </div>
+        ))}
+        {book?.transactions?.length !== book?.txCount && <LoadMore />}
+      </div>
     </div>
   );
 };
