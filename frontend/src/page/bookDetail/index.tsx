@@ -21,7 +21,7 @@ const BookDetail = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { txPageScroll } = useSelector((rootState: RootState) => rootState.ui);
+  const { txPageScroll, isDeviceReady } = useSelector((rootState: RootState) => rootState.ui);
   const book = useBook();
   const noMember = useMemo(() => book?.members?.length === 0, [book]);
   // const showAd = useMemo(
@@ -35,9 +35,9 @@ const BookDetail = () => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (id === undefined) return;
+    if (id === undefined || !isDeviceReady) return;
     loadBookById(id).catch(() => navigate(Page.Book, { replace: true }));
-  }, [id]);
+  }, [id, isDeviceReady]);
 
   useEffect(() => {
     if (ref.current) ref.current.scrollTop = txPageScroll;

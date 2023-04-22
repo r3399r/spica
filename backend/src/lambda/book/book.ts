@@ -3,7 +3,6 @@ import { BookService } from 'src/logic/BookService';
 import {
   GetBookIdParams,
   PostBookBillRequest,
-  PostBookIdRequest,
   PostBookMemberRequest,
   PostBookRequest,
   PostBookTransferRequest,
@@ -110,12 +109,8 @@ async function apiBookId(event: LambdaEvent, service: BookService) {
         event.headers['x-api-device']
       );
     case 'POST':
-      if (event.body === null)
-        throw new BadRequestError('body should not be empty');
-
       return service.addDeviceBook(
         event.pathParameters.id,
-        JSON.parse(event.body) as PostBookIdRequest,
         event.headers['x-api-device']
       );
     case 'DELETE':

@@ -20,7 +20,6 @@ import {
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
-  PostBookIdRequest,
   PostBookIdResponse,
   PostBookMemberRequest,
   PostBookMemberResponse,
@@ -46,7 +45,7 @@ import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
-import { BadRequestError, UnauthorizedError } from 'src/model/error';
+import { BadRequestError } from 'src/model/error';
 import { Pagination, PaginationParams } from 'src/model/Pagination';
 import {
   BookDetail,
@@ -135,13 +134,6 @@ export class BookService {
     }
 
     return newBook;
-  }
-
-  private async validateBook(id: string, code: string) {
-    const book = await this.vBookAccess.findById(id);
-    if (book.code !== code.toLowerCase()) throw new UnauthorizedError();
-
-    return book;
   }
 
   private async checkDeviceHasBook(
@@ -457,17 +449,29 @@ export class BookService {
     deviceId: string,
     params: GetBookIdParams | null
   ): Promise<Pagination<GetBookIdResponse>> {
-    const book = await this.checkDeviceHasBook(deviceId, id);
+    const book = await this.vBookAccess.findById(id);
+
+    const oldDeviceBook = await this.deviceBookAccess.findByDeviceIdAndBookId(
+      deviceId,
+      id
+    );
+    if (oldDeviceBook === null) {
+      const deviceBook = new DeviceBookEntity();
+      deviceBook.deviceId = deviceId;
+      deviceBook.bookId = book.id;
+      deviceBook.showDelete = false;
+
+      await this.deviceBookAccess.save(deviceBook);
+    }
 
     return await this.getBookDetail(book, params);
   }
 
   public async addDeviceBook(
     id: string,
-    data: PostBookIdRequest,
     deviceId: string
   ): Promise<Pagination<PostBookIdResponse>> {
-    const book = await this.validateBook(id, data.code);
+    const book = await this.vBookAccess.findById(id);
 
     const deviceBook = new DeviceBookEntity();
     deviceBook.deviceId = deviceId;

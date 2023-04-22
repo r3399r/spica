@@ -117,7 +117,7 @@ export const addFriendIntoBook = async (bookId: string, friendId: string) => {
     const { books } = getState().book;
     const book = books?.find((v) => v.id === bookId);
     if (book === undefined) return;
-    await bookEndpoint.postBookId(bookId, { code: book.code }, friendId);
+    await bookEndpoint.postBookId(bookId, friendId);
   } finally {
     dispatch(finishWaiting());
   }

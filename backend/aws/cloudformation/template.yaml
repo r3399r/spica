@@ -284,16 +284,6 @@ Resources:
                   "required": true,
                   "schema": {"type": "string"}
                 }],
-                "requestBody": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/postBookId"
-                      }
-                    }
-                  },
-                  "required": true
-                },
                 "responses": {
                   "200": {
                     "description": "200 response",
@@ -1093,13 +1083,6 @@ Resources:
                 "symbol": {"type": "string"}
               },
               "required": ["name"]
-            },
-            "postBookId": {
-              "type": "object",
-              "properties": {
-                "code": {"type": "string"},
-              },
-              "required": ["code"]
             },
             "putBook": {
               "type": "object",
