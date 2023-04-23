@@ -163,14 +163,14 @@ const calculateAdjust = (total: number, detail: Detail[]): ShareDetail[] => {
   if (n < detail.length)
     for (let i = 0; i < n; i++)
       if (rest.gt(0)) {
-        const minIndex = getMinIndex(result.map((v) => v.amount));
+        const minIndex = getMinIndex(result.map((v) => v.amount.minus(v.value)));
         const index = minIndex.length === 1 ? minIndex[0] : randomPick(minIndex);
         result = result.map((v, i) => ({
           ...v,
           amount: i === index ? v.amount.plus(0.01) : v.amount,
         }));
       } else {
-        const maxIndex = getMaxIndex(result.map((v) => v.amount));
+        const maxIndex = getMaxIndex(result.map((v) => v.amount.minus(v.value)));
         const index = maxIndex.length === 1 ? maxIndex[0] : randomPick(maxIndex);
         result = result.map((v, i) => ({
           ...v,
