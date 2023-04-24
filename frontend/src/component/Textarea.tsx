@@ -21,7 +21,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, Props>(
       )}
       <textarea
         className={classNames(
-          'rounded bg-grey-200 outline-none p-2 h-16 w-full border-solid border-[1px] focus:border-solid focus:border-teal-500',
+          'rounded bg-grey-200 outline-none p-2 h-16 w-full border-solid border-[1px] focus:border-solid focus:border-teal-500 leading-normal',
           {
             'border-tomato-500': !!error,
             'border-grey-200': !error,
