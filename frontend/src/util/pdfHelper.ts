@@ -20,13 +20,13 @@ export const exportPdf = async (elementId: string, filename: string, margin = 10
     format: [297, 210],
   });
 
-  doc.addImage(imgData, 'PNG', margin, paddingTop, imgWidth, imgHeight);
+  doc.addImage(imgData, 'PNG', margin, paddingTop, imgWidth, imgHeight, 'alias', 'FAST');
   heightLeft -= pageHeight;
 
   while (heightLeft >= 0) {
     paddingTop = heightLeft - imgHeight; // top padding for other pages
     doc.addPage();
-    doc.addImage(imgData, 'PNG', margin, paddingTop, imgWidth, imgHeight);
+    doc.addImage(imgData, 'PNG', margin, paddingTop, imgWidth, imgHeight, 'alias', 'FAST');
     heightLeft -= pageHeight;
   }
 
