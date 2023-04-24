@@ -1,6 +1,6 @@
 {
   "name": "@y-celestial/spica-service",
-  "version": "1.1.7",
+  "version": "1.2.0",
   "author": "Yue Chang",
   "scripts": {
     "lint:es": "eslint -c ./eslint.json src",
