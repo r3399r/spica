@@ -1,22 +1,34 @@
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
-export const exportPdf = (elementId: string, filename: string, margin = 40) => {
+export const exportPdf = async (elementId: string, filename: string, margin = 10) => {
   const input = document.getElementById(elementId);
   if (input === null) return;
 
-  html2canvas(input).then((canvas) => {
-    const imgData = canvas.toDataURL('image/png');
+  const canvas = await html2canvas(input);
+  const imgData = canvas.toDataURL('image/png');
 
-    const orientation = canvas.width > canvas.height ? 'l' : 'p';
-    const pdf = new jsPDF({
-      orientation,
-      unit: 'px',
-      format: [canvas.height + 2 * margin, canvas.width + 2 * margin],
-    });
-    const imgProps = pdf.getImageProperties(imgData);
+  const pageHeight = 297;
+  const imgWidth = 210 - 2 * margin;
+  const imgHeight = (imgWidth * canvas.height) / canvas.width;
 
-    pdf.addImage(imgData, 'PNG', margin, margin, imgProps.width, imgProps.height);
-    pdf.save(filename);
+  let heightLeft = imgHeight;
+  let paddingTop = 0;
+
+  const doc = new jsPDF({
+    unit: 'px',
+    format: [297, 210],
   });
+
+  doc.addImage(imgData, 'PNG', margin, paddingTop, imgWidth, imgHeight);
+  heightLeft -= pageHeight;
+
+  while (heightLeft >= 0) {
+    paddingTop = heightLeft - imgHeight; // top padding for other pages
+    doc.addPage();
+    doc.addImage(imgData, 'PNG', margin, paddingTop, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+  }
+
+  doc.save(filename);
 };
