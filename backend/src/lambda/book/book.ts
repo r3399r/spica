@@ -1,19 +1,8 @@
 import { bindings } from 'src/bindings';
-import {
-  BadRequestError,
-  InternalServerError,
-} from 'src/celestial-service/error';
-import { errorOutput, successOutput } from 'src/celestial-service/LambdaOutput';
-import {
-  LambdaContext,
-  LambdaEvent,
-  LambdaOutput,
-} from 'src/celestial-service/model/Lambda';
 import { BookService } from 'src/logic/BookService';
 import {
   GetBookIdParams,
   PostBookBillRequest,
-  PostBookIdRequest,
   PostBookMemberRequest,
   PostBookRequest,
   PostBookTransferRequest,
@@ -22,6 +11,9 @@ import {
   PutBookRequest,
   PutBookTransferRequest,
 } from 'src/model/api/Book';
+import { BadRequestError, InternalServerError } from 'src/model/error';
+import { LambdaContext, LambdaEvent, LambdaOutput } from 'src/model/Lambda';
+import { errorOutput, successOutput } from 'src/util/LambdaOutput';
 
 export async function book(
   event: LambdaEvent,
@@ -52,8 +44,8 @@ export async function book(
       case '/api/book/{id}/member/{mid}':
         res = await apiBookIdMemberId(event, service);
         break;
-      case '/api/book/{id}/name':
-        res = await apiBookIdName(event, service);
+      case '/api/book/{id}/member/{mid}/self':
+        res = await apiBookIdMemberIdSelf(event, service);
         break;
       case '/api/book/{id}/showDelete':
         res = await apiBookIdShowDelete(event, service);
@@ -117,12 +109,8 @@ async function apiBookId(event: LambdaEvent, service: BookService) {
         event.headers['x-api-device']
       );
     case 'POST':
-      if (event.body === null)
-        throw new BadRequestError('body should not be empty');
-
       return service.addDeviceBook(
         event.pathParameters.id,
-        JSON.parse(event.body) as PostBookIdRequest,
         event.headers['x-api-device']
       );
     case 'DELETE':
@@ -229,15 +217,16 @@ async function apiBookIdMemberId(event: LambdaEvent, service: BookService) {
   }
 }
 
-async function apiBookIdName(event: LambdaEvent, service: BookService) {
+async function apiBookIdMemberIdSelf(event: LambdaEvent, service: BookService) {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   if (event.headers === null)
     throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
-    case 'GET':
-      return service.getBookNameById(
+    case 'PUT':
+      return service.reviseMemberSelf(
         event.pathParameters.id,
+        event.pathParameters.mid,
         event.headers['x-api-device']
       );
     default:

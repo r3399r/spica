@@ -3,12 +3,12 @@ import format from 'date-fns/format';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import Body from 'src/celestial-ui/component/typography/Body';
-import H2 from 'src/celestial-ui/component/typography/H2';
-import H4 from 'src/celestial-ui/component/typography/H4';
-import { compare } from 'src/celestial-ui/util/compare';
+import Body from 'src/component/typography/Body';
+import H2 from 'src/component/typography/H2';
+import H4 from 'src/component/typography/H4';
 import useBook from 'src/hook/useBook';
 import { bn, bnFormat } from 'src/util/bignumber';
+import { compare } from 'src/util/compare';
 
 const Main = () => {
   const { tid } = useParams();

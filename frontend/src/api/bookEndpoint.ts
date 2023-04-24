@@ -3,11 +3,9 @@ import {
   DeleteBookTransferResponse,
   GetBookIdParams,
   GetBookIdResponse,
-  GetBookNameResponse,
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
-  PostBookIdRequest,
   PostBookIdResponse,
   PostBookMemberRequest,
   PostBookMemberResponse,
@@ -24,8 +22,8 @@ import {
   PutBookShowDeleteResponse,
   PutBookTransferRequest,
   PutBookTransferResponse,
-} from '@y-celestial/spica-service';
-import http from 'src/celestial-ui/util/http';
+} from 'src/model/backend/api/Book';
+import http from 'src/util/http';
 
 const getBook = async (deviceId: string) =>
   await http.get<GetBookResponse>('book', { headers: { 'x-api-device': deviceId } });
@@ -39,9 +37,8 @@ const getBookId = async (id: string, deviceId: string, params?: GetBookIdParams)
     params,
   });
 
-const postBookId = async (id: string, data: PostBookIdRequest, deviceId: string) =>
+const postBookId = async (id: string, deviceId: string) =>
   await http.post<PostBookIdResponse>(`book/${id}`, {
-    data,
     headers: { 'x-api-device': deviceId },
   });
 
@@ -90,8 +87,8 @@ const deleteBookIdMember = async (id: string, mid: string, deviceId: string) =>
     headers: { 'x-api-device': deviceId },
   });
 
-const getBookIdName = async (id: string, deviceId: string) =>
-  await http.get<GetBookNameResponse>(`book/${id}/name`, {
+const putBookIdMemberSelf = async (id: string, mid: string, deviceId: string) =>
+  await http.put<PutBookMemberResponse>(`book/${id}/member/${mid}/self`, {
     headers: { 'x-api-device': deviceId },
   });
 
@@ -135,7 +132,7 @@ export default {
   postBookIdMember,
   putBookIdMember,
   deleteBookIdMember,
-  getBookIdName,
+  putBookIdMemberSelf,
   putBookIdShowDelete,
   postBookIdTransfer,
   putBookIdTransfer,

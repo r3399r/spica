@@ -11,30 +11,15 @@ import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
 import { ViewBookAccess } from 'src/access/ViewBookAccess';
 import { ViewDeviceBookAccess } from 'src/access/ViewDeviceBookAccess';
 import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
-import {
-  BadRequestError,
-  UnauthorizedError,
-} from 'src/celestial-service/error';
-import {
-  Pagination,
-  PaginationParams,
-} from 'src/celestial-service/model/Pagination';
-import { compare } from 'src/celestial-service/util/compare';
-import {
-  differenceBy,
-  intersectionBy,
-} from 'src/celestial-service/util/setTheory';
 import { BillType } from 'src/constant/Book';
 import {
   DeleteBookBillResponse,
   DeleteBookTransferResponse,
   GetBookIdParams,
   GetBookIdResponse,
-  GetBookNameResponse,
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
-  PostBookIdRequest,
   PostBookIdResponse,
   PostBookMemberRequest,
   PostBookMemberResponse,
@@ -60,6 +45,8 @@ import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
+import { BadRequestError } from 'src/model/error';
+import { Pagination, PaginationParams } from 'src/model/Pagination';
 import {
   BookDetail,
   History,
@@ -70,7 +57,9 @@ import {
 import { ViewBillShare } from 'src/model/viewEntity/ViewBillShare';
 import { ViewBook } from 'src/model/viewEntity/ViewBook';
 import { bn } from 'src/util/bignumber';
+import { compare } from 'src/util/compare';
 import { randomBase10 } from 'src/util/random';
+import { differenceBy, intersectionBy } from 'src/util/setTheory';
 
 /**
  * Service class for Book
@@ -119,9 +108,9 @@ export class BookService {
     deviceId: string
   ): Promise<PostBookResponse> {
     const book = new BookEntity();
-    book.name = data.name;
+    book.name = data.bookName;
     book.code = randomBase10(6);
-    book.symbol = data.symbol ?? '$';
+    book.symbol = '$';
 
     const newBook = await this.bookAccess.save(book);
 
@@ -132,14 +121,19 @@ export class BookService {
 
     await this.deviceBookAccess.save(deviceBook);
 
+    if (data.nickname) {
+      const member = new MemberEntity();
+      member.bookId = newBook.id;
+      member.nickname = data.nickname;
+      member.deviceId = deviceId;
+      member.total = 0;
+      member.balance = 0;
+      member.deletable = true;
+
+      await this.memberAccess.save(member);
+    }
+
     return newBook;
-  }
-
-  private async validateBook(id: string, code: string) {
-    const book = await this.vBookAccess.findById(id);
-    if (book.code !== code.toLowerCase()) throw new UnauthorizedError();
-
-    return book;
   }
 
   private async checkDeviceHasBook(
@@ -165,19 +159,6 @@ export class BookService {
     const vDeviceBooks = await this.vDeviceBookAccess.findByDeviceId(deviceId);
 
     return vDeviceBooks.sort(compare('dateCreated'));
-  }
-
-  public async getBookNameById(
-    id: string,
-    deviceId: string
-  ): Promise<GetBookNameResponse> {
-    const vDeviceBooks = await this.vDeviceBookAccess.findByDeviceId(deviceId);
-    if (vDeviceBooks.find((v) => v.bookId === id) !== undefined)
-      throw new BadRequestError('already own');
-
-    const book = await this.vBookAccess.findById(id);
-
-    return { id: book.id, name: book.name };
   }
 
   private compareTxTransfer = (
@@ -468,17 +449,29 @@ export class BookService {
     deviceId: string,
     params: GetBookIdParams | null
   ): Promise<Pagination<GetBookIdResponse>> {
-    const book = await this.checkDeviceHasBook(deviceId, id);
+    const book = await this.vBookAccess.findById(id);
+
+    const oldDeviceBook = await this.deviceBookAccess.findByDeviceIdAndBookId(
+      deviceId,
+      id
+    );
+    if (oldDeviceBook === null) {
+      const deviceBook = new DeviceBookEntity();
+      deviceBook.deviceId = deviceId;
+      deviceBook.bookId = book.id;
+      deviceBook.showDelete = false;
+
+      await this.deviceBookAccess.save(deviceBook);
+    }
 
     return await this.getBookDetail(book, params);
   }
 
   public async addDeviceBook(
     id: string,
-    data: PostBookIdRequest,
     deviceId: string
   ): Promise<Pagination<PostBookIdResponse>> {
-    const book = await this.validateBook(id, data.code);
+    const book = await this.vBookAccess.findById(id);
 
     const deviceBook = new DeviceBookEntity();
     deviceBook.deviceId = deviceId;
@@ -576,6 +569,25 @@ export class BookService {
     if (member.deletable === false) throw new BadRequestError('not deletable');
 
     await this.memberAccess.hardDeleteById(mid);
+  }
+
+  public async reviseMemberSelf(
+    bid: string,
+    mid: string,
+    deviceId: string
+  ): Promise<PutBookMemberResponse> {
+    await this.checkDeviceHasBook(deviceId, bid);
+
+    const oldMember = await this.memberAccess.findById(mid);
+    if (oldMember.bookId !== bid) throw new BadRequestError('bad request');
+
+    const newMember: Member = {
+      ...oldMember,
+      deviceId: oldMember.deviceId === deviceId ? null : deviceId,
+    };
+    await this.memberAccess.update(newMember);
+
+    return newMember;
   }
 
   private validateDetail(amount: number, data: ShareDetail[]) {

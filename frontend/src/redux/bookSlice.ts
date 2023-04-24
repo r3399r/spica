@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { GetBookIdResponse } from '@y-celestial/spica-service';
+import { GetBookIdResponse } from 'src/model/backend/api/Book';
 import { SavedBook } from 'src/model/Book';
 
 export type BookState = {

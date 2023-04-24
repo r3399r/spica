@@ -1,12 +1,12 @@
-import { Transaction, TransactionBill, TransactionTransfer } from '@y-celestial/spica-service';
 import classNames from 'classnames';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import Body from 'src/celestial-ui/component/typography/Body';
 import LoadMore from 'src/component/LoadMore';
+import Body from 'src/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
+import { Transaction, TransactionBill, TransactionTransfer } from 'src/model/backend/type/Book';
 import { aggregateTransactions } from 'src/service/bookService';
 import { bnFormat } from 'src/util/bignumber';
 

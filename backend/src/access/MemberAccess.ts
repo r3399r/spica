@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
-import { BadRequestError } from 'src/celestial-service/error';
 import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
+import { BadRequestError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**

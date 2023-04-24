@@ -2,7 +2,6 @@ import { init, use } from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import ChainedBackend from 'i18next-chained-backend';
 import HttpBackend from 'i18next-http-backend';
-import LocalStorageBackend from 'i18next-localstorage-backend';
 import { initReactI18next } from 'react-i18next';
 import { Language } from 'src/constant/Language';
 
@@ -39,11 +38,8 @@ init({
   },
   // options for backend plugin
   backend: {
-    backends: [LocalStorageBackend, HttpBackend],
+    backends: [HttpBackend],
     backendOptions: [
-      {
-        expirationTime: 7 * 24 * 60 * 60 * 1000, // 7 days
-      },
       {
         // path where resources get loaded from
         loadPath: '/locale/{{lng}}/{{ns}}.json',

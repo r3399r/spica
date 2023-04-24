@@ -1,9 +1,9 @@
-import { Member } from '@y-celestial/spica-service';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import FormInput from 'src/celestial-ui/component/FormInput';
-import ModalForm from 'src/celestial-ui/component/ModalForm';
+import FormInput from 'src/component/FormInput';
+import ModalForm from 'src/component/ModalForm';
+import { Member } from 'src/model/backend/entity/Member';
 import { RenameMemberForm } from 'src/model/Form';
 import { renameMember } from 'src/service/memberService';
 

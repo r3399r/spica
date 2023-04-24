@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import Switch from 'src/celestial-ui/component/Switch';
-import H4 from 'src/celestial-ui/component/typography/H4';
+import Switch from 'src/component/Switch';
+import H4 from 'src/component/typography/H4';
 import useBook from 'src/hook/useBook';
 import { toggleShowDelete } from 'src/service/bookSettingService';
 

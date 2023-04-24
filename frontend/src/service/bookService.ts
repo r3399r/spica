@@ -1,17 +1,19 @@
-import { Transaction } from '@y-celestial/spica-service';
 import format from 'date-fns/format';
 import bookEndpoint from 'src/api/bookEndpoint';
-import { compare } from 'src/celestial-ui/util/compare';
+import { PostBookRequest } from 'src/model/backend/api/Book';
+import { Transaction } from 'src/model/backend/type/Book';
 import { appendBook, setBooks } from 'src/redux/bookSlice';
 import { dispatch, getState } from 'src/redux/store';
 import { finishWaiting, startWaiting } from 'src/redux/uiSlice';
+import { compare } from 'src/util/compare';
 import { getLocalDeviceId } from 'src/util/localStorage';
+import { exportPdf } from 'src/util/pdfHelper';
 
 export const loadBookList = async () => {
+  const { books } = getState().book;
+  const loading = books === null;
   try {
-    dispatch(startWaiting());
-
-    const { books } = getState().book;
+    if (loading) dispatch(startWaiting());
 
     const deviceId = getLocalDeviceId();
 
@@ -36,16 +38,16 @@ export const loadBookList = async () => {
 
     dispatch(setBooks(updatedBooks));
   } finally {
-    dispatch(finishWaiting());
+    if (loading) dispatch(finishWaiting());
   }
 };
 
-export const createBook = async (name: string) => {
+export const createBook = async (data: PostBookRequest) => {
   try {
     dispatch(startWaiting());
 
     const deviceId = getLocalDeviceId();
-    const res = await bookEndpoint.postBook({ name }, deviceId);
+    const res = await bookEndpoint.postBook(data, deviceId);
     const book = res.data;
 
     dispatch(
@@ -158,4 +160,21 @@ export const aggregateTransactions = (id: string, transactions: Transaction[]) =
   });
 
   return map;
+};
+
+export const exportPersonalPdf = (id: string, userId: string) => {
+  const { books } = getState().book;
+  const savedBook = books?.find((v) => v.id === id);
+  const user = savedBook?.members?.find((v) => v.id === userId);
+  if (savedBook === undefined || user === undefined) return;
+
+  exportPdf('pdf-personal-content', `${savedBook.name}-${user.nickname}.pdf`);
+};
+
+export const exportOverallPdf = (id: string) => {
+  const { books } = getState().book;
+  const savedBook = books?.find((v) => v.id === id);
+  if (savedBook === undefined) return;
+
+  exportPdf('pdf-overall-content', `${savedBook.name}.pdf`);
 };

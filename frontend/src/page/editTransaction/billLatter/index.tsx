@@ -1,9 +1,9 @@
-import { ShareMethod } from '@y-celestial/spica-service';
 import classNames from 'classnames';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import Button from 'src/celestial-ui/component/Button';
+import Button from 'src/component/Button';
+import { ShareMethod } from 'src/constant/backend/Book';
 import useBook from 'src/hook/useBook';
 import IcPctInactive from 'src/image/ic-method-pct-inactive.svg';
 import IcPct from 'src/image/ic-method-pct.svg';

@@ -1,17 +1,17 @@
-import { Transaction } from '@y-celestial/spica-service';
 import classNames from 'classnames';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import Body from 'src/celestial-ui/component/typography/Body';
-import H2 from 'src/celestial-ui/component/typography/H2';
-import H4 from 'src/celestial-ui/component/typography/H4';
 import LoadMore from 'src/component/LoadMore';
-import NavbarVanilla from 'src/component/NavbarVanilla';
+import Body from 'src/component/typography/Body';
+import H2 from 'src/component/typography/H2';
+import H4 from 'src/component/typography/H4';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
+import { Transaction } from 'src/model/backend/type/Book';
 import { aggregateTransactions, loadBookById } from 'src/service/bookService';
 import { bn } from 'src/util/bignumber';
+import Navbar from './Navbar';
 
 const PersonalBalance = () => {
   const { id, uid } = useParams();
@@ -71,34 +71,36 @@ const PersonalBalance = () => {
 
   return (
     <div className="max-w-[640px] mx-[15px] sm:mx-auto">
-      <NavbarVanilla text={t('act.back')} />
-      <H2>{member?.nickname}</H2>
-      <div className="pt-5 flex justify-between items-center gap-[10px]">
-        <Body
-          size="s"
-          className={classNames('py-[3px] px-1 bg-grey-200', {
-            'text-tomato-700': member?.total && member.total < 0,
-            'text-green-700': member?.total && member.total >= 0,
-          })}
-        >
-          {member?.total && member.total < 0 ? t('desc.out') : t('desc.in')}
-        </Body>
-        <H4>
-          {book?.symbol}
-          {bn(member?.total ?? '0')
-            .abs()
-            .toFormat()}
-        </H4>
-      </div>
-      {Object.keys(transactions).map((v) => (
-        <div key={v} className="my-[10px]">
-          <Body bold className="pt-[5px] text-navy-100">
-            {v}
+      <Navbar />
+      <div id="pdf-personal-content">
+        <H2>{member?.nickname}</H2>
+        <div className="pt-5 flex justify-between items-center gap-[10px]">
+          <Body
+            size="s"
+            className={classNames('py-[3px] px-1 bg-grey-200', {
+              'text-tomato-700': member?.total && member.total < 0,
+              'text-green-700': member?.total && member.total >= 0,
+            })}
+          >
+            {member?.total && member.total < 0 ? t('desc.out') : t('desc.in')}
           </Body>
-          <>{transactions[v].map(items)}</>
+          <H4>
+            {book?.symbol}
+            {bn(member?.total ?? '0')
+              .abs()
+              .toFormat()}
+          </H4>
         </div>
-      ))}
-      {book?.transactions?.length !== book?.txCount && <LoadMore />}
+        {Object.keys(transactions).map((v) => (
+          <div key={v} className="my-[10px]">
+            <Body bold className="pt-[5px] text-navy-100">
+              {v}
+            </Body>
+            <>{transactions[v].map(items)}</>
+          </div>
+        ))}
+        {book?.transactions?.length !== book?.txCount && <LoadMore />}
+      </div>
     </div>
   );
 };

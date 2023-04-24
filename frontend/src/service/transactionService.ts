@@ -1,11 +1,7 @@
-import {
-  BillType,
-  Member,
-  ShareDetail,
-  ShareMethod,
-  Transaction,
-} from '@y-celestial/spica-service';
 import bookEndpoint from 'src/api/bookEndpoint';
+import { BillType, ShareMethod } from 'src/constant/backend/Book';
+import { Member } from 'src/model/backend/entity/Member';
+import { ShareDetail, Transaction } from 'src/model/backend/type/Book';
 import { Detail } from 'src/model/Book';
 import { setBooks } from 'src/redux/bookSlice';
 import { saveBillFormData } from 'src/redux/formSlice';
@@ -167,14 +163,14 @@ const calculateAdjust = (total: number, detail: Detail[]): ShareDetail[] => {
   if (n < detail.length)
     for (let i = 0; i < n; i++)
       if (rest.gt(0)) {
-        const minIndex = getMinIndex(result.map((v) => v.amount));
+        const minIndex = getMinIndex(result.map((v) => v.amount.minus(v.value)));
         const index = minIndex.length === 1 ? minIndex[0] : randomPick(minIndex);
         result = result.map((v, i) => ({
           ...v,
           amount: i === index ? v.amount.plus(0.01) : v.amount,
         }));
       } else {
-        const maxIndex = getMaxIndex(result.map((v) => v.amount));
+        const maxIndex = getMaxIndex(result.map((v) => v.amount.minus(v.value)));
         const index = maxIndex.length === 1 ? maxIndex[0] : randomPick(maxIndex);
         result = result.map((v, i) => ({
           ...v,
@@ -513,3 +509,5 @@ export const saveBillDataEvenly = (
       }),
     );
 };
+
+export const getDeviceId = () => getLocalDeviceId();

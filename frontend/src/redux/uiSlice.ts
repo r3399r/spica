@@ -6,6 +6,7 @@ export type UiState = {
   txState: 'main' | 'former' | 'latter';
   txPageScroll: number;
   settlementTab: 'check' | 'balance';
+  snackbarMessage: string | undefined;
 };
 
 const initialState: UiState = {
@@ -14,6 +15,7 @@ const initialState: UiState = {
   txState: 'main',
   txPageScroll: 0,
   settlementTab: 'check',
+  snackbarMessage: undefined,
 };
 
 export const uiSlice = createSlice({
@@ -38,6 +40,9 @@ export const uiSlice = createSlice({
     setSettlementTab: (state: UiState, action: PayloadAction<'check' | 'balance'>) => {
       state.settlementTab = action.payload;
     },
+    setSnackbarMessage: (state: UiState, action: PayloadAction<string | undefined>) => {
+      state.snackbarMessage = action.payload;
+    },
   },
 });
 
@@ -48,6 +53,7 @@ export const {
   setTxState,
   setTxPageScroll,
   setSettlementTab,
+  setSnackbarMessage,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { In } from 'typeorm';
+import { In, Raw } from 'typeorm';
 import { ViewBook } from 'src/model/viewEntity/ViewBook';
 import { ViewBookEntity } from 'src/model/viewEntity/ViewBookEntity';
 import { Database } from 'src/util/Database';
@@ -12,10 +12,16 @@ export class ViewBookAccess {
   @inject(Database)
   private readonly database!: Database;
 
-  public async findAll() {
+  public async findExpired() {
     const qr = await this.database.getQueryRunner();
 
-    return await qr.manager.find<ViewBook>(ViewBookEntity.name);
+    return await qr.manager.find<ViewBook>(ViewBookEntity.name, {
+      where: {
+        lastDateUpdated: Raw(
+          (alias) => `${alias} < NOW() - interval '100 day'`
+        ),
+      },
+    });
   }
 
   public async findById(id: string) {

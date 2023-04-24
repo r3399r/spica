@@ -1,10 +1,10 @@
-import { History as HistoryType } from '@y-celestial/spica-service';
 import format from 'date-fns/format';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import Body from 'src/celestial-ui/component/typography/Body';
+import Body from 'src/component/typography/Body';
 import useBook from 'src/hook/useBook';
+import { History as HistoryType } from 'src/model/backend/type/Book';
 import { bn } from 'src/util/bignumber';
 
 const History = () => {

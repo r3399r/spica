@@ -3,8 +3,8 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import Button from 'src/celestial-ui/component/Button';
-import Body from 'src/celestial-ui/component/typography/Body';
+import Button from 'src/component/Button';
+import Body from 'src/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
 import IcAdd from 'src/image/ic-add.svg';
@@ -21,7 +21,7 @@ const BookDetail = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { txPageScroll } = useSelector((rootState: RootState) => rootState.ui);
+  const { txPageScroll, isDeviceReady } = useSelector((rootState: RootState) => rootState.ui);
   const book = useBook();
   const noMember = useMemo(() => book?.members?.length === 0, [book]);
   // const showAd = useMemo(
@@ -35,9 +35,9 @@ const BookDetail = () => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (id === undefined) return;
+    if (id === undefined || !isDeviceReady) return;
     loadBookById(id).catch(() => navigate(Page.Book, { replace: true }));
-  }, [id]);
+  }, [id, isDeviceReady]);
 
   useEffect(() => {
     if (ref.current) ref.current.scrollTop = txPageScroll;
@@ -52,7 +52,7 @@ const BookDetail = () => {
         ref={ref}
         onScroll={(e) => dispatch(setTxPageScroll(e.currentTarget.scrollTop))}
       >
-        <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+        <div className="max-w-[640px] mx-[15px] sm:mx-auto" id="pdf-overall-content">
           <Navbar />
           <MainCard />
           <BalanceCard />

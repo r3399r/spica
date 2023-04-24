@@ -1,8 +1,8 @@
-import { ShareDetail } from '@y-celestial/spica-service';
+import { ShareDetail } from './backend/type/Book';
 
 export type LanguageForm = { language: string };
 
-export type NewBookForm = { name: string };
+export type NewBookForm = { bookName: string; nickname: string };
 
 export type NewMemberForm = { nickname: string };
 
@@ -34,4 +34,12 @@ export type TransferForm = {
 
 export type SplitForm = {
   value: string;
+};
+
+export type FriendForm = {
+  id: string;
+};
+
+export type DataTransferForm = {
+  token: string;
 };

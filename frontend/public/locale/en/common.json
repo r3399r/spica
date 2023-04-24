@@ -1,5 +1,5 @@
 {
-  "appName": "Split the Bill",
+  "appName": "Bunny Bill",
   "language": "English",
   "act": {
     "confirm": "Confirm",
@@ -19,7 +19,8 @@
     "sharer": "Sharer",
     "sender": "Sender",
     "receiver": "Receiver",
-    "memo": "Memo"
+    "memo": "Memo",
+    "copy": "Copied!"
   },
   "landing": {
     "title": "Bunny Bill",
@@ -33,14 +34,33 @@
     "bookList": "Book List",
     "newBook": "Create New Book",
     "noBook": "No Book",
-    "name": "Name"
+    "bookName": "Book Name*",
+    "nickname": "my nickname",
+    "nicknameHelper": "optional, can add member later"
   },
   "systemSetting": {
     "back": "Back",
     "head": "System Setting",
     "language": "Language",
+    "myId": "My ID",
+    "dataTransfer": "Data Transfer",
     "add2HomeScreen": "Add to Home Screen",
     "contactUs": "Contact Us"
+  },
+  "transfer": {
+    "back": "Back",
+    "head": "Data Transfer",
+    "outHead": "Transfer Out",
+    "outHint": "Enter the key into other devices to copy the data on this device to the new device.",
+    "outBtn": "Generate Key",
+    "inHead": "Transfer In",
+    "inHint": "Enter the key from another device to import data.",
+    "inBtn": "Enter key",
+    "modalOutHead": "Key",
+    "modalOutHint": "The key will be expired in 24 hours",
+    "modalOutClose": "Close",
+    "modalOutCopy": "Copy Key",
+    "modalInLabel": "Enter Key"
   },
   "add2HomeScreen": {
     "back": "Back",
@@ -109,11 +129,16 @@
     "nickname": "nickname",
     "noMemberHint": "Let's create new members!",
     "shareWithFriend": "Share With Friends",
-    "shareText": "I'd like to share \"{{book}}\" with you. Please click and input the code.",
+    "shareText": "I'd like to share \"{{book}}\" with you. Please click the link.",
     "shareLink": "Share Link",
-    "codeHint": "code:",
+    "inputId": "Enter friend ID",
     "edit": "Edit Profile",
-    "deleteHint": "Delete \"{{nickname}}\"?"
+    "deleteHint": "Delete \"{{nickname}}\"?",
+    "self": "Me",
+    "selfHint1": "set \"{{nickname}}\" as me",
+    "selfHint2": "\"{{nickname}}\" is not me",
+    "friendPlaceholder": "Friend ID",
+    "friendHint": "The ID can be found in System Setting"
   },
   "share": {
     "join": "Join this Book?",

@@ -1,15 +1,16 @@
-import { Member, ShareMethod } from '@y-celestial/spica-service';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import FormNumberInput from 'src/celestial-ui/component/FormNumberInput';
-import ModalForm from 'src/celestial-ui/component/ModalForm';
-import Body from 'src/celestial-ui/component/typography/Body';
+import FormNumberInput from 'src/component/FormNumberInput';
+import ModalForm from 'src/component/ModalForm';
+import Body from 'src/component/typography/Body';
+import { ShareMethod } from 'src/constant/backend/Book';
 import IcPctInactive from 'src/image/ic-method-pct-inactive.svg';
 import IcPct from 'src/image/ic-method-pct.svg';
 import IcWeightInactive from 'src/image/ic-method-weight-inactive.svg';
 import IcWeight from 'src/image/ic-method-weight.svg';
+import { Member } from 'src/model/backend/entity/Member';
 import { SplitForm } from 'src/model/Form';
 import { addMemberToBillLatter } from 'src/service/transactionService';
 

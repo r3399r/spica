@@ -19,7 +19,8 @@
     "sharer": "分攤者",
     "sender": "匯款者",
     "receiver": "收款者",
-    "memo": "備註"
+    "memo": "備註",
+    "copy": "複製成功！"
   },
   "landing": {
     "title": "Bunny Bill",
@@ -33,14 +34,33 @@
     "bookList": "帳本清單",
     "newBook": "建立新帳本",
     "noBook": "尚未建立帳本",
-    "name": "名稱"
+    "bookName": "帳本名稱*",
+    "nickname": "我的暱稱",
+    "nicknameHelper": "可先不填，之後再去「成員」中新增"
   },
   "systemSetting": {
     "back": "回帳本清單",
     "head": "系統設定",
     "language": "語言設定",
+    "myId": "我的 ID",
+    "dataTransfer": "資料轉移",
     "add2HomeScreen": "加入手機主畫面",
     "contactUs": "聯絡我們"
+  },
+  "transfer": {
+    "back": "回系統設定",
+    "head": "資料轉移",
+    "outHead": "資料轉出",
+    "outHint": "將密鑰輸入其他裝置，可將此裝置上的資料拷貝到新的裝置上",
+    "outBtn": "產生密鑰",
+    "inHead": "資料匯入",
+    "inHint": "輸入其他裝置的密鑰即可匯入資料",
+    "inBtn": "輸入密鑰",
+    "modalOutHead": "密鑰",
+    "modalOutHint": "此密鑰將於 24 小時後失效",
+    "modalOutClose": "關閉",
+    "modalOutCopy": "複製密鑰",
+    "modalInLabel": "輸入密鑰"
   },
   "add2HomeScreen": {
     "back": "回系統設定",
@@ -108,12 +128,17 @@
     "create": "新增",
     "nickname": "暱稱",
     "noMemberHint": "尚未有成員，請輸入暱稱來新增成員吧！",
-    "shareWithFriend": "與好友共享",
-    "shareText": "與你共享帳本「{{book}}」，請於點擊連結後輸入通行碼",
+    "shareWithFriend": "與好友共享帳本",
+    "shareText": "與你共享帳本「{{book}}」，請點擊連結",
     "shareLink": "分享連結",
-    "codeHint": "通行碼：",
+    "inputId": "輸入好友 ID",
     "edit": "編輯資料",
-    "deleteHint": "要刪除「{{nickname}}」嗎？"
+    "deleteHint": "要刪除「{{nickname}}」嗎？",
+    "self": "我",
+    "selfHint1": "將「{{nickname}}」設定為我的暱稱",
+    "selfHint2": "「{{nickname}}」不再是我的暱稱",
+    "friendPlaceholder": "好友 ID",
+    "friendHint": "使用者ID顯示在系統設定"
   },
   "share": {
     "join": "加入此帳本？",

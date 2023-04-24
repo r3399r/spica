@@ -1,4 +1,4 @@
-const CACHE_NAME = 'version-1.4.0';
+const CACHE_NAME = 'version-1.6.0';
 const urlsToCache = ['index.html', 'offline.html'];
 const self = this;
 // Install SW

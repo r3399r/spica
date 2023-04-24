@@ -4,6 +4,7 @@ import { BillShareAccess } from 'src/access/BillShareAccess';
 import { BookAccess } from 'src/access/BookAccess';
 import { DbAccess } from 'src/access/DbAccess';
 import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
+import { DeviceTokenAccess } from 'src/access/DeviceTokenAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
 import { ViewBookAccess } from 'src/access/ViewBookAccess';
@@ -37,38 +38,51 @@ export class DbCleanService {
   @inject(DeviceBookAccess)
   private readonly deviceBookAccess!: DeviceBookAccess;
 
+  @inject(DeviceTokenAccess)
+  private readonly deviceTokenAccess!: DeviceTokenAccess;
+
   public async cleanup() {
     await this.dbAccess.cleanup();
   }
 
-  public async cleanExpiredBook() {
+  private async cleanExpiredBook() {
+    const res = await this.vBookAccess.findExpired();
+
+    for (const book of res) {
+      // delete transfer
+      await this.transferAccess.hardDeleteByBookId(book.id);
+
+      // delete bill -> billShare
+      const bills = await this.billAccess.findByBookId(book.id);
+      for (const bill of bills)
+        await this.billShareAccess.hardDeleteByBillId(bill.id);
+      await this.billAccess.hardDeleteByBookId(book.id);
+
+      // delete member
+      await this.memberAccess.hardDeleteByBookId(book.id);
+
+      // delete device book pair
+      await this.deviceBookAccess.hardDeleteByBookId(book.id);
+
+      // delete book
+      await this.bookAccess.hardDeleteById(book.id);
+    }
+  }
+
+  private async cleanExpiredToken() {
+    const res = await this.deviceTokenAccess.findExpired();
+
+    for (const deviceToken of res)
+      await this.deviceTokenAccess.hardDeleteById(deviceToken.id);
+  }
+
+  public async cleanExpired() {
     try {
       await this.dbAccess.startTransaction();
-      const res = await this.vBookAccess.findAll();
 
-      for (const book of res)
-        if (
-          new Date().getTime() - new Date(book.lastDateUpdated).getTime() >
-          100 * 24 * 60 * 60 * 1000 // 100 days
-        ) {
-          // delete transfer
-          await this.transferAccess.hardDeleteByBookId(book.id);
+      await this.cleanExpiredBook();
+      await this.cleanExpiredToken();
 
-          // delete bill -> billShare
-          const bills = await this.billAccess.findByBookId(book.id);
-          for (const bill of bills)
-            await this.billShareAccess.hardDeleteByBillId(bill.id);
-          await this.billAccess.hardDeleteByBookId(book.id);
-
-          // delete member
-          await this.memberAccess.hardDeleteByBookId(book.id);
-
-          // delete device book pair
-          await this.deviceBookAccess.hardDeleteByBookId(book.id);
-
-          // delete book
-          await this.bookAccess.hardDeleteById(book.id);
-        }
       await this.dbAccess.commitTransaction();
     } catch (e) {
       await this.dbAccess.rollbackTransaction();

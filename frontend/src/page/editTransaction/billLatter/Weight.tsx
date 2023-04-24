@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import Divider from 'src/celestial-ui/component/Divider';
-import Body from 'src/celestial-ui/component/typography/Body';
-import H5 from 'src/celestial-ui/component/typography/H5';
+import Divider from 'src/component/Divider';
+import Body from 'src/component/typography/Body';
+import H5 from 'src/component/typography/H5';
 import Amount from './Amount';
 import SplitMix from './SplitMix';
 

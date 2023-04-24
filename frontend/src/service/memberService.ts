@@ -81,3 +81,44 @@ export const deleteMember = async (bookId: string, memberId: string) => {
     dispatch(finishWaiting());
   }
 };
+
+export const setMemberAsSelf = async (bookId: string, memberId: string) => {
+  try {
+    dispatch(startWaiting());
+
+    const deviceId = getLocalDeviceId();
+    const res = await bookEndpoint.putBookIdMemberSelf(bookId, memberId, deviceId);
+
+    const { books } = getState().book;
+    const updatedBooks = (books ?? []).map((v) => {
+      if (v.id === bookId) {
+        const updatedMembers = (v.members ?? []).map((o) => (o.id === memberId ? res.data : o));
+
+        return {
+          ...v,
+          members: updatedMembers,
+        };
+      }
+
+      return v;
+    });
+
+    dispatch(setBooks(updatedBooks));
+  } finally {
+    dispatch(finishWaiting());
+  }
+};
+
+export const getDeviceId = () => getLocalDeviceId();
+
+export const addFriendIntoBook = async (bookId: string, friendId: string) => {
+  try {
+    dispatch(startWaiting());
+    const { books } = getState().book;
+    const book = books?.find((v) => v.id === bookId);
+    if (book === undefined) return;
+    await bookEndpoint.postBookId(bookId, friendId);
+  } finally {
+    dispatch(finishWaiting());
+  }
+};

@@ -1,4 +1,7 @@
-import { Member, ShareMethod, Transaction, ViewBook } from '@y-celestial/spica-service';
+import { ShareMethod } from 'src/constant/backend/Book';
+import { Member } from './backend/entity/Member';
+import { Transaction } from './backend/type/Book';
+import { ViewBook } from './backend/viewEntity/ViewBook';
 
 export type SavedBook = ViewBook & {
   showDelete: boolean;

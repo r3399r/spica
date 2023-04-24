@@ -6,5 +6,6 @@ CREATE TABLE device_book (
 	date_created TIMESTAMP NULL,
 	date_updated TIMESTAMP NULL,
 	PRIMARY KEY (id ASC),
-	FOREIGN KEY (book_id) REFERENCES book (id)
+	FOREIGN KEY (book_id) REFERENCES book (id),
+	UNIQUE (device_id, book_id)
 );

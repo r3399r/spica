@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
 import { In, IsNull } from 'typeorm';
-import { BadRequestError } from 'src/celestial-service/error';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
+import { BadRequestError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
