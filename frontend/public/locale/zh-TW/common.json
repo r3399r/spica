@@ -9,7 +9,8 @@
     "reset": "重置",
     "clear": "清除",
     "back": "回上頁",
-    "loadMore": "讀取更多"
+    "loadMore": "讀取更多",
+    "export": "匯出"
   },
   "desc": {
     "in": "收入",
@@ -20,7 +21,9 @@
     "sender": "匯款者",
     "receiver": "收款者",
     "memo": "備註",
-    "copy": "複製成功！"
+    "copy": "複製成功！",
+    "exportTitle": "匯出",
+    "exportHint": "將收支明細匯出成一個 pdf 檔"
   },
   "landing": {
     "title": "Bunny Bill",
