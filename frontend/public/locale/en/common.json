@@ -9,7 +9,8 @@
     "reset": "Reset",
     "clear": "Clear",
     "back": "Back",
-    "loadMore": "Load More"
+    "loadMore": "Load More",
+    "export": "Export"
   },
   "desc": {
     "in": "Income",
@@ -20,7 +21,9 @@
     "sender": "Sender",
     "receiver": "Receiver",
     "memo": "Memo",
-    "copy": "Copied!"
+    "copy": "Copied!",
+    "exportTitle": "Export",
+    "exportHint": "Export the transaction list into a pdf"
   },
   "landing": {
     "title": "Bunny Bill",

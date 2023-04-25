@@ -138,6 +138,43 @@ export const loadMoreBookById = async (id: string) => {
   }
 };
 
+export const loadAllBookById = async (id: string) => {
+  try {
+    dispatch(startWaiting());
+    const deviceId = getLocalDeviceId();
+    const { books } = getState().book;
+    const savedBook = books?.find((v) => v.id === id);
+    const txCount = savedBook?.txCount;
+
+    if (savedBook === undefined || !txCount) throw new Error('unexpected');
+
+    let savedTx = savedBook.transactions ?? [];
+    let savedCount = savedTx.length;
+    while (savedCount < txCount) {
+      const res = await bookEndpoint.getBookId(id, deviceId, {
+        limit: '50',
+        offset: String(savedCount),
+      });
+
+      savedTx = [...savedTx, ...res.data.transactions];
+      savedCount += res.data.transactions.length;
+    }
+
+    const index = books?.findIndex((v) => v.id === id) ?? -1;
+    if (books === null || index === -1) throw new Error('unexpected');
+    else {
+      const tmp = [...books];
+      tmp[index] = {
+        ...tmp[index],
+        transactions: savedTx,
+      };
+      dispatch(setBooks(tmp));
+    }
+  } finally {
+    dispatch(finishWaiting());
+  }
+};
+
 export const getBookIndex = (id: string) => {
   const { books } = getState().book;
   if (books === null) return 0;
