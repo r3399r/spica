@@ -133,7 +133,7 @@ const SplitMixed = ({ mode }: Props) => {
           <AmountInput
             symbol={book?.symbol ?? '$'}
             decimal={2}
-            className={classNames('w-[90px]', {
+            className={classNames('!w-[90px]', {
               'text-navy-900': v.customAmount,
               'text-navy-100': !v.customAmount,
             })}

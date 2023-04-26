@@ -95,7 +95,7 @@ const SplitAdjust = () => {
           <AmountInput
             symbol={book?.symbol ?? '$'}
             decimal={2}
-            className="w-[78px]"
+            className="!w-[78px]"
             value={`${book?.symbol}${v.value}`}
             onChange={onInput(v.id)}
           />
