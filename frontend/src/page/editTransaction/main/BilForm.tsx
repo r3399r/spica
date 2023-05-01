@@ -27,7 +27,7 @@ const BillForm = () => {
   }, [members, isDeviceReady]);
 
   useEffect(() => {
-    if (self) addMemberToBillFormer(self);
+    if (self && billFormData.former === undefined) addMemberToBillFormer(self);
   }, [self]);
 
   const saveFormData = (data: Partial<Form>) => {
