@@ -87,7 +87,7 @@
     "billOutNote": "{{member}} 支付了 {{symbol}}{{amount}}",
     "billInNote": "{{member}} 收取了 {{symbol}}{{amount}}",
     "transferNote": "{{srcMember}} 转帐 {{symbol}}{{amount}} 给 {{dstMember}}",
-    "settlement": "结算",
+    "settlement": "个人收支 / 结帐",
     "shouldReceive": "须收款",
     "shouldPay": "须还款",
     "deleted": "已删除"
@@ -171,7 +171,6 @@
   },
   "settlement": {
     "back": "回帐本",
-    "head": "结算",
     "check": "结帐",
     "balance": "个人收支",
     "shouldPay": "需支付",

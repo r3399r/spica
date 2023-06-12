@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import NavbarVanilla from 'src/component/NavbarVanilla';
 import Body from 'src/component/typography/Body';
-import H2 from 'src/component/typography/H2';
 import { Page } from 'src/constant/Page';
 import { RootState } from 'src/redux/store';
 import { setSettlementTab } from 'src/redux/uiSlice';
@@ -28,18 +27,7 @@ const Settlement = () => {
   return (
     <div className="max-w-[640px] mx-[15px] sm:mx-auto">
       <NavbarVanilla text={t('settlement.back')} />
-      <H2>{t('settlement.head')}</H2>
       <div className="mt-5 mb-[25px] flex gap-[10px]">
-        <Body
-          bold
-          className={classNames('w-full text-center py-1 rounded-[4px] cursor-pointer', {
-            'bg-tan-300 text-navy-700': tab === 'check',
-            'bg-grey-200 text-navy-900 text-opacity-30': tab === 'balance',
-          })}
-          onClick={() => dispatch(setSettlementTab('check'))}
-        >
-          {t('settlement.check')}
-        </Body>
         <Body
           bold
           className={classNames('w-full text-center py-1 rounded-[4px] cursor-pointer', {
@@ -50,9 +38,19 @@ const Settlement = () => {
         >
           {t('settlement.balance')}
         </Body>
+        <Body
+          bold
+          className={classNames('w-full text-center py-1 rounded-[4px] cursor-pointer', {
+            'bg-tan-300 text-navy-700': tab === 'check',
+            'bg-grey-200 text-navy-900 text-opacity-30': tab === 'balance',
+          })}
+          onClick={() => dispatch(setSettlementTab('check'))}
+        >
+          {t('settlement.check')}
+        </Body>
       </div>
-      {tab === 'check' && <Check />}
       {tab === 'balance' && <Balance />}
+      {tab === 'check' && <Check />}
     </div>
   );
 };

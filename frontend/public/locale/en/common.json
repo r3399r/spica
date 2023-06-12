@@ -171,7 +171,6 @@
   },
   "settlement": {
     "back": "Back",
-    "head": "Settlement",
     "check": "Check",
     "balance": "Balance",
     "shouldPay": "Should pay",
