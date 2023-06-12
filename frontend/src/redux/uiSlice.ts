@@ -14,7 +14,7 @@ const initialState: UiState = {
   workload: 0,
   txState: 'main',
   txPageScroll: 0,
-  settlementTab: 'check',
+  settlementTab: 'balance',
   snackbarMessage: undefined,
 };
 
