@@ -28,7 +28,8 @@ const TransferForm = () => {
   }, [members, isDeviceReady]);
 
   useEffect(() => {
-    if (self) dispatch(saveTransferFormData({ srcMemberId: self }));
+    if (self && !transferFormData.srcMemberId)
+      dispatch(saveTransferFormData({ srcMemberId: self }));
   }, [self]);
 
   const saveFormData = (data: Partial<Form>) => {
