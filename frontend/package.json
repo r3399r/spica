@@ -1,6 +1,6 @@
 {
   "name": "spica-frontend",
-  "version": "1.6.7",
+  "version": "1.6.8",
   "private": true,
   "scripts": {
     "start": "cross-env BROWSER=none PORT=3000 react-scripts start",
