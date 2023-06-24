@@ -117,27 +117,32 @@ export const calculateAmount = (total: number, detail: Detail[]): ShareDetail[] 
     });
   rest = rest.minus(resultWeight.reduce((prev, current) => prev.plus(current.amount), bn(0)));
 
-  let result = [...resPercentage, ...resAmount, ...resultWeight];
+  const result = [...resPercentage, ...resAmount, ...resultWeight];
+  if (detail.filter((v) => v.method === ShareMethod.Amount).length === detail.length)
+    return result.map((v) => ({ ...v, amount: v.amount.toNumber() }));
+
+  const amountSharer = result.filter((v) => v.method === ShareMethod.Amount);
+  let notAmountSharer = result.filter((v) => v.method !== ShareMethod.Amount);
   const n = rest.abs().times(100).integerValue().toNumber();
   if (n < detail.length)
     for (let i = 0; i < n; i++)
       if (rest.gt(0)) {
-        const minIndex = getMinIndex(result.map((v) => v.amount));
+        const minIndex = getMinIndex(notAmountSharer.map((v) => v.amount));
         const index = minIndex.length === 1 ? minIndex[0] : randomPick(minIndex);
-        result = result.map((v, i) => ({
+        notAmountSharer = notAmountSharer.map((v, i) => ({
           ...v,
           amount: i === index ? v.amount.plus(0.01) : v.amount,
         }));
       } else {
-        const maxIndex = getMaxIndex(result.map((v) => v.amount));
+        const maxIndex = getMaxIndex(notAmountSharer.map((v) => v.amount));
         const index = maxIndex.length === 1 ? maxIndex[0] : randomPick(maxIndex);
-        result = result.map((v, i) => ({
+        notAmountSharer = notAmountSharer.map((v, i) => ({
           ...v,
           amount: i === index ? v.amount.minus(0.01) : v.amount,
         }));
       }
 
-  return result.map((v) => ({ ...v, amount: v.amount.toNumber() }));
+  return [...amountSharer, ...notAmountSharer].map((v) => ({ ...v, amount: v.amount.toNumber() }));
 };
 
 const calculateAdjust = (total: number, detail: Detail[]): ShareDetail[] => {
