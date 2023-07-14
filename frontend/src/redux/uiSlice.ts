@@ -7,6 +7,7 @@ export type UiState = {
   txPageScroll: number;
   settlementTab: 'check' | 'balance';
   snackbarMessage: string | undefined;
+  showMemberModal: boolean;
 };
 
 const initialState: UiState = {
@@ -16,6 +17,7 @@ const initialState: UiState = {
   txPageScroll: 0,
   settlementTab: 'balance',
   snackbarMessage: undefined,
+  showMemberModal: false,
 };
 
 export const uiSlice = createSlice({
@@ -43,6 +45,9 @@ export const uiSlice = createSlice({
     setSnackbarMessage: (state: UiState, action: PayloadAction<string | undefined>) => {
       state.snackbarMessage = action.payload;
     },
+    setShowMemberModal: (state: UiState, action: PayloadAction<boolean>) => {
+      state.showMemberModal = action.payload;
+    },
   },
 });
 
@@ -54,6 +59,7 @@ export const {
   setTxPageScroll,
   setSettlementTab,
   setSnackbarMessage,
+  setShowMemberModal,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

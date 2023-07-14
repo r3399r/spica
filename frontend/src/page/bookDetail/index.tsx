@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'src/component/Button';
+import ModalMmeber from 'src/component/ModalMmeber';
 import Body from 'src/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
@@ -86,6 +87,7 @@ const BookDetail = () => {
           </div>
         </div>
       )}
+      <ModalMmeber />
     </>
   );
 };

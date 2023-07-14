@@ -4,7 +4,7 @@ import { PostBookRequest } from 'src/model/backend/api/Book';
 import { Transaction } from 'src/model/backend/type/Book';
 import { appendBook, setBooks } from 'src/redux/bookSlice';
 import { dispatch, getState } from 'src/redux/store';
-import { finishWaiting, startWaiting } from 'src/redux/uiSlice';
+import { finishWaiting, setShowMemberModal, startWaiting } from 'src/redux/uiSlice';
 import { compare } from 'src/util/compare';
 import { getLocalDeviceId } from 'src/util/localStorage';
 import { exportPdf } from 'src/util/pdfHelper';
@@ -87,6 +87,7 @@ export const loadBookById = async (id: string) => {
           txCount: Number(res.headers['x-pagination-count']),
         }),
       );
+    // if (index===-1&&res.data.members.length > 0) dispatch(setShowMemberModal(true))
     else {
       const tmp = [...books];
       tmp[index] = {
