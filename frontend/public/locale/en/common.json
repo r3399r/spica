@@ -175,5 +175,10 @@
     "balance": "Balance",
     "shouldPay": "Should pay",
     "isCleared": "All bills are cleared"
+  },
+  "memberModal": {
+    "head": "Select your nickname",
+    "hint": "You can also add your nickname later",
+    "skip": "Skip"
   }
 }

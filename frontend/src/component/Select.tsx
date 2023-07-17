@@ -82,7 +82,13 @@ const Select = ({
           </div>
           <div>{disabled ? <img src={IcSelectDisabled} /> : <img src={IcSelect} />}</div>
         </div>
-        <Modal open={open} handleClose={() => setOpen(false)} showClose={false} px={false}>
+        <Modal
+          open={open}
+          handleClose={() => setOpen(false)}
+          showClose={false}
+          px={false}
+          className="py-[12px]"
+        >
           <>{children}</>
         </Modal>
       </div>

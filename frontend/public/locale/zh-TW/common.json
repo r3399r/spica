@@ -175,5 +175,10 @@
     "balance": "個人收支",
     "shouldPay": "需支付",
     "isCleared": "所有款項已結清"
+  },
+  "memberModal": {
+    "head": "選擇你的暱稱",
+    "hint": "也可之後再前往「帳本成員」新增屬於你的暱稱",
+    "skip": "跳過"
   }
 }

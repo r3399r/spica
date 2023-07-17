@@ -43,3 +43,7 @@ export type FriendForm = {
 export type DataTransferForm = {
   token: string;
 };
+
+export type MemberSelectForm = {
+  id: string;
+};

@@ -110,7 +110,7 @@ export const loadMoreBookById = async (id: string) => {
 
     const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.getBookId(id, deviceId, {
-      limit: '50',
+      limit: '60',
       offset: String(savedBook?.transactions?.length),
     });
 
@@ -152,7 +152,7 @@ export const loadAllBookById = async (id: string) => {
     let savedCount = savedTx.length;
     while (savedCount < txCount) {
       const res = await bookEndpoint.getBookId(id, deviceId, {
-        limit: '50',
+        limit: '60',
         offset: String(savedCount),
       });
 

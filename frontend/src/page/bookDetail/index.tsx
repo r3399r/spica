@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,21 +7,25 @@ import Button from 'src/component/Button';
 import Body from 'src/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
+import useQuery from 'src/hook/useQuery';
 import IcAdd from 'src/image/ic-add.svg';
 import { RootState } from 'src/redux/store';
 import { setTxPageScroll } from 'src/redux/uiSlice';
 import { loadBookById } from 'src/service/bookService';
 import BalanceCard from './BalanceCard';
 import MainCard from './MainCard';
+import ModalMember from './ModalMember';
 import Navbar from './Navbar';
 import TransactionList from './TransactionList';
 
 const BookDetail = () => {
   const { id } = useParams();
   const { t } = useTranslation();
+  const { a: isShared } = useQuery();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { txPageScroll, isDeviceReady } = useSelector((rootState: RootState) => rootState.ui);
+  const [open, setOpen] = useState<boolean>(false);
   const book = useBook();
   const noMember = useMemo(() => book?.members?.length === 0, [book]);
   // const showAd = useMemo(
@@ -40,8 +44,21 @@ const BookDetail = () => {
   }, [id, isDeviceReady]);
 
   useEffect(() => {
+    if (!id) return;
+    const savedId = localStorage.getItem('memberSet');
+    if (isShared && (!savedId || !savedId.split(',').includes(id))) setOpen(true);
+  }, [isShared]);
+
+  useEffect(() => {
     if (ref.current) ref.current.scrollTop = txPageScroll;
   }, []);
+
+  const handleClose = () => {
+    if (!id) return;
+    const savedId = localStorage.getItem('memberSet');
+    localStorage.setItem('memberSet', savedId ? savedId + ',' + id : id);
+    setOpen(false);
+  };
 
   return (
     <>
@@ -86,6 +103,7 @@ const BookDetail = () => {
           </div>
         </div>
       )}
+      <ModalMember open={open} handleClose={handleClose} />
     </>
   );
 };
