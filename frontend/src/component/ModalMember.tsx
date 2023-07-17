@@ -18,7 +18,6 @@ const ModalMember = () => {
   const methods = useForm<MemberSelectForm>();
   const book = useBook();
   const members = useMemo(() => book?.members, [book]);
-  console.log(open);
   const handleClose = () => {
     dispatch(setShowMemberModal(false));
   };

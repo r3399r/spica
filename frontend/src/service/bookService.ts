@@ -80,10 +80,7 @@ export const loadBookById = async (id: string) => {
     const updatedBooks = await loadBookList();
     const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.getBookId(id, deviceId, { limit: '50', offset: '0' });
-    console.log(
-      updatedBooks.find((v) => v.id === id),
-      res.data.members,
-    );
+
     if (updatedBooks.find((v) => v.id === id) === undefined && res.data.members.length > 0)
       dispatch(setShowMemberModal(true));
 
