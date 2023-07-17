@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ import ModalMember from 'src/component/ModalMember';
 import Body from 'src/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
+import useQuery from 'src/hook/useQuery';
 import IcAdd from 'src/image/ic-add.svg';
 import { RootState } from 'src/redux/store';
 import { setTxPageScroll } from 'src/redux/uiSlice';
@@ -20,9 +21,11 @@ import TransactionList from './TransactionList';
 const BookDetail = () => {
   const { id } = useParams();
   const { t } = useTranslation();
+  const { a: isShared } = useQuery();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { txPageScroll, isDeviceReady } = useSelector((rootState: RootState) => rootState.ui);
+  const [open, setOpen] = useState<boolean>(false);
   const book = useBook();
   const noMember = useMemo(() => book?.members?.length === 0, [book]);
   // const showAd = useMemo(
@@ -39,6 +42,10 @@ const BookDetail = () => {
     if (id === undefined || !isDeviceReady) return;
     loadBookById(id).catch(() => navigate(Page.Book, { replace: true }));
   }, [id, isDeviceReady]);
+
+  useEffect(() => {
+    setOpen(!!isShared);
+  }, [isShared]);
 
   useEffect(() => {
     if (ref.current) ref.current.scrollTop = txPageScroll;
@@ -87,7 +94,7 @@ const BookDetail = () => {
           </div>
         </div>
       )}
-      <ModalMember />
+      <ModalMember open={open} handleClose={() => setOpen(false)} />
     </>
   );
 };

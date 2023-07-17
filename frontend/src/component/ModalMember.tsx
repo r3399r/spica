@@ -1,26 +1,23 @@
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
 import ModalForm from 'src/component/ModalForm';
 import Radio from 'src/component/Radio';
 import useBook from 'src/hook/useBook';
 import { MemberSelectForm } from 'src/model/Form';
-import { RootState } from 'src/redux/store';
-import { setShowMemberModal } from 'src/redux/uiSlice';
 import { setMemberAsSelf } from 'src/service/memberService';
 import Body from './typography/Body';
 
-const ModalMember = () => {
-  const dispatch = useDispatch();
-  const { showMemberModal: open } = useSelector((rootState: RootState) => rootState.ui);
+type Props = {
+  open: boolean;
+  handleClose: () => void;
+};
+
+const ModalMember = ({ open, handleClose }: Props) => {
   const { t } = useTranslation();
   const methods = useForm<MemberSelectForm>();
   const book = useBook();
   const members = useMemo(() => book?.members, [book]);
-  const handleClose = () => {
-    dispatch(setShowMemberModal(false));
-  };
 
   const onClose = () => {
     handleClose();

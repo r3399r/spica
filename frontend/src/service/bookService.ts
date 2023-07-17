@@ -4,7 +4,7 @@ import { PostBookRequest } from 'src/model/backend/api/Book';
 import { Transaction } from 'src/model/backend/type/Book';
 import { appendBook, setBooks } from 'src/redux/bookSlice';
 import { dispatch, getState } from 'src/redux/store';
-import { finishWaiting, setShowMemberModal, startWaiting } from 'src/redux/uiSlice';
+import { finishWaiting, startWaiting } from 'src/redux/uiSlice';
 import { compare } from 'src/util/compare';
 import { getLocalDeviceId } from 'src/util/localStorage';
 import { exportPdf } from 'src/util/pdfHelper';
@@ -37,8 +37,6 @@ export const loadBookList = async () => {
     });
 
     dispatch(setBooks(updatedBooks));
-
-    return updatedBooks;
   } finally {
     if (loading) dispatch(finishWaiting());
   }
@@ -77,12 +75,8 @@ export const loadBookById = async (id: string) => {
     const savedBook = books?.find((v) => v.id === id);
     if (savedBook && savedBook.members !== null && savedBook.transactions !== null) return;
 
-    const updatedBooks = await loadBookList();
     const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.getBookId(id, deviceId, { limit: '50', offset: '0' });
-
-    if (updatedBooks.find((v) => v.id === id) === undefined && res.data.members.length > 0)
-      dispatch(setShowMemberModal(true));
 
     const index = books?.findIndex((v) => v.id === id) ?? -1;
     if (books === null || index === -1)

@@ -14,7 +14,7 @@ const Share = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const book = useBook();
-  const link = `${location.origin}/book/${id}`;
+  const link = `${location.origin}/book/${id}?a=1`;
   const [open, setOpen] = useState<boolean>(false);
 
   const onShareLink = () => {
