@@ -9,15 +9,16 @@ import { MemberSelectForm } from 'src/model/Form';
 import { RootState } from 'src/redux/store';
 import { setShowMemberModal } from 'src/redux/uiSlice';
 import { setMemberAsSelf } from 'src/service/memberService';
+import Body from './typography/Body';
 
-const ModalMmeber = () => {
+const ModalMember = () => {
   const dispatch = useDispatch();
   const { showMemberModal: open } = useSelector((rootState: RootState) => rootState.ui);
   const { t } = useTranslation();
   const methods = useForm<MemberSelectForm>();
   const book = useBook();
   const members = useMemo(() => book?.members, [book]);
-
+  console.log(open);
   const handleClose = () => {
     dispatch(setShowMemberModal(false));
   };
@@ -40,17 +41,26 @@ const ModalMmeber = () => {
       onSubmit={onSubmit}
       open={open}
       handleClose={onClose}
-      title="gi"
-      cancelBtn={t('act.cancel')}
+      title={t('memberModal.head')}
+      cancelBtn={t('memberModal.skip')}
       confirmBtn={t('act.submit')}
     >
       <>
-        {members.map((v) => (
-          <Radio key={v.id} {...methods.register('id')} id={v.id} label={v.nickname} value={v.id} />
-        ))}
+        <Body size="l">{t('memberModal.hint')}</Body>
+        <div className="my-[15px]">
+          {members.map((v) => (
+            <Radio
+              key={v.id}
+              {...methods.register('id')}
+              id={v.id}
+              label={v.nickname}
+              value={v.id}
+            />
+          ))}
+        </div>
       </>
     </ModalForm>
   );
 };
 
-export default ModalMmeber;
+export default ModalMember;

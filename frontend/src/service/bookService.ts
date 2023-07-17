@@ -37,6 +37,8 @@ export const loadBookList = async () => {
     });
 
     dispatch(setBooks(updatedBooks));
+
+    return updatedBooks;
   } finally {
     if (loading) dispatch(finishWaiting());
   }
@@ -75,8 +77,15 @@ export const loadBookById = async (id: string) => {
     const savedBook = books?.find((v) => v.id === id);
     if (savedBook && savedBook.members !== null && savedBook.transactions !== null) return;
 
+    const updatedBooks = await loadBookList();
     const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.getBookId(id, deviceId, { limit: '50', offset: '0' });
+    console.log(
+      updatedBooks.find((v) => v.id === id),
+      res.data.members,
+    );
+    if (updatedBooks.find((v) => v.id === id) === undefined && res.data.members.length > 0)
+      dispatch(setShowMemberModal(true));
 
     const index = books?.findIndex((v) => v.id === id) ?? -1;
     if (books === null || index === -1)
@@ -87,7 +96,6 @@ export const loadBookById = async (id: string) => {
           txCount: Number(res.headers['x-pagination-count']),
         }),
       );
-    // if (index===-1&&res.data.members.length > 0) dispatch(setShowMemberModal(true))
     else {
       const tmp = [...books];
       tmp[index] = {
@@ -111,7 +119,7 @@ export const loadMoreBookById = async (id: string) => {
 
     const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.getBookId(id, deviceId, {
-      limit: '50',
+      limit: '60',
       offset: String(savedBook?.transactions?.length),
     });
 
@@ -153,7 +161,7 @@ export const loadAllBookById = async (id: string) => {
     let savedCount = savedTx.length;
     while (savedCount < txCount) {
       const res = await bookEndpoint.getBookId(id, deviceId, {
-        limit: '50',
+        limit: '60',
         offset: String(savedCount),
       });
 

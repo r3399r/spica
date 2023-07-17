@@ -1,5 +1,6 @@
 import { ModalUnstyled, ModalUnstyledProps } from '@mui/base';
 import classNames from 'classnames';
+import { twMerge } from 'tailwind-merge';
 import IcClose from 'src/image/ic-close.svg';
 import Backdrop from './Backdrop';
 
@@ -9,7 +10,14 @@ type Props = ModalUnstyledProps & {
   px?: boolean;
 };
 
-const Modal = ({ children, handleClose, showClose = true, px = true, ...props }: Props) => (
+const Modal = ({
+  children,
+  handleClose,
+  showClose = true,
+  px = true,
+  className,
+  ...props
+}: Props) => (
   <ModalUnstyled
     className="z-10 fixed right-0 bottom-0 top-0 left-0 flex items-center justify-center"
     slots={{ backdrop: Backdrop }}
@@ -27,10 +35,13 @@ const Modal = ({ children, handleClose, showClose = true, px = true, ...props }:
         </div>
       )}
       <div
-        className={classNames({
-          'pt-[20px]': !showClose,
-          'px-5': px,
-        })}
+        className={twMerge(
+          classNames({
+            'pt-[20px]': !showClose,
+            'px-5': px,
+          }),
+          className,
+        )}
       >
         {children}
       </div>
