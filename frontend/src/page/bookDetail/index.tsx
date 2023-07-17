@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'src/component/Button';
-import ModalMember from 'src/component/ModalMember';
 import Body from 'src/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
@@ -15,6 +14,7 @@ import { setTxPageScroll } from 'src/redux/uiSlice';
 import { loadBookById } from 'src/service/bookService';
 import BalanceCard from './BalanceCard';
 import MainCard from './MainCard';
+import ModalMember from './ModalMember';
 import Navbar from './Navbar';
 import TransactionList from './TransactionList';
 
@@ -44,12 +44,21 @@ const BookDetail = () => {
   }, [id, isDeviceReady]);
 
   useEffect(() => {
-    setOpen(!!isShared);
+    if (!id) return;
+    const savedId = localStorage.getItem('memberSet');
+    if (isShared && (!savedId || !savedId.split(',').includes(id))) setOpen(true);
   }, [isShared]);
 
   useEffect(() => {
     if (ref.current) ref.current.scrollTop = txPageScroll;
   }, []);
+
+  const handleClose = () => {
+    if (!id) return;
+    const savedId = localStorage.getItem('memberSet');
+    localStorage.setItem('memberSet', savedId ? savedId + ',' + id : id);
+    setOpen(false);
+  };
 
   return (
     <>
@@ -94,7 +103,7 @@ const BookDetail = () => {
           </div>
         </div>
       )}
-      <ModalMember open={open} handleClose={() => setOpen(false)} />
+      <ModalMember open={open} handleClose={handleClose} />
     </>
   );
 };

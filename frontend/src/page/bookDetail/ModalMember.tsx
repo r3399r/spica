@@ -3,10 +3,10 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import ModalForm from 'src/component/ModalForm';
 import Radio from 'src/component/Radio';
+import Body from 'src/component/typography/Body';
 import useBook from 'src/hook/useBook';
 import { MemberSelectForm } from 'src/model/Form';
 import { setMemberAsSelf } from 'src/service/memberService';
-import Body from './typography/Body';
 
 type Props = {
   open: boolean;
