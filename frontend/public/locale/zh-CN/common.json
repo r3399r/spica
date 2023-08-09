@@ -88,8 +88,8 @@
     "billInNote": "{{member}} 收取了 {{symbol}}{{amount}}",
     "transferNote": "{{srcMember}} 转帐 {{symbol}}{{amount}} 给 {{dstMember}}",
     "settlement": "个人收支 / 结帐",
-    "shouldReceive": "须收款",
-    "shouldPay": "须还款",
+    "shouldReceive": "需收款",
+    "shouldPay": "需还款",
     "deleted": "已删除"
   },
   "bookSetting": {
