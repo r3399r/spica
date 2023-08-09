@@ -158,7 +158,7 @@ export class BookService {
   public async getBookList(deviceId: string): Promise<GetBookResponse> {
     const vDeviceBooks = await this.vDeviceBookAccess.findByDeviceId(deviceId);
 
-    return vDeviceBooks.sort(compare('dateCreated'));
+    return vDeviceBooks.sort(compare('lastDateUpdated'));
   }
 
   private compareTxTransfer = (
