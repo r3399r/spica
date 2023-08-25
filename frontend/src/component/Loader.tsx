@@ -10,7 +10,7 @@ const Loader = () => {
   return (
     <ModalUnstyled
       open={workload > 0}
-      className="z-20 fixed right-0 bottom-0 top-0 left-0 flex items-center justify-center"
+      className="fixed inset-0 z-20 flex items-center justify-center"
       slots={{ backdrop: Backdrop }}
     >
       <div className="w-20 outline-none">

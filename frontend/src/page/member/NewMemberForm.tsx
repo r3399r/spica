@@ -19,7 +19,7 @@ const NewMemberForm = () => {
   };
 
   return (
-    <Form methods={methods} onSubmit={onSubmit} className="flex gap-[10px] items-center mb-4">
+    <Form methods={methods} onSubmit={onSubmit} className="mb-4 flex items-center gap-[10px]">
       <div className="flex-1 pt-4">
         <FormInput name="nickname" placeholder={t('member.nickname')} required />
       </div>

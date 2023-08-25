@@ -24,10 +24,10 @@ const Former = () => {
         {billFormData.type === BillType.Out ? t('desc.payer') : t('desc.receiver')}
       </Body>
       <div
-        className="flex justify-between gap-[10px] cursor-pointer"
+        className="flex cursor-pointer justify-between gap-[10px]"
         onClick={() => dispatch(setTxState('former'))}
       >
-        <div className="flex-1 flex flex-col gap-[5px]">
+        <div className="flex flex-1 flex-col gap-[5px]">
           {isAll && (
             <div className="ml-[10px] flex justify-between">
               <Body size="l">{members?.find((v) => v.id === former[0].id)?.nickname}</Body>

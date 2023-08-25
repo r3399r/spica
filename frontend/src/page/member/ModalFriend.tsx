@@ -39,7 +39,7 @@ const ModalFriend = ({ open, handleClose }: Props) => {
       confirmBtn={t('act.submit')}
     >
       <>
-        <div className="flex gap-1 items-center mb-[30px]">
+        <div className="mb-[30px] flex items-center gap-1">
           <Body size="l">{t('member.friendHint')}</Body>
           <img src={IcConfig} />
         </div>

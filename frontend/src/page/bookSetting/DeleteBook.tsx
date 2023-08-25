@@ -12,7 +12,7 @@ const DeleteBook = () => {
 
   return (
     <>
-      <div className="pt-5 pb-4 border-b border-b-grey-300 flex justify-between mb-[5px]">
+      <div className="mb-[5px] flex justify-between border-b border-b-grey-300 pb-4 pt-5">
         <H4>{t('bookSetting.deleteBook')}</H4>
         <Img
           src={IcRemove}

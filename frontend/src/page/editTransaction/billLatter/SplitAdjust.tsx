@@ -88,7 +88,7 @@ const SplitAdjust = () => {
         <div key={v.id} className="flex h-[60px] items-center gap-[10px]">
           <div className="flex flex-1 items-center">
             <Checkbox id={v.id} checked={v.checked} onChange={onCheck(v.id)} />
-            <label htmlFor={v.id} className="pl-3 break-all w-full">
+            <label htmlFor={v.id} className="w-full break-all pl-3">
               {v.nickname}
             </label>
           </div>

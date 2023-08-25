@@ -5,16 +5,16 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
 };
 
 const Radio = forwardRef<HTMLInputElement, Props>(({ label, id, ...props }, ref) => (
-  <div className="flex items-center my-[10px]">
+  <div className="my-[10px] flex items-center">
     <input
-      className="appearance-none cursor-pointer rounded-full w-5 h-5 border-2 border-navy-900 opacity-30 transition-all m-0 bg-clip-content p-[3px] checked:border-teal-500 checked:bg-teal-500 checked:opacity-100"
+      className="m-0 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-navy-900 bg-clip-content p-[3px] opacity-30 transition-all checked:border-teal-500 checked:bg-teal-500 checked:opacity-100"
       {...props}
       type="radio"
       id={id}
       ref={ref}
     />
     {label && (
-      <label className="pl-3 flex-1 leading-none" htmlFor={id}>
+      <label className="flex-1 pl-3 leading-none" htmlFor={id}>
         {label}
       </label>
     )}

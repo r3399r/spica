@@ -49,7 +49,7 @@ const TransferForm = () => {
       </div>
       <Body className="mb-[5px] text-navy-700">{t('desc.sender')}</Body>
       <div
-        className="flex justify-between gap-[10px] cursor-pointer"
+        className="flex cursor-pointer justify-between gap-[10px]"
         onClick={() => setSide('src')}
       >
         <Body size="l" className="ml-[10px]">
@@ -62,7 +62,7 @@ const TransferForm = () => {
       <Divider className="my-[15px]" />
       <Body className="mb-[5px] text-navy-700">{t('desc.receiver')}</Body>
       <div
-        className="flex justify-between gap-[10px] cursor-pointer"
+        className="flex cursor-pointer justify-between gap-[10px]"
         onClick={() => setSide('dst')}
       >
         <Body size="l" className="ml-[10px]">

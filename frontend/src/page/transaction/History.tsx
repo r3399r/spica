@@ -91,7 +91,7 @@ const History = () => {
   return (
     <div className="my-[15px]">
       {tx.dateDeleted && (
-        <Body size="s" className="text-navy-300 mb-[5px]">
+        <Body size="s" className="mb-[5px] text-navy-300">
           {t('transaction.deletedAt', {
             date: format(new Date(tx.dateDeleted), 'yyyy-MM-dd HH:mm'),
           })}

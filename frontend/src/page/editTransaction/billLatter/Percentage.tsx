@@ -10,9 +10,9 @@ const Percentage = () => {
 
   return (
     <>
-      <div className="flex gap-[10px] items-center py-[10px] mb-[15px]">
+      <div className="mb-[15px] flex items-center gap-[10px] py-[10px]">
         <H5>{t('editTx.pct')}</H5>
-        <Body className="flex-1 border-l border-grey-300 pl-[10px] min-h-[42px] flex items-center">
+        <Body className="flex min-h-[42px] flex-1 items-center border-l border-grey-300 pl-[10px]">
           {t('editTx.pctDesc')}
         </Body>
       </div>

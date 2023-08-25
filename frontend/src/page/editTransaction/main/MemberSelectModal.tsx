@@ -27,7 +27,7 @@ const MemberSelectModal = ({ open, onClose, members, side }: Props) => {
   };
 
   return (
-    <Modal open={open} handleClose={onClose} showClose={false} px={false}>
+    <Modal open={open} handleClose={onClose} showClose={false} px={false} className="py-[12px]">
       <>
         {members.map((v) => (
           <ListItem

@@ -29,7 +29,7 @@ const Switch = (props: UseSwitchParameters) => {
         )}
       />
       <input
-        className="absolute w-full h-full top-0 left-0 opacity-0 z-0 m-0 cursor-[inherit]"
+        className="absolute left-0 top-0 z-0 m-0 h-full w-full cursor-[inherit] opacity-0"
         {...getInputProps()}
       />
     </span>

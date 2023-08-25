@@ -19,7 +19,7 @@ const Amount = () => {
   );
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex items-center justify-between">
       <H2>{`${book?.symbol}${bnFormat(billFormData.amount ?? 0)}`}</H2>
       <Body className={classNames({ 'text-tomato-500': remaining !== 0 })}>{`${t(
         remaining > 0 ? 'editTx.greaterThan' : 'editTx.lessThan',

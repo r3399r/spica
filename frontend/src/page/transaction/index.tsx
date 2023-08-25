@@ -16,7 +16,7 @@ const Transaction = () => {
   }, [id]);
 
   return (
-    <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+    <div className="mx-[15px] max-w-[640px] sm:mx-auto">
       <Navbar />
       <Main />
       <History />

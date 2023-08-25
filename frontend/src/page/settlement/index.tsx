@@ -25,9 +25,9 @@ const Settlement = () => {
   }, [id]);
 
   return (
-    <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+    <div className="mx-[15px] max-w-[640px] sm:mx-auto">
       <NavbarVanilla text={t('settlement.back')} />
-      <div className="mt-5 mb-[25px] flex gap-[10px]">
+      <div className="mb-[25px] mt-5 flex gap-[10px]">
         <Body
           bold
           className={classNames('w-full text-center py-1 rounded-[4px] cursor-pointer', {

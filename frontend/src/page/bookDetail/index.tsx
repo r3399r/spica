@@ -69,7 +69,7 @@ const BookDetail = () => {
         ref={ref}
         onScroll={(e) => dispatch(setTxPageScroll(e.currentTarget.scrollTop))}
       >
-        <div className="max-w-[640px] mx-[15px] sm:mx-auto" id="pdf-overall-content">
+        <div className="mx-[15px] max-w-[640px] sm:mx-auto" id="pdf-overall-content">
           <Navbar />
           <MainCard />
           <BalanceCard />
@@ -90,7 +90,7 @@ const BookDetail = () => {
         <div className="fixed bottom-0 h-[104px] w-full">
           <div className="mx-auto w-fit">
             <Button
-              className="mt-5 w-64 h-12"
+              className="mt-5 h-12 w-64"
               onClick={() => navigate(`${Page.Book}/${book.id}/tx`)}
             >
               <div className="flex justify-center">

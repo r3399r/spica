@@ -22,7 +22,7 @@ const BookSetting = () => {
   }, [id]);
 
   return (
-    <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+    <div className="mx-[15px] max-w-[640px] sm:mx-auto">
       <NavbarVanilla text={t('bookSetting.back')} />
       <H2>{t('bookSetting.head')}</H2>
       <RenameBook />

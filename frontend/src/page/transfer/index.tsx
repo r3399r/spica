@@ -15,10 +15,10 @@ const Transfer = () => {
 
   return (
     <>
-      <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+      <div className="mx-[15px] max-w-[640px] sm:mx-auto">
         <NavbarVanilla text={t('transfer.back')} />
         <H2 className="mt-5">{t('transfer.head')}</H2>
-        <div className="pt-5 pb-4 border-b border-b-grey-300 flex gap-[15px] justify-between items-center">
+        <div className="flex items-center justify-between gap-[15px] border-b border-b-grey-300 pb-4 pt-5">
           <div className="w-3/4">
             <H4 className="mb-[5px]">{t('transfer.outHead')}</H4>
             <Body size="l">{t('transfer.outHint')}</Body>
@@ -33,7 +33,7 @@ const Transfer = () => {
             </Button>
           </div>
         </div>
-        <div className="pt-5 pb-4 border-b border-b-grey-300 flex gap-[15px] justify-between items-center">
+        <div className="flex items-center justify-between gap-[15px] border-b border-b-grey-300 pb-4 pt-5">
           <div className="w-3/4">
             <H4 className="mb-[5px]">{t('transfer.inHead')}</H4>
             <Body size="l">{t('transfer.inHint')}</Body>

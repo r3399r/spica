@@ -43,7 +43,7 @@ const PersonalBalance = () => {
       return (
         <div
           key={item.id}
-          className="py-[10px] border-b-[1px] border-b-grey-300 cursor-pointer flex gap-[10px]"
+          className="flex cursor-pointer gap-[10px] border-b-[1px] border-b-grey-300 py-[10px]"
           onClick={() => navigate(`${Page.Book}/${id}/tx/${item.id}`)}
         >
           <Body
@@ -55,7 +55,7 @@ const PersonalBalance = () => {
           >
             {item.type === 'out' ? t('desc.out') : t('desc.in')}
           </Body>
-          <div className="flex-1 flex justify-between">
+          <div className="flex flex-1 justify-between">
             <Body size="l" bold>
               {item.descr}
             </Body>
@@ -70,11 +70,11 @@ const PersonalBalance = () => {
   };
 
   return (
-    <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+    <div className="mx-[15px] max-w-[640px] sm:mx-auto">
       <Navbar />
       <div id="pdf-personal-content">
         <H2>{member?.nickname}</H2>
-        <div className="pt-5 flex justify-between items-center gap-[10px]">
+        <div className="flex items-center justify-between gap-[10px] pt-5">
           <Body
             size="s"
             className={classNames('py-[3px] px-1 bg-grey-200', {

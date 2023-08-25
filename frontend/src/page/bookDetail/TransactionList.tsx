@@ -59,13 +59,13 @@ const TransactionList = () => {
       return (
         <div
           key={item.id}
-          className="py-[10px] border-b-[1px] border-b-grey-300 cursor-pointer"
+          className="cursor-pointer border-b-[1px] border-b-grey-300 py-[10px]"
           onClick={() => navigate(`${Page.Book}/${id}/tx/${item.id}`)}
         >
           <div className="flex justify-between">
             <div className="flex gap-1">
               {item.dateDeleted && (
-                <Body size="s" className="px-1 py-[3px] bg-tomato-500 text-white">
+                <Body size="s" className="bg-tomato-500 px-1 py-[3px] text-white">
                   {t('bookDetail.deleted')}
                 </Body>
               )}
@@ -86,13 +86,13 @@ const TransactionList = () => {
     return (
       <div
         key={item.id}
-        className="py-[10px] border-b-[1px] border-b-grey-300 cursor-pointer"
+        className="cursor-pointer border-b-[1px] border-b-grey-300 py-[10px]"
         onClick={() => navigate(`${Page.Book}/${id}/tx/${item.id}`)}
       >
         <div className="flex justify-between">
           <div className="flex gap-1">
             {item.dateDeleted && (
-              <Body size="s" className="px-1 py-[3px] bg-tomato-500 text-white">
+              <Body size="s" className="bg-tomato-500 px-1 py-[3px] text-white">
                 {t('bookDetail.deleted')}
               </Body>
             )}
@@ -126,7 +126,7 @@ const TransactionList = () => {
       </div>
     );
 
-  return <div className="text-black p-[10px]">--</div>;
+  return <div className="p-[10px] text-black">--</div>;
 };
 
 export default TransactionList;

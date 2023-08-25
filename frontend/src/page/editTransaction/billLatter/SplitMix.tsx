@@ -117,12 +117,12 @@ const SplitMixed = ({ mode }: Props) => {
         <div key={v.id} className="flex h-[60px] items-center gap-[10px]">
           <div className="flex flex-1 items-center">
             <Checkbox id={v.id} checked={v.checked} onChange={onCheck(v.id)} />
-            <label htmlFor={v.id} className="pl-3 break-all w-full">
+            <label htmlFor={v.id} className="w-full break-all pl-3">
               {v.nickname}
             </label>
           </div>
           <div
-            className="min-w-[72px] bg-grey-200 rounded-[4px] p-2 flex justify-between gap-0.5"
+            className="flex min-w-[72px] justify-between gap-0.5 rounded-[4px] bg-grey-200 p-2"
             onClick={() => setTargetId(v.id)}
           >
             <Body size="l">{v.value ?? ''}</Body>

@@ -10,7 +10,7 @@ const LoadMore = () => {
 
   return (
     <div
-      className="mt-[10px] flex flex-col items-center py-[5px] cursor-pointer"
+      className="mt-[10px] flex cursor-pointer flex-col items-center py-[5px]"
       onClick={() => loadMoreBookById(id ?? 'xx')}
     >
       <Body className="text-navy-100">{t('act.loadMore')}</Body>

@@ -55,12 +55,12 @@ const Latter = () => {
     <>
       <Body className="mb-[5px] text-navy-700">{t('desc.sharer')}</Body>
       <div
-        className="flex justify-between gap-[10px] cursor-pointer"
+        className="flex cursor-pointer justify-between gap-[10px]"
         onClick={() => dispatch(setTxState('latter'))}
       >
-        <div className="flex-1 flex flex-col gap-[5px]">
+        <div className="flex flex-1 flex-col gap-[5px]">
           {isAllShare && (
-            <div className="ml-[10px] flex justify-between flex-1">
+            <div className="ml-[10px] flex flex-1 justify-between">
               <Body size="l">{t('editTx.allShare')}</Body>
             </div>
           )}
