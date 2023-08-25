@@ -55,10 +55,10 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="mt-[15px] mb-5 relative">
+      <div className="relative mb-5 mt-[15px]">
         <BackButton text={t('transaction.back')} />
         {tx && (
-          <div className="absolute top-0 right-0">
+          <div className="absolute right-0 top-0">
             {tx.dateDeleted === null ? (
               <div className="flex gap-[15px]">
                 <Img
@@ -75,7 +75,7 @@ const Navbar = () => {
                 />
               </div>
             ) : (
-              <Body size="s" className="text-white bg-tomato-700 py-1 px-[10px]">
+              <Body size="s" className="bg-tomato-700 px-[10px] py-1 text-white">
                 {t('transaction.deleted')}
               </Body>
             )}

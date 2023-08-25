@@ -35,27 +35,27 @@ const MemberList = () => {
   if (members === undefined) return <></>;
 
   if (members === null || members.length === 0)
-    return <Body className="text-navy-300 py-[30px] text-center">{t('member.noMemberHint')}</Body>;
+    return <Body className="py-[30px] text-center text-navy-300">{t('member.noMemberHint')}</Body>;
 
   return (
     <>
-      <div className="px-[10px] mb-5">
+      <div className="mb-5 px-[10px]">
         {members.map((v) => (
           <div
             key={v.id}
-            className="py-[10px] flex justify-between border-b-[1px] border-b-grey-100"
+            className="flex justify-between border-b-[1px] border-b-grey-100 py-[10px]"
           >
-            <div className="flex gap-3 items-center">
+            <div className="flex items-center gap-3">
               <Body bold size="l">
                 {v.nickname}
               </Body>
               {v.id === self && (
-                <Body size="s" className="px-1 py-[3px] bg-beige-300 text-tomato-700">
+                <Body size="s" className="bg-beige-300 px-1 py-[3px] text-tomato-700">
                   {t('member.self')}
                 </Body>
               )}
             </div>
-            <div className="w-fit flex gap-[15px]">
+            <div className="flex w-fit gap-[15px]">
               {(v.id === self || !self) && (
                 <Img
                   src={IcCrown}

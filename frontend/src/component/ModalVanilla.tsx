@@ -31,7 +31,7 @@ const ModalVanilla = ({
       {title && <H2 className="mb-[15px]">{title}</H2>}
       <div>{children}</div>
       {(cancelBtn || confirmBtn) && (
-        <div className="flex justify-end pt-[10px] gap-[15px] pb-[30px] flex-wrap">
+        <div className="flex flex-wrap justify-end gap-[15px] pb-[30px] pt-[10px]">
           {cancelBtn && (
             <Button appearance="secondary" onClick={handleClose} type="button">
               {cancelBtn}

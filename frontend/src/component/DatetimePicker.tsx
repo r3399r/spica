@@ -28,9 +28,9 @@ const DatetimePicker = ({ label, initDate, onChange, cancelTxt, confirmTxt }: Pr
 
   return (
     <div className="w-full">
-      {label && <div className="text-[14px] leading-normal text-navy-700 mb-[5px]">{label}</div>}
+      {label && <div className="mb-[5px] text-[14px] leading-normal text-navy-700">{label}</div>}
       <div
-        className="rounded bg-grey-200 outline-none p-2 h-[40px] cursor-pointer flex justify-between items-center"
+        className="flex h-[40px] cursor-pointer items-center justify-between rounded bg-grey-200 p-2 outline-none"
         onClick={() => setOpen(true)}
       >
         <div>{format(date, 'yyyy/MM/dd HH:mm')}</div>
@@ -54,7 +54,7 @@ const DatetimePicker = ({ label, initDate, onChange, cancelTxt, confirmTxt }: Pr
             timeIcon={<img src={IcClock} />}
             inputFormat="yyyy/MM/dd HH:mm"
           />
-          <div className="flex gap-[15px] justify-end mr-3 mb-4">
+          <div className="mb-4 mr-3 flex justify-end gap-[15px]">
             <Button
               appearance="secondary"
               onClick={() => {

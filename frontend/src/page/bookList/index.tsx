@@ -40,7 +40,7 @@ const BookList = () => {
   return (
     <>
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
-        <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+        <div className="mx-[15px] max-w-[640px] sm:mx-auto">
           <div className="float-right">
             <Img
               src={IcConfig}
@@ -49,17 +49,17 @@ const BookList = () => {
               onClick={() => navigate(Page.Setting)}
             />
           </div>
-          <H5 className="mt-[15px] mb-[10px] text-navy-500 text-center">{t('appName')}</H5>
+          <H5 className="mb-[10px] mt-[15px] text-center text-navy-500">{t('appName')}</H5>
           <div>
             <img src={PicBookHero} className="w-full" />
           </div>
-          <H2 className="mt-[30px] mb-5 mx-[25px]">{t('bookList.bookList')}</H2>
+          <H2 className="mx-[25px] mb-5 mt-[30px]">{t('bookList.bookList')}</H2>
           {books?.length === 0 ? (
-            <Body className="py-[30px] flex justify-center text-navy-300">
+            <Body className="flex justify-center py-[30px] text-navy-300">
               {t('bookList.noBook')}
             </Body>
           ) : (
-            <div className="flex gap-[10px] mx-[25px] flex-wrap">
+            <div className="mx-[25px] flex flex-wrap gap-[10px]">
               {books?.map((v, i) => (
                 <div
                   key={v.id}
@@ -73,7 +73,7 @@ const BookList = () => {
                   )}
                   onClick={() => navigate(`${Page.Book}/${v.id}`)}
                 >
-                  <div className="bg-white w-fit h-fit rounded-full mb-[10px]">
+                  <div className="mb-[10px] h-fit w-fit rounded-full bg-white">
                     <img src={IcBook} />
                   </div>
                   <Body className="break-words text-navy-700">{v.name}</Body>
@@ -85,7 +85,7 @@ const BookList = () => {
       </div>
       <div className="fixed bottom-0 h-[104px] w-full">
         <div className="mx-auto w-fit">
-          <Button className="mt-5 w-64 h-12" onClick={() => setOpen(true)}>
+          <Button className="mt-5 h-12 w-64" onClick={() => setOpen(true)}>
             <div className="flex justify-center">
               <img src={IcAdd} />
               <Body size="l" bold className="text-white">

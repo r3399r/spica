@@ -18,7 +18,7 @@ const Navbar = () => {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <div className="flex justify-between mt-[15px] mb-5">
+    <div className="mb-5 mt-[15px] flex justify-between">
       <BackButton text={t('bookDetail.back')} />
       <div className="flex gap-[15px]">
         <div className="cursor-pointer" onClick={() => setOpen(true)}>

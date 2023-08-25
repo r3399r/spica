@@ -19,16 +19,16 @@ const Modal = ({
   ...props
 }: Props) => (
   <ModalUnstyled
-    className="z-10 fixed right-0 bottom-0 top-0 left-0 flex items-center justify-center"
+    className="fixed inset-0 z-10 flex items-center justify-center"
     slots={{ backdrop: Backdrop }}
     onClose={() => handleClose()}
     {...props}
   >
-    <div className="w-full mx-[15px] sm:w-[610px] sm:mx-auto bg-white rounded-[20px] outline-none">
+    <div className="mx-[15px] w-full rounded-[20px] bg-white outline-none sm:mx-auto sm:w-[610px]">
       {showClose && (
         <div className="relative h-[34px]">
           <img
-            className="absolute right-[10px] bottom-0 cursor-pointer"
+            className="absolute bottom-0 right-[10px] cursor-pointer"
             src={IcClose}
             onClick={handleClose}
           />

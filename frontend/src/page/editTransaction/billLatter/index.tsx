@@ -78,14 +78,14 @@ const BillLatter = () => {
   return (
     <>
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
-        <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+        <div className="mx-[15px] max-w-[640px] sm:mx-auto">
           <Navbar
             onCancel={() => {
               dispatch(setTxState('main'));
               dispatch(saveBillFormData({ latter: initialLatter }));
             }}
           />
-          <div className="flex gap-[10px] mb-[15px]">
+          <div className="mb-[15px] flex gap-[10px]">
             <div
               className={classNames(
                 'h-[30px] w-full rounded-[4px] flex justify-center items-center cursor-pointer',
@@ -128,24 +128,24 @@ const BillLatter = () => {
           {tab === 'pm' && <PlusMinus />}
         </div>
       </div>
-      <div className="fixed bottom-0 h-[104px] w-full flex justify-center">
-        <div className="max-w-[640px] w-full mx-9 flex gap-5">
+      <div className="fixed bottom-0 flex h-[104px] w-full justify-center">
+        <div className="mx-9 flex w-full max-w-[640px] gap-5">
           <Button
-            className="mt-5 w-full h-12 text-base !p-[10px]"
+            className="mt-5 h-12 w-full !p-[10px] text-base"
             appearance="secondary"
             onClick={onClear}
           >
             {t('act.clear')}
           </Button>
           <Button
-            className="mt-5 w-full h-12 text-base !p-[10px]"
+            className="mt-5 h-12 w-full !p-[10px] text-base"
             appearance="secondary"
             onClick={onReset}
           >
             {t('act.reset')}
           </Button>
           <Button
-            className="mt-5 w-full h-12 text-base !p-[10px]"
+            className="mt-5 h-12 w-full !p-[10px] text-base"
             onClick={() => dispatch(setTxState('main'))}
             disabled={remaining !== 0}
           >

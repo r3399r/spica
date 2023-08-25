@@ -15,8 +15,8 @@ const SystemHint = () => {
 
   return (
     <>
-      <div className="pt-5 pb-4 border-b border-b-grey-300">
-        <div className="flex justify-between mb-[5px]">
+      <div className="border-b border-b-grey-300 pb-4 pt-5">
+        <div className="mb-[5px] flex justify-between">
           <H6>{t('bookSetting.systemDeleteDate')}</H6>
           <Body className="text-tomato-500">{dateExpired}</Body>
         </div>

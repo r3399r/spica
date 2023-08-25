@@ -28,11 +28,11 @@ const ModalOut = ({ open, handleClose }: Props) => {
         <Body bold size="l">
           {t('transfer.modalOutHead')}
         </Body>
-        <Body className="p-[10px] my-[5px] font-bold text-navy-300 bg-grey-100 rounded-[4px]">
+        <Body className="my-[5px] rounded-[4px] bg-grey-100 p-[10px] font-bold text-navy-300">
           {token ?? '...'}
         </Body>
         <Body className="mb-5 text-navy-300">{t('transfer.modalOutHint')}</Body>
-        <div className="flex justify-end pt-[10px] gap-[15px] pb-[30px] flex-wrap">
+        <div className="flex flex-wrap justify-end gap-[15px] pb-[30px] pt-[10px]">
           <Button appearance="secondary" onClick={handleClose} type="button">
             {t('transfer.modalOutClose')}
           </Button>

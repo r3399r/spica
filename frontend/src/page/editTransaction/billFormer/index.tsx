@@ -97,14 +97,14 @@ const BillFormer = () => {
   return (
     <>
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
-        <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+        <div className="mx-[15px] max-w-[640px] sm:mx-auto">
           <Navbar
             onCancel={() => {
               dispatch(setTxState('main'));
               dispatch(saveBillFormData({ former: initialFormer }));
             }}
           />
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <H2>{`${book?.symbol}${bnFormat(billFormData.amount ?? 0)}`}</H2>
             <Body className={classNames({ 'text-tomato-500': remaining !== 0 })}>{`${t(
               remaining > 0 ? 'editTx.greaterThan' : 'editTx.lessThan',
@@ -125,7 +125,7 @@ const BillFormer = () => {
             <div key={v.id} className="flex h-[60px] items-center gap-3">
               <div className="flex flex-1 items-center">
                 <Checkbox id={v.id} checked={v.checked} onChange={onCheck(v.id)} />
-                <label htmlFor={v.id} className="pl-3 break-all w-full">
+                <label htmlFor={v.id} className="w-full break-all pl-3">
                   {v.nickname}
                 </label>
               </div>
@@ -143,13 +143,13 @@ const BillFormer = () => {
           ))}
         </div>
       </div>
-      <div className="fixed bottom-0 h-[104px] w-full flex justify-center">
-        <div className="max-w-[640px] w-full mx-9 flex gap-5">
-          <Button className="mt-5 w-full h-12 text-base" appearance="secondary" onClick={onReset}>
+      <div className="fixed bottom-0 flex h-[104px] w-full justify-center">
+        <div className="mx-9 flex w-full max-w-[640px] gap-5">
+          <Button className="mt-5 h-12 w-full text-base" appearance="secondary" onClick={onReset}>
             {t('act.reset')}
           </Button>
           <Button
-            className="mt-5 w-full h-12 text-base"
+            className="mt-5 h-12 w-full text-base"
             onClick={() => dispatch(setTxState('main'))}
             disabled={remaining !== 0}
           >

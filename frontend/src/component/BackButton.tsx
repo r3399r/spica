@@ -13,7 +13,7 @@ const BackButton = ({ text }: Props) => {
 
   return (
     <div
-      className="flex cursor-pointer w-fit"
+      className="flex w-fit cursor-pointer"
       onClick={() =>
         location.key === 'default' ? navigate(Page.Book, { replace: true }) : navigate(-1)
       }

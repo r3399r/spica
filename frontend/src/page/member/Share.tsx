@@ -27,12 +27,12 @@ const Share = () => {
 
   return (
     <>
-      <div className="p-[10px] bg-grey-100 rounded-[15px]">
+      <div className="rounded-[15px] bg-grey-100 p-[10px]">
         <H4>{t('member.shareWithFriend')}</H4>
-        <div className="mt-5 flex gap-5 items-center justify-center">
+        <div className="mt-5 flex items-center justify-center gap-5">
           <CopyToClipboard text={link} onCopy={() => dispatch(setSnackbarMessage(t('desc.copy')))}>
             <Button
-              className="px-[30px] py-[10px] rounded-md"
+              className="rounded-md px-[30px] py-[10px]"
               onClick={onShareLink}
               appearance="default"
             >
@@ -40,7 +40,7 @@ const Share = () => {
             </Button>
           </CopyToClipboard>
           <Button
-            className="px-[30px] py-[10px] rounded-md"
+            className="rounded-md px-[30px] py-[10px]"
             onClick={() => setOpen(true)}
             appearance="default"
           >

@@ -17,11 +17,11 @@ const BalanceCard = () => {
   const latter = useMemo(() => book?.members?.filter((v) => v.balance < 0) ?? [], [book]);
 
   return (
-    <div className="rounded-[15px] p-[10px] bg-grey-200 my-[10px] text-navy-700">
+    <div className="my-[10px] rounded-[15px] bg-grey-200 p-[10px] text-navy-700">
       <div className="mb-[10px] flex justify-between">
         <H4>{t('bookDetail.balance')}</H4>
         <div
-          className="flex items-center h-[21px] cursor-pointer"
+          className="flex h-[21px] cursor-pointer items-center"
           onClick={() => navigate(`${Page.Book}/${id}/settlement`)}
         >
           <Body bold className="text-navy-300">
@@ -37,10 +37,10 @@ const BalanceCard = () => {
             <Body size="s" className="text-navy-300">
               {t('bookDetail.shouldReceive')}
             </Body>
-            <div className="h-[1px] bg-grey-500 flex-1" />
+            <div className="h-[1px] flex-1 bg-grey-500" />
           </div>
           {former.map((v) => (
-            <div key={v.id} className="flex justify-between py-[5px] ml-[10px] gap-2">
+            <div key={v.id} className="ml-[10px] flex justify-between gap-2 py-[5px]">
               <Body size="l" className="text-navy-700">
                 {v.nickname}
               </Body>
@@ -57,10 +57,10 @@ const BalanceCard = () => {
             <Body size="s" className="text-navy-300">
               {t('bookDetail.shouldPay')}
             </Body>
-            <div className="h-[1px] bg-grey-500 flex-1" />
+            <div className="h-[1px] flex-1 bg-grey-500" />
           </div>
           {latter.map((v) => (
-            <div key={v.id} className="flex justify-between py-[5px] ml-[10px] gap-2">
+            <div key={v.id} className="ml-[10px] flex justify-between gap-2 py-[5px]">
               <Body size="l" className="text-navy-700">
                 {v.nickname}
               </Body>

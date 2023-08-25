@@ -47,14 +47,14 @@ const Main = () => {
         <H4>{t('desc.transfer')}</H4>
         <Body className="text-teal-500">{t('desc.transfer')}</Body>
         <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:mm')}</Body>
-        <H2 className="text-right mt-[10px] pb-[18px] border-b-[1px] border-b-grey-300">{`${
+        <H2 className="mt-[10px] border-b-[1px] border-b-grey-300 pb-[18px] text-right">{`${
           book.symbol
         }${bnFormat(tx.amount)}`}</H2>
-        <div className="py-[15px] border-b-[1px] border-b-grey-300">
+        <div className="border-b-[1px] border-b-grey-300 py-[15px]">
           <Body size="s" className="mb-[5px] text-navy-300">
             {t('desc.sender')}
           </Body>
-          <div className="py-[5px] pl-[10px] flex justify-between">
+          <div className="flex justify-between py-[5px] pl-[10px]">
             <Body size="l" className="text-navy-700">
               {book.members?.find((m) => m.id === tx.srcMemberId)?.nickname}
             </Body>
@@ -63,11 +63,11 @@ const Main = () => {
             )}`}</Body>
           </div>
         </div>
-        <div className="py-[15px] border-b-[1px] border-b-grey-300">
+        <div className="border-b-[1px] border-b-grey-300 py-[15px]">
           <Body size="s" className="mb-[5px] text-navy-300">
             {t('desc.receiver')}
           </Body>
-          <div className="py-[5px] pl-[10px] flex justify-between">
+          <div className="flex justify-between py-[5px] pl-[10px]">
             <Body size="l" className="text-navy-700">
               {book.members?.find((m) => m.id === tx.dstMemberId)?.nickname}
             </Body>
@@ -76,11 +76,11 @@ const Main = () => {
             )}`}</Body>
           </div>
         </div>
-        <div className="py-[15px] border-b-[1px] border-b-grey-300">
+        <div className="border-b-[1px] border-b-grey-300 py-[15px]">
           <Body size="s" className="text-navy-300">
             {t('desc.memo')}
           </Body>
-          {tx.memo && <Body className="mt-[5px] pl-[10px] whitespace-pre">{tx.memo}</Body>}
+          {tx.memo && <Body className="mt-[5px] whitespace-pre pl-[10px]">{tx.memo}</Body>}
         </div>
       </>
     );
@@ -97,15 +97,15 @@ const Main = () => {
         {tx.type === 'out' ? t('desc.out') : t('desc.in')}
       </Body>
       <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:mm')}</Body>
-      <H2 className="text-right mt-[10px] pb-[18px] border-b-[1px] border-b-grey-300">{`${
+      <H2 className="mt-[10px] border-b-[1px] border-b-grey-300 pb-[18px] text-right">{`${
         book.symbol
       }${bnFormat(tx.amount)}`}</H2>
-      <div className="py-[15px] border-b-[1px] border-b-grey-300">
+      <div className="border-b-[1px] border-b-grey-300 py-[15px]">
         <Body size="s" className="mb-[5px] text-navy-300">
           {tx.type === 'out' ? t('desc.payer') : t('desc.receiver')}
         </Body>
         {txFormer.map((v) => (
-          <div key={v.id} className="py-[5px] pl-[10px] flex justify-between">
+          <div key={v.id} className="flex justify-between py-[5px] pl-[10px]">
             <Body size="l" className="text-navy-700">
               {v.nickname}
             </Body>
@@ -115,12 +115,12 @@ const Main = () => {
           </div>
         ))}
       </div>
-      <div className="py-[15px] border-b-[1px] border-b-grey-300">
+      <div className="border-b-[1px] border-b-grey-300 py-[15px]">
         <Body size="s" className="mb-[5px] text-navy-300">
           {t('desc.sharer')}
         </Body>
         {txLatter.map((v) => (
-          <div key={v.id} className="py-[5px] pl-[10px] flex justify-between">
+          <div key={v.id} className="flex justify-between py-[5px] pl-[10px]">
             <Body size="l" className="text-navy-700">
               {v.nickname}
             </Body>
@@ -130,11 +130,11 @@ const Main = () => {
           </div>
         ))}
       </div>
-      <div className="py-[15px] border-b-[1px] border-b-grey-300">
+      <div className="border-b-[1px] border-b-grey-300 py-[15px]">
         <Body size="s" className="text-navy-300">
           {t('desc.memo')}
         </Body>
-        {tx.memo && <Body className="mt-[5px] pl-[10px] whitespace-pre">{tx.memo}</Body>}
+        {tx.memo && <Body className="mt-[5px] whitespace-pre pl-[10px]">{tx.memo}</Body>}
       </div>
     </>
   );

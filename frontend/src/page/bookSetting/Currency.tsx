@@ -16,14 +16,14 @@ const Currency = () => {
   return (
     <>
       <div
-        className="pt-5 pb-4 border-b border-b-grey-300 cursor-pointer"
+        className="cursor-pointer border-b border-b-grey-300 pb-4 pt-5"
         onClick={() => setOpen(true)}
       >
-        <div className="flex justify-between mb-[5px]">
+        <div className="mb-[5px] flex justify-between">
           <H4>{t('bookSetting.currency')}</H4>
           <Img src={IcEdit} srcActive={IcEditActive} />
         </div>
-        <Body size="l" className="text-navy-300 min-h-[24px]">
+        <Body size="l" className="min-h-[24px] text-navy-300">
           {book?.symbol}
         </Body>
       </div>

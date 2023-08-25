@@ -31,13 +31,13 @@ const SystemSetting = () => {
   }, [isDeviceReady]);
 
   return (
-    <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+    <div className="mx-[15px] max-w-[640px] sm:mx-auto">
       <NavbarVanilla text={t('systemSetting.back')} />
       <H2>{t('systemSetting.head')}</H2>
       <Language />
       <CopyToClipboard text={deviceId} onCopy={() => dispatch(setSnackbarMessage(t('desc.copy')))}>
-        <div className="pt-5 pb-4 border-b border-b-grey-300 cursor-pointer">
-          <div className="flex justify-between mb-[5px]">
+        <div className="cursor-pointer border-b border-b-grey-300 pb-4 pt-5">
+          <div className="mb-[5px] flex justify-between">
             <H4>{t('systemSetting.myId')}</H4>
             <Img src={IcCopy} srcActive={IcCopyActive} />
           </div>
@@ -47,14 +47,14 @@ const SystemSetting = () => {
         </div>
       </CopyToClipboard>
       <div
-        className="pt-5 pb-4 border-b border-b-grey-300 flex justify-between cursor-pointer"
+        className="flex cursor-pointer justify-between border-b border-b-grey-300 pb-4 pt-5"
         onClick={() => navigate(`${Page.Setting}/transfer`)}
       >
         <H4>{t('systemSetting.dataTransfer')}</H4>
         <img src={IcGo} />
       </div>
       <div
-        className="pt-5 pb-4 border-b border-b-grey-300 flex justify-between cursor-pointer"
+        className="flex cursor-pointer justify-between border-b border-b-grey-300 pb-4 pt-5"
         onClick={() => navigate(`${Page.Setting}/a2hs`)}
       >
         <H4>{t('systemSetting.add2HomeScreen')}</H4>
@@ -63,7 +63,7 @@ const SystemSetting = () => {
       <a
         target="_blank"
         href={href}
-        className="pt-5 pb-4 border-b border-b-grey-300 flex justify-between"
+        className="flex justify-between border-b border-b-grey-300 pb-4 pt-5"
         rel="noreferrer"
       >
         <H4>{t('systemSetting.contactUs')}</H4>

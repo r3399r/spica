@@ -20,13 +20,13 @@ const Balance = () => {
       {members.map((v) => (
         <div key={v.id}>
           <div
-            className="flex py-[10px] gap-[10px] justify-between items-center cursor-pointer"
+            className="flex cursor-pointer items-center justify-between gap-[10px] py-[10px]"
             onClick={() => navigate(`${Page.Book}/${id}/settlement/${v.id}`)}
           >
             <Body size="l" className="text-navy-700">
               {v.nickname}
             </Body>
-            <div className="flex gap-[10px] items-center">
+            <div className="flex items-center gap-[10px]">
               <Body
                 size="s"
                 className={classNames('bg-grey-200 px-1 py-[3px] whitespace-nowrap', {

@@ -23,7 +23,7 @@ const Snackbar = () => {
       autoHideDuration={2000}
     >
       <div>
-        <Body size="l" className="bg-navy-300 text-white px-5 py-[10px] rounded-[4px] shadow-md">
+        <Body size="l" className="rounded-[4px] bg-navy-300 px-5 py-[10px] text-white shadow-md">
           {snackbarMessage}
         </Body>
       </div>

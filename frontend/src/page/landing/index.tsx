@@ -17,33 +17,33 @@ const Landing = () => {
 
   return (
     <>
-      <H1 className="text-teal-500 font-[900] text-center mt-10 mb-[10px]">{t('landing.title')}</H1>
-      <H4 className="text-teal-500 text-center">{t('landing.subtitle')}</H4>
+      <H1 className="mb-[10px] mt-10 text-center font-[900] text-teal-500">{t('landing.title')}</H1>
+      <H4 className="text-center text-teal-500">{t('landing.subtitle')}</H4>
       <div className="mt-5">
         <img src={PicHero} className="mx-auto w-[calc(100%-30px)] sm:w-[640px]" />
       </div>
-      <div className="mt-5 mb-10 sm:mb-11 flex justify-center">
-        <Button className="w-64 h-12 text-base" onClick={() => navigate(Page.Book)}>
+      <div className="mb-10 mt-5 flex justify-center sm:mb-11">
+        <Button className="h-12 w-64 text-base" onClick={() => navigate(Page.Book)}>
           {t('landing.start')}
         </Button>
       </div>
       <div className="sm:flex">
-        <div className="bg-teal-300 py-[30px] px-4 sm:w-1/3">
+        <div className="bg-teal-300 px-4 py-[30px] sm:w-1/3">
           <img src={PicFeatureLogin} className="mx-auto" />
-          <H5 className="text-navy-500 text-center">{t('landing.featureLogin')}</H5>
+          <H5 className="text-center text-navy-500">{t('landing.featureLogin')}</H5>
         </div>
-        <div className="bg-beige-300 py-[30px] px-4 sm:w-1/3">
+        <div className="bg-beige-300 px-4 py-[30px] sm:w-1/3">
           <img src={PicFeaturePwa} className="mx-auto" />
-          <H5 className="text-navy-500 text-center">{t('landing.featurePwa')}</H5>
+          <H5 className="text-center text-navy-500">{t('landing.featurePwa')}</H5>
         </div>
-        <div className="bg-grey-200 py-[30px] px-4 sm:w-1/3">
+        <div className="bg-grey-200 px-4 py-[30px] sm:w-1/3">
           <img src={PicFeatureEasy} className="mx-auto" />
-          <H5 className="text-navy-500 text-center">{t('landing.featureEasy')}</H5>
+          <H5 className="text-center text-navy-500">{t('landing.featureEasy')}</H5>
         </div>
       </div>
       <Body
         size="s"
-        className="my-5 text-navy-300 text-center"
+        className="my-5 text-center text-navy-300"
       >{`© Celetial Studio 2022 - ${new Date().getFullYear()}`}</Body>
     </>
   );

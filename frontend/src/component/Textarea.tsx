@@ -37,9 +37,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, Props>(
       {(typeof error === 'string' || helper) && (
         <div className="mt-[5px]">
           {typeof error === 'string' && (
-            <div className="text-tomato-500 text-[12px] leading-normal">{error}</div>
+            <div className="text-[12px] leading-normal text-tomato-500">{error}</div>
           )}
-          {helper && <div className="text-navy-300 text-[12px] leading-normal">{helper}</div>}
+          {helper && <div className="text-[12px] leading-normal text-navy-300">{helper}</div>}
         </div>
       )}
     </div>

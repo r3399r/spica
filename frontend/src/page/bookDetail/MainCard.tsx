@@ -30,7 +30,7 @@ const MainCard = () => {
         'bg-tan-300': index % 3 === 2,
       })}
     >
-      <H4 className="min-h-[28px] text-navy-700 mb-[10px]">{book?.name}</H4>
+      <H4 className="mb-[10px] min-h-[28px] text-navy-700">{book?.name}</H4>
       <div className="flex items-end">
         <div className="flex-1">
           <Body size="s" className="text-navy-300">
@@ -43,7 +43,7 @@ const MainCard = () => {
         </div>
         <div>
           <div
-            className="p-[5px] rounded-md flex gap-[5px] cursor-pointer bg-teal-500 text-white active:bg-teal-400 disabled:bg-teal-300 disabled:text-opacity-70"
+            className="flex cursor-pointer gap-[5px] rounded-md bg-teal-500 p-[5px] text-white active:bg-teal-400 disabled:bg-teal-300 disabled:text-opacity-70"
             onClick={() => navigate(`${Page.Book}/${id}/member`)}
           >
             <img src={IcMember} />

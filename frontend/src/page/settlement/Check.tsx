@@ -34,17 +34,17 @@ const Check = () => {
   };
 
   if (checkResult.length === 0)
-    return <Body className="text-navy-300 text-center">{t('settlement.isCleared')}</Body>;
+    return <Body className="text-center text-navy-300">{t('settlement.isCleared')}</Body>;
 
   return (
     <>
       {checkResult.map((v, i) => (
         <div
           key={i}
-          className="bg-grey-100 rounded-[15px] p-[10px] mb-[10px] cursor-pointer"
+          className="mb-[10px] cursor-pointer rounded-[15px] bg-grey-100 p-[10px]"
           onClick={onCheck(v)}
         >
-          <div className="flex gap-[10px] justify-between items-center">
+          <div className="flex items-center justify-between gap-[10px]">
             <Body size="l" className="w-[calc(50%-28px)] break-words">
               {v.latter.nickname}
             </Body>

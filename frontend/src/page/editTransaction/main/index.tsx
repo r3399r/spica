@@ -67,7 +67,7 @@ const Main = () => {
   return (
     <>
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
-        <div className="max-w-[640px] mx-[15px] sm:mx-auto">
+        <div className="mx-[15px] max-w-[640px] sm:mx-auto">
           <NavbarVanilla text={t('act.back')} />
           <div className="flex gap-4 pb-4">
             <div className="w-[108px]">
@@ -97,7 +97,7 @@ const Main = () => {
       </div>
       <div className="fixed bottom-0 h-[104px] w-full">
         <div className="mx-auto w-fit">
-          <Button className="mt-5 w-64 h-12 text-base" disabled={disabled} onClick={onSubmit}>
+          <Button className="mt-5 h-12 w-64 text-base" disabled={disabled} onClick={onSubmit}>
             {t('act.submit')}
           </Button>
         </div>

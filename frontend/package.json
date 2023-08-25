@@ -67,6 +67,7 @@
     "eslint-import-resolver-typescript": "^3.5.1",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-react": "^7.31.8",
+    "eslint-plugin-tailwindcss": "^3.13.0",
     "i18next-locales-sync": "^2.0.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",

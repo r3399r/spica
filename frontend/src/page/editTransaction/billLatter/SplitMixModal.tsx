@@ -55,7 +55,7 @@ const SplitMixModal = ({ open, onClose, member, mode }: Props) => {
       title={t('editTx.modalTitle', { nickname: member.nickname })}
     >
       <>
-        <div className="flex gap-[10px] mb-[15px]">
+        <div className="mb-[15px] flex gap-[10px]">
           <div
             className={classNames(
               'h-[30px] w-full rounded-[4px] flex justify-center items-center cursor-pointer',
@@ -89,7 +89,7 @@ const SplitMixModal = ({ open, onClose, member, mode }: Props) => {
             required
             label={tab === 'weight' ? t('editTx.weight') : t('editTx.pct')}
           />
-          <Body size="l" className="text-navy-500 absolute bottom-2 right-2">
+          <Body size="l" className="absolute bottom-2 right-2 text-navy-500">
             {tab === 'weight' ? t('editTx.unitWeight') : t('editTx.unitPct')}
           </Body>
         </div>
