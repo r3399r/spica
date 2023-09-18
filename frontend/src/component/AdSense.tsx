@@ -10,10 +10,10 @@ const AdSense = () => {
     <ins
       className="adsbygoogle"
       style={{ display: 'block' }}
-      data-ad-format="fluid"
-      data-ad-layout-key="-fg+5r+5f-cv+3r"
-      data-ad-client="ca-pub-4116238563422892"
-      data-ad-slot="2305807594"
+      data-ad-client="ca-pub-3051999847338334"
+      data-ad-slot="2157422371"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
     />
   );
 };
