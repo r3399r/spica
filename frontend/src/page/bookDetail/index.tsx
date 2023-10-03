@@ -75,7 +75,7 @@ const BookDetail = () => {
           <MainCard />
           <BalanceCard />
           {showAd && (
-            <div className="my-[10px] border-[1px] border-solid border-grey-500">
+            <div className="my-[10px]">
               <AdSense />
             </div>
           )}

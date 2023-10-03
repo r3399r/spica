@@ -8,8 +8,7 @@ const AdSense = () => {
 
   return (
     <ins
-      className="adsbygoogle"
-      style={{ display: 'block' }}
+      className="adsbygoogle block data-[ad-status=unfilled]:!hidden"
       data-ad-client="ca-pub-3051999847338334"
       data-ad-slot="2157422371"
       data-ad-format="auto"
