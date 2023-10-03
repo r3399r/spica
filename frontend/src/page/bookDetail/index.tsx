@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import AdSense from 'src/component/AdSense';
 import Button from 'src/component/Button';
 import Body from 'src/component/typography/Body';
 import { Page } from 'src/constant/Page';
@@ -28,14 +29,14 @@ const BookDetail = () => {
   const [open, setOpen] = useState<boolean>(false);
   const book = useBook();
   const noMember = useMemo(() => book?.members?.length === 0, [book]);
-  // const showAd = useMemo(
-  //   () =>
-  //     book?.members &&
-  //     book.members.length > 0 &&
-  //     book?.transactions &&
-  //     book.transactions.length > 0,
-  //   [book],
-  // );
+  const showAd = useMemo(
+    () =>
+      book?.members &&
+      book.members.length > 0 &&
+      book?.transactions &&
+      book.transactions.length > 0,
+    [book],
+  );
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -73,11 +74,11 @@ const BookDetail = () => {
           <Navbar />
           <MainCard />
           <BalanceCard />
-          {/* {showAd && (
-            <div className="my-[10px] border-[1px] border-solid border-grey-500">
+          {showAd && (
+            <div className="my-[10px]">
               <AdSense />
             </div>
-          )} */}
+          )}
           <TransactionList />
           {noMember && (
             <Body className="mt-[30px] px-[46px] text-center text-navy-300">
