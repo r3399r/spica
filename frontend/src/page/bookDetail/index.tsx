@@ -74,11 +74,7 @@ const BookDetail = () => {
           <Navbar />
           <MainCard />
           <BalanceCard />
-          {showAd && (
-            <div className="my-[10px]">
-              <AdSense />
-            </div>
-          )}
+          {showAd && <AdSense />}
           <TransactionList />
           {noMember && (
             <Body className="mt-[30px] px-[46px] text-center text-navy-300">
