@@ -20,7 +20,7 @@ export const bookSlice = createSlice({
       state.books = action.payload;
     },
     appendBook: (state: BookState, action: PayloadAction<SavedBook>) => {
-      state.books = [...(state.books ?? []), action.payload];
+      state.books = [action.payload, ...(state.books ?? [])];
     },
   },
 });
