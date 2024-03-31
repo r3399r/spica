@@ -119,7 +119,8 @@
       "amount": "金額",
       "memo": "備註",
       "descr": "項目",
-      "former": "付款者",
+      "formerIn": "收款者",
+      "formerOut": "付款者",
       "latter": "分攤者",
       "srcMemberId": "匯款者",
       "dstMemberId": "收款者"
