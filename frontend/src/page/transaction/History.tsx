@@ -18,13 +18,15 @@ const History = () => {
       let from = value.from;
       let to = value.to;
 
+      let finalKey: string = key;
       if (key === 'former' || key === 'latter') {
+        if (key === 'former') finalKey = tx?.type === 'in' ? 'formerIn' : 'formerOut';
         if (from === null) {
           const memberId = String(to).split(':')[0];
           const amount = bn(String(to).split(':')[1]).abs().toFormat();
 
           return t('transaction.createContent', {
-            key: t(`transaction.key.${key}`),
+            key: t(`transaction.key.${finalKey}`),
             to: `${book?.members?.find((v) => v.id === memberId)?.nickname}(${
               book?.symbol
             }${amount})`,
@@ -35,7 +37,7 @@ const History = () => {
           const amount = bn(String(from).split(':')[1]).abs().toFormat();
 
           return t('transaction.removeContent', {
-            key: t(`transaction.key.${key}`),
+            key: t(`transaction.key.${finalKey}`),
             from: `${book?.members?.find((v) => v.id === memberId)?.nickname}(${
               book?.symbol
             }${amount})`,
@@ -63,6 +65,7 @@ const History = () => {
         from = `${book?.symbol}${from}`;
         to = `${book?.symbol}${to}`;
       } else if (key === 'former' || key === 'latter') {
+        if (key === 'former') finalKey = tx?.type === 'in' ? 'formerIn' : 'formerOut';
         const fromMemberId = String(from).split(':')[0];
         const fromAmount = bn(String(from).split(':')[1]).abs().toFormat();
         const toMemberId = String(to).split(':')[0];
@@ -81,7 +84,7 @@ const History = () => {
         to = String(book?.members?.find((v) => v.id === to)?.nickname);
       }
 
-      return t('transaction.updateContent', { key: t(`transaction.key.${key}`), from, to });
+      return t('transaction.updateContent', { key: t(`transaction.key.${finalKey}`), from, to });
     },
     [book, t],
   );

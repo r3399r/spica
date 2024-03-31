@@ -119,7 +119,8 @@
       "amount": "Amount",
       "memo": "Memo",
       "descr": "Item",
-      "former": "Payer",
+      "formerIn": "Receiver",
+      "formerOut": "Payer",
       "latter": "Sharer",
       "srcMemberId": "Sender",
       "dstMemberId": "Receiver"
