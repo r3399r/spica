@@ -47,6 +47,7 @@ const ModalReviseSymbol = ({ open, handleClose }: Props) => {
         <Radio {...methods.register('symbol')} id="won" label="₩" value="₩" />
         <Radio {...methods.register('symbol')} id="pound" label="£" value="£" />
         <Radio {...methods.register('symbol')} id="baht" label="฿" value="฿" />
+        <Radio {...methods.register('symbol')} id="piso" label="₱" value="₱" />
       </>
     </ModalForm>
   );
