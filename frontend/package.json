@@ -1,6 +1,6 @@
 {
   "name": "spica-frontend",
-  "version": "1.6.15",
+  "version": "1.6.16",
   "private": true,
   "scripts": {
     "start": "cross-env WATCHPACK_POLLING=true BROWSER=none PORT=3000 react-scripts start",
