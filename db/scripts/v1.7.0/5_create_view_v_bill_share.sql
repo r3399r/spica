@@ -1,3 +1,4 @@
+DROP VIEW v_bill_share;
 CREATE VIEW v_bill_share as
 select
     bs.id,

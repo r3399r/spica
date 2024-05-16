@@ -3,6 +3,7 @@ CREATE TABLE transfer (
 	ver INT8 NOT NULL,
 	book_id UUID NOT NULL,
 	date TIMESTAMP NOT NULL,
+	currency_id UUID NOT NULL,
 	amount FLOAT NOT NULL,
 	src_member_id UUID NOT NULL,
 	dst_member_id UUID NOT NULL,
@@ -13,5 +14,6 @@ CREATE TABLE transfer (
 	PRIMARY KEY (id ASC, ver),
 	FOREIGN KEY (src_member_id) REFERENCES member (id),
 	FOREIGN KEY (dst_member_id) REFERENCES member (id),
-	FOREIGN KEY (book_id) REFERENCES book (id)
+	FOREIGN KEY (book_id) REFERENCES book (id),
+	FOREIGN KEY (currency_id) REFERENCES currency (id)
 );
