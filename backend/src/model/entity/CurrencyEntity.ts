@@ -1,45 +1,35 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, Generated } from 'typeorm';
-import { BillType } from 'src/constant/Book';
-import { Bill } from './Bill';
+import { Currency } from './Currency';
 
-@Entity({ name: 'bill' })
-export class BillEntity implements Bill {
+@Entity({ name: 'currency' })
+export class CurrencyEntity implements Currency {
   @Column({ primary: true })
   @Generated('uuid')
   id!: string;
 
-  @Column({ primary: true, type: 'int8' })
-  ver!: string;
-
   @Column({ type: 'uuid', name: 'book_id' })
   bookId!: string;
 
-  @Column({ type: 'timestamp' })
-  date!: string;
+  @Column({ type: 'text' })
+  name!: string;
 
   @Column({ type: 'text' })
-  type!: BillType;
+  symbol!: string;
 
-  @Column({ type: 'text' })
-  descr!: string;
+  @Column({ type: 'float', name: 'exchange_rate' })
+  exchangeRate!: number|null;
 
-  @Column({ type: 'uuid', name: 'currency_id' })
-  currencyId!: string;
+  @Column({ type: 'bool', name: 'is_primary' })
+  isPrimary!: boolean;
 
-  @Column({ type: 'float' })
-  amount!: number;
-
-  @Column({ type: 'text', default: null })
-  memo: string | null = null;
+  @Column({ type: 'bool' })
+  deletable!: boolean;
 
   @Column({ type: 'timestamp', name: 'date_created', default: null })
   dateCreated!: string;
 
   @Column({ type: 'timestamp', name: 'date_updated', default: null })
   dateUpdated: string | null = null;
-
-  @Column({ type: 'timestamp', name: 'date_deleted', default: null })
-  dateDeleted: string | null = null;
 
   @BeforeInsert()
   setDateCreated(): void {

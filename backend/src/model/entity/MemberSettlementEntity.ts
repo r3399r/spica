@@ -1,44 +1,29 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, Generated } from 'typeorm';
-import { Transfer } from './Transfer';
+import { MemberSettlement } from './MemberSettlement';
 
-@Entity({ name: 'transfer' })
-export class TransferEntity implements Transfer {
+@Entity({ name: 'member_settlement' })
+export class MemberSettlementEntity implements MemberSettlement {
   @Column({ primary: true })
   @Generated('uuid')
   id!: string;
 
-  @Column({ primary: true, type: 'int8' })
-  ver!: string;
-
-  @Column({ type: 'uuid', name: 'book_id' })
-  bookId!: string;
-
-  @Column({ type: 'timestamp' })
-  date!: string;
+  @Column({ type: 'uuid', name: 'member_id' })
+  memberId!: string;
 
   @Column({ type: 'uuid', name: 'currency_id' })
   currencyId!: string;
 
   @Column({ type: 'float' })
-  amount!: number;
+  balance!: number;
 
-  @Column({ type: 'uuid', name: 'src_member_id' })
-  srcMemberId!: string;
-
-  @Column({ type: 'uuid', name: 'dst_member_id' })
-  dstMemberId!: string;
-
-  @Column({ type: 'text', default: null })
-  memo: string | null = null;
+  @Column({ type: 'float' })
+  total!: number;
 
   @Column({ type: 'timestamp', name: 'date_created', default: null })
   dateCreated!: string;
 
   @Column({ type: 'timestamp', name: 'date_updated', default: null })
   dateUpdated: string | null = null;
-
-  @Column({ type: 'timestamp', name: 'date_deleted', default: null })
-  dateDeleted: string | null = null;
 
   @BeforeInsert()
   setDateCreated(): void {

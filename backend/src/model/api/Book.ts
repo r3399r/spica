@@ -8,6 +8,7 @@ import {
   TransferData,
 } from 'src/model/type/Book';
 import { ViewDeviceBook } from 'src/model/viewEntity/ViewDeviceBook';
+import { Currency } from 'src/model/entity/Currency';
 
 export type GetBookResponse = ViewDeviceBook[];
 
@@ -82,3 +83,11 @@ export type DeleteBookTransferResponse = {
   members: Member[];
   transaction: Transaction;
 };
+
+export type PostBookCurrencyRequest={
+  name:string;
+  symbol:string;
+  exchangeRate:number
+}
+
+export type PostBookCurrencyResponse = Currency;

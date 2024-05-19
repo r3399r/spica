@@ -3,6 +3,7 @@ import { BookService } from 'src/logic/BookService';
 import {
   GetBookIdParams,
   PostBookBillRequest,
+  PostBookCurrencyRequest,
   PostBookMemberRequest,
   PostBookRequest,
   PostBookTransferRequest,
@@ -38,6 +39,9 @@ export async function book(
       case '/api/book/{id}/bill/{billId}':
         res = await apiBookIdBillId(event, service);
         break;
+        case '/api/book/{id}/currency':
+          res = await apiBookIdCurrency(event, service);
+          break;
       case '/api/book/{id}/member':
         res = await apiBookIdMember(event, service);
         break;
@@ -163,6 +167,26 @@ async function apiBookIdBillId(event: LambdaEvent, service: BookService) {
       return service.deleteBill(
         event.pathParameters.id,
         event.pathParameters.billId,
+        event.headers['x-api-device']
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdCurrency(event: LambdaEvent, service: BookService) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  switch (event.httpMethod) {
+    case 'POST':
+      if (event.body === null)
+        throw new BadRequestError('body should not be empty');
+      if (event.headers === null)
+        throw new BadRequestError('headers should not be empty');
+
+      return service.addCurrency(
+        event.pathParameters.id,
+        JSON.parse(event.body) as PostBookCurrencyRequest,
         event.headers['x-api-device']
       );
     default:

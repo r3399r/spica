@@ -3,6 +3,7 @@ import { inject, injectable } from 'inversify';
 import { BillAccess } from 'src/access/BillAccess';
 import { BillShareAccess } from 'src/access/BillShareAccess';
 import { BookAccess } from 'src/access/BookAccess';
+import { CurrencyAccess } from 'src/access/CurrencyAccess';
 import { DbAccess } from 'src/access/DbAccess';
 import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
@@ -20,6 +21,8 @@ import {
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
+  PostBookCurrencyRequest,
+  PostBookCurrencyResponse,
   PostBookIdResponse,
   PostBookMemberRequest,
   PostBookMemberResponse,
@@ -40,6 +43,7 @@ import { Bill } from 'src/model/entity/Bill';
 import { BillEntity } from 'src/model/entity/BillEntity';
 import { BillShareEntity } from 'src/model/entity/BillShareEntity';
 import { BookEntity } from 'src/model/entity/BookEntity';
+import { CurrencyEntity } from 'src/model/entity/CurrencyEntity';
 import { DeviceBookEntity } from 'src/model/entity/DeviceBookEntity';
 import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
@@ -77,6 +81,9 @@ export class BookService {
 
   @inject(MemberAccess)
   private readonly memberAccess!: MemberAccess;
+
+  @inject(CurrencyAccess)
+  private readonly currencyAccess!: CurrencyAccess;
 
   @inject(BillAccess)
   private readonly billAccess!: BillAccess;
@@ -949,5 +956,23 @@ export class BookService {
       await this.dbAccess.rollbackTransaction();
       throw e;
     }
+  }
+
+  public async addCurrency(
+    id: string,
+    data: PostBookCurrencyRequest,
+    deviceId: string
+  ): Promise<PostBookCurrencyResponse> {
+    await this.checkDeviceHasBook(deviceId, id);
+
+    const currency = new CurrencyEntity();
+    currency.bookId=id
+    currency.name=data.name;
+    currency.symbol=data.symbol;
+    currency.exchangeRate=data.exchangeRate
+    currency.isPrimary=false
+    currency.deletable=false
+
+    return await this.currencyAccess.save(currency);
   }
 }
