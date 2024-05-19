@@ -17,7 +17,7 @@ export class CurrencyEntity implements Currency {
   symbol!: string;
 
   @Column({ type: 'float', name: 'exchange_rate' })
-  exchangeRate!: number|null;
+  exchangeRate!: number | null;
 
   @Column({ type: 'bool', name: 'is_primary' })
   isPrimary!: boolean;

@@ -3,10 +3,12 @@ import 'reflect-metadata';
 import { BillAccess } from './access/BillAccess';
 import { BillShareAccess } from './access/BillShareAccess';
 import { BookAccess } from './access/BookAccess';
+import { CurrencyAccess } from './access/CurrencyAccess';
 import { DbAccess } from './access/DbAccess';
 import { DeviceBookAccess } from './access/DeviceBookAccess';
 import { DeviceTokenAccess } from './access/DeviceTokenAccess';
 import { MemberAccess } from './access/MemberAccess';
+import { MemberSettlementAccess } from './access/MemberSettlementAccess';
 import { TransferAccess } from './access/TransferAccess';
 import { ViewBillShareAccess } from './access/ViewBillShareAccess';
 import { ViewBookAccess } from './access/ViewBookAccess';
@@ -18,19 +20,17 @@ import { TransferService } from './logic/TransferService';
 import { BillEntity } from './model/entity/BillEntity';
 import { BillShareEntity } from './model/entity/BillShareEntity';
 import { BookEntity } from './model/entity/BookEntity';
+import { CurrencyEntity } from './model/entity/CurrencyEntity';
 import { DeviceBookEntity } from './model/entity/DeviceBookEntity';
 import { DeviceTokenEntity } from './model/entity/DeviceTokenEntity';
 import { MemberEntity } from './model/entity/MemberEntity';
+import { MemberSettlementEntity } from './model/entity/MemberSettlementEntity';
 import { TransferEntity } from './model/entity/TransferEntity';
 import { ViewBillShareEntity } from './model/viewEntity/ViewBillShareEntity';
 import { ViewBookEntity } from './model/viewEntity/ViewBookEntity';
 import { ViewDeviceBookEntity } from './model/viewEntity/ViewDeviceBookEntity';
 import { ViewTransactionEntity } from './model/viewEntity/ViewTransactionEntity';
 import { Database, dbEntitiesBindingId } from './util/Database';
-import { CurrencyEntity } from './model/entity/CurrencyEntity';
-import { MemberSettlementEntity } from './model/entity/MemberSettlementEntity';
-import { CurrencyAccess } from './access/CurrencyAccess';
-import { MemberSettlementAccess } from './access/MemberSettlementAccess';
 
 const container: Container = new Container();
 
@@ -44,7 +44,9 @@ container.bind<Function>(dbEntitiesBindingId).toFunction(CurrencyEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(DeviceBookEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(DeviceTokenEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(MemberEntity);
-container.bind<Function>(dbEntitiesBindingId).toFunction(MemberSettlementEntity);
+container
+  .bind<Function>(dbEntitiesBindingId)
+  .toFunction(MemberSettlementEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(TransferEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(ViewDeviceBookEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(ViewBillShareEntity);

@@ -3,7 +3,7 @@ export type Currency = {
   bookId: string;
   name: string;
   symbol: string;
-  exchangeRate: number|null;
+  exchangeRate: number | null;
   isPrimary: boolean;
   deletable: boolean;
   dateCreated: string | null;

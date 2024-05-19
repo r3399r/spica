@@ -39,9 +39,9 @@ export async function book(
       case '/api/book/{id}/bill/{billId}':
         res = await apiBookIdBillId(event, service);
         break;
-        case '/api/book/{id}/currency':
-          res = await apiBookIdCurrency(event, service);
-          break;
+      case '/api/book/{id}/currency':
+        res = await apiBookIdCurrency(event, service);
+        break;
       case '/api/book/{id}/member':
         res = await apiBookIdMember(event, service);
         break;

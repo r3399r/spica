@@ -7,6 +7,7 @@ import { CurrencyAccess } from 'src/access/CurrencyAccess';
 import { DbAccess } from 'src/access/DbAccess';
 import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
+import { MemberSettlementAccess } from 'src/access/MemberSettlementAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
 import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
 import { ViewBookAccess } from 'src/access/ViewBookAccess';
@@ -47,6 +48,7 @@ import { CurrencyEntity } from 'src/model/entity/CurrencyEntity';
 import { DeviceBookEntity } from 'src/model/entity/DeviceBookEntity';
 import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
+import { MemberSettlementEntity } from 'src/model/entity/MemberSettlementEntity';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
 import { BadRequestError } from 'src/model/error';
@@ -81,6 +83,9 @@ export class BookService {
 
   @inject(MemberAccess)
   private readonly memberAccess!: MemberAccess;
+
+  @inject(MemberSettlementAccess)
+  private readonly memberSettlementAccess!: MemberSettlementAccess;
 
   @inject(CurrencyAccess)
   private readonly currencyAccess!: CurrencyAccess;
@@ -965,14 +970,37 @@ export class BookService {
   ): Promise<PostBookCurrencyResponse> {
     await this.checkDeviceHasBook(deviceId, id);
 
-    const currency = new CurrencyEntity();
-    currency.bookId=id
-    currency.name=data.name;
-    currency.symbol=data.symbol;
-    currency.exchangeRate=data.exchangeRate
-    currency.isPrimary=false
-    currency.deletable=false
+    try {
+      await this.dbAccess.startTransaction();
 
-    return await this.currencyAccess.save(currency);
+      const currency = new CurrencyEntity();
+      currency.bookId = id;
+      currency.name = data.name;
+      currency.symbol = data.symbol;
+      currency.exchangeRate = data.exchangeRate;
+      currency.isPrimary = false;
+      currency.deletable = false;
+
+      const newCurrency = await this.currencyAccess.save(currency);
+      const members = await this.memberAccess.findByBookId(id);
+      await Promise.all(
+        members.map((v) => {
+          const membersettlement = new MemberSettlementEntity();
+          membersettlement.memberId = v.id;
+          membersettlement.currencyId = newCurrency.id;
+          membersettlement.balance = 0;
+          membersettlement.total = 0;
+
+          return this.memberSettlementAccess.save(membersettlement);
+        })
+      );
+
+      await this.dbAccess.commitTransaction();
+
+      return newCurrency;
+    } catch (e) {
+      await this.dbAccess.rollbackTransaction();
+      throw e;
+    }
   }
 }
