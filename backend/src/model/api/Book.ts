@@ -91,3 +91,11 @@ export type PostBookCurrencyRequest = {
 };
 
 export type PostBookCurrencyResponse = Currency;
+
+export type PutBookCurrencyRequest = {
+  name: string;
+  symbol: string;
+  exchangeRate?: number;
+};
+
+export type PutBookCurrencyResponse = Currency;

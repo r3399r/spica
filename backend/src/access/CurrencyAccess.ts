@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Currency } from 'src/model/entity/Currency';
 import { CurrencyEntity } from 'src/model/entity/CurrencyEntity';
+import { BadRequestError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -19,11 +20,27 @@ export class CurrencyAccess {
     return await qr.manager.save(entity);
   }
 
-  public async findByBookId(bookId: string) {
+  public async findById(id: string) {
     const qr = await this.database.getQueryRunner();
 
-    return await qr.manager.find<Currency>(CurrencyEntity.name, {
-      where: { bookId },
+    return await qr.manager.findOneOrFail<Currency>(CurrencyEntity.name, {
+      where: { id },
     });
+  }
+
+  public async findPrimaryByBookId(bookId: string) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.findOneOrFail<Currency>(CurrencyEntity.name, {
+      where: { isPrimary: true, bookId },
+    });
+  }
+
+  public async hardDeleteById(id: string) {
+    const qr = await this.database.getQueryRunner();
+
+    const res = await qr.manager.delete(CurrencyEntity.name, id);
+
+    if (res.affected === 0) throw new BadRequestError('nothing happened.');
   }
 }

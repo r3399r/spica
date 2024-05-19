@@ -33,6 +33,8 @@ import {
   PostBookTransferResponse,
   PutBookBillRequest,
   PutBookBillResponse,
+  PutBookCurrencyRequest,
+  PutBookCurrencyResponse,
   PutBookMemberRequest,
   PutBookMemberResponse,
   PutBookRequest,
@@ -44,6 +46,7 @@ import { Bill } from 'src/model/entity/Bill';
 import { BillEntity } from 'src/model/entity/BillEntity';
 import { BillShareEntity } from 'src/model/entity/BillShareEntity';
 import { BookEntity } from 'src/model/entity/BookEntity';
+import { Currency } from 'src/model/entity/Currency';
 import { CurrencyEntity } from 'src/model/entity/CurrencyEntity';
 import { DeviceBookEntity } from 'src/model/entity/DeviceBookEntity';
 import { Member } from 'src/model/entity/Member';
@@ -979,7 +982,7 @@ export class BookService {
       currency.symbol = data.symbol;
       currency.exchangeRate = data.exchangeRate;
       currency.isPrimary = false;
-      currency.deletable = false;
+      currency.deletable = true;
 
       const newCurrency = await this.currencyAccess.save(currency);
       const members = await this.memberAccess.findByBookId(id);
@@ -998,6 +1001,108 @@ export class BookService {
       await this.dbAccess.commitTransaction();
 
       return newCurrency;
+    } catch (e) {
+      await this.dbAccess.rollbackTransaction();
+      throw e;
+    }
+  }
+
+  public async updateCurrency(
+    bookId: string,
+    currencyId: string,
+    data: PutBookCurrencyRequest,
+    deviceId: string
+  ): Promise<PutBookCurrencyResponse> {
+    await this.checkDeviceHasBook(deviceId, bookId);
+
+    const oldCurrency = await this.currencyAccess.findById(currencyId);
+    if (oldCurrency.bookId !== bookId) throw new BadRequestError('bad request');
+    const newCurrency: Currency = {
+      ...oldCurrency,
+      name: data.name,
+      symbol: data.symbol,
+      exchangeRate: data.exchangeRate ?? oldCurrency.exchangeRate,
+    };
+    await this.currencyAccess.save(newCurrency);
+
+    return newCurrency;
+  }
+
+  private async checkCurrencyIsDeletable(currencyId: string) {
+    const bills = await this.billAccess.findByCurrencyId(currencyId);
+    if (bills.length > 0) return false;
+    const transfers = await this.transferAccess.findByCurrencyId(currencyId);
+    if (transfers.length > 0) return false;
+
+    return true;
+  }
+
+  public async deleteCurrency(
+    bookId: string,
+    currencyId: string,
+    deviceId: string
+  ) {
+    await this.checkDeviceHasBook(deviceId, bookId);
+
+    try {
+      await this.dbAccess.startTransaction();
+
+      const currency = await this.currencyAccess.findById(currencyId);
+      if (currency.bookId !== bookId) throw new BadRequestError('bad request');
+      if (currency.deletable === false)
+        throw new BadRequestError('not deletable');
+
+      const isDeletable = await this.checkCurrencyIsDeletable(currencyId);
+      if (!isDeletable) throw new BadRequestError('not deletable');
+
+      const memberSettlements =
+        await this.memberSettlementAccess.findByCurrencyId(currencyId);
+
+      await Promise.all(
+        memberSettlements.map((v) =>
+          this.memberSettlementAccess.hardDeleteById(v.id)
+        )
+      );
+
+      await this.currencyAccess.hardDeleteById(currencyId);
+
+      await this.dbAccess.commitTransaction();
+    } catch (e) {
+      await this.dbAccess.rollbackTransaction();
+      throw e;
+    }
+  }
+
+  public async reviseCurrencyPrimary(
+    bookId: string,
+    currencyId: string,
+    deviceId: string
+  ): Promise<PutBookCurrencyResponse> {
+    await this.checkDeviceHasBook(deviceId, bookId);
+
+    try {
+      await this.dbAccess.startTransaction();
+
+      const oldPrimaryCurrency = await this.currencyAccess.findPrimaryByBookId(
+        bookId
+      );
+      oldPrimaryCurrency.isPrimary = false;
+
+      oldPrimaryCurrency.deletable = await this.checkCurrencyIsDeletable(
+        oldPrimaryCurrency.id
+      );
+      await this.currencyAccess.save(oldPrimaryCurrency);
+
+      const newPrimaryCurrency = await this.currencyAccess.findById(currencyId);
+      if (newPrimaryCurrency.bookId !== bookId)
+        throw new BadRequestError('bad request');
+      newPrimaryCurrency.isPrimary = true;
+      newPrimaryCurrency.deletable = false;
+      await this.currencyAccess.save(newPrimaryCurrency);
+
+      await this.dbAccess.commitTransaction();
+
+      return newPrimaryCurrency;
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;

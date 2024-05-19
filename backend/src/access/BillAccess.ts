@@ -52,6 +52,14 @@ export class BillAccess {
     });
   }
 
+  public async findByCurrencyId(currencyId: string) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.find<Bill>(BillEntity.name, {
+      where: { currencyId },
+    });
+  }
+
   public async hardDeleteByBookId(id: string) {
     const qr = await this.database.getQueryRunner();
 
