@@ -33,6 +33,7 @@ import {
   PostBookTransferResponse,
   PutBookBillRequest,
   PutBookBillResponse,
+  PutBookCurrencyPrimaryResponse,
   PutBookCurrencyRequest,
   PutBookCurrencyResponse,
   PutBookMemberRequest,
@@ -54,7 +55,7 @@ import { MemberEntity } from 'src/model/entity/MemberEntity';
 import { MemberSettlementEntity } from 'src/model/entity/MemberSettlementEntity';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
-import { BadRequestError } from 'src/model/error';
+import { BadRequestError, InternalServerError } from 'src/model/error';
 import { Pagination, PaginationParams } from 'src/model/Pagination';
 import {
   BookDetail,
@@ -1077,32 +1078,51 @@ export class BookService {
     bookId: string,
     currencyId: string,
     deviceId: string
-  ): Promise<PutBookCurrencyResponse> {
+  ): Promise<PutBookCurrencyPrimaryResponse> {
     await this.checkDeviceHasBook(deviceId, bookId);
 
     try {
       await this.dbAccess.startTransaction();
 
-      const oldPrimaryCurrency = await this.currencyAccess.findPrimaryByBookId(
-        bookId
-      );
-      oldPrimaryCurrency.isPrimary = false;
+      const currencies = await this.currencyAccess.findByBookId(bookId);
+      const newPrimaryCurrency = currencies.find((v) => v.id === currencyId);
+      const oldPrimaryCurrency = currencies.find((v) => v.isPrimary === true);
+      if (
+        newPrimaryCurrency === undefined ||
+        oldPrimaryCurrency === undefined ||
+        newPrimaryCurrency.exchangeRate === null
+      )
+        throw new InternalServerError('something works unexpected');
 
-      oldPrimaryCurrency.deletable = await this.checkCurrencyIsDeletable(
-        oldPrimaryCurrency.id
-      );
-      await this.currencyAccess.save(oldPrimaryCurrency);
+      const newCurrencies: Currency[] = [];
+      for (const currency of currencies) {
+        const temp = { ...currency };
+        // is old primary and set as secondary
+        if (temp.id === oldPrimaryCurrency.id) {
+          temp.isPrimary = false;
+          temp.deletable = await this.checkCurrencyIsDeletable(temp.id);
+          temp.exchangeRate = 1 / newPrimaryCurrency.exchangeRate;
+        }
+        // is new primary and set as primary
+        else if (temp.id === newPrimaryCurrency.id) {
+          temp.isPrimary = true;
+          temp.deletable = false;
+          temp.exchangeRate = null;
+        }
+        // is still secondary
+        else {
+          if (temp.exchangeRate === null)
+            throw new InternalServerError('exchange rate should be not null');
+          temp.exchangeRate =
+            temp.exchangeRate / newPrimaryCurrency.exchangeRate;
+        }
+        newCurrencies.push(temp);
+      }
 
-      const newPrimaryCurrency = await this.currencyAccess.findById(currencyId);
-      if (newPrimaryCurrency.bookId !== bookId)
-        throw new BadRequestError('bad request');
-      newPrimaryCurrency.isPrimary = true;
-      newPrimaryCurrency.deletable = false;
-      await this.currencyAccess.save(newPrimaryCurrency);
-
+      await Promise.all(newCurrencies.map((v) => this.currencyAccess.save(v)));
       await this.dbAccess.commitTransaction();
 
-      return newPrimaryCurrency;
+      return newCurrencies;
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;

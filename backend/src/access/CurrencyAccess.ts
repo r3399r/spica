@@ -28,11 +28,11 @@ export class CurrencyAccess {
     });
   }
 
-  public async findPrimaryByBookId(bookId: string) {
+  public async findByBookId(bookId: string) {
     const qr = await this.database.getQueryRunner();
 
-    return await qr.manager.findOneOrFail<Currency>(CurrencyEntity.name, {
-      where: { isPrimary: true, bookId },
+    return await qr.manager.find<Currency>(CurrencyEntity.name, {
+      where: { bookId },
     });
   }
 

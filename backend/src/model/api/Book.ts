@@ -99,3 +99,5 @@ export type PutBookCurrencyRequest = {
 };
 
 export type PutBookCurrencyResponse = Currency;
+
+export type PutBookCurrencyPrimaryResponse = Currency[];
