@@ -548,14 +548,37 @@ export class BookService {
   ): Promise<PostBookMemberResponse> {
     await this.checkDeviceHasBook(deviceId, id);
 
-    const member = new MemberEntity();
-    member.bookId = id;
-    member.nickname = data.nickname;
-    member.total = 0;
-    member.balance = 0;
-    member.deletable = true;
+    try {
+      await this.dbAccess.startTransaction();
 
-    return await this.memberAccess.save(member);
+      const member = new MemberEntity();
+      member.bookId = id;
+      member.nickname = data.nickname;
+      member.total = 0;
+      member.balance = 0;
+      member.deletable = true;
+
+      const newMember = await this.memberAccess.save(member);
+      const currencies = await this.currencyAccess.findByBookId(id);
+      await Promise.all(
+        currencies.map((v) => {
+          const membersettlement = new MemberSettlementEntity();
+          membersettlement.memberId = newMember.id;
+          membersettlement.currencyId = v.id;
+          membersettlement.balance = 0;
+          membersettlement.total = 0;
+
+          return this.memberSettlementAccess.save(membersettlement);
+        })
+      );
+
+      await this.dbAccess.commitTransaction();
+
+      return newMember;
+    } catch (e) {
+      await this.dbAccess.rollbackTransaction();
+      throw e;
+    }
   }
 
   public async reviseMemberNickname(
