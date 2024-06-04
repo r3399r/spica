@@ -1,6 +1,7 @@
 {
   "appName": "Bunny Bill",
   "language": "English",
+  "error": "Something went wrong, please try again later or contact us to fix it.",
   "act": {
     "confirm": "Confirm",
     "cancel": "Cancel",

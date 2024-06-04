@@ -1,6 +1,7 @@
 {
   "appName": "Bunny Bill",
   "language": "繁體中文",
+  "error": "發生錯誤，請重新再試，若狀況持續，請聯繫我們，謝謝!",
   "act": {
     "confirm": "確認",
     "cancel": "取消",
