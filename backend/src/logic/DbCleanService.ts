@@ -2,10 +2,12 @@ import { inject, injectable } from 'inversify';
 import { BillAccess } from 'src/access/BillAccess';
 import { BillShareAccess } from 'src/access/BillShareAccess';
 import { BookAccess } from 'src/access/BookAccess';
+import { CurrencyAccess } from 'src/access/CurrencyAccess';
 import { DbAccess } from 'src/access/DbAccess';
 import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
 import { DeviceTokenAccess } from 'src/access/DeviceTokenAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
+import { MemberSettlementAccess } from 'src/access/MemberSettlementAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
 import { ViewBookAccess } from 'src/access/ViewBookAccess';
 
@@ -32,6 +34,12 @@ export class DbCleanService {
   @inject(MemberAccess)
   private readonly memberAccess!: MemberAccess;
 
+  @inject(MemberSettlementAccess)
+  private readonly memberSettlementAccess!: MemberSettlementAccess;
+
+  @inject(CurrencyAccess)
+  private readonly currencyAccess!: CurrencyAccess;
+
   @inject(BookAccess)
   private readonly bookAccess!: BookAccess;
 
@@ -49,6 +57,13 @@ export class DbCleanService {
     const res = await this.vBookAccess.findExpired();
 
     for (const book of res) {
+      // delete member_settlement
+      const settles = await this.memberSettlementAccess.find({
+        where: { currency: { bookId: book.id } },
+      });
+      for (const settle of settles)
+        await this.memberSettlementAccess.hardDeleteById(settle.id);
+
       // delete transfer
       await this.transferAccess.hardDeleteByBookId(book.id);
 
@@ -57,6 +72,9 @@ export class DbCleanService {
       for (const bill of bills)
         await this.billShareAccess.hardDeleteByBillId(bill.id);
       await this.billAccess.hardDeleteByBookId(book.id);
+
+      // delete currency
+      await this.currencyAccess.hardDeleteByBookId(book.id);
 
       // delete member
       await this.memberAccess.hardDeleteByBookId(book.id);

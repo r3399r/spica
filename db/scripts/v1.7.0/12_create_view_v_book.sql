@@ -1,3 +1,5 @@
+drop view v_device_book;
+drop view v_book;
 CREATE VIEW v_book as
 select
 	b.id,
@@ -47,3 +49,18 @@ left join (
 		id
 	) as tmp2 on
 	b.id = tmp2.id;
+	
+CREATE VIEW v_device_book as
+select
+    db.id,
+    db.device_id,
+    db.book_id,
+    vb.name,
+    vb.code,
+    vb.symbol,
+    db.show_delete,
+    vb.date_created,
+    vb.last_date_updated
+from
+    device_book db
+    left join v_book vb on db.book_id = vb.id;
