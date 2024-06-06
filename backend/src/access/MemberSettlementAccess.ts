@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import { FindManyOptions, FindOneOptions } from 'typeorm';
 import { MemberSettlement } from 'src/model/entity/MemberSettlement';
 import { MemberSettlementEntity } from 'src/model/entity/MemberSettlementEntity';
 import { BadRequestError } from 'src/model/error';
@@ -27,6 +28,29 @@ export class MemberSettlementAccess {
       MemberSettlementEntity.name,
       {
         where: { currencyId },
+      }
+    );
+  }
+
+  public async findOneOrFail(options?: FindOneOptions<MemberSettlement>) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.findOneOrFail<MemberSettlement>(
+      MemberSettlementEntity.name,
+      {
+        ...options,
+      }
+    );
+  }
+
+  public async find(options?: FindManyOptions<MemberSettlement>) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.find<MemberSettlement>(
+      MemberSettlementEntity.name,
+      {
+        relations: { currency: true },
+        ...options,
       }
     );
   }

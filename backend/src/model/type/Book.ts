@@ -22,6 +22,7 @@ export type BillData = {
   former: ShareDetail[];
   latter: ShareDetail[];
   memo?: string;
+  currencyId?: string;
 };
 
 export type TransferData = {
@@ -30,6 +31,7 @@ export type TransferData = {
   srcMemberId: string;
   dstMemberId: string;
   memo?: string;
+  currencyId?: string;
 };
 
 export type Transaction = TransactionBill | TransactionTransfer;
@@ -45,6 +47,7 @@ export type TransactionBill = {
   former: ShareDetail[];
   latter: ShareDetail[];
   memo: string | null;
+  currencyId: string;
   dateCreated: string | null;
   dateUpdated: string | null;
   dateDeleted: string | null;
@@ -61,6 +64,7 @@ export type TransactionTransfer = {
   srcMemberId: string;
   dstMemberId: string;
   memo: string | null;
+  currencyId: string;
   dateCreated: string | null;
   dateUpdated: string | null;
   dateDeleted: string | null;

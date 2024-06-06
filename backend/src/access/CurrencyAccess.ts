@@ -36,6 +36,14 @@ export class CurrencyAccess {
     });
   }
 
+  public async findPrimaryByBookId(bookId: string) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.findOneOrFail<Currency>(CurrencyEntity.name, {
+      where: { bookId, isPrimary: true },
+    });
+  }
+
   public async hardDeleteById(id: string) {
     const qr = await this.database.getQueryRunner();
 

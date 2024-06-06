@@ -1,4 +1,14 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, Generated } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  Generated,
+  JoinColumn,
+  ManyToOne,
+} from 'typeorm';
+import { Currency } from './Currency';
+import { CurrencyEntity } from './CurrencyEntity';
 import { MemberSettlement } from './MemberSettlement';
 
 @Entity({ name: 'member_settlement' })
@@ -12,6 +22,10 @@ export class MemberSettlementEntity implements MemberSettlement {
 
   @Column({ type: 'uuid', name: 'currency_id' })
   currencyId!: string;
+
+  @ManyToOne(() => CurrencyEntity)
+  @JoinColumn({ name: 'currency_id' })
+  currency!: Currency;
 
   @Column({ type: 'float' })
   balance!: number;
