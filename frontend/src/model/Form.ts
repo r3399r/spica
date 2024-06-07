@@ -10,7 +10,7 @@ export type ShareForm = { code: string };
 
 export type RenameBookForm = { name: string };
 
-export type ReviseSymbolForm = { symbol: string };
+export type CreateCurrencyForm = { name: string; symbol: string; exchangeRate: string };
 
 export type RenameMemberForm = { nickname: string };
 

@@ -1,10 +1,12 @@
 import { BillType, ShareMethod } from 'src/constant/Book';
+import { Currency } from 'src/model/entity/Currency';
 import { Member } from 'src/model/entity/Member';
 import { ViewBook } from 'src/model/viewEntity/ViewBook';
 
 export type BookDetail = ViewBook & {
   members: Member[];
   transactions: Transaction[];
+  currencies: Currency[];
 };
 
 export type ShareDetail = {

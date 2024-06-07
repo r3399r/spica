@@ -478,8 +478,9 @@ export class BookService {
     const limit = paginate ? Number(paginate.limit) : 50;
     const offset = paginate ? Number(paginate.offset) : 0;
 
-    const [members, { data: tx, count }] = await Promise.all([
+    const [members, currencies, { data: tx, count }] = await Promise.all([
       this.getMemberByBook(book.id),
+      this.currencyAccess.findByBookId(book.id),
       this.vTransactionAccess.findAndCountByBookId(book.id, {
         order: { date: 'desc' },
         take: limit,
@@ -501,6 +502,7 @@ export class BookService {
       data: {
         ...book,
         members,
+        currencies,
         transactions: [
           ...this.handleTransfer(transfers),
           ...this.handleBill(billShares),

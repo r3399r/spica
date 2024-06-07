@@ -31,6 +31,7 @@ export const loadBookList = async () => {
         lastDateUpdated: v.lastDateUpdated,
         members: null,
         transactions: null,
+        currencies: null,
         txCount: null,
         ...savedBook,
       };
@@ -57,6 +58,7 @@ export const createBook = async (data: PostBookRequest) => {
         lastDateUpdated: new Date().toISOString(),
         members: null,
         transactions: null,
+        currencies: [],
         txCount: 0,
       }),
     );
@@ -73,7 +75,13 @@ export const loadBookById = async (id: string) => {
     const { books } = getState().book;
 
     const savedBook = books?.find((v) => v.id === id);
-    if (savedBook && savedBook.members !== null && savedBook.transactions !== null) return;
+    if (
+      savedBook &&
+      savedBook.members !== null &&
+      savedBook.transactions !== null &&
+      savedBook.members !== null
+    )
+      return;
 
     const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.getBookId(id, deviceId, { limit: '50', offset: '0' });

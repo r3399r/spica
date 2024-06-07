@@ -1,12 +1,13 @@
 import { ShareMethod } from 'src/constant/backend/Book';
+import { Currency } from './backend/entity/Currency';
 import { Member } from './backend/entity/Member';
-import { Transaction } from './backend/type/Book';
-import { ViewBook } from './backend/viewEntity/ViewBook';
+import { BookDetail, Transaction } from './backend/type/Book';
 
-export type SavedBook = ViewBook & {
+export type SavedBook = Omit<BookDetail, 'members' | 'transactions' | 'currencies'> & {
   showDelete: boolean;
   members: Member[] | null;
   transactions: Transaction[] | null;
+  currencies: Currency[] | null;
   txCount: number | null;
 };
 

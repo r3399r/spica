@@ -6,6 +6,8 @@ import {
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
+  PostBookCurrencyRequest,
+  PostBookCurrencyResponse,
   PostBookIdResponse,
   PostBookMemberRequest,
   PostBookMemberResponse,
@@ -119,6 +121,12 @@ const deleteBookIdTransfer = async (id: string, tid: string, deviceId: string) =
     headers: { 'x-api-device': deviceId },
   });
 
+const postBookIdCurrency = async (id: string, data: PostBookCurrencyRequest, deviceId: string) =>
+  await http.post<PostBookCurrencyResponse>(`book/${id}/currency`, {
+    data,
+    headers: { 'x-api-device': deviceId },
+  });
+
 export default {
   getBook,
   postBook,
@@ -137,4 +145,5 @@ export default {
   postBookIdTransfer,
   putBookIdTransfer,
   deleteBookIdTransfer,
+  postBookIdCurrency,
 };

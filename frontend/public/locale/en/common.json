@@ -97,13 +97,22 @@
     "back": "Back",
     "head": "Settings",
     "bookName": "Name of Book",
-    "currency": "Curreny Symbol",
+    "currency": "Curreny Settings",
     "deleteBook": "Delete Book",
     "showDeleted": "Show Deleted Transactions",
     "systemDeleteDate": "System Clean up Date",
     "systemDeleteHint": "If there is no any update for 100 days, the book would be removed by system.",
     "rename": "Rename",
     "deleteHint": "Note that this action would only delete the book in this device. It would not affect others' devices."
+  },
+  "currencySetting": {
+    "back": "Back",
+    "head": "Currency Settings",
+    "create": "Create",
+    "createCurrency": "Create Currency",
+    "name": "Name",
+    "symbol": "Symbol",
+    "exchangeRate": "Exchange Rate"
   },
   "transaction": {
     "back": "Back",
