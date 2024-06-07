@@ -1,7 +1,5 @@
-import { useDispatch, useSelector } from 'react-redux';
 import ListItem from 'src/component/ListItem';
 import Modal from 'src/component/Modal';
-import { RootState } from 'src/redux/store';
 
 type Props = {
   open: boolean;

@@ -6,20 +6,20 @@ import FormNumberInput from 'src/component/FormNumberInput';
 import ModalForm from 'src/component/ModalForm';
 import Body from 'src/component/typography/Body';
 import useBook from 'src/hook/useBook';
-import { CreateCurrencyForm, RenameBookForm } from 'src/model/Form';
-import { createCurrency, renameBook } from 'src/service/bookSettingService';
+import { Currency } from 'src/model/backend/entity/Currency';
+import { CreateCurrencyForm } from 'src/model/Form';
+import { createCurrency, editCurrency } from 'src/service/bookSettingService';
 import ModalSymbolSelect from './ModalSymbolSelect';
 
 type Props = {
   open: boolean;
   handleClose: () => void;
+  editTarget?: Currency;
 };
 
-const ModalCreateCurrency = ({ open, handleClose }: Props) => {
+const ModalCurrency = ({ open, handleClose, editTarget }: Props) => {
   const { t } = useTranslation();
-  const methods = useForm<CreateCurrencyForm>({
-    defaultValues: { name: '', symbol: '$', exchangeRate: '' },
-  });
+  const methods = useForm<CreateCurrencyForm>();
   const book = useBook();
   const primaryCurrency = useMemo(
     () => book?.currencies?.find((v) => v.isPrimary === true),
@@ -28,6 +28,12 @@ const ModalCreateCurrency = ({ open, handleClose }: Props) => {
   const [modalSymbolOpen, setModalSymbolOpen] = useState<boolean>(false);
   const watchName = methods.watch('name');
 
+  useEffect(() => {
+    methods.setValue('name', editTarget?.name ?? '');
+    methods.setValue('symbol', editTarget?.symbol ?? '$');
+    methods.setValue('exchangeRate', editTarget?.exchangeRate?.toString() ?? '');
+  }, [editTarget, open]);
+
   const onClose = () => {
     handleClose();
     methods.reset();
@@ -35,7 +41,8 @@ const ModalCreateCurrency = ({ open, handleClose }: Props) => {
 
   const onSubmit = (data: CreateCurrencyForm) => {
     if (!book) return;
-    createCurrency(book.id, data).then(onClose);
+    if (editTarget) editCurrency(book.id, editTarget.id, data).then(onClose);
+    else createCurrency(book.id, data).then(onClose);
   };
 
   return (
@@ -61,17 +68,23 @@ const ModalCreateCurrency = ({ open, handleClose }: Props) => {
               {methods.getValues('symbol')}
             </Body>
           </div>
-          <div>
-            <Body>{t('currencySetting.exchangeRate')}</Body>
-            <div className="mt-[5px] flex items-center gap-[5px]">
-              <Body size="l" className="flex-1">
-                1 {methods.getValues('name') === '' ? '--' : watchName}
-              </Body>
-              <Body size="l">=</Body>
-              <FormNumberInput name="exchangeRate" decimal={6} className="flex-1 bg-grey-200 p-2" />
-              <Body size="l">{primaryCurrency?.name}</Body>
+          {editTarget?.id !== primaryCurrency?.id && (
+            <div>
+              <Body>{t('currencySetting.exchangeRate')}</Body>
+              <div className="mt-[5px] flex items-center gap-[5px]">
+                <Body size="l" className="flex-1">
+                  1 {methods.getValues('name') === '' ? '--' : watchName}
+                </Body>
+                <Body size="l">=</Body>
+                <FormNumberInput
+                  name="exchangeRate"
+                  decimal={6}
+                  className="flex-1 bg-grey-200 p-2"
+                />
+                <Body size="l">{primaryCurrency?.name}</Body>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </ModalForm>
       <ModalSymbolSelect
@@ -84,4 +97,4 @@ const ModalCreateCurrency = ({ open, handleClose }: Props) => {
   );
 };
 
-export default ModalCreateCurrency;
+export default ModalCurrency;

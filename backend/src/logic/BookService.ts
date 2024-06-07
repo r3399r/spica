@@ -502,7 +502,7 @@ export class BookService {
       data: {
         ...book,
         members,
-        currencies,
+        currencies: currencies.sort(compare('dateCreated')),
         transactions: [
           ...this.handleTransfer(transfers),
           ...this.handleBill(billShares),
@@ -1248,6 +1248,7 @@ export class BookService {
           temp.deletable = await this.checkCurrencyIsDeletable(temp.id);
           temp.exchangeRate = bn(1)
             .div(newPrimaryCurrency.exchangeRate)
+            .dp(6)
             .toNumber();
         }
         // is new primary and set as primary
@@ -1262,6 +1263,7 @@ export class BookService {
             throw new InternalServerError('exchange rate should be not null');
           temp.exchangeRate = bn(temp.exchangeRate)
             .div(newPrimaryCurrency.exchangeRate)
+            .dp(6)
             .toNumber();
         }
         newCurrencies.push(temp);
@@ -1270,7 +1272,7 @@ export class BookService {
       await Promise.all(newCurrencies.map((v) => this.currencyAccess.save(v)));
       await this.dbAccess.commitTransaction();
 
-      return newCurrencies;
+      return newCurrencies.sort(compare('dateCreated'));
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;
