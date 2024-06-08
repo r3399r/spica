@@ -8,7 +8,7 @@ import Body from 'src/component/typography/Body';
 import useBook from 'src/hook/useBook';
 import { Currency } from 'src/model/backend/entity/Currency';
 import { CreateCurrencyForm } from 'src/model/Form';
-import { createCurrency, editCurrency } from 'src/service/bookSettingService';
+import { createCurrency, editCurrency } from 'src/service/currencySettingService';
 import ModalSymbolSelect from './ModalSymbolSelect';
 
 type Props = {

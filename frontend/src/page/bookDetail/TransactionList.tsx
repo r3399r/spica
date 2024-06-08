@@ -55,6 +55,10 @@ const TransactionList = () => {
   );
 
   const items = (item: Transaction) => {
+    const isMultiple = book?.currencies?.length ?? 0 > 1;
+    const currency = book?.currencies?.find((v) => v.id === item.currencyId);
+    const currencyDisplay = isMultiple ? `${currency?.name}${currency?.symbol}` : currency?.symbol;
+
     if (item.type !== 'transfer')
       return (
         <div
@@ -73,9 +77,10 @@ const TransactionList = () => {
                 {item.descr}
               </Body>
             </div>
-            <Body size="l" className={classNames({ 'opacity-30': item.dateDeleted })}>{`${
-              book?.symbol
-            }${bnFormat(item.amount)}`}</Body>
+            <Body
+              size="l"
+              className={classNames({ 'opacity-30': item.dateDeleted })}
+            >{`${currencyDisplay}${bnFormat(item.amount)}`}</Body>
           </div>
           <Body size="s" className="text-[12px] leading-[18px] text-teal-500">
             {billNote(item)}
@@ -100,9 +105,10 @@ const TransactionList = () => {
               {t('desc.transfer')}
             </Body>
           </div>
-          <Body size="l" className={classNames({ 'opacity-30': item.dateDeleted })}>{`${
-            book?.symbol
-          }${bnFormat(item.amount)}`}</Body>
+          <Body
+            size="l"
+            className={classNames({ 'opacity-30': item.dateDeleted })}
+          >{`${currencyDisplay}${bnFormat(item.amount)}`}</Body>
         </div>
         <Body size="s" className="text-[12px] leading-[18px] text-teal-500">
           {transferNote(item)}

@@ -18,7 +18,7 @@ import IcRemoveDisabled from 'src/image/ic-remove-disabled.svg';
 import IcRemove from 'src/image/ic-remove.svg';
 import { Currency } from 'src/model/backend/entity/Currency';
 import { loadBookById } from 'src/service/bookService';
-import { setPrimaryCurrency } from 'src/service/bookSettingService';
+import { removeCurrency, setPrimaryCurrency } from 'src/service/currencySettingService';
 import ModalCurrency from './ModalCurrency';
 
 const CurrencySetting = () => {
@@ -51,6 +51,11 @@ const CurrencySetting = () => {
   const onClickCreate = () => {
     setEditTarget(undefined);
     setOpen(true);
+  };
+
+  const onClickRemove = (cid:string)=>() => {
+    if (id === undefined) return;
+    removeCurrency(id,cid)
   };
 
   return (
@@ -86,7 +91,9 @@ const CurrencySetting = () => {
               />
             )}
             {v.deletable ? (
-              <Img src={IcRemove} srcActive={IcRemoveActive} className="cursor-pointer" />
+              <Img src={IcRemove} srcActive={IcRemoveActive} className="cursor-pointer" 
+              onClick={onClickRemove(v.id)}
+              />
             ) : (
               <img src={IcRemoveDisabled} />
             )}

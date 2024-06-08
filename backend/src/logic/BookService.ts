@@ -455,7 +455,7 @@ export class BookService {
               .times(current.currency.exchangeRate ?? 1)
               .plus(prev),
           bn(0)
-        )
+        ).dp(6)
         .toNumber();
       member.total = settles
         .reduce(
@@ -464,7 +464,7 @@ export class BookService {
               .times(current.currency.exchangeRate ?? 1)
               .plus(prev),
           bn(0)
-        )
+        ).dp(6)
         .toNumber();
     }
 
@@ -1171,7 +1171,10 @@ export class BookService {
     };
     await this.currencyAccess.save(newCurrency);
 
-    return newCurrency;
+    return {
+      currency: newCurrency,
+      members: await this.getMemberByBook(bookId),
+    };
   }
 
   private async checkCurrencyIsDeletable(currencyId: string) {
@@ -1272,7 +1275,10 @@ export class BookService {
       await Promise.all(newCurrencies.map((v) => this.currencyAccess.save(v)));
       await this.dbAccess.commitTransaction();
 
-      return newCurrencies.sort(compare('dateCreated'));
+      return {
+        currencies: newCurrencies.sort(compare('dateCreated')),
+        members: await this.getMemberByBook(bookId),
+      };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();
       throw e;

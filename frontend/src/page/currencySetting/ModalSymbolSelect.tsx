@@ -10,11 +10,11 @@ type Props = {
 
 const symbols = [
   { id: 'dollar', label: '$' },
-  { id: 'euro', label: '€' },
   { id: 'yen', label: '¥' },
-  { id: 'won', label: '₩' },
-  { id: 'pound', label: '£' },
   { id: 'baht', label: '฿' },
+  { id: 'won', label: '₩' },
+  { id: 'euro', label: '€' },
+  { id: 'pound', label: '£' },
   { id: 'piso', label: '₱' },
 ];
 

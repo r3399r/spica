@@ -19,6 +19,7 @@ import {
   PutBookBillResponse,
   PutBookCurrencyPrimaryResponse,
   PutBookCurrencyRequest,
+  PutBookCurrencyResponse,
   PutBookMemberRequest,
   PutBookMemberResponse,
   PutBookRequest,
@@ -135,10 +136,15 @@ const putBookIdCurrency = async (
   data: PutBookCurrencyRequest,
   deviceId: string,
 ) =>
-  await http.put<PostBookCurrencyResponse>(`book/${id}/currency/${cid}`, {
+  await http.put<PutBookCurrencyResponse>(`book/${id}/currency/${cid}`, {
     data,
     headers: { 'x-api-device': deviceId },
   });
+
+  const deleteBookIdCurrency = async (id: string, cid: string, deviceId: string) =>
+    await http.delete(`book/${id}/currency/${cid}`, {
+      headers: { 'x-api-device': deviceId },
+    });
 
 const putBookIdCurrencyPrimary = async (id: string, cid: string, deviceId: string) =>
   await http.put<PutBookCurrencyPrimaryResponse>(`book/${id}/currency/${cid}/primary`, {
@@ -164,6 +170,6 @@ export default {
   putBookIdTransfer,
   deleteBookIdTransfer,
   postBookIdCurrency,
-  putBookIdCurrency,
+  putBookIdCurrency,deleteBookIdCurrency,
   putBookIdCurrencyPrimary,
 };

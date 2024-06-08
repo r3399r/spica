@@ -32,6 +32,13 @@ const PersonalBalance = () => {
       ),
     [book],
   );
+  const mainCurrencyDisplay = useMemo(() => {
+    const primary = book?.currencies?.find((v) => v.isPrimary);
+    if (primary === undefined) return '';
+    if (book?.currencies?.length === 1) return primary.symbol;
+
+    return `${primary.name}${primary.symbol}`;
+  }, [book]);
 
   useEffect(() => {
     if (id === undefined) return;
@@ -39,6 +46,10 @@ const PersonalBalance = () => {
   }, [id]);
 
   const items = (item: Transaction) => {
+    const isMultiple = book?.currencies?.length ?? 0 > 1;
+    const currency = book?.currencies?.find((v) => v.id === item.currencyId);
+    const currencyDisplay = isMultiple ? `${currency?.name}${currency?.symbol}` : currency?.symbol;
+
     if (item.type !== 'transfer')
       return (
         <div
@@ -60,7 +71,7 @@ const PersonalBalance = () => {
               {item.descr}
             </Body>
             <Body size="l">
-              {`${book?.symbol}${bn(item.latter.find((v) => v.id === uid)?.amount ?? '0')
+              {`${currencyDisplay}${bn(item.latter.find((v) => v.id === uid)?.amount ?? '0')
                 .abs()
                 .toFormat()}`}
             </Body>
@@ -85,7 +96,7 @@ const PersonalBalance = () => {
             {member?.total && member.total < 0 ? t('desc.out') : t('desc.in')}
           </Body>
           <H4>
-            {book?.symbol}
+            {mainCurrencyDisplay}
             {bn(member?.total ?? '0')
               .abs()
               .toFormat()}

@@ -98,6 +98,12 @@ export type PutBookCurrencyRequest = {
   exchangeRate?: number;
 };
 
-export type PutBookCurrencyResponse = Currency;
+export type PutBookCurrencyResponse = {
+  currency: Currency;
+  members: Member[];
+};
 
-export type PutBookCurrencyPrimaryResponse = Currency[];
+export type PutBookCurrencyPrimaryResponse = {
+  currencies: Currency[];
+  members: Member[];
+};

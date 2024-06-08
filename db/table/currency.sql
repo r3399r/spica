@@ -9,6 +9,5 @@ CREATE TABLE currency (
 	date_created TIMESTAMP NULL,
 	date_updated TIMESTAMP NULL,
 	PRIMARY KEY (id ASC),
-	FOREIGN KEY (book_id) REFERENCES book (id),
-	UNIQUE (book_id, name)
+	FOREIGN KEY (book_id) REFERENCES book (id)
 );
