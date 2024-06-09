@@ -452,19 +452,19 @@ export class BookService {
         .reduce(
           (prev, current) =>
             bn(current.balance)
-              .times(current.currency.exchangeRate ?? 1)
+              .times(current.currency.exchangeRate ?? 1).dp(2)
               .plus(prev),
           bn(0)
-        ).dp(6)
+        )
         .toNumber();
       member.total = settles
         .reduce(
           (prev, current) =>
             bn(current.total)
-              .times(current.currency.exchangeRate ?? 1)
+              .times(current.currency.exchangeRate ?? 1).dp(2)
               .plus(prev),
           bn(0)
-        ).dp(6)
+        )
         .toNumber();
     }
 

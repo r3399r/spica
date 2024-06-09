@@ -141,10 +141,10 @@ const putBookIdCurrency = async (
     headers: { 'x-api-device': deviceId },
   });
 
-  const deleteBookIdCurrency = async (id: string, cid: string, deviceId: string) =>
-    await http.delete(`book/${id}/currency/${cid}`, {
-      headers: { 'x-api-device': deviceId },
-    });
+const deleteBookIdCurrency = async (id: string, cid: string, deviceId: string) =>
+  await http.delete(`book/${id}/currency/${cid}`, {
+    headers: { 'x-api-device': deviceId },
+  });
 
 const putBookIdCurrencyPrimary = async (id: string, cid: string, deviceId: string) =>
   await http.put<PutBookCurrencyPrimaryResponse>(`book/${id}/currency/${cid}/primary`, {
@@ -170,6 +170,7 @@ export default {
   putBookIdTransfer,
   deleteBookIdTransfer,
   postBookIdCurrency,
-  putBookIdCurrency,deleteBookIdCurrency,
+  putBookIdCurrency,
+  deleteBookIdCurrency,
   putBookIdCurrencyPrimary,
 };

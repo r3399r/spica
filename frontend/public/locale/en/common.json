@@ -178,7 +178,9 @@
     "pmDesc": "After deducting the personal extra amount, the remaining amount is divided equally among all the owners.",
     "unitWeight": "x",
     "unitPct": "%",
-    "modalTitle": "Share of {{nickname}}"
+    "modalTitle": "Share of {{nickname}}",
+    "currency": "Currency",
+    "currencyHint": "Please go to book settings to configure currencies."
   },
   "settlement": {
     "back": "Back",

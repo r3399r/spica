@@ -178,7 +178,9 @@
     "pmDesc": "扣除個人額外的金額後，剩餘的款項由所有人平分。",
     "unitWeight": "份",
     "unitPct": "%",
-    "modalTitle": "{{nickname}}的分配"
+    "modalTitle": "{{nickname}}的分配",
+    "currency": "幣別",
+    "currencyHint": "欲新增不同貨幣請至帳本設定頁。"
   },
   "settlement": {
     "back": "回帳本",

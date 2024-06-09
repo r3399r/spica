@@ -20,7 +20,7 @@ const TransactionList = () => {
     [book],
   );
   const billNote = useCallback(
-    (transaction: TransactionBill) => {
+    (transaction: TransactionBill, currencyDisplay?: string) => {
       const { type, amount, former } = transaction;
       if (former.length === 0) return 'ERROR';
       const member =
@@ -31,7 +31,7 @@ const TransactionList = () => {
         return t('bookDetail.billOutNote', {
           member,
           amount: bnFormat(amount),
-          symbol: book?.symbol,
+          symbol: currencyDisplay,
         });
 
       return t('bookDetail.billInNote', { member, amount: bnFormat(amount), symbol: book?.symbol });
@@ -39,7 +39,7 @@ const TransactionList = () => {
     [t, book],
   );
   const transferNote = useCallback(
-    (transaction: TransactionTransfer) => {
+    (transaction: TransactionTransfer, currencyDisplay?: string) => {
       const { amount, srcMemberId, dstMemberId } = transaction;
       const srcMember = book?.members?.find((v) => v.id === srcMemberId)?.nickname;
       const dstMember = book?.members?.find((v) => v.id === dstMemberId)?.nickname;
@@ -48,14 +48,14 @@ const TransactionList = () => {
         srcMember,
         dstMember,
         amount: bnFormat(amount),
-        symbol: book?.symbol,
+        symbol: currencyDisplay,
       });
     },
     [t, book],
   );
 
   const items = (item: Transaction) => {
-    const isMultiple = book?.currencies?.length ?? 0 > 1;
+    const isMultiple = (book?.currencies?.length ?? 0) > 1;
     const currency = book?.currencies?.find((v) => v.id === item.currencyId);
     const currencyDisplay = isMultiple ? `${currency?.name}${currency?.symbol}` : currency?.symbol;
 
@@ -83,7 +83,7 @@ const TransactionList = () => {
             >{`${currencyDisplay}${bnFormat(item.amount)}`}</Body>
           </div>
           <Body size="s" className="text-[12px] leading-[18px] text-teal-500">
-            {billNote(item)}
+            {billNote(item, currencyDisplay)}
           </Body>
         </div>
       );
@@ -111,7 +111,7 @@ const TransactionList = () => {
           >{`${currencyDisplay}${bnFormat(item.amount)}`}</Body>
         </div>
         <Body size="s" className="text-[12px] leading-[18px] text-teal-500">
-          {transferNote(item)}
+          {transferNote(item, currencyDisplay)}
         </Body>
       </div>
     );

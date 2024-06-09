@@ -20,9 +20,9 @@ export const createCurrency = async (id: string, data: CreateCurrencyForm) => {
     const updatedBooks = (books ?? []).map((v) =>
       v.id === id
         ? {
-          ...v,
-          currencies: [...(v.currencies ?? []), res.data],
-        }
+            ...v,
+            currencies: [...(v.currencies ?? []), res.data],
+          }
         : v,
     );
 
@@ -52,10 +52,10 @@ export const editCurrency = async (id: string, cid: string, data: CreateCurrency
     const updatedBooks = (books ?? []).map((v) =>
       v.id === id
         ? {
-          ...v,
-          currencies: v.currencies?.map((o) => (o.id === cid ? res.data.currency : o)) ?? null,
-          members: res.data.members,
-        }
+            ...v,
+            currencies: v.currencies?.map((o) => (o.id === cid ? res.data.currency : o)) ?? null,
+            members: res.data.members,
+          }
         : v,
     );
 
@@ -76,10 +76,10 @@ export const setPrimaryCurrency = async (id: string, cid: string) => {
     const updatedBooks = (books ?? []).map((v) =>
       v.id === id
         ? {
-          ...v,
-          currencies: res.data.currencies,
-          members: res.data.members,
-        }
+            ...v,
+            currencies: res.data.currencies,
+            members: res.data.members,
+          }
         : v,
     );
 
@@ -114,4 +114,4 @@ export const removeCurrency = async (id: string, cid: string) => {
   } finally {
     dispatch(finishWaiting());
   }
-}
+};

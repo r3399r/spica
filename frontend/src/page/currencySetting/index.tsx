@@ -53,9 +53,9 @@ const CurrencySetting = () => {
     setOpen(true);
   };
 
-  const onClickRemove = (cid:string)=>() => {
+  const onClickRemove = (cid: string) => () => {
     if (id === undefined) return;
-    removeCurrency(id,cid)
+    removeCurrency(id, cid);
   };
 
   return (
@@ -91,8 +91,11 @@ const CurrencySetting = () => {
               />
             )}
             {v.deletable ? (
-              <Img src={IcRemove} srcActive={IcRemoveActive} className="cursor-pointer" 
-              onClick={onClickRemove(v.id)}
+              <Img
+                src={IcRemove}
+                srcActive={IcRemoveActive}
+                className="cursor-pointer"
+                onClick={onClickRemove(v.id)}
               />
             ) : (
               <img src={IcRemoveDisabled} />

@@ -46,7 +46,7 @@ const PersonalBalance = () => {
   }, [id]);
 
   const items = (item: Transaction) => {
-    const isMultiple = book?.currencies?.length ?? 0 > 1;
+    const isMultiple = (book?.currencies?.length ?? 0) > 1;
     const currency = book?.currencies?.find((v) => v.id === item.currencyId);
     const currencyDisplay = isMultiple ? `${currency?.name}${currency?.symbol}` : currency?.symbol;
 

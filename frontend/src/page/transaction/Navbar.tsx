@@ -36,6 +36,7 @@ const Navbar = () => {
           former: tx.former.map((v) => ({ ...v, amount: bn(v.amount).abs().toNumber() })),
           latter: tx.latter.map((v) => ({ ...v, amount: bn(v.amount).abs().toNumber() })),
           memo: tx.memo ?? undefined,
+          currencyId: tx.currencyId,
         }),
       );
     else if (tx.type === 'transfer') {
@@ -47,6 +48,7 @@ const Navbar = () => {
           srcMemberId: tx.srcMemberId,
           dstMemberId: tx.dstMemberId,
           memo: tx.memo ?? undefined,
+          currencyId: tx.currencyId,
         }),
       );
     }

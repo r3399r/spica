@@ -178,7 +178,9 @@
     "pmDesc": "扣除个人额外的金额后，剩馀的款项由所有人平分。",
     "unitWeight": "份",
     "unitPct": "%",
-    "modalTitle": "{{nickname}}的分配"
+    "modalTitle": "{{nickname}}的分配",
+    "currency": "币别",
+    "currencyHint": "欲新增不同货币请至帐本设定页。"
   },
   "settlement": {
     "back": "回帐本",

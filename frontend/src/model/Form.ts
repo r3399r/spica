@@ -18,6 +18,7 @@ export type BillForm = {
   date: string;
   type: 'in' | 'out';
   descr: string;
+  currencyId: string;
   amount: number;
   former: ShareDetail[];
   latter: ShareDetail[];
@@ -26,6 +27,7 @@ export type BillForm = {
 
 export type TransferForm = {
   date: string;
+  currencyId: string;
   amount: number;
   srcMemberId: string;
   dstMemberId: string;
@@ -45,5 +47,9 @@ export type DataTransferForm = {
 };
 
 export type MemberSelectForm = {
+  id: string;
+};
+
+export type CurrencySelectForm = {
   id: string;
 };
