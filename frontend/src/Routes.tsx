@@ -4,6 +4,7 @@ import Add2HomeScreen from './page/add2HomeScreen';
 import BookDetail from './page/bookDetail';
 import BookList from './page/bookList';
 import BookSetting from './page/bookSetting';
+import CurrencySetting from './page/currencySetting';
 import EidtTransaction from './page/editTransaction';
 import Landing from './page/landing';
 import Member from './page/member';
@@ -26,6 +27,7 @@ const AppRoutes = () => (
     <Route path={`${Page.Book}/:id/tx/:tid`} element={<Transaction />} />
     <Route path={`${Page.Book}/:id/member`} element={<Member />} />
     <Route path={`${Page.Book}/:id/setting`} element={<BookSetting />} />
+    <Route path={`${Page.Book}/:id/setting/currency`} element={<CurrencySetting />} />
     <Route path={`${Page.Book}/:id/settlement`} element={<Settlement />} />
     <Route path={`${Page.Book}/:id/settlement/:uid`} element={<PersonalBalance />} />
     <Route path={`${Page.Share}/:id`} element={<Share />} />

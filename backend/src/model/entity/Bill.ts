@@ -7,6 +7,7 @@ export type Bill = {
   date: string;
   type: BillType;
   descr: string;
+  currencyId: string;
   amount: number;
   memo: string | null;
   dateCreated: string | null;

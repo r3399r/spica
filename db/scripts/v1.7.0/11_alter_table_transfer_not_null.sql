@@ -1,0 +1,1 @@
+ALTER TABLE transfer ALTER COLUMN currency_id set NOT NULL;

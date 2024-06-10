@@ -3,6 +3,7 @@ export type Transfer = {
   ver: string;
   bookId: string;
   date: string;
+  currencyId: string;
   amount: number;
   srcMemberId: string;
   dstMemberId: string;

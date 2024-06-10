@@ -7,6 +7,7 @@ select
     b.date,
     b.type,
     b.descr,
+    b.currency_id,
     b.amount,
     b.memo,
     b.date_created,

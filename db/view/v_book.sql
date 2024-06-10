@@ -35,6 +35,13 @@ left join (
 			t.date_updated
 		from
 			"transfer" t
+	union all
+		select
+			c.book_id as id,
+			c.date_created,
+			c.date_updated
+		from
+			currency c
 ) as tmp
 	group by
 		id

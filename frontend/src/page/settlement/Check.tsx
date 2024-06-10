@@ -20,6 +20,13 @@ const Check = () => {
   const book = useBook();
   const members = useMemo(() => book?.members ?? [], [book]);
   const checkResult = useMemo(() => check(members), [members]);
+  const currencyDisplay = useMemo(() => {
+    const primary = book?.currencies?.find((v) => v.isPrimary);
+    if (primary === undefined) return '';
+    if (book?.currencies?.length === 1) return primary.symbol;
+
+    return `${primary.name}${primary.symbol}`;
+  }, [book]);
 
   const onCheck = (v: CheckType) => () => {
     dispatch(setTxFormType('transfer'));
@@ -57,7 +64,7 @@ const Check = () => {
           </div>
           <Divider className="my-[10px]" />
           <div className="flex">
-            <Body size="l" className="flex-1">{`${book?.symbol}${bnFormat(v.amount)}`}</Body>
+            <Body size="l" className="flex-1">{`${currencyDisplay}${bnFormat(v.amount)}`}</Body>
             <img src={IcGoCheck} />
           </div>
         </div>

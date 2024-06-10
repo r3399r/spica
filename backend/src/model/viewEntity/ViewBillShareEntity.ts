@@ -25,6 +25,9 @@ export class ViewBillShareEntity implements ViewBillShare {
   @ViewColumn()
   descr!: string;
 
+  @ViewColumn({ name: 'currency_id' })
+  currencyId!: string;
+
   @ViewColumn()
   amount!: number;
 

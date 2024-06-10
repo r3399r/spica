@@ -26,6 +26,7 @@ export const renameBook = async (id: string, name: string) => {
     dispatch(finishWaiting());
   }
 };
+
 export const resetSymbol = async (id: string, symbol: string) => {
   try {
     dispatch(startWaiting());

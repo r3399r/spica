@@ -12,6 +12,14 @@ const History = () => {
   const { t } = useTranslation();
   const book = useBook();
   const tx = useMemo(() => book?.transactions?.find((v) => v.id === tid), [tid, book]);
+
+  const getCurrencyDisplay = (currencyId: string) => {
+    const currency = book?.currencies?.find((v) => v.id === currencyId);
+    const isMultiple = (book?.currencies?.length ?? 0) > 1;
+
+    return isMultiple ? `${currency?.name}${currency?.symbol}` : currency?.symbol ?? '';
+  };
+
   const getDisplayText = useCallback(
     (value: HistoryType['items'][0]) => {
       const key = value.key;
@@ -23,24 +31,24 @@ const History = () => {
         if (key === 'former') finalKey = tx?.type === 'in' ? 'formerIn' : 'formerOut';
         if (from === null) {
           const memberId = String(to).split(':')[0];
-          const amount = bn(String(to).split(':')[1]).abs().toFormat();
+          const member = book?.members?.find((v) => v.id === memberId);
+          const currencyId = String(to).split(':')[1];
+          const amount = bn(String(to).split(':')[2]).abs().toFormat();
 
           return t('transaction.createContent', {
             key: t(`transaction.key.${finalKey}`),
-            to: `${book?.members?.find((v) => v.id === memberId)?.nickname}(${
-              book?.symbol
-            }${amount})`,
+            to: `${member?.nickname}(${getCurrencyDisplay(currencyId)}${amount})`,
           });
         }
         if (to === null) {
           const memberId = String(from).split(':')[0];
-          const amount = bn(String(from).split(':')[1]).abs().toFormat();
+          const member = book?.members?.find((v) => v.id === memberId);
+          const currencyId = String(from).split(':')[1];
+          const amount = bn(String(from).split(':')[2]).abs().toFormat();
 
           return t('transaction.removeContent', {
             key: t(`transaction.key.${finalKey}`),
-            from: `${book?.members?.find((v) => v.id === memberId)?.nickname}(${
-              book?.symbol
-            }${amount})`,
+            from: `${member?.nickname}(${getCurrencyDisplay(currencyId)}${amount})`,
           });
         }
       }
@@ -62,20 +70,26 @@ const History = () => {
         from = format(new Date(from), 'yyyy-MM-dd HH:mm');
         to = format(new Date(to), 'yyyy-MM-dd HH:mm');
       } else if (key === 'amount') {
-        from = `${book?.symbol}${from}`;
-        to = `${book?.symbol}${to}`;
+        const fromCurrencyId = String(from).split(':')[0];
+        const fromAmount = bn(String(from).split(':')[1]).toFormat();
+        const toCurrencyId = String(to).split(':')[0];
+        const toAmount = bn(String(to).split(':')[1]).toFormat();
+        from = `${getCurrencyDisplay(fromCurrencyId)}${fromAmount}`;
+        to = `${getCurrencyDisplay(toCurrencyId)}${toAmount}`;
       } else if (key === 'former' || key === 'latter') {
         if (key === 'former') finalKey = tx?.type === 'in' ? 'formerIn' : 'formerOut';
         const fromMemberId = String(from).split(':')[0];
-        const fromAmount = bn(String(from).split(':')[1]).abs().toFormat();
+        const fromCurrencyId = String(from).split(':')[1];
+        const fromAmount = bn(String(from).split(':')[2]).abs().toFormat();
         const toMemberId = String(to).split(':')[0];
-        const toAmount = bn(String(to).split(':')[1]).abs().toFormat();
-        from = `${book?.members?.find((v) => v.id === fromMemberId)?.nickname}(${
-          book?.symbol
-        }${fromAmount})`;
-        to = `${book?.members?.find((v) => v.id === toMemberId)?.nickname}(${
-          book?.symbol
-        }${toAmount})`;
+        const toCurrencyId = String(to).split(':')[1];
+        const toAmount = bn(String(to).split(':')[2]).abs().toFormat();
+        from = `${book?.members?.find((v) => v.id === fromMemberId)?.nickname}(${getCurrencyDisplay(
+          fromCurrencyId,
+        )}${fromAmount})`;
+        to = `${book?.members?.find((v) => v.id === toMemberId)?.nickname}(${getCurrencyDisplay(
+          toCurrencyId,
+        )}${toAmount})`;
       } else if (key === 'srcMemberId') {
         from = String(book?.members?.find((v) => v.id === from)?.nickname);
         to = String(book?.members?.find((v) => v.id === to)?.nickname);

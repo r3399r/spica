@@ -15,6 +15,13 @@ const BalanceCard = () => {
   const book = useBook();
   const former = useMemo(() => book?.members?.filter((v) => v.balance >= 0) ?? [], [book]);
   const latter = useMemo(() => book?.members?.filter((v) => v.balance < 0) ?? [], [book]);
+  const currencyDisplay = useMemo(() => {
+    const primary = book?.currencies?.find((v) => v.isPrimary);
+    if (primary === undefined) return '';
+    if (book?.currencies?.length === 1) return primary.symbol;
+
+    return `${primary.name}${primary.symbol}`;
+  }, [book]);
 
   return (
     <div className="my-[10px] rounded-[15px] bg-grey-200 p-[10px] text-navy-700">
@@ -44,7 +51,7 @@ const BalanceCard = () => {
               <Body size="l" className="text-navy-700">
                 {v.nickname}
               </Body>
-              <Body size="l" className="text-green-700">{`${book?.symbol}${bnFormat(
+              <Body size="l" className="text-green-700">{`${currencyDisplay}${bnFormat(
                 v.balance,
               )}`}</Body>
             </div>
@@ -64,7 +71,7 @@ const BalanceCard = () => {
               <Body size="l" className="text-navy-700">
                 {v.nickname}
               </Body>
-              <Body size="l" className="text-tomato-700">{`${book?.symbol}${bn(v.balance)
+              <Body size="l" className="text-tomato-700">{`${currencyDisplay}${bn(v.balance)
                 .abs()
                 .toFormat()}`}</Body>
             </div>

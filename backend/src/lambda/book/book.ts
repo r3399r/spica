@@ -3,10 +3,12 @@ import { BookService } from 'src/logic/BookService';
 import {
   GetBookIdParams,
   PostBookBillRequest,
+  PostBookCurrencyRequest,
   PostBookMemberRequest,
   PostBookRequest,
   PostBookTransferRequest,
   PutBookBillRequest,
+  PutBookCurrencyRequest,
   PutBookMemberRequest,
   PutBookRequest,
   PutBookTransferRequest,
@@ -37,6 +39,15 @@ export async function book(
         break;
       case '/api/book/{id}/bill/{billId}':
         res = await apiBookIdBillId(event, service);
+        break;
+      case '/api/book/{id}/currency':
+        res = await apiBookIdCurrency(event, service);
+        break;
+      case '/api/book/{id}/currency/{cid}':
+        res = await apiBookIdCurrencyId(event, service);
+        break;
+      case '/api/book/{id}/currency/{cid}/primary':
+        res = await apiBookIdCurrencyIdPrimary(event, service);
         break;
       case '/api/book/{id}/member':
         res = await apiBookIdMember(event, service);
@@ -163,6 +174,73 @@ async function apiBookIdBillId(event: LambdaEvent, service: BookService) {
       return service.deleteBill(
         event.pathParameters.id,
         event.pathParameters.billId,
+        event.headers['x-api-device']
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdCurrency(event: LambdaEvent, service: BookService) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  switch (event.httpMethod) {
+    case 'POST':
+      if (event.body === null)
+        throw new BadRequestError('body should not be empty');
+      if (event.headers === null)
+        throw new BadRequestError('headers should not be empty');
+
+      return service.addCurrency(
+        event.pathParameters.id,
+        JSON.parse(event.body) as PostBookCurrencyRequest,
+        event.headers['x-api-device']
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdCurrencyId(event: LambdaEvent, service: BookService) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  if (event.headers === null)
+    throw new BadRequestError('headers should not be empty');
+  switch (event.httpMethod) {
+    case 'PUT':
+      if (event.body === null)
+        throw new BadRequestError('body should not be empty');
+
+      return service.updateCurrency(
+        event.pathParameters.id,
+        event.pathParameters.cid,
+        JSON.parse(event.body) as PutBookCurrencyRequest,
+        event.headers['x-api-device']
+      );
+    case 'DELETE':
+      return service.deleteCurrency(
+        event.pathParameters.id,
+        event.pathParameters.cid,
+        event.headers['x-api-device']
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdCurrencyIdPrimary(
+  event: LambdaEvent,
+  service: BookService
+) {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  if (event.headers === null)
+    throw new BadRequestError('headers should not be empty');
+  switch (event.httpMethod) {
+    case 'PUT':
+      return service.reviseCurrencyPrimary(
+        event.pathParameters.id,
+        event.pathParameters.cid,
         event.headers['x-api-device']
       );
     default:

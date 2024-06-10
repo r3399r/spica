@@ -15,6 +15,12 @@ const Main = () => {
   const { t } = useTranslation();
   const book = useBook();
   const tx = useMemo(() => book?.transactions?.find((v) => v.id === tid), [tid, book]);
+  const currencyDisplay = useMemo(() => {
+    const isMultiple = (book?.currencies?.length ?? 0) > 1;
+    const currency = book?.currencies?.find((v) => v.id === tx?.currencyId);
+
+    return isMultiple ? `${currency?.name}${currency?.symbol}` : currency?.symbol;
+  }, [book]);
 
   const txFormer = useMemo(() => {
     if (!tx || tx.type === 'transfer') return [];
@@ -47,9 +53,9 @@ const Main = () => {
         <H4>{t('desc.transfer')}</H4>
         <Body className="text-teal-500">{t('desc.transfer')}</Body>
         <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:mm')}</Body>
-        <H2 className="mt-[10px] border-b-[1px] border-b-grey-300 pb-[18px] text-right">{`${
-          book.symbol
-        }${bnFormat(tx.amount)}`}</H2>
+        <H2 className="mt-[10px] border-b-[1px] border-b-grey-300 pb-[18px] text-right">{`${currencyDisplay}${bnFormat(
+          tx.amount,
+        )}`}</H2>
         <div className="border-b-[1px] border-b-grey-300 py-[15px]">
           <Body size="s" className="mb-[5px] text-navy-300">
             {t('desc.sender')}
@@ -58,7 +64,7 @@ const Main = () => {
             <Body size="l" className="text-navy-700">
               {book.members?.find((m) => m.id === tx.srcMemberId)?.nickname}
             </Body>
-            <Body size="l" className="text-green-700">{`${book.symbol}${bnFormat(
+            <Body size="l" className="text-green-700">{`${currencyDisplay}${bnFormat(
               tx.amount,
             )}`}</Body>
           </div>
@@ -71,7 +77,7 @@ const Main = () => {
             <Body size="l" className="text-navy-700">
               {book.members?.find((m) => m.id === tx.dstMemberId)?.nickname}
             </Body>
-            <Body size="l" className="text-tomato-700">{`${book.symbol}${bnFormat(
+            <Body size="l" className="text-tomato-700">{`${currencyDisplay}${bnFormat(
               tx.amount,
             )}`}</Body>
           </div>
@@ -97,9 +103,9 @@ const Main = () => {
         {tx.type === 'out' ? t('desc.out') : t('desc.in')}
       </Body>
       <Body className="text-navy-300">{format(new Date(tx.date), 'yyyy-MM-dd HH:mm')}</Body>
-      <H2 className="mt-[10px] border-b-[1px] border-b-grey-300 pb-[18px] text-right">{`${
-        book.symbol
-      }${bnFormat(tx.amount)}`}</H2>
+      <H2 className="mt-[10px] border-b-[1px] border-b-grey-300 pb-[18px] text-right">{`${currencyDisplay}${bnFormat(
+        tx.amount,
+      )}`}</H2>
       <div className="border-b-[1px] border-b-grey-300 py-[15px]">
         <Body size="s" className="mb-[5px] text-navy-300">
           {tx.type === 'out' ? t('desc.payer') : t('desc.receiver')}
@@ -109,7 +115,7 @@ const Main = () => {
             <Body size="l" className="text-navy-700">
               {v.nickname}
             </Body>
-            <Body size="l" className="text-green-700">{`${book.symbol}${bn(v.amount)
+            <Body size="l" className="text-green-700">{`${currencyDisplay}${bn(v.amount)
               .abs()
               .toFormat()}`}</Body>
           </div>
@@ -124,7 +130,7 @@ const Main = () => {
             <Body size="l" className="text-navy-700">
               {v.nickname}
             </Body>
-            <Body size="l" className="text-tomato-700">{`${book.symbol}${bn(v.amount)
+            <Body size="l" className="text-tomato-700">{`${currencyDisplay}${bn(v.amount)
               .abs()
               .toFormat()}`}</Body>
           </div>
