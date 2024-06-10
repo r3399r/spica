@@ -205,8 +205,12 @@ export class BookService {
     const items: History['items'] = [];
     if (String(oldTx.date) !== String(newTx.date))
       items.push({ key: 'date', from: oldTx.date, to: newTx.date });
-    if (oldTx.amount !== newTx.amount)
-      items.push({ key: 'amount', from: oldTx.amount, to: newTx.amount });
+    if (oldTx.amount !== newTx.amount || oldTx.currencyId !== newTx.currencyId)
+      items.push({
+        key: 'amount',
+        from: `${oldTx.currencyId}:${oldTx.amount}`,
+        to: `${newTx.currencyId}:${newTx.amount}`,
+      });
     if (oldTx.srcMemberId !== newTx.srcMemberId)
       items.push({
         key: 'srcMemberId',
@@ -232,8 +236,12 @@ export class BookService {
     const items: History['items'] = [];
     if (String(oldTx.date) !== String(newTx.date))
       items.push({ key: 'date', from: oldTx.date, to: newTx.date });
-    if (oldTx.amount !== newTx.amount)
-      items.push({ key: 'amount', from: oldTx.amount, to: newTx.amount });
+    if (oldTx.amount !== newTx.amount || oldTx.currencyId !== newTx.currencyId)
+      items.push({
+        key: 'amount',
+        from: `${oldTx.currencyId}:${oldTx.amount}`,
+        to: `${newTx.currencyId}:${newTx.amount}`,
+      });
     if (oldTx.descr !== newTx.descr)
       items.push({ key: 'descr', from: oldTx.descr, to: newTx.descr });
     if (oldTx.memo !== newTx.memo)
@@ -242,11 +250,14 @@ export class BookService {
     const sameFormer = intersectionBy(newTx.former, oldTx.former, 'id');
     for (const former of sameFormer) {
       const old = oldTx.former.find((v) => v.id === former.id);
-      if (old?.amount !== former.amount)
+      if (
+        old?.amount !== former.amount ||
+        oldTx.currencyId !== newTx.currencyId
+      )
         items.push({
           key: 'former',
-          from: `${old?.id}:${old?.amount}`,
-          to: `${former.id}:${former.amount}`,
+          from: `${old?.id}:${oldTx.currencyId}:${old?.amount}`,
+          to: `${former.id}:${newTx.currencyId}:${former.amount}`,
         });
     }
     const addFormer = differenceBy(newTx.former, oldTx.former, 'id');
@@ -254,25 +265,28 @@ export class BookService {
       items.push({
         key: 'former',
         from: null,
-        to: `${former.id}:${former.amount}`,
+        to: `${former.id}:${newTx.currencyId}:${former.amount}`,
       });
 
     const minusFormer = differenceBy(oldTx.former, newTx.former, 'id');
     for (const former of minusFormer)
       items.push({
         key: 'former',
-        from: `${former.id}:${former.amount}`,
+        from: `${former.id}:${oldTx.currencyId}:${former.amount}`,
         to: null,
       });
 
     const sameLatter = intersectionBy(newTx.latter, oldTx.latter, 'id');
     for (const latter of sameLatter) {
       const old = oldTx.latter.find((v) => v.id === latter.id);
-      if (old?.amount !== latter.amount)
+      if (
+        old?.amount !== latter.amount ||
+        oldTx.currencyId !== newTx.currencyId
+      )
         items.push({
           key: 'latter',
-          from: `${old?.id}:${old?.amount}`,
-          to: `${latter.id}:${latter.amount}`,
+          from: `${old?.id}:${oldTx.currencyId}:${old?.amount}`,
+          to: `${latter.id}:${newTx.currencyId}:${latter.amount}`,
         });
     }
     const addLatter = differenceBy(newTx.latter, oldTx.latter, 'id');
@@ -280,14 +294,14 @@ export class BookService {
       items.push({
         key: 'latter',
         from: null,
-        to: `${latter.id}:${latter.amount}`,
+        to: `${latter.id}:${newTx.currencyId}:${latter.amount}`,
       });
 
     const minusLatter = differenceBy(oldTx.latter, newTx.latter, 'id');
     for (const latter of minusLatter)
       items.push({
         key: 'latter',
-        from: `${latter.id}:${latter.amount}`,
+        from: `${latter.id}:${oldTx.currencyId}:${latter.amount}`,
         to: null,
       });
 
@@ -452,7 +466,8 @@ export class BookService {
         .reduce(
           (prev, current) =>
             bn(current.balance)
-              .times(current.currency.exchangeRate ?? 1).dp(2)
+              .times(current.currency.exchangeRate ?? 1)
+              .dp(2)
               .plus(prev),
           bn(0)
         )
@@ -461,7 +476,8 @@ export class BookService {
         .reduce(
           (prev, current) =>
             bn(current.total)
-              .times(current.currency.exchangeRate ?? 1).dp(2)
+              .times(current.currency.exchangeRate ?? 1)
+              .dp(2)
               .plus(prev),
           bn(0)
         )
