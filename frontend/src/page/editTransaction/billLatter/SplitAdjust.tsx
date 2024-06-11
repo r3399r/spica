@@ -17,6 +17,10 @@ const SplitAdjust = () => {
   const book = useBook();
   const members = useMemo(() => book?.members ?? [], [book]);
   const [input, setInput] = useState<MemberAdjust[]>([]);
+  const symbol = useMemo(
+    () => book?.currencies?.find((v) => v.id === billFormData.currencyId)?.symbol,
+    [book, billFormData],
+  );
 
   useEffect(() => {
     setInput(
@@ -93,16 +97,13 @@ const SplitAdjust = () => {
             </label>
           </div>
           <AmountInput
-            symbol={book?.symbol ?? '$'}
+            symbol={symbol ?? '$'}
             decimal={2}
             className="!w-[78px]"
-            value={`${book?.symbol}${v.value}`}
+            value={`${symbol}${v.value}`}
             onChange={onInput(v.id)}
           />
-          <Body
-            size="l"
-            className="min-w-[72px] text-navy-100"
-          >{`+ ${book?.symbol}${v.amount}`}</Body>
+          <Body size="l" className="min-w-[72px] text-navy-100">{`+ ${symbol}${v.amount}`}</Body>
         </div>
       ))}
     </>

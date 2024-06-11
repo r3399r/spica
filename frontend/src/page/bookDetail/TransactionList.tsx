@@ -34,7 +34,11 @@ const TransactionList = () => {
           symbol: currencyDisplay,
         });
 
-      return t('bookDetail.billInNote', { member, amount: bnFormat(amount), symbol: book?.symbol });
+      return t('bookDetail.billInNote', {
+        member,
+        amount: bnFormat(amount),
+        symbol: currencyDisplay,
+      });
     },
     [t, book],
   );
