@@ -21,6 +21,10 @@ const Latter = () => {
   const isAllShare =
     members?.length ===
     billFormData.latter?.filter((v) => v.method === ShareMethod.Weight && v.value === 1).length;
+  const symbol = useMemo(
+    () => book?.currencies?.find((v) => v.id === billFormData.currencyId)?.symbol,
+    [book, billFormData],
+  );
 
   const latter: ShareDetail[] = useMemo(() => {
     if (
@@ -69,7 +73,7 @@ const Latter = () => {
               <div key={v.id} className="ml-[10px] flex justify-between">
                 <Body size="l">{members?.find((o) => o.id === v.id)?.nickname}</Body>
                 <Body size="l" className="text-navy-300">
-                  {`${book?.symbol}${bn(v.amount).abs().toFormat()}`}
+                  {`${symbol}${bn(v.amount).abs().toFormat()}`}
                 </Body>
               </div>
             ))}

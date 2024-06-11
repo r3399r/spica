@@ -22,11 +22,15 @@ const CurrencyModal = ({ open, handleClose }: Props) => {
   const book = useBook();
   const currencies = useMemo(() => book?.currencies, [book]);
   const isMultiple = useMemo(() => (currencies?.length ?? 0) > 1, [currencies]);
-  const { billFormData, transferFormData } = useSelector((rootState: RootState) => rootState.form);
+  const { txFormType, billFormData, transferFormData } = useSelector(
+    (rootState: RootState) => rootState.form,
+  );
 
   useEffect(() => {
-    methods.setValue('id', billFormData.currencyId ?? '');
-    methods.setValue('id', transferFormData.currencyId ?? '');
+    methods.setValue(
+      'id',
+      (txFormType === 'bill' ? billFormData.currencyId : transferFormData.currencyId) ?? '',
+    );
   }, [open]);
 
   const onClose = () => {

@@ -17,6 +17,10 @@ const Former = () => {
   const members = useMemo(() => book?.members, [book]);
   const isAll = billFormData.former?.length === 1;
   const former = useMemo(() => billFormData.former ?? [], [billFormData.former]);
+  const symbol = useMemo(
+    () => book?.currencies?.find((v) => v.id === billFormData.currencyId)?.symbol,
+    [book, billFormData],
+  );
 
   return (
     <>
@@ -43,7 +47,7 @@ const Former = () => {
                 <div key={v.id} className="ml-[10px] flex justify-between">
                   <Body size="l">{v.nickname}</Body>
                   <Body size="l" className="text-navy-300">
-                    {`${book?.symbol}${bn(former.find((o) => o.id === v.id)?.amount ?? 0)
+                    {`${symbol}${bn(former.find((o) => o.id === v.id)?.amount ?? 0)
                       .abs()
                       .toFormat()}`}
                   </Body>

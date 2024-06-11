@@ -17,14 +17,18 @@ const Amount = () => {
     () => remainingAmount(billFormData.amount ?? 0, billFormData.latter ?? []),
     [billFormData.latter],
   );
+  const symbol = useMemo(
+    () => book?.currencies?.find((v) => v.id === billFormData.currencyId)?.symbol,
+    [book, billFormData],
+  );
 
   return (
     <div className="flex items-center justify-between">
-      <H2>{`${book?.symbol}${bnFormat(billFormData.amount ?? 0)}`}</H2>
+      <H2>{`${symbol}${bnFormat(billFormData.amount ?? 0)}`}</H2>
       <Body className={classNames({ 'text-tomato-500': remaining !== 0 })}>{`${t(
         remaining > 0 ? 'editTx.greaterThan' : 'editTx.lessThan',
         {
-          symbol: book?.symbol,
+          symbol,
           amount: bn(remaining).abs().toFormat(),
         },
       )}`}</Body>
