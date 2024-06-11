@@ -38,6 +38,8 @@ export const loadBookList = async () => {
     });
 
     dispatch(setBooks(updatedBooks));
+
+    return updatedBooks;
   } finally {
     if (loading) dispatch(finishWaiting());
   }
@@ -72,7 +74,7 @@ export const createBook = async (data: PostBookRequest) => {
 export const loadBookById = async (id: string) => {
   try {
     dispatch(startWaiting());
-    const { books } = getState().book;
+    const books = await loadBookList();
 
     const savedBook = books?.find((v) => v.id === id);
     if (
@@ -86,24 +88,18 @@ export const loadBookById = async (id: string) => {
     const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.getBookId(id, deviceId, { limit: '50', offset: '0' });
 
-    const index = books?.findIndex((v) => v.id === id) ?? -1;
-    if (books === null || index === -1)
-      dispatch(
-        appendBook({
+    const tmp = books.map((v) => {
+      if (v.id === id)
+        return {
           ...res.data,
-          showDelete: false,
+          showDelete: v.showDelete,
           txCount: Number(res.headers['x-pagination-count']),
-        }),
-      );
-    else {
-      const tmp = [...books];
-      tmp[index] = {
-        ...res.data,
-        showDelete: tmp[index].showDelete,
-        txCount: Number(res.headers['x-pagination-count']),
-      };
-      dispatch(setBooks(tmp));
-    }
+        };
+
+      return v;
+    });
+
+    if (tmp) dispatch(setBooks(tmp));
   } finally {
     dispatch(finishWaiting());
   }
