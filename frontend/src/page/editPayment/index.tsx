@@ -9,7 +9,6 @@ import NavbarVanilla from 'src/component/NavbarVanilla';
 import Select from 'src/component/Select';
 import SelectOption from 'src/component/SelectOption';
 import H2 from 'src/component/typography/H2';
-import { Page } from 'src/constant/Page';
 import { Bank } from 'src/model/backend/entity/Bank';
 import { BankAccount } from 'src/model/backend/entity/BankAccount';
 import { PaymentForm } from 'src/model/Form';
@@ -56,7 +55,7 @@ const EditPayment = () => {
 
   const onCancel = () => {
     methods.reset();
-    navigate(`${Page.Setting}/payment`);
+    navigate(-1);
   };
 
   return (
