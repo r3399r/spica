@@ -47,9 +47,25 @@
     "head": "系统设定",
     "language": "语言设定",
     "myId": "我的 ID",
+    "myPaymentAccount": "我的收款帐户",
     "dataTransfer": "资料转移",
     "add2HomeScreen": "加入手机主画面",
     "contactUs": "联络我们"
+  },
+  "payment": {
+    "back": "回系统设定",
+    "head": "我的收款帐户",
+    "create": "新增收款帐户",
+    "noPayment": "无收款帐户",
+    "userPayment": "{{ name }} 的收款帐户"
+  },
+  "editPayment": {
+    "back": "回收款帐户",
+    "head": "新增收款帐户",
+    "bank": "银行",
+    "accountNumber": "帐户号码",
+    "notBank": "非银行帐户",
+    "deleteHint": "要删除这个收款帐户吗？"
   },
   "transfer": {
     "back": "回系统设定",

@@ -47,9 +47,25 @@
     "head": "System Setting",
     "language": "Language",
     "myId": "My ID",
+    "myPaymentAccount": "My Payment Account",
     "dataTransfer": "Data Transfer",
     "add2HomeScreen": "Add to Home Screen",
     "contactUs": "Contact Us"
+  },
+  "payment": {
+    "back": "Back",
+    "head": "My Payment Account",
+    "create": "Create Payment",
+    "noPayment": "No Payment Account",
+    "userPayment": "Payment Account of {{ name }}"
+  },
+  "editPayment": {
+    "back": "Back",
+    "head": "Create Payment Account",
+    "bank": "Bank",
+    "accountNumber": "Account Number",
+    "notBank": "Not Bank Account",
+    "deleteHint": "Delete this payment account?"
   },
   "transfer": {
     "back": "Back",

@@ -6,7 +6,7 @@ import { compare } from 'src/util/compare';
 export const check = (members: Member[]): Check[] => {
   const res: Check[] = [];
 
-  let sortedMember = [...members].sort(compare('balance', 'asc'));
+  let sortedMember = [...members].filter((v) => v.balance !== 0).sort(compare('balance', 'asc'));
   while (sortedMember.length > 0) {
     const former = sortedMember[sortedMember.length - 1];
     const latter = sortedMember[0];

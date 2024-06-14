@@ -47,9 +47,25 @@
     "head": "系統設定",
     "language": "語言設定",
     "myId": "我的 ID",
+    "myPaymentAccount": "我的收款帳戶",
     "dataTransfer": "資料轉移",
     "add2HomeScreen": "加入手機主畫面",
     "contactUs": "聯絡我們"
+  },
+  "payment": {
+    "back": "回系統設定",
+    "head": "我的收款帳戶",
+    "create": "新增收款帳戶",
+    "noPayment": "無收款帳戶",
+    "userPayment": "{{ name }} 的收款帳戶"
+  },
+  "editPayment": {
+    "back": "回收款帳戶",
+    "head": "新增收款帳戶",
+    "bank": "銀行",
+    "accountNumber": "帳戶號碼",
+    "notBank": "非銀行帳戶",
+    "deleteHint": "要刪除這個收款帳戶嗎？"
   },
   "transfer": {
     "back": "回系統設定",

@@ -24,7 +24,7 @@ const Modal = ({
     onClose={() => handleClose()}
     {...props}
   >
-    <div className="mx-[15px] w-full rounded-[20px] bg-white outline-none sm:mx-auto sm:w-[610px]">
+    <div className="mx-[15px] max-h-[calc(100%-50px)] w-full overflow-auto rounded-[20px] bg-white outline-none sm:mx-auto sm:w-[610px]">
       {showClose && (
         <div className="relative h-[34px]">
           <img

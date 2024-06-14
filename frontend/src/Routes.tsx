@@ -5,9 +5,11 @@ import BookDetail from './page/bookDetail';
 import BookList from './page/bookList';
 import BookSetting from './page/bookSetting';
 import CurrencySetting from './page/currencySetting';
+import EditPayment from './page/editPayment';
 import EidtTransaction from './page/editTransaction';
 import Landing from './page/landing';
 import Member from './page/member';
+import Payment from './page/payment';
 import PersonalBalance from './page/personalBalance';
 import Settlement from './page/settlement';
 import Share from './page/share';
@@ -20,6 +22,8 @@ const AppRoutes = () => (
     <Route path={Page.Landing} element={<Landing />} />
     <Route path={Page.Book} element={<BookList />} />
     <Route path={Page.Setting} element={<SystemSetting />} />
+    <Route path={`${Page.Setting}/payment`} element={<Payment />} />
+    <Route path={`${Page.Setting}/payment/edit`} element={<EditPayment />} />
     <Route path={`${Page.Setting}/transfer`} element={<Transfer />} />
     <Route path={`${Page.Setting}/a2hs`} element={<Add2HomeScreen />} />
     <Route path={`${Page.Book}/:id`} element={<BookDetail />} />

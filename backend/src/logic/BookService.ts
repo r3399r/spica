@@ -460,9 +460,10 @@ export class BookService {
       where: { currency: { bookId: id } },
     });
 
+    const res: Member[] = [];
     for (const member of members) {
       const settles = memberSettles.filter((v) => v.memberId === member.id);
-      member.balance = settles
+      const balance = settles
         .reduce(
           (prev, current) =>
             bn(current.balance)
@@ -472,7 +473,7 @@ export class BookService {
           bn(0)
         )
         .toNumber();
-      member.total = settles
+      const total = settles
         .reduce(
           (prev, current) =>
             bn(current.total)
@@ -482,9 +483,14 @@ export class BookService {
           bn(0)
         )
         .toNumber();
+      res.push({
+        ...member,
+        balance,
+        total,
+      });
     }
 
-    return members.sort(compare('dateCreated'));
+    return res.sort(compare('dateCreated'));
   }
 
   private async getBookDetail(

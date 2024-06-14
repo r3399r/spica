@@ -48,6 +48,13 @@ const SystemSetting = () => {
       </CopyToClipboard>
       <div
         className="flex cursor-pointer justify-between border-b border-b-grey-300 pb-4 pt-5"
+        onClick={() => navigate(`${Page.Setting}/payment`)}
+      >
+        <H4>{t('systemSetting.myPaymentAccount')}</H4>
+        <img src={IcGo} />
+      </div>
+      <div
+        className="flex cursor-pointer justify-between border-b border-b-grey-300 pb-4 pt-5"
         onClick={() => navigate(`${Page.Setting}/transfer`)}
       >
         <H4>{t('systemSetting.dataTransfer')}</H4>

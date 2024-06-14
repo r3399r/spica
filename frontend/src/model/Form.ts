@@ -53,3 +53,8 @@ export type MemberSelectForm = {
 export type CurrencySelectForm = {
   id: string;
 };
+
+export type PaymentForm = {
+  code: string;
+  account: string;
+};

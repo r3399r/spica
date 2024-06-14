@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Bank } from 'src/model/backend/entity/Bank';
+import { BankAccount } from 'src/model/backend/entity/BankAccount';
 
 export type UiState = {
   isDeviceReady: boolean;
@@ -7,6 +9,8 @@ export type UiState = {
   txPageScroll: number;
   settlementTab: 'check' | 'balance';
   snackbarMessage: string | undefined;
+  paymentList: BankAccount[] | null;
+  bankList: Bank[] | null;
 };
 
 const initialState: UiState = {
@@ -16,6 +20,8 @@ const initialState: UiState = {
   txPageScroll: 0,
   settlementTab: 'balance',
   snackbarMessage: undefined,
+  paymentList: null,
+  bankList: null,
 };
 
 export const uiSlice = createSlice({
@@ -43,6 +49,12 @@ export const uiSlice = createSlice({
     setSnackbarMessage: (state: UiState, action: PayloadAction<string | undefined>) => {
       state.snackbarMessage = action.payload;
     },
+    setPaymentList: (state: UiState, action: PayloadAction<BankAccount[] | null>) => {
+      state.paymentList = action.payload;
+    },
+    setBankList: (state: UiState, action: PayloadAction<Bank[]>) => {
+      state.bankList = action.payload;
+    },
   },
 });
 
@@ -54,6 +66,8 @@ export const {
   setTxPageScroll,
   setSettlementTab,
   setSnackbarMessage,
+  setPaymentList,
+  setBankList,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
