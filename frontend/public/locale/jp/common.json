@@ -1,9 +1,9 @@
 {
   "appName": "Bunny Bill",
   "language": "日本語",
-  "error": "エラーが発生しました。状況が解決しない場合は、もう一度試してください。ご連絡ください。ありがとうございます。",
+  "error": "エラーが発生しました。再試行してください。状況が続く場合は、お問い合わせください、ありがとうございます。",
   "act": {
-    "confirm": "完了",
+    "confirm": "確認",
     "cancel": "キャンセル",
     "submit": "送出",
     "delete": "削除",
@@ -22,7 +22,7 @@
     "sender": "送金者",
     "receiver": "受取人",
     "memo": "メモ",
-    "copy": "複製成功！",
+    "copy": "コピー成功！",
     "exportTitle": "エクスポート",
     "exportHint": "取引明細をPDFファイルにエクスポートする"
   },
@@ -55,7 +55,7 @@
   "payment": {
     "back": "戻る",
     "head": "私の支払いアカウント",
-    "create": "支払いアカウントを追加する",
+    "create": "アカウントを追加",
     "noPayment": "支払いアカウントがない",
     "userPayment": "{{ name }} の支払いアカウント"
   },
@@ -72,7 +72,7 @@
     "head": "データ移行",
     "outHead": "データ転出",
     "outHint": "他のデバイスにキーを入力すると、このデバイスのデータが新しいデバイスにコピーされます。",
-    "outBtn": "キーを生成する",
+    "outBtn": "キーを生成",
     "inHead": "データ転入",
     "inHint": "別のデバイスからキーを入力してデータをインポートします",
     "inBtn": "キーを入力",
@@ -84,11 +84,11 @@
   },
   "add2HomeScreen": {
     "back": "戻る",
-    "iosStep1": " Safari を使用してこの Web サイトを開き、画面下部の共有アイコンをクリックします。",
+    "iosStep1": "Safari を使用してこのサイトを開き、画面下部の共有アイコンをクリックします。",
     "iosStep2": "「ホーム画面に追加」を選ぶ",
     "iosStep3": "「追加」をクリックします",
-    "androidStep1": " Chrome を使用してこの Web サイトを開き、画面右上隅の「その他」アイコンをクリックします。",
-    "androidStep2": "ホーム画面に追加」を選ぶ",
+    "androidStep1": "Chrome を使用してこのサイトを開き、画面右上隅の「その他」アイコンをクリックします。",
+    "androidStep2": "「ホーム画面に追加」を選ぶ",
     "androidStep3": "「追加」をクリックします",
     "done": "上記の手順を完了すると、ホーム画面に Bunny Bill アイコンが表示されます。"
   },
@@ -99,7 +99,7 @@
     "member": "メンバー",
     "balance": "バランス",
     "noMemberHint": "会計を開始する前に、「メンバー」に移動して共有者を追加してください。",
-    "newTransaction": "勘定を入力",
+    "newTransaction": "取引を追加",
     "multiple": "マルチ",
     "billOutNote": "{{member}} は {{symbol}}{{amount}} を支払った",
     "billInNote": "{{member}} は {{symbol}}{{amount}} を受け取った",
@@ -144,7 +144,7 @@
       "date": "日付",
       "amount": "金額",
       "memo": "メモ",
-      "descr": "項目",
+      "descr": "品目",
       "formerIn": "受取者",
       "formerOut": "支払者",
       "latter": "共有者",
@@ -162,11 +162,11 @@
     "shareText": "帳簿「{{book}}」を共有するには、リンクをクリックしてください",
     "shareLink": "リンクを共有",
     "inputId": "友達のID入力",
-    "edit": "データ編集",
+    "edit": "メンバー編集",
     "deleteHint": "「{{nickname}}」を削除しますか？",
     "self": "私",
     "selfHint1": "「{{nickname}}」がニックネームを設定",
-    "selfHint2": "「{{nickname}}」はニックネームがありません",
+    "selfHint2": "「{{nickname}}」はニックネームではない",
     "friendPlaceholder": "友達の ID",
     "friendHint": "ユーサのIDはシステム設定で確認できます"
   },
@@ -176,9 +176,9 @@
     "wrongCode": "コードが違い"
   },
   "editTx": {
-    "type": "カテゴリ",
+    "type": "項目",
     "date": "日付",
-    "descr": "項目",
+    "descr": "品目",
     "amount": "金額",
     "share": "共有",
     "adjust": "調整",
@@ -203,7 +203,7 @@
     "check": "決済",
     "balance": "バランス",
     "shouldPay": "支払う",
-    "isCleared": "すべての支払いが完了しました"
+    "isCleared": "すべての支払いが決済しました"
   },
   "memberModal": {
     "head": "ニックネームを選ぶ",
