@@ -14,6 +14,7 @@ type Props<T extends FieldValues> = {
   children: ReactElement;
   cancelBtn?: string;
   confirmBtn?: string;
+  confirmBtnEnable?: boolean;
 };
 
 const ModalForm = <T extends FieldValues>({
@@ -24,6 +25,7 @@ const ModalForm = <T extends FieldValues>({
   cancelBtn,
   confirmBtn,
   handleClose,
+  confirmBtnEnable = true,
   ...props
 }: Props<T>) => (
   <Modal handleClose={handleClose} {...props}>
@@ -38,7 +40,7 @@ const ModalForm = <T extends FieldValues>({
             </Button>
           )}
           {confirmBtn && (
-            <Button appearance="default" type="submit">
+            <Button appearance="default" type="submit" disabled={!confirmBtnEnable}>
               {confirmBtn}
             </Button>
           )}

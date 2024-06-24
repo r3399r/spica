@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import ModalVanilla from 'src/component/ModalVanilla';
+import Body from 'src/component/typography/Body';
 import { deleteBankAccount } from 'src/service/paymentService';
 
 type Props = {
@@ -25,7 +26,9 @@ const ModalDelete = ({ open, handleClose, bankAccountId }: Props) => {
       deleteBtn={t('act.delete')}
       onDelete={onDelete}
     >
-      <div>{t('editPayment.deleteHint')}</div>
+      <Body size="l" className="mb-5">
+        {t('editPayment.deleteHint')}
+      </Body>
     </ModalVanilla>
   );
 };

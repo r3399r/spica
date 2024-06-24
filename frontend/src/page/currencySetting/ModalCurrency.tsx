@@ -27,6 +27,11 @@ const ModalCurrency = ({ open, handleClose, editTarget }: Props) => {
   );
   const [modalSymbolOpen, setModalSymbolOpen] = useState<boolean>(false);
   const watchName = methods.watch('name');
+  const watchExchangeRate = methods.watch('exchangeRate');
+  const confirmBtnEnable = useMemo(
+    () => (editTarget?.isPrimary ? true : !!watchExchangeRate && Number(watchExchangeRate) > 0),
+    [watchExchangeRate, editTarget],
+  );
 
   useEffect(() => {
     methods.setValue('name', editTarget?.name ?? '');
@@ -55,6 +60,7 @@ const ModalCurrency = ({ open, handleClose, editTarget }: Props) => {
         title={t('currencySetting.createCurrency')}
         cancelBtn={t('act.cancel')}
         confirmBtn={t('act.submit')}
+        confirmBtnEnable={confirmBtnEnable}
       >
         <div className="mb-5 flex flex-col gap-4">
           <FormInput name="name" label={t('currencySetting.name')} autoFocus required />
