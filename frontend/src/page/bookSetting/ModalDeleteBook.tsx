@@ -23,9 +23,10 @@ const ModalDeleteBook = ({ open, handleClose }: Props) => {
 
   const onDelete = () => {
     if (!book) return;
-    deleteBook(book.id);
-    handleClose();
-    navigate(Page.Book);
+    deleteBook(book.id).then(() => {
+      handleClose();
+      navigate(Page.Book);
+    });
   };
 
   return (

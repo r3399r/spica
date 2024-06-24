@@ -9,9 +9,10 @@ import { compare } from 'src/util/compare';
 import { getLocalDeviceId } from 'src/util/localStorage';
 import { exportPdf } from 'src/util/pdfHelper';
 
-export const loadBookList = async () => {
+export const loadBookList = async (id?: string) => {
   const { books } = getState().book;
-  const loading = books === null;
+  const loading = books?.find((v) => v.id === id) === undefined;
+  if (id && books !== null && !loading) return books;
   try {
     if (loading) dispatch(startWaiting());
 
@@ -74,7 +75,7 @@ export const createBook = async (data: PostBookRequest) => {
 export const loadBookById = async (id: string) => {
   try {
     dispatch(startWaiting());
-    const books = await loadBookList();
+    const books = await loadBookList(id);
 
     const savedBook = books?.find((v) => v.id === id);
     if (
