@@ -88,7 +88,7 @@ export const loadBookById = async (id: string) => {
     const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.getBookId(id, deviceId, { limit: '50', offset: '0' });
 
-    if (books.length === 0)
+    if (books.find((v) => v.id === id) === undefined)
       dispatch(
         appendBook({
           ...res.data,
@@ -97,16 +97,15 @@ export const loadBookById = async (id: string) => {
         }),
       );
     else {
-      const tmp = books.map((v) => {
-        if (v.id === id)
-          return {
-            ...res.data,
-            showDelete: v.showDelete,
-            txCount: Number(res.headers['x-pagination-count']),
-          };
-
-        return v;
-      });
+      const tmp = books.map((v) =>
+        v.id === id
+          ? {
+              ...res.data,
+              showDelete: v.showDelete,
+              txCount: Number(res.headers['x-pagination-count']),
+            }
+          : v,
+      );
       dispatch(setBooks(tmp));
     }
   } finally {
