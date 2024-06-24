@@ -1,5 +1,5 @@
-drop view v_device_book;
-drop view v_book;
+DROP VIEW IF EXISTS v_device_book;
+DROP VIEW IF EXISTS v_book;
 CREATE VIEW v_book as
 select
 	b.id,

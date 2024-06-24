@@ -73,17 +73,20 @@ const SplitMixed = ({ mode }: Props) => {
         o.id === memberId
           ? {
               ...o,
+              checked: Number(v.target.value) > 0,
               amount: v.target.value,
               customAmount: true,
             }
           : o,
       ),
     );
-    addMemberToBillLatter(memberId, mode, {
-      id: memberId,
-      method: ShareMethod.Amount,
-      value: Number(v.target.value),
-    });
+    if (Number(v.target.value) > 0)
+      addMemberToBillLatter(memberId, mode, {
+        id: memberId,
+        method: ShareMethod.Amount,
+        value: Number(v.target.value),
+      });
+    else removeMemberFromBillLatter(memberId);
   };
 
   const onCheck = (memberId: string) => (v: ChangeEvent<HTMLInputElement>) => {

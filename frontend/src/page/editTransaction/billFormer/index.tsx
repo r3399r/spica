@@ -78,11 +78,13 @@ const BillFormer = () => {
           : o,
       ),
     );
-    addMemberToBillFormer(memberId, {
-      id: memberId,
-      method: ShareMethod.Amount,
-      value: Number(v.target.value),
-    });
+    if (Number(v.target.value) > 0)
+      addMemberToBillFormer(memberId, {
+        id: memberId,
+        method: ShareMethod.Amount,
+        value: Number(v.target.value),
+      });
+    else removeMemberFromBillFormer(memberId);
   };
 
   const onCheck = (memberId: string) => (v: ChangeEvent<HTMLInputElement>) => {
