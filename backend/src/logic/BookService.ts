@@ -1291,6 +1291,8 @@ export class BookService {
             .dp(6)
             .toNumber();
         }
+        // to avoid extreme value
+        if (temp.exchangeRate === 0) temp.exchangeRate = 0.000001;
         newCurrencies.push(temp);
       }
 
