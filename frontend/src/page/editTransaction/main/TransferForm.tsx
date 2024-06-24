@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import AmountInput from 'src/component/AmountInput';
 import Divider from 'src/component/Divider';
 import Textarea from 'src/component/Textarea';
 import Body from 'src/component/typography/Body';
@@ -11,6 +10,7 @@ import { TransferForm as Form } from 'src/model/Form';
 import { saveTransferFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { getDeviceId } from 'src/service/transactionService';
+import AmountCurrency from './AmountCurrency';
 import MemberSelectModal from './MemberSelectModal';
 
 const TransferForm = () => {
@@ -38,15 +38,7 @@ const TransferForm = () => {
 
   return (
     <>
-      <div className="pb-4">
-        <AmountInput
-          symbol={book?.symbol ?? '$'}
-          decimal={2}
-          label={t('editTx.amount')}
-          defaultValue={transferFormData.amount}
-          onChange={(e) => saveFormData({ amount: Number(e.target.value) })}
-        />
-      </div>
+      <AmountCurrency />
       <Body className="mb-[5px] text-navy-700">{t('desc.sender')}</Body>
       <div
         className="flex cursor-pointer justify-between gap-[10px]"

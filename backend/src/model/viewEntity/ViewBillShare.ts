@@ -8,6 +8,7 @@ export type ViewBillShare = {
   date: string;
   type: BillType;
   descr: string;
+  currencyId: string;
   amount: number;
   memo: string | null;
   dateCreated: string | null;

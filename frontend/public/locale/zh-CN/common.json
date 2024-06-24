@@ -1,6 +1,7 @@
 {
   "appName": "Bunny Bill",
   "language": "简体中文",
+  "error": "发生错误，请重新再试，若状况持续，请联繫我们，谢谢！",
   "act": {
     "confirm": "确认",
     "cancel": "取消",
@@ -46,9 +47,25 @@
     "head": "系统设定",
     "language": "语言设定",
     "myId": "我的 ID",
+    "myPaymentAccount": "我的收款帐户",
     "dataTransfer": "资料转移",
     "add2HomeScreen": "加入手机主画面",
     "contactUs": "联络我们"
+  },
+  "payment": {
+    "back": "回系统设定",
+    "head": "我的收款帐户",
+    "create": "新增收款帐户",
+    "noPayment": "无收款帐户",
+    "userPayment": "{{ name }} 的收款帐户"
+  },
+  "editPayment": {
+    "back": "回收款帐户",
+    "head": "新增收款帐户",
+    "bank": "银行",
+    "accountNumber": "帐户号码",
+    "notBank": "非银行帐户",
+    "deleteHint": "要删除这个收款帐户吗？"
   },
   "transfer": {
     "back": "回系统设定",
@@ -96,13 +113,22 @@
     "back": "回帐本",
     "head": "设定",
     "bookName": "帐本名称",
-    "currency": "币别",
+    "currency": "币别设定",
     "deleteBook": "删除帐本",
     "showDeleted": "显示已删除帐目",
     "systemDeleteDate": "系统移除日期",
     "systemDeleteHint": "若此帐本累积 100 天未更新，则系统将自动移除此帐本所有资料。",
     "rename": "重新命名",
     "deleteHint": "此处仅能删除这台装置当中的记录，其他装置的记录不受影响"
+  },
+  "currencySetting": {
+    "back": "回设定",
+    "head": "币别设定",
+    "create": "新增",
+    "createCurrency": "新增币别",
+    "name": "名称",
+    "symbol": "符号",
+    "exchangeRate": "汇率"
   },
   "transaction": {
     "back": "回帐本",
@@ -168,7 +194,9 @@
     "pmDesc": "扣除个人额外的金额后，剩馀的款项由所有人平分。",
     "unitWeight": "份",
     "unitPct": "%",
-    "modalTitle": "{{nickname}}的分配"
+    "modalTitle": "{{nickname}}的分配",
+    "currency": "币别",
+    "currencyHint": "欲新增不同货币请至帐本设定页。"
   },
   "settlement": {
     "back": "回帐本",

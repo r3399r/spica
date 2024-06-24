@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig, RawAxiosRequestHeaders } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios';
+import { t } from 'i18next';
 
 // eslint-disable-next-line
 type Options<D = any, P = any> = {
@@ -35,54 +36,31 @@ const publicRequestConfig = <D = unknown, P = any>(
 });
 
 // eslint-disable-next-line
-const privateRequestConfig = <D = unknown, P = any>(
-  method: string,
-  url: string,
-  options?: Options<D, P>,
-) => ({
-  ...defaultConfig,
-  headers: {
-    ...defaultHeader,
-    ...options?.headers,
-    ...({ ['x-api-code']: localStorage.getItem('token') ?? '' } as RawAxiosRequestHeaders),
-  },
-  data: options?.data,
-  params: options?.params,
-  url,
-  method,
-});
+const request = async <T>(config: AxiosRequestConfig<any>) => {
+  try {
+    // eslint-disable-next-line
+    return await axios.request<T, AxiosResponse<T, any>, any>(config);
+  } catch (e) {
+    alert(t('error'));
+    throw new Error(String(e));
+  }
+};
 
 // eslint-disable-next-line
 const get = async <T, P = any>(url: string, options?: Options<any, P>) =>
-  await axios.request<T>(publicRequestConfig<unknown, P>('get', url, options));
+  await request<T>(publicRequestConfig<unknown, P>('get', url, options));
 
 const post = async <T, D = unknown>(url: string, options?: Options<D>) =>
-  await axios.request<T>(publicRequestConfig<D>('post', url, options));
+  await request<T>(publicRequestConfig<D>('post', url, options));
 
 const put = async <T, D = unknown>(url: string, options?: Options<D>) =>
-  await axios.request<T>(publicRequestConfig<D>('put', url, options));
+  await request<T>(publicRequestConfig<D>('put', url, options));
 
 const patch = async <T, D = unknown>(url: string, options?: Options<D>) =>
-  await axios.request<T>(publicRequestConfig<D>('patch', url, options));
+  await request<T>(publicRequestConfig<D>('patch', url, options));
 
 const sendDelete = async <T, D = unknown>(url: string, options?: Options<D>) =>
-  await axios.request<T>(publicRequestConfig<D>('delete', url, options));
-
-// eslint-disable-next-line
-const authGet = async <T, P = any>(url: string, options?: Options<any, P>) =>
-  await axios.request<T>(privateRequestConfig<unknown, P>('get', url, options));
-
-const authPost = async <T, D = unknown>(url: string, options?: Options<D>) =>
-  await axios.request<T>(privateRequestConfig<D>('post', url, options));
-
-const authPut = async <T, D = unknown>(url: string, options?: Options<D>) =>
-  await axios.request<T>(privateRequestConfig<D>('put', url, options));
-
-const authPatch = async <T, D = unknown>(url: string, options?: Options<D>) =>
-  await axios.request<T>(privateRequestConfig<D>('patch', url, options));
-
-const authDelete = async <T, D = unknown>(url: string, options?: Options<D>) =>
-  await axios.request<T>(privateRequestConfig<D>('delete', url, options));
+  await request<T>(publicRequestConfig<D>('delete', url, options));
 
 export default {
   get,
@@ -90,9 +68,4 @@ export default {
   put,
   patch,
   delete: sendDelete,
-  authGet,
-  authPost,
-  authPut,
-  authPatch,
-  authDelete,
 };

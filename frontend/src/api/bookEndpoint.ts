@@ -6,6 +6,8 @@ import {
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
+  PostBookCurrencyRequest,
+  PostBookCurrencyResponse,
   PostBookIdResponse,
   PostBookMemberRequest,
   PostBookMemberResponse,
@@ -15,6 +17,9 @@ import {
   PostBookTransferResponse,
   PutBookBillRequest,
   PutBookBillResponse,
+  PutBookCurrencyPrimaryResponse,
+  PutBookCurrencyRequest,
+  PutBookCurrencyResponse,
   PutBookMemberRequest,
   PutBookMemberResponse,
   PutBookRequest,
@@ -119,6 +124,33 @@ const deleteBookIdTransfer = async (id: string, tid: string, deviceId: string) =
     headers: { 'x-api-device': deviceId },
   });
 
+const postBookIdCurrency = async (id: string, data: PostBookCurrencyRequest, deviceId: string) =>
+  await http.post<PostBookCurrencyResponse>(`book/${id}/currency`, {
+    data,
+    headers: { 'x-api-device': deviceId },
+  });
+
+const putBookIdCurrency = async (
+  id: string,
+  cid: string,
+  data: PutBookCurrencyRequest,
+  deviceId: string,
+) =>
+  await http.put<PutBookCurrencyResponse>(`book/${id}/currency/${cid}`, {
+    data,
+    headers: { 'x-api-device': deviceId },
+  });
+
+const deleteBookIdCurrency = async (id: string, cid: string, deviceId: string) =>
+  await http.delete(`book/${id}/currency/${cid}`, {
+    headers: { 'x-api-device': deviceId },
+  });
+
+const putBookIdCurrencyPrimary = async (id: string, cid: string, deviceId: string) =>
+  await http.put<PutBookCurrencyPrimaryResponse>(`book/${id}/currency/${cid}/primary`, {
+    headers: { 'x-api-device': deviceId },
+  });
+
 export default {
   getBook,
   postBook,
@@ -137,4 +169,8 @@ export default {
   postBookIdTransfer,
   putBookIdTransfer,
   deleteBookIdTransfer,
+  postBookIdCurrency,
+  putBookIdCurrency,
+  deleteBookIdCurrency,
+  putBookIdCurrencyPrimary,
 };

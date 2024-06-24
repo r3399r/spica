@@ -21,6 +21,13 @@ const MainCard = () => {
     () => book?.members?.reduce((prev, current) => prev.plus(current.total), bn(0)),
     [book],
   );
+  const currencyDisplay = useMemo(() => {
+    const primary = book?.currencies?.find((v) => v.isPrimary);
+    if (primary === undefined) return '';
+    if (book?.currencies?.length === 1) return primary.symbol;
+
+    return `${primary.name}${primary.symbol}`;
+  }, [book]);
 
   return (
     <div
@@ -37,7 +44,7 @@ const MainCard = () => {
             {total?.gte(0) ? t('bookDetail.totalIn') : t('bookDetail.totalOut')}
           </Body>
           <H5 className="min-h-[24px] text-navy-700">
-            {book?.symbol}
+            {currencyDisplay}
             {total?.abs().toFormat()}
           </H5>
         </div>

@@ -14,4 +14,9 @@ export const Language = [
     code: 'zh-CN',
     form: 'https://docs.google.com/forms/d/e/1FAIpQLSeUk9z9zevegaKzu1zuUlElWyZnRRPo798Z16QCBRJ17x8wxg/viewform?usp=sf_link',
   },
+  {
+    name: '日本語',
+    code: 'jp',
+    form: 'https://docs.google.com/forms/d/e/1FAIpQLSe1KgW43gWaH1FDuu3DeD67t5UJExvAr7DmLnGO54mRaMMMLg/viewform?usp=sf_link',
+  },
 ];

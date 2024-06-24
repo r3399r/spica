@@ -31,12 +31,15 @@ export const loadBookList = async () => {
         lastDateUpdated: v.lastDateUpdated,
         members: null,
         transactions: null,
+        currencies: null,
         txCount: null,
         ...savedBook,
       };
     });
 
     dispatch(setBooks(updatedBooks));
+
+    return updatedBooks;
   } finally {
     if (loading) dispatch(finishWaiting());
   }
@@ -57,6 +60,7 @@ export const createBook = async (data: PostBookRequest) => {
         lastDateUpdated: new Date().toISOString(),
         members: null,
         transactions: null,
+        currencies: [],
         txCount: 0,
       }),
     );
@@ -70,16 +74,21 @@ export const createBook = async (data: PostBookRequest) => {
 export const loadBookById = async (id: string) => {
   try {
     dispatch(startWaiting());
-    const { books } = getState().book;
+    const books = await loadBookList();
 
     const savedBook = books?.find((v) => v.id === id);
-    if (savedBook && savedBook.members !== null && savedBook.transactions !== null) return;
+    if (
+      savedBook &&
+      savedBook.members !== null &&
+      savedBook.transactions !== null &&
+      savedBook.members !== null
+    )
+      return;
 
     const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.getBookId(id, deviceId, { limit: '50', offset: '0' });
 
-    const index = books?.findIndex((v) => v.id === id) ?? -1;
-    if (books === null || index === -1)
+    if (books.length === 0)
       dispatch(
         appendBook({
           ...res.data,
@@ -88,12 +97,16 @@ export const loadBookById = async (id: string) => {
         }),
       );
     else {
-      const tmp = [...books];
-      tmp[index] = {
-        ...res.data,
-        showDelete: tmp[index].showDelete,
-        txCount: Number(res.headers['x-pagination-count']),
-      };
+      const tmp = books.map((v) => {
+        if (v.id === id)
+          return {
+            ...res.data,
+            showDelete: v.showDelete,
+            txCount: Number(res.headers['x-pagination-count']),
+          };
+
+        return v;
+      });
       dispatch(setBooks(tmp));
     }
   } finally {

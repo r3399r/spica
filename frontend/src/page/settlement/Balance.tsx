@@ -14,6 +14,13 @@ const Balance = () => {
   const navigate = useNavigate();
   const book = useBook();
   const members = useMemo(() => book?.members ?? [], [book]);
+  const currencyDisplay = useMemo(() => {
+    const primary = book?.currencies?.find((v) => v.isPrimary);
+    if (primary === undefined) return '';
+    if (book?.currencies?.length === 1) return primary.symbol;
+
+    return `${primary.name}${primary.symbol}`;
+  }, [book]);
 
   return (
     <>
@@ -36,7 +43,7 @@ const Balance = () => {
               >
                 {v.total < 0 ? t('desc.out') : t('desc.in')}
               </Body>
-              <Body size="l" className="text-navy-700">{`${book?.symbol}${bn(v.total)
+              <Body size="l" className="text-navy-700">{`${currencyDisplay}${bn(v.total)
                 .abs()
                 .toFormat()}`}</Body>
             </div>

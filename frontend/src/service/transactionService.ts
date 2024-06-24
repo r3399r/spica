@@ -200,7 +200,8 @@ const getBillData = () => {
     billFormData.descr === undefined ||
     billFormData.amount === undefined ||
     billFormData.former === undefined ||
-    billFormData.latter === undefined
+    billFormData.latter === undefined ||
+    billFormData.currencyId === undefined
   )
     throw new Error('unexpected');
 
@@ -208,6 +209,7 @@ const getBillData = () => {
     date: billFormData.date,
     type: billFormData.type as BillType,
     descr: billFormData.descr,
+    currencyId: billFormData.currencyId,
     amount: billFormData.amount,
     former: billFormData.former,
     latter: billFormData.latter,
@@ -273,7 +275,8 @@ const getTransferData = () => {
     transferFormData.date === undefined ||
     transferFormData.amount === undefined ||
     transferFormData.srcMemberId === undefined ||
-    transferFormData.dstMemberId === undefined
+    transferFormData.dstMemberId === undefined ||
+    transferFormData.currencyId === undefined
   )
     throw new Error('unexpected');
 
@@ -283,6 +286,7 @@ const getTransferData = () => {
     srcMemberId: transferFormData.srcMemberId,
     dstMemberId: transferFormData.dstMemberId,
     memo: transferFormData.memo === '' ? undefined : transferFormData.memo,
+    currencyId: transferFormData.currencyId,
   };
 };
 

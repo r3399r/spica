@@ -34,6 +34,10 @@ const BillFormer = () => {
     () => remainingAmount(billFormData.amount ?? 0, billFormData.former ?? []),
     [billFormData.former],
   );
+  const symbol = useMemo(
+    () => book?.currencies?.find((v) => v.id === billFormData.currencyId)?.symbol,
+    [book, billFormData],
+  );
 
   useEffect(() => {
     setInput(
@@ -74,11 +78,13 @@ const BillFormer = () => {
           : o,
       ),
     );
-    addMemberToBillFormer(memberId, {
-      id: memberId,
-      method: ShareMethod.Amount,
-      value: Number(v.target.value),
-    });
+    if (Number(v.target.value) > 0)
+      addMemberToBillFormer(memberId, {
+        id: memberId,
+        method: ShareMethod.Amount,
+        value: Number(v.target.value),
+      });
+    else removeMemberFromBillFormer(memberId);
   };
 
   const onCheck = (memberId: string) => (v: ChangeEvent<HTMLInputElement>) => {
@@ -105,11 +111,11 @@ const BillFormer = () => {
             }}
           />
           <div className="flex items-center justify-between">
-            <H2>{`${book?.symbol}${bnFormat(billFormData.amount ?? 0)}`}</H2>
+            <H2>{`${symbol}${bnFormat(billFormData.amount ?? 0)}`}</H2>
             <Body className={classNames({ 'text-tomato-500': remaining !== 0 })}>{`${t(
               remaining > 0 ? 'editTx.greaterThan' : 'editTx.lessThan',
               {
-                symbol: book?.symbol,
+                symbol,
                 amount: bn(remaining).abs().toFormat(),
               },
             )}`}</Body>
@@ -130,13 +136,13 @@ const BillFormer = () => {
                 </label>
               </div>
               <AmountInput
-                symbol={book?.symbol ?? '$'}
+                symbol={symbol ?? '$'}
                 decimal={2}
                 className={classNames('!w-[90px]', {
                   'text-navy-900': v.customAmount,
                   'text-navy-100': !v.customAmount,
                 })}
-                value={`${book?.symbol}${v.amount}`}
+                value={`${symbol}${v.amount}`}
                 onChange={onInput(v.id)}
               />
             </div>

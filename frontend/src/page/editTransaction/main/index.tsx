@@ -13,7 +13,7 @@ import { saveBillFormData, saveTransferFormData, setTxFormType } from 'src/redux
 import { RootState } from 'src/redux/store';
 import { loadBookById } from 'src/service/bookService';
 import { addTransaction, isTxSubmittable, reviseTransaction } from 'src/service/transactionService';
-import BillForm from './BilForm';
+import BillForm from './BillForm';
 import TransferForm from './TransferForm';
 
 const Main = () => {

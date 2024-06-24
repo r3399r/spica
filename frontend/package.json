@@ -1,9 +1,9 @@
 {
   "name": "spica-frontend",
-  "version": "1.6.16",
+  "version": "1.7.0",
   "private": true,
   "scripts": {
-    "start": "cross-env WATCHPACK_POLLING=true BROWSER=none PORT=3000 react-scripts start",
+    "start": "cross-env WATCHPACK_POLLING=true BROWSER=none PORT=3001 react-scripts start",
     "build": "cross-env BUILD_PATH='./dist' react-scripts build",
     "test": "react-scripts test --coverage",
     "test:nowatch": "npm run test -- --watchAll=false",
@@ -14,7 +14,7 @@
     "fix:format": "npm run lint:format -- --write",
     "lint": "run-s lint:*",
     "fix": "run-s fix:*",
-    "i18n-sync": "i18next-locales-sync -p en -s zh-CN zh-TW -l public/locale",
+    "i18n-sync": "i18next-locales-sync -p en -s zh-CN zh-TW jp -l public/locale",
     "clean": "del-cli dist -f",
     "pre:commit": "npm run lint",
     "pre:deploy": "run-s clean build"

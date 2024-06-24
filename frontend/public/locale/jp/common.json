@@ -1,0 +1,213 @@
+{
+  "appName": "Bunny Bill",
+  "language": "日本語",
+  "error": "エラーが発生しました。再試行してください。状況が続く場合は、お問い合わせください、ありがとうございます。",
+  "act": {
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "submit": "送出",
+    "delete": "削除",
+    "reset": "リセット",
+    "clear": "クリア",
+    "back": "戻る",
+    "loadMore": "もっと読み込む",
+    "export": "エクスポート"
+  },
+  "desc": {
+    "in": "收入",
+    "out": "支出",
+    "transfer": "送金",
+    "payer": "支払者",
+    "sharer": "共有者",
+    "sender": "送金者",
+    "receiver": "受取人",
+    "memo": "メモ",
+    "copy": "コピー成功！",
+    "exportTitle": "エクスポート",
+    "exportHint": "取引明細をPDFファイルにエクスポートする"
+  },
+  "landing": {
+    "title": "Bunny Bill",
+    "subtitle": "簡単に割り勘しましょう",
+    "start": "はじめる",
+    "featureLogin": "ログインしない",
+    "featurePwa": "サイトをホーム画面に追加するだけでいつでも使用できます",
+    "featureEasy": "シンプルで使いやすい"
+  },
+  "bookList": {
+    "bookList": "帳簿リスト",
+    "newBook": "新しい帳簿を作成する",
+    "noBook": "帳簿がない",
+    "bookName": "帳簿名*",
+    "nickname": "ニックネーム",
+    "nicknameHelper": "オプション、後でメンバーを追加できます"
+  },
+  "systemSetting": {
+    "back": "帳簿リスト",
+    "head": "システム設定",
+    "language": "表示言語",
+    "myId": "マイID",
+    "myPaymentAccount": "私の支払いアカウント",
+    "dataTransfer": "データ移行",
+    "add2HomeScreen": "ホーム画面に追加する",
+    "contactUs": "お問い合わせ"
+  },
+  "payment": {
+    "back": "戻る",
+    "head": "私の支払いアカウント",
+    "create": "アカウントを追加",
+    "noPayment": "支払いアカウントがない",
+    "userPayment": "{{ name }} の支払いアカウント"
+  },
+  "editPayment": {
+    "back": "支払いアカウントに戻る",
+    "head": "支払いアカウントを追加",
+    "bank": "口座",
+    "accountNumber": "口座番号",
+    "notBank": "非銀行帳戶",
+    "deleteHint": "この支払いアカウントを削除しますか"
+  },
+  "transfer": {
+    "back": "戻る",
+    "head": "データ移行",
+    "outHead": "データ転出",
+    "outHint": "他のデバイスにキーを入力すると、このデバイスのデータが新しいデバイスにコピーされます。",
+    "outBtn": "キーを生成",
+    "inHead": "データ転入",
+    "inHint": "別のデバイスからキーを入力してデータをインポートします",
+    "inBtn": "キーを入力",
+    "modalOutHead": "キー",
+    "modalOutHint": "このキーは 24 時間で期限切れになります",
+    "modalOutClose": "閉じる",
+    "modalOutCopy": "キーをコピー",
+    "modalInLabel": "キーを入力"
+  },
+  "add2HomeScreen": {
+    "back": "戻る",
+    "iosStep1": "Safari を使用してこのサイトを開き、画面下部の共有アイコンをクリックします。",
+    "iosStep2": "「ホーム画面に追加」を選ぶ",
+    "iosStep3": "「追加」をクリックします",
+    "androidStep1": "Chrome を使用してこのサイトを開き、画面右上隅の「その他」アイコンをクリックします。",
+    "androidStep2": "「ホーム画面に追加」を選ぶ",
+    "androidStep3": "「追加」をクリックします",
+    "done": "上記の手順を完了すると、ホーム画面に Bunny Bill アイコンが表示されます。"
+  },
+  "bookDetail": {
+    "back": "戻る",
+    "totalOut": "総費用",
+    "totalIn": "総収入",
+    "member": "メンバー",
+    "balance": "バランス",
+    "noMemberHint": "会計を開始する前に、「メンバー」に移動して共有者を追加してください。",
+    "newTransaction": "取引を追加",
+    "multiple": "マルチ",
+    "billOutNote": "{{member}} は {{symbol}}{{amount}} を支払った",
+    "billInNote": "{{member}} は {{symbol}}{{amount}} を受け取った",
+    "transferNote": "{{srcMember}} は {{dstMember}} に {{symbol}}{{amount}} を送金した",
+    "settlement": "決済",
+    "shouldReceive": "収受",
+    "shouldPay": "返済",
+    "deleted": "削除された"
+  },
+  "bookSetting": {
+    "back": "戻る",
+    "head": "設定",
+    "bookName": "帳簿名",
+    "currency": "通貨設定",
+    "deleteBook": "帳簿を削除",
+    "showDeleted": "削除された取引を表示",
+    "systemDeleteDate": "帳簿削除された日付",
+    "systemDeleteHint": "この帳簿が 100 日間更新されなかった場合、この帳簿のすべてのデータを自動的に削除します。",
+    "rename": "名の変更",
+    "deleteHint": "ここで削除できるのはこのデバイス上の記録のみであり、他のデバイス上の記録は影響を受けません。"
+  },
+  "currencySetting": {
+    "back": "戻る",
+    "head": "通貨設定",
+    "create": "入力",
+    "createCurrency": "通貨入力",
+    "name": "名",
+    "symbol": "記号",
+    "exchangeRate": "為替レート"
+  },
+  "transaction": {
+    "back": "戻る",
+    "deleted": "削除された",
+    "deleteHint": "この取引を削除しますか？",
+    "createdAt": " {{date}} に作成",
+    "updatedAt": " {{date}} に変更",
+    "deletedAt": " {{date}} に削除",
+    "updateContent": "- {{key}} {{from}} から {{to}} に変更しました",
+    "removeContent": "- {{key}} {{from}} は削除します",
+    "createContent": "- {{key}} {{to}} は作成します",
+    "key": {
+      "date": "日付",
+      "amount": "金額",
+      "memo": "メモ",
+      "descr": "品目",
+      "formerIn": "受取者",
+      "formerOut": "支払者",
+      "latter": "共有者",
+      "srcMemberId": "送金者",
+      "dstMemberId": "受取者"
+    }
+  },
+  "member": {
+    "head": "帳簿メンバー",
+    "back": "戻る",
+    "create": "追加",
+    "nickname": "ニックネーム",
+    "noMemberHint": "まだメンバーがいません。ニックネームを入力して新しいメンバーを追加してください。",
+    "shareWithFriend": "帳簿を友達と共有する",
+    "shareText": "帳簿「{{book}}」を共有するには、リンクをクリックしてください",
+    "shareLink": "リンクを共有",
+    "inputId": "友達のID入力",
+    "edit": "メンバー編集",
+    "deleteHint": "「{{nickname}}」を削除しますか？",
+    "self": "私",
+    "selfHint1": "「{{nickname}}」がニックネームを設定",
+    "selfHint2": "「{{nickname}}」はニックネームではない",
+    "friendPlaceholder": "友達の ID",
+    "friendHint": "ユーサのIDはシステム設定で確認できます"
+  },
+  "share": {
+    "join": "帳簿に参加しますか？",
+    "code": "コード",
+    "wrongCode": "コードが違い"
+  },
+  "editTx": {
+    "type": "項目",
+    "date": "日付",
+    "descr": "品目",
+    "amount": "金額",
+    "share": "共有",
+    "adjust": "調整",
+    "all": "全部",
+    "allShare": "全員で平等に分ける",
+    "lessThan": "未割り当ての {{symbol}}{{amount}} があります",
+    "greaterThan": "{{symbol}}{{amount}} を超える",
+    "weight": "共有",
+    "pct": "パーセント",
+    "pm": "金額調整",
+    "weightDesc": "各人の保有株数に応じて分配され、金額を入力した場合はその金額が優先されます。",
+    "pctDesc": "各人の割合に応じて分配し、金額も入力できます。",
+    "pmDesc": "個人の追加金額を差し引いた残りの金額を所有者全員で均等に分配します。",
+    "unitWeight": "こ",
+    "unitPct": "%",
+    "modalTitle": "{{nickname}}の割当",
+    "currency": "通貨",
+    "currencyHint": "他の通貨を追加したいたり、帳簿設定ページに移動してください"
+  },
+  "settlement": {
+    "back": "戻る",
+    "check": "決済",
+    "balance": "バランス",
+    "shouldPay": "支払う",
+    "isCleared": "すべての支払いが決済しました"
+  },
+  "memberModal": {
+    "head": "ニックネームを選ぶ",
+    "hint": "後で「帳簿メンバー」にニックネームを追加することもできます。",
+    "skip": "スキップ"
+  }
+}

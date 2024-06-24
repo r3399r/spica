@@ -16,6 +16,9 @@ export class TransferEntity implements Transfer {
   @Column({ type: 'timestamp' })
   date!: string;
 
+  @Column({ type: 'uuid', name: 'currency_id' })
+  currencyId!: string;
+
   @Column({ type: 'float' })
   amount!: number;
 

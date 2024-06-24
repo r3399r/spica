@@ -10,7 +10,7 @@ export type ShareForm = { code: string };
 
 export type RenameBookForm = { name: string };
 
-export type ReviseSymbolForm = { symbol: string };
+export type CreateCurrencyForm = { name: string; symbol: string; exchangeRate: string };
 
 export type RenameMemberForm = { nickname: string };
 
@@ -18,6 +18,7 @@ export type BillForm = {
   date: string;
   type: 'in' | 'out';
   descr: string;
+  currencyId: string;
   amount: number;
   former: ShareDetail[];
   latter: ShareDetail[];
@@ -26,6 +27,7 @@ export type BillForm = {
 
 export type TransferForm = {
   date: string;
+  currencyId: string;
   amount: number;
   srcMemberId: string;
   dstMemberId: string;
@@ -46,4 +48,13 @@ export type DataTransferForm = {
 
 export type MemberSelectForm = {
   id: string;
+};
+
+export type CurrencySelectForm = {
+  id: string;
+};
+
+export type PaymentForm = {
+  code: string;
+  account: string;
 };

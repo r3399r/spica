@@ -23,6 +23,9 @@ export class BillEntity implements Bill {
   @Column({ type: 'text' })
   descr!: string;
 
+  @Column({ type: 'uuid', name: 'currency_id' })
+  currencyId!: string;
+
   @Column({ type: 'float' })
   amount!: number;
 

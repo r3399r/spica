@@ -3,9 +3,11 @@ import { inject, injectable } from 'inversify';
 import { BillAccess } from 'src/access/BillAccess';
 import { BillShareAccess } from 'src/access/BillShareAccess';
 import { BookAccess } from 'src/access/BookAccess';
+import { CurrencyAccess } from 'src/access/CurrencyAccess';
 import { DbAccess } from 'src/access/DbAccess';
 import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
+import { MemberSettlementAccess } from 'src/access/MemberSettlementAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
 import { ViewBillShareAccess } from 'src/access/ViewBillShareAccess';
 import { ViewBookAccess } from 'src/access/ViewBookAccess';
@@ -20,6 +22,8 @@ import {
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
+  PostBookCurrencyRequest,
+  PostBookCurrencyResponse,
   PostBookIdResponse,
   PostBookMemberRequest,
   PostBookMemberResponse,
@@ -29,6 +33,9 @@ import {
   PostBookTransferResponse,
   PutBookBillRequest,
   PutBookBillResponse,
+  PutBookCurrencyPrimaryResponse,
+  PutBookCurrencyRequest,
+  PutBookCurrencyResponse,
   PutBookMemberRequest,
   PutBookMemberResponse,
   PutBookRequest,
@@ -40,12 +47,16 @@ import { Bill } from 'src/model/entity/Bill';
 import { BillEntity } from 'src/model/entity/BillEntity';
 import { BillShareEntity } from 'src/model/entity/BillShareEntity';
 import { BookEntity } from 'src/model/entity/BookEntity';
+import { Currency } from 'src/model/entity/Currency';
+import { CurrencyEntity } from 'src/model/entity/CurrencyEntity';
 import { DeviceBookEntity } from 'src/model/entity/DeviceBookEntity';
 import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
+import { MemberSettlement } from 'src/model/entity/MemberSettlement';
+import { MemberSettlementEntity } from 'src/model/entity/MemberSettlementEntity';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
-import { BadRequestError } from 'src/model/error';
+import { BadRequestError, InternalServerError } from 'src/model/error';
 import { Pagination, PaginationParams } from 'src/model/Pagination';
 import {
   BookDetail,
@@ -78,6 +89,12 @@ export class BookService {
   @inject(MemberAccess)
   private readonly memberAccess!: MemberAccess;
 
+  @inject(MemberSettlementAccess)
+  private readonly memberSettlementAccess!: MemberSettlementAccess;
+
+  @inject(CurrencyAccess)
+  private readonly currencyAccess!: CurrencyAccess;
+
   @inject(BillAccess)
   private readonly billAccess!: BillAccess;
 
@@ -107,33 +124,53 @@ export class BookService {
     data: PostBookRequest,
     deviceId: string
   ): Promise<PostBookResponse> {
-    const book = new BookEntity();
-    book.name = data.bookName;
-    book.code = randomBase10(6);
-    book.symbol = '$';
+    try {
+      await this.dbAccess.startTransaction();
+      const book = new BookEntity();
+      book.name = data.bookName;
+      book.code = randomBase10(6);
+      book.symbol = '$';
+      const newBook = await this.bookAccess.save(book);
 
-    const newBook = await this.bookAccess.save(book);
+      const deviceBook = new DeviceBookEntity();
+      deviceBook.deviceId = deviceId;
+      deviceBook.bookId = newBook.id;
+      deviceBook.showDelete = false;
+      await this.deviceBookAccess.save(deviceBook);
 
-    const deviceBook = new DeviceBookEntity();
-    deviceBook.deviceId = deviceId;
-    deviceBook.bookId = newBook.id;
-    deviceBook.showDelete = false;
+      const currency = new CurrencyEntity();
+      currency.bookId = newBook.id;
+      currency.name = 'TWD';
+      currency.symbol = '$';
+      currency.isPrimary = true;
+      currency.deletable = false;
+      const newCurrency = await this.currencyAccess.save(currency);
 
-    await this.deviceBookAccess.save(deviceBook);
+      if (data.nickname) {
+        const member = new MemberEntity();
+        member.bookId = newBook.id;
+        member.nickname = data.nickname;
+        member.deviceId = deviceId;
+        member.total = 0;
+        member.balance = 0;
+        member.deletable = true;
+        const newMember = await this.memberAccess.save(member);
 
-    if (data.nickname) {
-      const member = new MemberEntity();
-      member.bookId = newBook.id;
-      member.nickname = data.nickname;
-      member.deviceId = deviceId;
-      member.total = 0;
-      member.balance = 0;
-      member.deletable = true;
+        const memberSettlement = new MemberSettlementEntity();
+        memberSettlement.memberId = newMember.id;
+        memberSettlement.currencyId = newCurrency.id;
+        memberSettlement.balance = 0;
+        memberSettlement.total = 0;
+        await this.memberSettlementAccess.save(memberSettlement);
+      }
 
-      await this.memberAccess.save(member);
+      await this.dbAccess.commitTransaction();
+
+      return newBook;
+    } catch (e) {
+      await this.dbAccess.rollbackTransaction();
+      throw e;
     }
-
-    return newBook;
   }
 
   private async checkDeviceHasBook(
@@ -168,8 +205,12 @@ export class BookService {
     const items: History['items'] = [];
     if (String(oldTx.date) !== String(newTx.date))
       items.push({ key: 'date', from: oldTx.date, to: newTx.date });
-    if (oldTx.amount !== newTx.amount)
-      items.push({ key: 'amount', from: oldTx.amount, to: newTx.amount });
+    if (oldTx.amount !== newTx.amount || oldTx.currencyId !== newTx.currencyId)
+      items.push({
+        key: 'amount',
+        from: `${oldTx.currencyId}:${oldTx.amount}`,
+        to: `${newTx.currencyId}:${newTx.amount}`,
+      });
     if (oldTx.srcMemberId !== newTx.srcMemberId)
       items.push({
         key: 'srcMemberId',
@@ -195,8 +236,12 @@ export class BookService {
     const items: History['items'] = [];
     if (String(oldTx.date) !== String(newTx.date))
       items.push({ key: 'date', from: oldTx.date, to: newTx.date });
-    if (oldTx.amount !== newTx.amount)
-      items.push({ key: 'amount', from: oldTx.amount, to: newTx.amount });
+    if (oldTx.amount !== newTx.amount || oldTx.currencyId !== newTx.currencyId)
+      items.push({
+        key: 'amount',
+        from: `${oldTx.currencyId}:${oldTx.amount}`,
+        to: `${newTx.currencyId}:${newTx.amount}`,
+      });
     if (oldTx.descr !== newTx.descr)
       items.push({ key: 'descr', from: oldTx.descr, to: newTx.descr });
     if (oldTx.memo !== newTx.memo)
@@ -205,11 +250,14 @@ export class BookService {
     const sameFormer = intersectionBy(newTx.former, oldTx.former, 'id');
     for (const former of sameFormer) {
       const old = oldTx.former.find((v) => v.id === former.id);
-      if (old?.amount !== former.amount)
+      if (
+        old?.amount !== former.amount ||
+        oldTx.currencyId !== newTx.currencyId
+      )
         items.push({
           key: 'former',
-          from: `${old?.id}:${old?.amount}`,
-          to: `${former.id}:${former.amount}`,
+          from: `${old?.id}:${oldTx.currencyId}:${old?.amount}`,
+          to: `${former.id}:${newTx.currencyId}:${former.amount}`,
         });
     }
     const addFormer = differenceBy(newTx.former, oldTx.former, 'id');
@@ -217,25 +265,28 @@ export class BookService {
       items.push({
         key: 'former',
         from: null,
-        to: `${former.id}:${former.amount}`,
+        to: `${former.id}:${newTx.currencyId}:${former.amount}`,
       });
 
     const minusFormer = differenceBy(oldTx.former, newTx.former, 'id');
     for (const former of minusFormer)
       items.push({
         key: 'former',
-        from: `${former.id}:${former.amount}`,
+        from: `${former.id}:${oldTx.currencyId}:${former.amount}`,
         to: null,
       });
 
     const sameLatter = intersectionBy(newTx.latter, oldTx.latter, 'id');
     for (const latter of sameLatter) {
       const old = oldTx.latter.find((v) => v.id === latter.id);
-      if (old?.amount !== latter.amount)
+      if (
+        old?.amount !== latter.amount ||
+        oldTx.currencyId !== newTx.currencyId
+      )
         items.push({
           key: 'latter',
-          from: `${old?.id}:${old?.amount}`,
-          to: `${latter.id}:${latter.amount}`,
+          from: `${old?.id}:${oldTx.currencyId}:${old?.amount}`,
+          to: `${latter.id}:${newTx.currencyId}:${latter.amount}`,
         });
     }
     const addLatter = differenceBy(newTx.latter, oldTx.latter, 'id');
@@ -243,14 +294,14 @@ export class BookService {
       items.push({
         key: 'latter',
         from: null,
-        to: `${latter.id}:${latter.amount}`,
+        to: `${latter.id}:${newTx.currencyId}:${latter.amount}`,
       });
 
     const minusLatter = differenceBy(oldTx.latter, newTx.latter, 'id');
     for (const latter of minusLatter)
       items.push({
         key: 'latter',
-        from: `${latter.id}:${latter.amount}`,
+        from: `${latter.id}:${oldTx.currencyId}:${latter.amount}`,
         to: null,
       });
 
@@ -272,6 +323,7 @@ export class BookService {
           srcMemberId: tx.srcMemberId,
           dstMemberId: tx.dstMemberId,
           memo: tx.memo,
+          currencyId: tx.currencyId,
           dateCreated: tx.dateCreated,
           dateUpdated: tx.dateUpdated,
           dateDeleted: tx.dateDeleted,
@@ -290,6 +342,7 @@ export class BookService {
           srcMemberId: tx.srcMemberId,
           dstMemberId: tx.dstMemberId,
           memo: tx.memo,
+          currencyId: tx.currencyId,
           dateCreated: lastTx.dateCreated,
           dateUpdated: tx.dateUpdated,
           dateDeleted: tx.dateDeleted,
@@ -340,6 +393,7 @@ export class BookService {
               ]
             : [],
           memo: share.memo,
+          currencyId: share.currencyId,
           dateCreated: share.dateCreated,
           dateUpdated: share.dateUpdated,
           dateDeleted: share.dateDeleted,
@@ -402,8 +456,41 @@ export class BookService {
 
   private async getMemberByBook(id: string) {
     const members = await this.memberAccess.findByBookId(id);
+    const memberSettles = await this.memberSettlementAccess.find({
+      where: { currency: { bookId: id } },
+    });
 
-    return members.sort(compare('dateCreated'));
+    const res: Member[] = [];
+    for (const member of members) {
+      const settles = memberSettles.filter((v) => v.memberId === member.id);
+      const balance = settles
+        .reduce(
+          (prev, current) =>
+            bn(current.balance)
+              .times(current.currency.exchangeRate ?? 1)
+              .dp(2)
+              .plus(prev),
+          bn(0)
+        )
+        .toNumber();
+      const total = settles
+        .reduce(
+          (prev, current) =>
+            bn(current.total)
+              .times(current.currency.exchangeRate ?? 1)
+              .dp(2)
+              .plus(prev),
+          bn(0)
+        )
+        .toNumber();
+      res.push({
+        ...member,
+        balance,
+        total,
+      });
+    }
+
+    return res.sort(compare('dateCreated'));
   }
 
   private async getBookDetail(
@@ -413,8 +500,9 @@ export class BookService {
     const limit = paginate ? Number(paginate.limit) : 50;
     const offset = paginate ? Number(paginate.offset) : 0;
 
-    const [members, { data: tx, count }] = await Promise.all([
+    const [members, currencies, { data: tx, count }] = await Promise.all([
       this.getMemberByBook(book.id),
+      this.currencyAccess.findByBookId(book.id),
       this.vTransactionAccess.findAndCountByBookId(book.id, {
         order: { date: 'desc' },
         take: limit,
@@ -436,6 +524,7 @@ export class BookService {
       data: {
         ...book,
         members,
+        currencies: currencies.sort(compare('dateCreated')),
         transactions: [
           ...this.handleTransfer(transfers),
           ...this.handleBill(billShares),
@@ -532,14 +621,37 @@ export class BookService {
   ): Promise<PostBookMemberResponse> {
     await this.checkDeviceHasBook(deviceId, id);
 
-    const member = new MemberEntity();
-    member.bookId = id;
-    member.nickname = data.nickname;
-    member.total = 0;
-    member.balance = 0;
-    member.deletable = true;
+    try {
+      await this.dbAccess.startTransaction();
 
-    return await this.memberAccess.save(member);
+      const member = new MemberEntity();
+      member.bookId = id;
+      member.nickname = data.nickname;
+      member.total = 0;
+      member.balance = 0;
+      member.deletable = true;
+
+      const newMember = await this.memberAccess.save(member);
+      const currencies = await this.currencyAccess.findByBookId(id);
+      await Promise.all(
+        currencies.map((v) => {
+          const membersettlement = new MemberSettlementEntity();
+          membersettlement.memberId = newMember.id;
+          membersettlement.currencyId = v.id;
+          membersettlement.balance = 0;
+          membersettlement.total = 0;
+
+          return this.memberSettlementAccess.save(membersettlement);
+        })
+      );
+
+      await this.dbAccess.commitTransaction();
+
+      return newMember;
+    } catch (e) {
+      await this.dbAccess.rollbackTransaction();
+      throw e;
+    }
   }
 
   public async reviseMemberNickname(
@@ -596,13 +708,15 @@ export class BookService {
   }
 
   private async updateMember(
-    id: string,
+    memberId: string,
+    currencyId: string,
     amount: number | BigNumber,
     updateTotal = false
   ) {
-    const oldMember = await this.memberAccess.findById(id);
+    const oldMember = await this.memberAccess.findById(memberId);
     const newMember: Member = {
       ...oldMember,
+      // total & balance are depreacated
       total: updateTotal
         ? bn(oldMember.total).plus(amount).toNumber()
         : oldMember.total,
@@ -610,6 +724,25 @@ export class BookService {
       deletable: false,
     };
     await this.memberAccess.update(newMember);
+
+    // feature multiple currencies
+    const oldMemberSettlement = await this.memberSettlementAccess.findOneOrFail(
+      { where: { memberId, currencyId } }
+    );
+    const newMemberSettlement: MemberSettlement = {
+      ...oldMemberSettlement,
+      total: updateTotal
+        ? bn(oldMemberSettlement.total).plus(amount).toNumber()
+        : oldMemberSettlement.total,
+      balance: bn(oldMemberSettlement.balance).plus(amount).toNumber(),
+    };
+    await this.memberSettlementAccess.save(newMemberSettlement);
+
+    const currency = await this.currencyAccess.findById(currencyId);
+    if (currency.deletable === true) {
+      currency.deletable = false;
+      await this.currencyAccess.save(currency);
+    }
 
     return newMember;
   }
@@ -632,6 +765,9 @@ export class BookService {
       bill.descr = data.descr;
       bill.amount = data.amount;
       bill.memo = data.memo ?? null;
+      bill.currencyId =
+        data.currencyId ??
+        (await this.currencyAccess.findPrimaryByBookId(id)).id;
 
       const newBill = await this.billAccess.save(bill);
       this.validateDetail(data.amount, data.former);
@@ -652,7 +788,7 @@ export class BookService {
 
           await this.billShareAccess.save(billShare);
 
-          return await this.updateMember(v.id, amount);
+          return await this.updateMember(v.id, newBill.currencyId, amount);
         })
       );
       await Promise.all(
@@ -670,7 +806,12 @@ export class BookService {
 
           await this.billShareAccess.save(billShare);
 
-          return await this.updateMember(v.id, amount, true);
+          return await this.updateMember(
+            v.id,
+            newBill.currencyId,
+            amount,
+            true
+          );
         })
       );
 
@@ -708,6 +849,7 @@ export class BookService {
       positive.map((v) =>
         this.updateMember(
           v.memberId,
+          oldBill.currencyId,
           bn(v.amount).negated(),
           oldBill.type === BillType.In
         )
@@ -717,6 +859,7 @@ export class BookService {
       negative.map((v) =>
         this.updateMember(
           v.memberId,
+          oldBill.currencyId,
           bn(v.amount).negated(),
           oldBill.type === BillType.Out
         )
@@ -747,6 +890,9 @@ export class BookService {
       bill.descr = data.descr;
       bill.amount = data.amount;
       bill.memo = data.memo ?? null;
+      bill.currencyId =
+        data.currencyId ??
+        (await this.currencyAccess.findPrimaryByBookId(bookId)).id;
 
       const newBill = await this.billAccess.save(bill);
       this.validateDetail(data.amount, data.former);
@@ -767,7 +913,7 @@ export class BookService {
 
           await this.billShareAccess.save(billShare);
 
-          return await this.updateMember(v.id, amount);
+          return await this.updateMember(v.id, newBill.currencyId, amount);
         })
       );
       await Promise.all(
@@ -785,7 +931,12 @@ export class BookService {
 
           await this.billShareAccess.save(billShare);
 
-          return await this.updateMember(v.id, amount, true);
+          return await this.updateMember(
+            v.id,
+            newBill.currencyId,
+            amount,
+            true
+          );
         })
       );
 
@@ -847,10 +998,21 @@ export class BookService {
       transfer.srcMemberId = data.srcMemberId;
       transfer.dstMemberId = data.dstMemberId;
       transfer.memo = data.memo ?? null;
+      transfer.currencyId =
+        data.currencyId ??
+        (await this.currencyAccess.findPrimaryByBookId(id)).id;
 
-      await this.updateMember(data.srcMemberId, bn(data.amount));
-      await this.updateMember(data.dstMemberId, bn(data.amount).negated());
       const newTransfer = await this.transferAccess.save(transfer);
+      await this.updateMember(
+        data.srcMemberId,
+        newTransfer.currencyId,
+        bn(data.amount)
+      );
+      await this.updateMember(
+        data.dstMemberId,
+        newTransfer.currencyId,
+        bn(data.amount).negated()
+      );
 
       await this.dbAccess.commitTransaction();
 
@@ -884,23 +1046,39 @@ export class BookService {
       });
       await this.updateMember(
         oldTransfer.srcMemberId,
+        oldTransfer.currencyId,
         bn(oldTransfer.amount).negated()
       );
-      await this.updateMember(oldTransfer.dstMemberId, bn(oldTransfer.amount));
+      await this.updateMember(
+        oldTransfer.dstMemberId,
+        oldTransfer.currencyId,
+        bn(oldTransfer.amount)
+      );
 
-      const newTransfer = new TransferEntity();
-      newTransfer.id = transferId;
-      newTransfer.ver = bn(oldTransfer.ver).plus(1).toString();
-      newTransfer.bookId = bookId;
-      newTransfer.date = data.date;
-      newTransfer.amount = data.amount;
-      newTransfer.srcMemberId = data.srcMemberId;
-      newTransfer.dstMemberId = data.dstMemberId;
-      newTransfer.memo = data.memo ?? null;
+      const transfer = new TransferEntity();
+      transfer.id = transferId;
+      transfer.ver = bn(oldTransfer.ver).plus(1).toString();
+      transfer.bookId = bookId;
+      transfer.date = data.date;
+      transfer.amount = data.amount;
+      transfer.srcMemberId = data.srcMemberId;
+      transfer.dstMemberId = data.dstMemberId;
+      transfer.memo = data.memo ?? null;
+      transfer.currencyId =
+        data.currencyId ??
+        (await this.currencyAccess.findPrimaryByBookId(bookId)).id;
 
-      await this.updateMember(data.srcMemberId, bn(data.amount));
-      await this.updateMember(data.dstMemberId, bn(data.amount).negated());
-      await this.transferAccess.save(newTransfer);
+      const newTransfer = await this.transferAccess.save(transfer);
+      await this.updateMember(
+        data.srcMemberId,
+        newTransfer.currencyId,
+        bn(data.amount)
+      );
+      await this.updateMember(
+        data.dstMemberId,
+        newTransfer.currencyId,
+        bn(data.amount).negated()
+      );
 
       await this.dbAccess.commitTransaction();
 
@@ -929,9 +1107,14 @@ export class BookService {
 
       await this.updateMember(
         transfer.srcMemberId,
+        transfer.currencyId,
         bn(transfer.amount).negated()
       );
-      await this.updateMember(transfer.dstMemberId, bn(transfer.amount));
+      await this.updateMember(
+        transfer.dstMemberId,
+        transfer.currencyId,
+        bn(transfer.amount)
+      );
       await this.transferAccess.update({
         ...transfer,
         dateDeleted: new Date().toISOString(),
@@ -944,6 +1127,179 @@ export class BookService {
       return {
         members: await this.getMemberByBook(bookId),
         transaction: this.handleTransfer(transfers)[0],
+      };
+    } catch (e) {
+      await this.dbAccess.rollbackTransaction();
+      throw e;
+    }
+  }
+
+  public async addCurrency(
+    id: string,
+    data: PostBookCurrencyRequest,
+    deviceId: string
+  ): Promise<PostBookCurrencyResponse> {
+    await this.checkDeviceHasBook(deviceId, id);
+
+    try {
+      await this.dbAccess.startTransaction();
+
+      const currency = new CurrencyEntity();
+      currency.bookId = id;
+      currency.name = data.name;
+      currency.symbol = data.symbol;
+      currency.exchangeRate = data.exchangeRate;
+      currency.isPrimary = false;
+      currency.deletable = true;
+
+      const newCurrency = await this.currencyAccess.save(currency);
+      const members = await this.memberAccess.findByBookId(id);
+      await Promise.all(
+        members.map((v) => {
+          const membersettlement = new MemberSettlementEntity();
+          membersettlement.memberId = v.id;
+          membersettlement.currencyId = newCurrency.id;
+          membersettlement.balance = 0;
+          membersettlement.total = 0;
+
+          return this.memberSettlementAccess.save(membersettlement);
+        })
+      );
+
+      await this.dbAccess.commitTransaction();
+
+      return newCurrency;
+    } catch (e) {
+      await this.dbAccess.rollbackTransaction();
+      throw e;
+    }
+  }
+
+  public async updateCurrency(
+    bookId: string,
+    currencyId: string,
+    data: PutBookCurrencyRequest,
+    deviceId: string
+  ): Promise<PutBookCurrencyResponse> {
+    await this.checkDeviceHasBook(deviceId, bookId);
+
+    const oldCurrency = await this.currencyAccess.findById(currencyId);
+    if (oldCurrency.bookId !== bookId) throw new BadRequestError('bad request');
+    const newCurrency: Currency = {
+      ...oldCurrency,
+      name: data.name,
+      symbol: data.symbol,
+      exchangeRate: data.exchangeRate ?? oldCurrency.exchangeRate,
+    };
+    await this.currencyAccess.save(newCurrency);
+
+    return {
+      currency: newCurrency,
+      members: await this.getMemberByBook(bookId),
+    };
+  }
+
+  private async checkCurrencyIsDeletable(currencyId: string) {
+    const bills = await this.billAccess.findByCurrencyId(currencyId);
+    if (bills.length > 0) return false;
+    const transfers = await this.transferAccess.findByCurrencyId(currencyId);
+    if (transfers.length > 0) return false;
+
+    return true;
+  }
+
+  public async deleteCurrency(
+    bookId: string,
+    currencyId: string,
+    deviceId: string
+  ) {
+    await this.checkDeviceHasBook(deviceId, bookId);
+
+    try {
+      await this.dbAccess.startTransaction();
+
+      const currency = await this.currencyAccess.findById(currencyId);
+      if (currency.bookId !== bookId) throw new BadRequestError('bad request');
+      if (currency.deletable === false)
+        throw new BadRequestError('not deletable');
+
+      const isDeletable = await this.checkCurrencyIsDeletable(currencyId);
+      if (!isDeletable) throw new BadRequestError('not deletable');
+
+      const memberSettlements =
+        await this.memberSettlementAccess.findByCurrencyId(currencyId);
+
+      await Promise.all(
+        memberSettlements.map((v) =>
+          this.memberSettlementAccess.hardDeleteById(v.id)
+        )
+      );
+
+      await this.currencyAccess.hardDeleteById(currencyId);
+
+      await this.dbAccess.commitTransaction();
+    } catch (e) {
+      await this.dbAccess.rollbackTransaction();
+      throw e;
+    }
+  }
+
+  public async reviseCurrencyPrimary(
+    bookId: string,
+    currencyId: string,
+    deviceId: string
+  ): Promise<PutBookCurrencyPrimaryResponse> {
+    await this.checkDeviceHasBook(deviceId, bookId);
+
+    try {
+      await this.dbAccess.startTransaction();
+
+      const currencies = await this.currencyAccess.findByBookId(bookId);
+      const newPrimaryCurrency = currencies.find((v) => v.id === currencyId);
+      const oldPrimaryCurrency = currencies.find((v) => v.isPrimary === true);
+      if (
+        newPrimaryCurrency === undefined ||
+        oldPrimaryCurrency === undefined ||
+        newPrimaryCurrency.exchangeRate === null
+      )
+        throw new InternalServerError('something works unexpected');
+
+      const newCurrencies: Currency[] = [];
+      for (const currency of currencies) {
+        const temp = { ...currency };
+        // is old primary and set as secondary
+        if (temp.id === oldPrimaryCurrency.id) {
+          temp.isPrimary = false;
+          temp.deletable = await this.checkCurrencyIsDeletable(temp.id);
+          temp.exchangeRate = bn(1)
+            .div(newPrimaryCurrency.exchangeRate)
+            .dp(6)
+            .toNumber();
+        }
+        // is new primary and set as primary
+        else if (temp.id === newPrimaryCurrency.id) {
+          temp.isPrimary = true;
+          temp.deletable = false;
+          temp.exchangeRate = null;
+        }
+        // is still secondary
+        else {
+          if (temp.exchangeRate === null)
+            throw new InternalServerError('exchange rate should be not null');
+          temp.exchangeRate = bn(temp.exchangeRate)
+            .div(newPrimaryCurrency.exchangeRate)
+            .dp(6)
+            .toNumber();
+        }
+        newCurrencies.push(temp);
+      }
+
+      await Promise.all(newCurrencies.map((v) => this.currencyAccess.save(v)));
+      await this.dbAccess.commitTransaction();
+
+      return {
+        currencies: newCurrencies.sort(compare('dateCreated')),
+        members: await this.getMemberByBook(bookId),
       };
     } catch (e) {
       await this.dbAccess.rollbackTransaction();

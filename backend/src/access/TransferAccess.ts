@@ -47,6 +47,14 @@ export class TransferAccess {
     });
   }
 
+  public async findByCurrencyId(currencyId: string) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.find<Transfer>(TransferEntity.name, {
+      where: { currencyId },
+    });
+  }
+
   public async update(input: Transfer) {
     const qr = await this.database.getQueryRunner();
     const entity = new TransferEntity();

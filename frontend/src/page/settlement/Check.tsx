@@ -7,6 +7,7 @@ import Body from 'src/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
 import IcGoCheck from 'src/image/ic-go-check.svg';
+import IcReceipts from 'src/image/ic-receipts.svg';
 import { Check as CheckType } from 'src/model/Book';
 import { saveTransferFormData, setTxFormType } from 'src/redux/formSlice';
 import { check } from 'src/service/settlementService';
@@ -20,6 +21,13 @@ const Check = () => {
   const book = useBook();
   const members = useMemo(() => book?.members ?? [], [book]);
   const checkResult = useMemo(() => check(members), [members]);
+  const currencyDisplay = useMemo(() => {
+    const primary = book?.currencies?.find((v) => v.isPrimary);
+    if (primary === undefined) return '';
+    if (book?.currencies?.length === 1) return primary.symbol;
+
+    return `${primary.name}${primary.symbol}`;
+  }, [book]);
 
   const onCheck = (v: CheckType) => () => {
     dispatch(setTxFormType('transfer'));
@@ -51,13 +59,22 @@ const Check = () => {
             <Body size="s" className="w-fit whitespace-nowrap text-navy-300">
               {t('settlement.shouldPay')}
             </Body>
-            <Body size="l" className="w-[calc(50%-28px)] break-words text-right">
-              {v.former.nickname}
-            </Body>
+            <div className="flex w-[calc(50%-28px)] justify-end gap-[5px] break-words">
+              <Body size="l">{v.former.nickname}</Body>
+              {v.former.deviceId && (
+                <img
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`${Page.Setting}/payment`, { state: { user: v.former } });
+                  }}
+                  src={IcReceipts}
+                />
+              )}
+            </div>
           </div>
           <Divider className="my-[10px]" />
           <div className="flex">
-            <Body size="l" className="flex-1">{`${book?.symbol}${bnFormat(v.amount)}`}</Body>
+            <Body size="l" className="flex-1">{`${currencyDisplay}${bnFormat(v.amount)}`}</Body>
             <img src={IcGoCheck} />
           </div>
         </div>

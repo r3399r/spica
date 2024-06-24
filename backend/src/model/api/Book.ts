@@ -1,4 +1,5 @@
 import { Book } from 'src/model/entity/Book';
+import { Currency } from 'src/model/entity/Currency';
 import { Member } from 'src/model/entity/Member';
 import { PaginationParams } from 'src/model/Pagination';
 import {
@@ -81,4 +82,28 @@ export type PutBookTransferResponse = {
 export type DeleteBookTransferResponse = {
   members: Member[];
   transaction: Transaction;
+};
+
+export type PostBookCurrencyRequest = {
+  name: string;
+  symbol: string;
+  exchangeRate: number;
+};
+
+export type PostBookCurrencyResponse = Currency;
+
+export type PutBookCurrencyRequest = {
+  name: string;
+  symbol: string;
+  exchangeRate?: number;
+};
+
+export type PutBookCurrencyResponse = {
+  currency: Currency;
+  members: Member[];
+};
+
+export type PutBookCurrencyPrimaryResponse = {
+  currencies: Currency[];
+  members: Member[];
 };

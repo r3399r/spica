@@ -22,6 +22,10 @@ const SplitMixed = ({ mode }: Props) => {
   const members = useMemo(() => book?.members ?? [], [book]);
   const [input, setInput] = useState<MemberLatter[]>([]);
   const [targetId, setTargetId] = useState<string>();
+  const symbol = useMemo(
+    () => book?.currencies?.find((v) => v.id === billFormData.currencyId)?.symbol,
+    [book, billFormData],
+  );
 
   useEffect(() => {
     setInput(
@@ -69,17 +73,20 @@ const SplitMixed = ({ mode }: Props) => {
         o.id === memberId
           ? {
               ...o,
+              checked: Number(v.target.value) > 0,
               amount: v.target.value,
               customAmount: true,
             }
           : o,
       ),
     );
-    addMemberToBillLatter(memberId, mode, {
-      id: memberId,
-      method: ShareMethod.Amount,
-      value: Number(v.target.value),
-    });
+    if (Number(v.target.value) > 0)
+      addMemberToBillLatter(memberId, mode, {
+        id: memberId,
+        method: ShareMethod.Amount,
+        value: Number(v.target.value),
+      });
+    else removeMemberFromBillLatter(memberId);
   };
 
   const onCheck = (memberId: string) => (v: ChangeEvent<HTMLInputElement>) => {
@@ -131,13 +138,13 @@ const SplitMixed = ({ mode }: Props) => {
             </Body>
           </div>
           <AmountInput
-            symbol={book?.symbol ?? '$'}
+            symbol={symbol ?? '$'}
             decimal={2}
             className={classNames('!w-[90px]', {
               'text-navy-900': v.customAmount,
               'text-navy-100': !v.customAmount,
             })}
-            value={`${book?.symbol}${v.amount}`}
+            value={`${symbol}${v.amount}`}
             onChange={onInputAmount(v.id)}
           />
         </div>
