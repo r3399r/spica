@@ -147,7 +147,7 @@ const BillLatter = () => {
           <Button
             className="mt-5 h-12 w-full !p-[10px] text-base"
             onClick={() => dispatch(setTxState('main'))}
-            disabled={remaining !== 0}
+            disabled={remaining !== 0 || !!billFormData.latter?.find((v) => v.amount === 0)}
           >
             {t('act.confirm')}
           </Button>
