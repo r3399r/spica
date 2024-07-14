@@ -6,8 +6,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import BackButton from 'src/component/BackButton';
 import Img from 'src/component/Img';
 import ModalExport from 'src/component/ModalExport';
-import { Page } from 'src/constant/Page';
+import { DonateLink, Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
+import IcDonate from 'src/image/ic-donate.svg';
 import IcExportActive from 'src/image/ic-export-active.svg';
 import IcExport from 'src/image/ic-export.svg';
 import IcSettingActive from 'src/image/ic-setting-active.svg';
@@ -37,6 +38,11 @@ const Navbar = () => {
     <div className="mb-5 mt-[15px] flex justify-between">
       <BackButton text={t('bookDetail.back')} />
       <div className="flex gap-[15px]">
+        <a target="_blank" href={DonateLink} rel="noreferrer">
+          <div className="cursor-pointer">
+            <Img src={IcDonate} />
+          </div>
+        </a>
         <CopyToClipboard text={link} onCopy={() => dispatch(setSnackbarMessage(t('desc.copy')))}>
           <div className="cursor-pointer" onClick={onShareLink}>
             <Img src={IcShare} />
