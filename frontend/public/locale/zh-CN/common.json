@@ -107,7 +107,9 @@
     "settlement": "个人收支 / 结帐",
     "shouldReceive": "需收款",
     "shouldPay": "需还款",
-    "deleted": "已删除"
+    "deleted": "已删除",
+    "donateTitle": "支持我们",
+    "donateNote": "感谢您使用Bunny Bill！如果您喜欢我们目前的成果，也可以通过贊助让我们提供更完善的服务。"
   },
   "bookSetting": {
     "back": "回帐本",

@@ -53,7 +53,7 @@ const CurrencyModal = ({ open, handleClose }: Props) => {
       open={open}
       handleClose={onClose}
       cancelBtn={t('act.cancel')}
-      confirmBtn={t('act.submit')}
+      confirmBtn={t('act.confirm')}
     >
       <>
         <div className="mb-[15px]">

@@ -8,7 +8,7 @@ import Img from 'src/component/Img';
 import Body from 'src/component/typography/Body';
 import H2 from 'src/component/typography/H2';
 import H5 from 'src/component/typography/H5';
-import { Page } from 'src/constant/Page';
+import { DonateLink, Page } from 'src/constant/Page';
 import IcAdd from 'src/image/ic-add.svg';
 import IcBook from 'src/image/ic-book.svg';
 import IcConfigActive from 'src/image/ic-config-active.svg';
@@ -51,7 +51,9 @@ const BookList = () => {
           </div>
           <H5 className="mb-[10px] mt-[15px] text-center text-navy-500">{t('appName')}</H5>
           <div>
-            <img src={PicBookHero} className="w-full" />
+            <a target="_blank" href={DonateLink} rel="noreferrer">
+              <img src={PicBookHero} className="w-full" />
+            </a>
           </div>
           <H2 className="mx-[25px] mb-5 mt-[30px]">{t('bookList.bookList')}</H2>
           {books?.length === 0 ? (
