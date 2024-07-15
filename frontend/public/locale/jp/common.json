@@ -107,7 +107,9 @@
     "settlement": "決済",
     "shouldReceive": "収受",
     "shouldPay": "返済",
-    "deleted": "削除された"
+    "deleted": "削除された",
+    "donateTitle": "Donate",
+    "donateNote": "Donate me"
   },
   "bookSetting": {
     "back": "戻る",

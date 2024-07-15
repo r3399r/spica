@@ -107,7 +107,9 @@
     "settlement": "Settlement",
     "shouldReceive": "Should Receive",
     "shouldPay": "Should Pay",
-    "deleted": "Deleted"
+    "deleted": "Deleted",
+    "donateTitle": "Donate",
+    "donateNote": "Donate me"
   },
   "bookSetting": {
     "back": "Back",

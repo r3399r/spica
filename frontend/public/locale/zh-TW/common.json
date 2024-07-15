@@ -107,7 +107,9 @@
     "settlement": "個人收支 / 結帳",
     "shouldReceive": "需收款",
     "shouldPay": "需還款",
-    "deleted": "已刪除"
+    "deleted": "已刪除",
+    "donateTitle": "Donate",
+    "donateNote": "Donate me"
   },
   "bookSetting": {
     "back": "回帳本",
