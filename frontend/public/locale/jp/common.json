@@ -108,8 +108,8 @@
     "shouldReceive": "収受",
     "shouldPay": "返済",
     "deleted": "削除された",
-    "donateTitle": "Donate",
-    "donateNote": "Donate me"
+    "donateTitle": "寄付してください",
+    "donateNote": "Bunny Bill をご利用いただきありがとうございます。現在の結果を気に入っていただけましたら、より良いサービスを提供するためにスポンサーになっていただくこともできます。"
   },
   "bookSetting": {
     "back": "戻る",

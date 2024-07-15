@@ -108,8 +108,8 @@
     "shouldReceive": "Should Receive",
     "shouldPay": "Should Pay",
     "deleted": "Deleted",
-    "donateTitle": "Donate",
-    "donateNote": "Donate me"
+    "donateTitle": "Donate Us",
+    "donateNote": "Thanks for using Bunny Bill! If you like our current results, you can also sponsor us to provide better services."
   },
   "bookSetting": {
     "back": "Back",
