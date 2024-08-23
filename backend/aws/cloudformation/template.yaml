@@ -6,11 +6,7 @@ Description: spica deployment cloudformation script
 Globals:
   Function:
       Timeout: 30  # in seconds
-Parameters: 
-  LambdaExecutionRole:
-    Type: String
-    Default: celestial-service-execution-role
-    Description: The primary role in that gives the Lambda function permission to do its work.
+Parameters:
   Project:
     Type: String
   TargetEnvr:
@@ -23,6 +19,27 @@ Parameters:
 Conditions: 
   IsProd: !Equals [ !Ref TargetEnvr, prod ]
 Resources:
+  ##########################################
+  ##### AWS IAM Role to execute lambda #####
+  ##########################################
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      RoleName: !Sub ${Project}-${TargetEnvr}-lambda-execution-role
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess
+        - arn:aws:iam::aws:policy/AmazonSESFullAccess
   ##############################################
   ##### API Gateway and associated Lambdas #####
   ##############################################
@@ -1435,6 +1452,155 @@ Resources:
                 }
               }
             },
+            "/api/dataSync": {
+              "post": {
+                "parameters": [{
+                  "name": "x-api-device",
+                  "in": "header",
+                  "required": true,
+                  "schema": {"type": "string"}
+                }],
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/postDataSync"
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "headers": {
+                      "Access-Control-Allow-Origin": {
+                        "schema": {"type": "string"}
+                      }
+                    },
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/Empty"
+                        }
+                      }
+                    }
+                  }
+                },
+                "x-amazon-apigateway-request-validator" : "Validate query string parameters and headers",
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-dataSync/invocations",
+                  "responses": {
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                      }
+                    }
+                  },
+                  "passthroughBehavior": "when_no_match",
+                  "contentHandling": "CONVERT_TO_TEXT"
+                }
+              }
+            },
+            "/api/dataSync/bind": {
+              "post": {
+                "parameters": [{
+                  "name": "x-api-device",
+                  "in": "header",
+                  "required": true,
+                  "schema": {"type": "string"}
+                }],
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/postDataSyncBind"
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "headers": {
+                      "Access-Control-Allow-Origin": {
+                        "schema": {"type": "string"}
+                      }
+                    },
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/Empty"
+                        }
+                      }
+                    }
+                  }
+                },
+                "x-amazon-apigateway-request-validator" : "Validate query string parameters and headers",
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-dataSync/invocations",
+                  "responses": {
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                      }
+                    }
+                  },
+                  "passthroughBehavior": "when_no_match",
+                  "contentHandling": "CONVERT_TO_TEXT"
+                }
+              }
+            },
+            "/api/dataSync/unbind": {
+              "post": {
+                "parameters": [{
+                  "name": "x-api-device",
+                  "in": "header",
+                  "required": true,
+                  "schema": {"type": "string"}
+                }],
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "headers": {
+                      "Access-Control-Allow-Origin": {
+                        "schema": {"type": "string"}
+                      }
+                    },
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/Empty"
+                        }
+                      }
+                    }
+                  }
+                },
+                "x-amazon-apigateway-request-validator" : "Validate query string parameters and headers",
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-dataSync/invocations",
+                  "responses": {
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                      }
+                    }
+                  },
+                  "passthroughBehavior": "when_no_match",
+                  "contentHandling": "CONVERT_TO_TEXT"
+                }
+              }
+            },
             "/api/transfer": {
               "post": {
                 "parameters": [{
@@ -1697,6 +1863,21 @@ Resources:
               },
               "required": ["date","amount","srcMemberId","dstMemberId"]
             },
+            "postDataSync": {
+              "type": "object",
+              "properties": {
+                "email": {"type": "string"}
+              },
+              "required": ["email"]
+            },
+            "postDataSyncBind": {
+              "type": "object",
+              "properties": {
+                "email": {"type": "string"},
+                "code": {"type": "string"}
+              },
+              "required": ["email", "code"]
+            },
             "putTransfer": {
               "type": "object",
               "properties": {
@@ -1723,7 +1904,7 @@ Resources:
       Handler: index.manifest
       Runtime: nodejs18.x
       FunctionName: !Sub ${Project}-${TargetEnvr}-manifest
-      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${ExecutionRole}"
       CodeUri: ../../dist/webpack/lambda
       MemorySize: 128
       Environment:
@@ -1744,7 +1925,7 @@ Resources:
       Handler: index.book
       Runtime: nodejs18.x
       FunctionName: !Sub ${Project}-${TargetEnvr}-book
-      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${ExecutionRole}"
       CodeUri: ../../dist/webpack/lambda
       MemorySize: 128
       Environment:
@@ -1769,7 +1950,7 @@ Resources:
       Handler: index.transfer
       Runtime: nodejs18.x
       FunctionName: !Sub ${Project}-${TargetEnvr}-transfer
-      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${ExecutionRole}"
       CodeUri: ../../dist/webpack/lambda
       MemorySize: 128
       Environment:
@@ -1787,6 +1968,31 @@ Resources:
       Action: 'lambda:InvokeFunction'
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ServerlessApi}/*
+  LambdaDataSync:
+    Type: AWS::Serverless::Function
+    Properties:
+      Architectures: [arm64]
+      Handler: index.dataSync
+      Runtime: nodejs18.x
+      FunctionName: !Sub ${Project}-${TargetEnvr}-dataSync
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${ExecutionRole}"
+      CodeUri: ../../dist/webpack/lambda
+      MemorySize: 128
+      Environment:
+        Variables:
+          PROJECT: !Sub ${Project}
+          DB_CLUSTER: !Sub '{{resolve:ssm:${TargetEnvr}-db-cluster:1}}'
+          DB_HOST: !Sub '{{resolve:ssm:${TargetEnvr}-db-host:1}}'
+          DB_PWD: !Sub '{{resolve:ssm:${TargetEnvr}-db-pwd:1}}'
+          DB_USER: !Sub '{{resolve:ssm:${TargetEnvr}-db-user:1}}'
+  InvokePermissionDataSync:
+    Type: AWS::Lambda::Permission
+    DependsOn: [ServerlessApi, LambdaDataSync]
+    Properties:
+      FunctionName: !Sub ${Project}-${TargetEnvr}-dataSync
+      Action: 'lambda:InvokeFunction'
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ServerlessApi}/*
   LambdaBankAccount:
     Type: AWS::Serverless::Function
     Properties:
@@ -1794,7 +2000,7 @@ Resources:
       Handler: index.bankAccount
       Runtime: nodejs18.x
       FunctionName: !Sub ${Project}-${TargetEnvr}-bankAccount
-      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${ExecutionRole}"
       CodeUri: ../../dist/webpack/lambda
       MemorySize: 128
       Environment:
@@ -1819,7 +2025,7 @@ Resources:
       Handler: index.dbClean
       Runtime: nodejs18.x
       FunctionName: !Sub ${Project}-${TargetEnvr}-dbClean
-      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${ExecutionRole}"
       CodeUri: ../../dist/webpack/lambda
       MemorySize: 128
       Environment:
@@ -1844,7 +2050,7 @@ Resources:
       Handler: index.bank
       Runtime: nodejs18.x
       FunctionName: !Sub ${Project}-${TargetEnvr}-bank
-      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${ExecutionRole}"
       CodeUri: ../../dist/webpack/lambda
       MemorySize: 128
       Environment:

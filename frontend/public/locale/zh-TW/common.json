@@ -1,7 +1,6 @@
 {
   "appName": "Bunny Bill",
   "language": "繁體中文",
-  "error": "發生錯誤，請重新再試，若狀況持續，請聯繫我們，謝謝！",
   "act": {
     "confirm": "確認",
     "cancel": "取消",
@@ -48,7 +47,7 @@
     "language": "語言設定",
     "myId": "我的 ID",
     "myPaymentAccount": "我的收款帳戶",
-    "dataTransfer": "資料轉移",
+    "dataSync": "資料同步",
     "add2HomeScreen": "加入手機主畫面",
     "contactUs": "聯絡我們"
   },
@@ -67,20 +66,18 @@
     "notBank": "非銀行帳戶",
     "deleteHint": "要刪除這個收款帳戶嗎？"
   },
-  "transfer": {
-    "back": "回系統設定",
-    "head": "資料轉移",
-    "outHead": "資料轉出",
-    "outHint": "將密鑰輸入其他裝置，可將此裝置上的資料拷貝到新的裝置上",
-    "outBtn": "產生密鑰",
-    "inHead": "資料匯入",
-    "inHint": "輸入其他裝置的密鑰即可匯入資料",
-    "inBtn": "輸入密鑰",
-    "modalOutHead": "密鑰",
-    "modalOutHint": "此密鑰將於 24 小時後失效",
-    "modalOutClose": "關閉",
-    "modalOutCopy": "複製密鑰",
-    "modalInLabel": "輸入密鑰"
+  "dataSync": {
+    "back": "回上一頁",
+    "head": "資料同步",
+    "hint": "綁定同一個 E-mail 可讓不同裝置的資料同步",
+    "label": "綁定的 E-mail",
+    "receiveCode": "獲得驗證碼",
+    "bindHint": "驗證碼已寄出，請至填寫的信箱查看",
+    "bindPlaceholder": "驗證碼",
+    "bindSuccess": "E-mail綁定成功，資料已同步",
+    "unbind": "解除綁定",
+    "unbindHead": "解除綁定的 E-mail",
+    "unbindHint": "解除綁定之後在此裝置新增的資料不會與其他裝置同步，直到再度綁定為止。"
   },
   "add2HomeScreen": {
     "back": "回系統設定",
@@ -211,5 +208,10 @@
     "head": "選擇你的暱稱",
     "hint": "也可之後再前往「帳本成員」新增屬於你的暱稱",
     "skip": "跳過"
+  },
+  "error": {
+    "default": "發生錯誤，請重新再試，若狀況持續，請聯繫我們，謝謝！",
+    "tooFrequent": "驗證碼已寄送。5 分鐘後可再重寄",
+    "invalidCode": "無效的驗證碼"
   }
 }

@@ -11,6 +11,7 @@ export type UiState = {
   snackbarMessage: string | undefined;
   paymentList: BankAccount[] | null;
   bankList: Bank[] | null;
+  emailBinded: string | null;
 };
 
 const initialState: UiState = {
@@ -22,6 +23,7 @@ const initialState: UiState = {
   snackbarMessage: undefined,
   paymentList: null,
   bankList: null,
+  emailBinded: null,
 };
 
 export const uiSlice = createSlice({
@@ -55,6 +57,9 @@ export const uiSlice = createSlice({
     setBankList: (state: UiState, action: PayloadAction<Bank[]>) => {
       state.bankList = action.payload;
     },
+    setEmailBinded: (state: UiState, action: PayloadAction<string | null>) => {
+      state.emailBinded = action.payload;
+    },
   },
 });
 
@@ -68,6 +73,7 @@ export const {
   setSnackbarMessage,
   setPaymentList,
   setBankList,
+  setEmailBinded,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

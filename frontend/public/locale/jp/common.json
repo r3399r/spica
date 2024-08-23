@@ -1,7 +1,6 @@
 {
   "appName": "Bunny Bill",
   "language": "日本語",
-  "error": "エラーが発生しました。再試行してください。状況が続く場合は、お問い合わせください、ありがとうございます。",
   "act": {
     "confirm": "確認",
     "cancel": "キャンセル",
@@ -48,7 +47,7 @@
     "language": "表示言語",
     "myId": "マイID",
     "myPaymentAccount": "私の支払いアカウント",
-    "dataTransfer": "データ移行",
+    "dataSync": "Data Sync",
     "add2HomeScreen": "ホーム画面に追加する",
     "contactUs": "お問い合わせ"
   },
@@ -67,20 +66,18 @@
     "notBank": "非銀行帳戶",
     "deleteHint": "この支払いアカウントを削除しますか"
   },
-  "transfer": {
-    "back": "戻る",
-    "head": "データ移行",
-    "outHead": "データ転出",
-    "outHint": "他のデバイスにキーを入力すると、このデバイスのデータが新しいデバイスにコピーされます。",
-    "outBtn": "キーを生成",
-    "inHead": "データ転入",
-    "inHint": "別のデバイスからキーを入力してデータをインポートします",
-    "inBtn": "キーを入力",
-    "modalOutHead": "キー",
-    "modalOutHint": "このキーは 24 時間で期限切れになります",
-    "modalOutClose": "閉じる",
-    "modalOutCopy": "キーをコピー",
-    "modalInLabel": "キーを入力"
+  "dataSync": {
+    "back": "Back",
+    "head": "Data Sync",
+    "hint": "Bind your devices with an E-mail address to sync data.",
+    "label": "E-mail to bind",
+    "receiveCode": "Receive Code",
+    "bindHint": "The code has sent to your email, please check.",
+    "bindPlaceholder": "Code",
+    "bindSuccess": "Data sync successfully",
+    "unbind": "Unbind",
+    "unbindHead": "Unbind E-mail",
+    "unbindHint": "After unbinding, data added on this device will not be synchronized with other devices until the device is bound again."
   },
   "add2HomeScreen": {
     "back": "戻る",
@@ -211,5 +208,10 @@
     "head": "ニックネームを選ぶ",
     "hint": "後で「帳簿メンバー」にニックネームを追加することもできます。",
     "skip": "スキップ"
+  },
+  "error": {
+    "default": "エラーが発生しました。再試行してください。状況が続く場合は、お問い合わせください、ありがとうございます。",
+    "tooFrequent": "We've sent you the code. If you want to resend email, please wait for 5 minutes.",
+    "invalidCode": "Invalid code"
   }
 }

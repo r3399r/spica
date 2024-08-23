@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios';
 import { t } from 'i18next';
+import { ErrorMessage } from 'src/constant/backend/constant/ErrorMessage';
 
 // eslint-disable-next-line
 type Options<D = any, P = any> = {
@@ -41,7 +42,19 @@ const request = async <T>(config: AxiosRequestConfig<any>) => {
     // eslint-disable-next-line
     return await axios.request<T, AxiosResponse<T, any>, any>(config);
   } catch (e) {
-    alert(t('error'));
+    if (axios.isAxiosError(e))
+      switch (e.response?.data.message) {
+        case ErrorMessage.TOO_FREQUENT:
+          alert(t('error.tooFrequent'));
+          break;
+        case ErrorMessage.INVALID_CODE:
+          alert(t('error.invalidCode'));
+          break;
+        default:
+          alert(t('error.default'));
+      }
+    else alert(t('error.default'));
+
     throw new Error(String(e));
   }
 };

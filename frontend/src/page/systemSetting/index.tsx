@@ -55,9 +55,9 @@ const SystemSetting = () => {
       </div>
       <div
         className="flex cursor-pointer justify-between border-b border-b-grey-300 pb-4 pt-5"
-        onClick={() => navigate(`${Page.Setting}/transfer`)}
+        onClick={() => navigate(`${Page.Setting}/sync`)}
       >
-        <H4>{t('systemSetting.dataTransfer')}</H4>
+        <H4>{t('systemSetting.dataSync')}</H4>
         <img src={IcGo} />
       </div>
       <div
