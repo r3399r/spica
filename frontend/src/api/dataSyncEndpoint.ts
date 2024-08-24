@@ -3,7 +3,7 @@ import {
   PostDataSyncBindResponse,
   PostDataSyncRequest,
   PostDataSyncUnbindResponse,
-} from 'src/model/backend/model/api/DataSync';
+} from 'src/model/backend/api/DataSync';
 import http from 'src/util/http';
 
 const postDataSync = async (data: PostDataSyncRequest, deviceId: string) =>
