@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios';
 import { t } from 'i18next';
-import { ErrorMessage } from 'src/constant/backend/constant/ErrorMessage';
+import { ErrorMessage } from 'src/constant/backend/ErrorMessage';
 
 // eslint-disable-next-line
 type Options<D = any, P = any> = {
