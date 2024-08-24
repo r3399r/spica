@@ -59,7 +59,7 @@ export class DataSyncService {
     });
     if (
       emailBind &&
-      new Date().getTime() - new Date(emailBind.dateCreated).getTime() <
+      new Date().getTime() - new Date(emailBind.codeGenerated).getTime() <
       5 * 60 * 1000
     )
       throw new BadRequestError(ErrorMessage.TOO_FREQUENT);
