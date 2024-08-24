@@ -1,11 +1,7 @@
-import { LambdaContext, LambdaEvent, LambdaOutput } from 'src/model/Lambda';
-import { successOutput } from 'src/util/LambdaOutput';
+import { LambdaContext, LambdaEvent } from 'src/model/Lambda';
 
-export async function manifest(
-  event: LambdaEvent,
-  _context?: LambdaContext
-): Promise<LambdaOutput> {
-  const res = {
+export async function manifest(event: LambdaEvent, _context?: LambdaContext) {
+  return {
     short_name: 'Bunny Bill',
     name: 'Bunny Bill',
     icons: [
@@ -63,6 +59,4 @@ export async function manifest(
     theme_color: '#ffffff',
     background_color: '#ffffff',
   };
-
-  return successOutput(res);
 }

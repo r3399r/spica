@@ -3,7 +3,6 @@ import { BillAccess } from 'src/access/BillAccess';
 import { BillShareAccess } from 'src/access/BillShareAccess';
 import { BookAccess } from 'src/access/BookAccess';
 import { CurrencyAccess } from 'src/access/CurrencyAccess';
-import { DbAccess } from 'src/access/DbAccess';
 import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
 import { DeviceTokenAccess } from 'src/access/DeviceTokenAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
@@ -16,9 +15,6 @@ import { ViewBookAccess } from 'src/access/ViewBookAccess';
  */
 @injectable()
 export class DbCleanService {
-  @inject(DbAccess)
-  private readonly dbAccess!: DbAccess;
-
   @inject(ViewBookAccess)
   private readonly vBookAccess!: ViewBookAccess;
 
@@ -48,10 +44,6 @@ export class DbCleanService {
 
   @inject(DeviceTokenAccess)
   private readonly deviceTokenAccess!: DeviceTokenAccess;
-
-  public async cleanup() {
-    await this.dbAccess.cleanup();
-  }
 
   private async cleanExpiredBook() {
     const res = await this.vBookAccess.findExpired();
@@ -95,20 +87,7 @@ export class DbCleanService {
   }
 
   public async cleanExpired() {
-    try {
-      await this.dbAccess.startTransaction();
-
-      await this.cleanExpiredBook();
-      await this.cleanExpiredToken();
-
-      await this.dbAccess.commitTransaction();
-    } catch (e) {
-      await this.dbAccess.rollbackTransaction();
-      throw e;
-    }
-  }
-
-  public async resetSqlStats() {
-    await this.dbAccess.resetSqlStats();
+    await this.cleanExpiredBook();
+    await this.cleanExpiredToken();
   }
 }

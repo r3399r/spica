@@ -1,6 +1,5 @@
 import { addDays } from 'date-fns';
 import { inject, injectable } from 'inversify';
-import { DbAccess } from 'src/access/DbAccess';
 import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
 import { DeviceTokenAccess } from 'src/access/DeviceTokenAccess';
 import {
@@ -18,18 +17,11 @@ import { differenceBy } from 'src/util/setTheory';
  */
 @injectable()
 export class TransferService {
-  @inject(DbAccess)
-  private readonly dbAccess!: DbAccess;
-
   @inject(DeviceTokenAccess)
   private readonly deviceTokenAccess!: DeviceTokenAccess;
 
   @inject(DeviceBookAccess)
   private readonly deviceBookAccess!: DeviceBookAccess;
-
-  public async cleanup() {
-    await this.dbAccess.cleanup();
-  }
 
   private async generateToken(deviceId: string) {
     const deviceToken = new DeviceTokenEntity();
