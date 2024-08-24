@@ -31,8 +31,8 @@ echo ===========================================================================
 
 echo prepare frontend files...
 npm run compile
-cp -R lib/src/model ../frontend/src/model/backend
-cp -R lib/src/constant ../frontend/src/constant/backend
+yes | cp -rf -R lib/src/model ../frontend/src/model/backend
+yes | cp -rf -R lib/src/constant ../frontend/src/constant/backend
 echo ====================================================================================
 
 # echo prepare api document...
