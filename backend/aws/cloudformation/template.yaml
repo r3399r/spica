@@ -1958,7 +1958,7 @@ Resources:
       FunctionName: !Sub ${Project}-${TargetEnvr}-api
       Role: !GetAtt ExecutionRole.Arn
       CodeUri: ../../lib/src
-      MemorySize: 128
+      MemorySize: 256
       Layers: [!Ref LambdaLayer]
       Environment:
         Variables:
