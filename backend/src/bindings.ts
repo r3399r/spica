@@ -12,7 +12,7 @@ import { DeviceBookAccess } from './access/DeviceBookAccess';
 import { DeviceTokenAccess } from './access/DeviceTokenAccess';
 import { MemberAccess } from './access/MemberAccess';
 import { MemberSettlementAccess } from './access/MemberSettlementAccess';
-import { SyncCodeAccess } from './access/SyncCodeAccess';
+import { EmailBindAccess } from './access/EmailBindAccess';
 import { TransferAccess } from './access/TransferAccess';
 import { ViewBillShareAccess } from './access/ViewBillShareAccess';
 import { ViewBookAccess } from './access/ViewBookAccess';
@@ -34,13 +34,13 @@ import { DeviceBookEntity } from './model/entity/DeviceBookEntity';
 import { DeviceTokenEntity } from './model/entity/DeviceTokenEntity';
 import { MemberEntity } from './model/entity/MemberEntity';
 import { MemberSettlementEntity } from './model/entity/MemberSettlementEntity';
-import { SyncCodeEntity } from './model/entity/SyncCodeEntity';
 import { TransferEntity } from './model/entity/TransferEntity';
 import { ViewBillShareEntity } from './model/viewEntity/ViewBillShareEntity';
 import { ViewBookEntity } from './model/viewEntity/ViewBookEntity';
 import { ViewDeviceBookEntity } from './model/viewEntity/ViewDeviceBookEntity';
 import { ViewTransactionEntity } from './model/viewEntity/ViewTransactionEntity';
 import { Database, dbEntitiesBindingId } from './util/Database';
+import { EmailBindEntity } from './model/entity/EmailBindEntity';
 
 const container: Container = new Container();
 
@@ -59,7 +59,7 @@ container.bind<Function>(dbEntitiesBindingId).toFunction(MemberEntity);
 container
   .bind<Function>(dbEntitiesBindingId)
   .toFunction(MemberSettlementEntity);
-container.bind<Function>(dbEntitiesBindingId).toFunction(SyncCodeEntity);
+container.bind<Function>(dbEntitiesBindingId).toFunction(EmailBindEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(TransferEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(ViewDeviceBookEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(ViewBillShareEntity);
@@ -79,7 +79,7 @@ container.bind<DeviceTokenAccess>(DeviceTokenAccess).toSelf();
 container.bind<MemberAccess>(MemberAccess).toSelf();
 container.bind<MemberSettlementAccess>(MemberSettlementAccess).toSelf();
 container.bind<TransferAccess>(TransferAccess).toSelf();
-container.bind<SyncCodeAccess>(SyncCodeAccess).toSelf();
+container.bind<EmailBindAccess>(EmailBindAccess).toSelf();
 container.bind<ViewDeviceBookAccess>(ViewDeviceBookAccess).toSelf();
 container.bind<ViewBillShareAccess>(ViewBillShareAccess).toSelf();
 container.bind<ViewBookAccess>(ViewBookAccess).toSelf();
