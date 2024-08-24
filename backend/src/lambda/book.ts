@@ -14,72 +14,47 @@ import {
   PutBookTransferRequest,
 } from 'src/model/api/Book';
 import { BadRequestError, InternalServerError } from 'src/model/error';
-import { LambdaContext, LambdaEvent, LambdaOutput } from 'src/model/Lambda';
-import { errorOutput, successOutput } from 'src/util/LambdaOutput';
+import { LambdaContext, LambdaEvent } from 'src/model/Lambda';
 
-export async function book(
-  event: LambdaEvent,
-  _context?: LambdaContext
-): Promise<LambdaOutput> {
-  let service: BookService | null = null;
-  try {
-    service = bindings.get(BookService);
+let event: LambdaEvent;
+let service: BookService;
 
-    let res: unknown;
+export async function book(lambdaEvent: LambdaEvent, _context?: LambdaContext) {
+  event = lambdaEvent;
+  service = bindings.get(BookService);
 
-    switch (event.resource) {
-      case '/api/book':
-        res = await apiBook(event, service);
-        break;
-      case '/api/book/{id}':
-        res = await apiBookId(event, service);
-        break;
-      case '/api/book/{id}/bill':
-        res = await apiBookIdBill(event, service);
-        break;
-      case '/api/book/{id}/bill/{billId}':
-        res = await apiBookIdBillId(event, service);
-        break;
-      case '/api/book/{id}/currency':
-        res = await apiBookIdCurrency(event, service);
-        break;
-      case '/api/book/{id}/currency/{cid}':
-        res = await apiBookIdCurrencyId(event, service);
-        break;
-      case '/api/book/{id}/currency/{cid}/primary':
-        res = await apiBookIdCurrencyIdPrimary(event, service);
-        break;
-      case '/api/book/{id}/member':
-        res = await apiBookIdMember(event, service);
-        break;
-      case '/api/book/{id}/member/{mid}':
-        res = await apiBookIdMemberId(event, service);
-        break;
-      case '/api/book/{id}/member/{mid}/self':
-        res = await apiBookIdMemberIdSelf(event, service);
-        break;
-      case '/api/book/{id}/showDelete':
-        res = await apiBookIdShowDelete(event, service);
-        break;
-      case '/api/book/{id}/transfer':
-        res = await apiBookIdTransfer(event, service);
-        break;
-      case '/api/book/{id}/transfer/{tid}':
-        res = await apiBookIdTransferId(event, service);
-        break;
-      default:
-        throw new InternalServerError('unknown resource');
-    }
-
-    return successOutput(res);
-  } catch (e) {
-    return errorOutput(e);
-  } finally {
-    await service?.cleanup();
+  switch (event.resource) {
+    case '/api/book':
+      return await apiBook();
+    case '/api/book/{id}':
+      return await apiBookId();
+    case '/api/book/{id}/bill':
+      return await apiBookIdBill();
+    case '/api/book/{id}/bill/{billId}':
+      return await apiBookIdBillId();
+    case '/api/book/{id}/currency':
+      return await apiBookIdCurrency();
+    case '/api/book/{id}/currency/{cid}':
+      return await apiBookIdCurrencyId();
+    case '/api/book/{id}/currency/{cid}/primary':
+      return await apiBookIdCurrencyIdPrimary();
+    case '/api/book/{id}/member':
+      return await apiBookIdMember();
+    case '/api/book/{id}/member/{mid}':
+      return await apiBookIdMemberId();
+    case '/api/book/{id}/member/{mid}/self':
+      return await apiBookIdMemberIdSelf();
+    case '/api/book/{id}/showDelete':
+      return await apiBookIdShowDelete();
+    case '/api/book/{id}/transfer':
+      return await apiBookIdTransfer();
+    case '/api/book/{id}/transfer/{tid}':
+      return await apiBookIdTransferId();
   }
+  throw new InternalServerError('unknown resource');
 }
 
-async function apiBook(event: LambdaEvent, service: BookService) {
+async function apiBook() {
   if (event.headers === null)
     throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
@@ -98,7 +73,7 @@ async function apiBook(event: LambdaEvent, service: BookService) {
   }
 }
 
-async function apiBookId(event: LambdaEvent, service: BookService) {
+async function apiBookId() {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   if (event.headers === null)
@@ -134,7 +109,7 @@ async function apiBookId(event: LambdaEvent, service: BookService) {
   }
 }
 
-async function apiBookIdBill(event: LambdaEvent, service: BookService) {
+async function apiBookIdBill() {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   switch (event.httpMethod) {
@@ -154,7 +129,7 @@ async function apiBookIdBill(event: LambdaEvent, service: BookService) {
   }
 }
 
-async function apiBookIdBillId(event: LambdaEvent, service: BookService) {
+async function apiBookIdBillId() {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   if (event.headers === null)
@@ -181,7 +156,7 @@ async function apiBookIdBillId(event: LambdaEvent, service: BookService) {
   }
 }
 
-async function apiBookIdCurrency(event: LambdaEvent, service: BookService) {
+async function apiBookIdCurrency() {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   switch (event.httpMethod) {
@@ -201,7 +176,7 @@ async function apiBookIdCurrency(event: LambdaEvent, service: BookService) {
   }
 }
 
-async function apiBookIdCurrencyId(event: LambdaEvent, service: BookService) {
+async function apiBookIdCurrencyId() {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   if (event.headers === null)
@@ -228,10 +203,7 @@ async function apiBookIdCurrencyId(event: LambdaEvent, service: BookService) {
   }
 }
 
-async function apiBookIdCurrencyIdPrimary(
-  event: LambdaEvent,
-  service: BookService
-) {
+async function apiBookIdCurrencyIdPrimary() {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   if (event.headers === null)
@@ -248,7 +220,7 @@ async function apiBookIdCurrencyIdPrimary(
   }
 }
 
-async function apiBookIdMember(event: LambdaEvent, service: BookService) {
+async function apiBookIdMember() {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   switch (event.httpMethod) {
@@ -268,7 +240,7 @@ async function apiBookIdMember(event: LambdaEvent, service: BookService) {
   }
 }
 
-async function apiBookIdMemberId(event: LambdaEvent, service: BookService) {
+async function apiBookIdMemberId() {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   if (event.headers === null)
@@ -295,7 +267,7 @@ async function apiBookIdMemberId(event: LambdaEvent, service: BookService) {
   }
 }
 
-async function apiBookIdMemberIdSelf(event: LambdaEvent, service: BookService) {
+async function apiBookIdMemberIdSelf() {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   if (event.headers === null)
@@ -312,7 +284,7 @@ async function apiBookIdMemberIdSelf(event: LambdaEvent, service: BookService) {
   }
 }
 
-async function apiBookIdShowDelete(event: LambdaEvent, service: BookService) {
+async function apiBookIdShowDelete() {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   if (event.headers === null)
@@ -328,7 +300,7 @@ async function apiBookIdShowDelete(event: LambdaEvent, service: BookService) {
   }
 }
 
-async function apiBookIdTransfer(event: LambdaEvent, service: BookService) {
+async function apiBookIdTransfer() {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   switch (event.httpMethod) {
@@ -348,7 +320,7 @@ async function apiBookIdTransfer(event: LambdaEvent, service: BookService) {
   }
 }
 
-async function apiBookIdTransferId(event: LambdaEvent, service: BookService) {
+async function apiBookIdTransferId() {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   if (event.headers === null)

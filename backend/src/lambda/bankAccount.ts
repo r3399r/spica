@@ -5,42 +5,30 @@ import {
   PutBankAccountRequest,
 } from 'src/model/api/BankAccount';
 import { BadRequestError, InternalServerError } from 'src/model/error';
-import { LambdaContext, LambdaEvent, LambdaOutput } from 'src/model/Lambda';
-import { errorOutput, successOutput } from 'src/util/LambdaOutput';
+import { LambdaContext, LambdaEvent } from 'src/model/Lambda';
+
+let event: LambdaEvent;
+let service: BankAccountService;
 
 export async function bankAccount(
-  event: LambdaEvent,
+  lambdaEvent: LambdaEvent,
   _context?: LambdaContext
-): Promise<LambdaOutput> {
-  let service: BankAccountService | null = null;
-  try {
-    service = bindings.get(BankAccountService);
+) {
+  event = lambdaEvent;
+  service = bindings.get(BankAccountService);
 
-    let res: unknown;
-
-    switch (event.resource) {
-      case '/api/bankAccount':
-        res = await apiBankAccount(event, service);
-        break;
-      case '/api/bankAccount/{id}':
-        res = await apiBankAccountId(event, service);
-        break;
-      case '/api/bankAccount/bank':
-        res = await apiBankAccountBank(event, service);
-        break;
-      default:
-        throw new InternalServerError('unknown resource');
-    }
-
-    return successOutput(res);
-  } catch (e) {
-    return errorOutput(e);
-  } finally {
-    await service?.cleanup();
+  switch (event.resource) {
+    case '/api/bankAccount':
+      return await apiBankAccount();
+    case '/api/bankAccount/{id}':
+      return await apiBankAccountId();
+    case '/api/bankAccount/bank':
+      return await apiBankAccountBank();
   }
+  throw new InternalServerError('unknown resource');
 }
 
-async function apiBankAccount(event: LambdaEvent, service: BankAccountService) {
+async function apiBankAccount() {
   if (event.headers === null)
     throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
@@ -59,10 +47,7 @@ async function apiBankAccount(event: LambdaEvent, service: BankAccountService) {
   }
 }
 
-async function apiBankAccountId(
-  event: LambdaEvent,
-  service: BankAccountService
-) {
+async function apiBankAccountId() {
   if (event.pathParameters === null)
     throw new BadRequestError('pathParameters should not be empty');
   if (event.headers === null)
@@ -87,10 +72,7 @@ async function apiBankAccountId(
   }
 }
 
-async function apiBankAccountBank(
-  event: LambdaEvent,
-  service: BankAccountService
-) {
+async function apiBankAccountBank() {
   switch (event.httpMethod) {
     case 'GET':
       return service.getBankList();

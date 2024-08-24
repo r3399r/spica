@@ -4,7 +4,6 @@ import { BillAccess } from 'src/access/BillAccess';
 import { BillShareAccess } from 'src/access/BillShareAccess';
 import { BookAccess } from 'src/access/BookAccess';
 import { CurrencyAccess } from 'src/access/CurrencyAccess';
-import { DbAccess } from 'src/access/DbAccess';
 import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { MemberSettlementAccess } from 'src/access/MemberSettlementAccess';
@@ -77,9 +76,6 @@ import { differenceBy, intersectionBy } from 'src/util/setTheory';
  */
 @injectable()
 export class BookService {
-  @inject(DbAccess)
-  private readonly dbAccess!: DbAccess;
-
   @inject(DeviceBookAccess)
   private readonly deviceBookAccess!: DeviceBookAccess;
 
@@ -116,61 +112,49 @@ export class BookService {
   @inject(ViewDeviceBookAccess)
   private readonly vDeviceBookAccess!: ViewDeviceBookAccess;
 
-  public async cleanup() {
-    await this.dbAccess.cleanup();
-  }
-
   public async createBook(
     data: PostBookRequest,
     deviceId: string
   ): Promise<PostBookResponse> {
-    try {
-      await this.dbAccess.startTransaction();
-      const book = new BookEntity();
-      book.name = data.bookName;
-      book.code = randomBase10(6);
-      book.symbol = '$';
-      const newBook = await this.bookAccess.save(book);
+    const book = new BookEntity();
+    book.name = data.bookName;
+    book.code = randomBase10(6);
+    book.symbol = '$';
+    const newBook = await this.bookAccess.save(book);
 
-      const deviceBook = new DeviceBookEntity();
-      deviceBook.deviceId = deviceId;
-      deviceBook.bookId = newBook.id;
-      deviceBook.showDelete = false;
-      await this.deviceBookAccess.save(deviceBook);
+    const deviceBook = new DeviceBookEntity();
+    deviceBook.deviceId = deviceId;
+    deviceBook.bookId = newBook.id;
+    deviceBook.showDelete = false;
+    await this.deviceBookAccess.save(deviceBook);
 
-      const currency = new CurrencyEntity();
-      currency.bookId = newBook.id;
-      currency.name = 'TWD';
-      currency.symbol = '$';
-      currency.isPrimary = true;
-      currency.deletable = false;
-      const newCurrency = await this.currencyAccess.save(currency);
+    const currency = new CurrencyEntity();
+    currency.bookId = newBook.id;
+    currency.name = 'TWD';
+    currency.symbol = '$';
+    currency.isPrimary = true;
+    currency.deletable = false;
+    const newCurrency = await this.currencyAccess.save(currency);
 
-      if (data.nickname) {
-        const member = new MemberEntity();
-        member.bookId = newBook.id;
-        member.nickname = data.nickname;
-        member.deviceId = deviceId;
-        member.total = 0;
-        member.balance = 0;
-        member.deletable = true;
-        const newMember = await this.memberAccess.save(member);
+    if (data.nickname) {
+      const member = new MemberEntity();
+      member.bookId = newBook.id;
+      member.nickname = data.nickname;
+      member.deviceId = deviceId;
+      member.total = 0;
+      member.balance = 0;
+      member.deletable = true;
+      const newMember = await this.memberAccess.save(member);
 
-        const memberSettlement = new MemberSettlementEntity();
-        memberSettlement.memberId = newMember.id;
-        memberSettlement.currencyId = newCurrency.id;
-        memberSettlement.balance = 0;
-        memberSettlement.total = 0;
-        await this.memberSettlementAccess.save(memberSettlement);
-      }
-
-      await this.dbAccess.commitTransaction();
-
-      return newBook;
-    } catch (e) {
-      await this.dbAccess.rollbackTransaction();
-      throw e;
+      const memberSettlement = new MemberSettlementEntity();
+      memberSettlement.memberId = newMember.id;
+      memberSettlement.currencyId = newCurrency.id;
+      memberSettlement.balance = 0;
+      memberSettlement.total = 0;
+      await this.memberSettlementAccess.save(memberSettlement);
     }
+
+    return newBook;
   }
 
   private async checkDeviceHasBook(
@@ -621,37 +605,28 @@ export class BookService {
   ): Promise<PostBookMemberResponse> {
     await this.checkDeviceHasBook(deviceId, id);
 
-    try {
-      await this.dbAccess.startTransaction();
+    const member = new MemberEntity();
+    member.bookId = id;
+    member.nickname = data.nickname;
+    member.total = 0;
+    member.balance = 0;
+    member.deletable = true;
 
-      const member = new MemberEntity();
-      member.bookId = id;
-      member.nickname = data.nickname;
-      member.total = 0;
-      member.balance = 0;
-      member.deletable = true;
+    const newMember = await this.memberAccess.save(member);
+    const currencies = await this.currencyAccess.findByBookId(id);
+    await Promise.all(
+      currencies.map((v) => {
+        const membersettlement = new MemberSettlementEntity();
+        membersettlement.memberId = newMember.id;
+        membersettlement.currencyId = v.id;
+        membersettlement.balance = 0;
+        membersettlement.total = 0;
 
-      const newMember = await this.memberAccess.save(member);
-      const currencies = await this.currencyAccess.findByBookId(id);
-      await Promise.all(
-        currencies.map((v) => {
-          const membersettlement = new MemberSettlementEntity();
-          membersettlement.memberId = newMember.id;
-          membersettlement.currencyId = v.id;
-          membersettlement.balance = 0;
-          membersettlement.total = 0;
+        return this.memberSettlementAccess.save(membersettlement);
+      })
+    );
 
-          return this.memberSettlementAccess.save(membersettlement);
-        })
-      );
-
-      await this.dbAccess.commitTransaction();
-
-      return newMember;
-    } catch (e) {
-      await this.dbAccess.rollbackTransaction();
-      throw e;
-    }
+    return newMember;
   }
 
   public async reviseMemberNickname(
@@ -754,82 +729,67 @@ export class BookService {
   ): Promise<PostBookBillResponse> {
     await this.checkDeviceHasBook(deviceId, id);
 
-    try {
-      await this.dbAccess.startTransaction();
+    const bill = new BillEntity();
+    bill.ver = '1';
+    bill.bookId = id;
+    bill.date = data.date;
+    bill.type = data.type;
+    bill.descr = data.descr;
+    bill.amount = data.amount;
+    bill.memo = data.memo ?? null;
+    bill.currencyId =
+      data.currencyId ?? (await this.currencyAccess.findPrimaryByBookId(id)).id;
 
-      const bill = new BillEntity();
-      bill.ver = '1';
-      bill.bookId = id;
-      bill.date = data.date;
-      bill.type = data.type;
-      bill.descr = data.descr;
-      bill.amount = data.amount;
-      bill.memo = data.memo ?? null;
-      bill.currencyId =
-        data.currencyId ??
-        (await this.currencyAccess.findPrimaryByBookId(id)).id;
+    const newBill = await this.billAccess.save(bill);
+    this.validateDetail(data.amount, data.former);
+    this.validateDetail(data.amount, data.latter);
 
-      const newBill = await this.billAccess.save(bill);
-      this.validateDetail(data.amount, data.former);
-      this.validateDetail(data.amount, data.latter);
+    await Promise.all(
+      data.former.map(async (v) => {
+        let amount = v.amount;
+        if (data.type === BillType.In) amount = v.amount * -1;
 
-      await Promise.all(
-        data.former.map(async (v) => {
-          let amount = v.amount;
-          if (data.type === BillType.In) amount = v.amount * -1;
+        const billShare = new BillShareEntity();
+        billShare.billId = newBill.id;
+        billShare.ver = '1';
+        billShare.memberId = v.id;
+        billShare.method = v.method;
+        billShare.value = v.value ?? null;
+        billShare.amount = amount;
 
-          const billShare = new BillShareEntity();
-          billShare.billId = newBill.id;
-          billShare.ver = '1';
-          billShare.memberId = v.id;
-          billShare.method = v.method;
-          billShare.value = v.value ?? null;
-          billShare.amount = amount;
+        await this.billShareAccess.save(billShare);
 
-          await this.billShareAccess.save(billShare);
+        return await this.updateMember(v.id, newBill.currencyId, amount);
+      })
+    );
+    await Promise.all(
+      data.latter.map(async (v) => {
+        let amount = v.amount;
+        if (data.type === BillType.Out) amount = v.amount * -1;
 
-          return await this.updateMember(v.id, newBill.currencyId, amount);
-        })
-      );
-      await Promise.all(
-        data.latter.map(async (v) => {
-          let amount = v.amount;
-          if (data.type === BillType.Out) amount = v.amount * -1;
+        const billShare = new BillShareEntity();
+        billShare.billId = newBill.id;
+        billShare.ver = '1';
+        billShare.memberId = v.id;
+        billShare.method = v.method;
+        billShare.value = v.value ?? null;
+        billShare.amount = amount;
 
-          const billShare = new BillShareEntity();
-          billShare.billId = newBill.id;
-          billShare.ver = '1';
-          billShare.memberId = v.id;
-          billShare.method = v.method;
-          billShare.value = v.value ?? null;
-          billShare.amount = amount;
+        await this.billShareAccess.save(billShare);
 
-          await this.billShareAccess.save(billShare);
+        return await this.updateMember(v.id, newBill.currencyId, amount, true);
+      })
+    );
 
-          return await this.updateMember(
-            v.id,
-            newBill.currencyId,
-            amount,
-            true
-          );
-        })
-      );
-
-      await this.dbAccess.commitTransaction();
-
-      return {
-        members: await this.getMemberByBook(id),
-        transaction: {
-          ...newBill,
-          former: data.former,
-          latter: data.latter,
-          history: [],
-        },
-      };
-    } catch (e) {
-      await this.dbAccess.rollbackTransaction();
-      throw e;
-    }
+    return {
+      members: await this.getMemberByBook(id),
+      transaction: {
+        ...newBill,
+        former: data.former,
+        latter: data.latter,
+        history: [],
+      },
+    };
   }
 
   private async deleteOldBill(oldBill: Bill) {
@@ -875,83 +835,69 @@ export class BookService {
   ): Promise<PutBookBillResponse> {
     await this.checkDeviceHasBook(deviceId, bookId);
 
-    try {
-      await this.dbAccess.startTransaction();
+    const oldBill = await this.billAccess.findUndeletedById(billId);
+    await this.deleteOldBill(oldBill);
 
-      const oldBill = await this.billAccess.findUndeletedById(billId);
-      await this.deleteOldBill(oldBill);
+    const bill = new BillEntity();
+    bill.id = billId;
+    bill.ver = bn(oldBill.ver).plus(1).toString();
+    bill.bookId = bookId;
+    bill.date = data.date;
+    bill.type = data.type;
+    bill.descr = data.descr;
+    bill.amount = data.amount;
+    bill.memo = data.memo ?? null;
+    bill.currencyId =
+      data.currencyId ??
+      (await this.currencyAccess.findPrimaryByBookId(bookId)).id;
 
-      const bill = new BillEntity();
-      bill.id = billId;
-      bill.ver = bn(oldBill.ver).plus(1).toString();
-      bill.bookId = bookId;
-      bill.date = data.date;
-      bill.type = data.type;
-      bill.descr = data.descr;
-      bill.amount = data.amount;
-      bill.memo = data.memo ?? null;
-      bill.currencyId =
-        data.currencyId ??
-        (await this.currencyAccess.findPrimaryByBookId(bookId)).id;
+    const newBill = await this.billAccess.save(bill);
+    this.validateDetail(data.amount, data.former);
+    this.validateDetail(data.amount, data.latter);
 
-      const newBill = await this.billAccess.save(bill);
-      this.validateDetail(data.amount, data.former);
-      this.validateDetail(data.amount, data.latter);
+    await Promise.all(
+      data.former.map(async (v) => {
+        let amount = v.amount;
+        if (data.type === BillType.In) amount = v.amount * -1;
 
-      await Promise.all(
-        data.former.map(async (v) => {
-          let amount = v.amount;
-          if (data.type === BillType.In) amount = v.amount * -1;
+        const billShare = new BillShareEntity();
+        billShare.billId = newBill.id;
+        billShare.ver = bn(oldBill.ver).plus(1).toString();
+        billShare.memberId = v.id;
+        billShare.method = v.method;
+        billShare.value = v.value ?? null;
+        billShare.amount = amount;
 
-          const billShare = new BillShareEntity();
-          billShare.billId = newBill.id;
-          billShare.ver = bn(oldBill.ver).plus(1).toString();
-          billShare.memberId = v.id;
-          billShare.method = v.method;
-          billShare.value = v.value ?? null;
-          billShare.amount = amount;
+        await this.billShareAccess.save(billShare);
 
-          await this.billShareAccess.save(billShare);
+        return await this.updateMember(v.id, newBill.currencyId, amount);
+      })
+    );
+    await Promise.all(
+      data.latter.map(async (v) => {
+        let amount = v.amount;
+        if (data.type === BillType.Out) amount = v.amount * -1;
 
-          return await this.updateMember(v.id, newBill.currencyId, amount);
-        })
-      );
-      await Promise.all(
-        data.latter.map(async (v) => {
-          let amount = v.amount;
-          if (data.type === BillType.Out) amount = v.amount * -1;
+        const billShare = new BillShareEntity();
+        billShare.billId = newBill.id;
+        billShare.ver = bn(oldBill.ver).plus(1).toString();
+        billShare.memberId = v.id;
+        billShare.method = v.method;
+        billShare.value = v.value ?? null;
+        billShare.amount = amount;
 
-          const billShare = new BillShareEntity();
-          billShare.billId = newBill.id;
-          billShare.ver = bn(oldBill.ver).plus(1).toString();
-          billShare.memberId = v.id;
-          billShare.method = v.method;
-          billShare.value = v.value ?? null;
-          billShare.amount = amount;
+        await this.billShareAccess.save(billShare);
 
-          await this.billShareAccess.save(billShare);
+        return await this.updateMember(v.id, newBill.currencyId, amount, true);
+      })
+    );
 
-          return await this.updateMember(
-            v.id,
-            newBill.currencyId,
-            amount,
-            true
-          );
-        })
-      );
+    const billShares = await this.vBillShareAccess.findByBillId(newBill.id);
 
-      await this.dbAccess.commitTransaction();
-
-      const billShares = await this.vBillShareAccess.findByBillId(newBill.id);
-
-      return {
-        members: await this.getMemberByBook(bookId),
-        transaction: this.handleBill(billShares)[0],
-      };
-    } catch (e) {
-      await this.dbAccess.rollbackTransaction();
-      throw e;
-    }
+    return {
+      members: await this.getMemberByBook(bookId),
+      transaction: this.handleBill(billShares)[0],
+    };
   }
 
   public async deleteBill(
@@ -961,23 +907,15 @@ export class BookService {
   ): Promise<DeleteBookBillResponse> {
     await this.checkDeviceHasBook(deviceId, bookId);
 
-    try {
-      await this.dbAccess.startTransaction();
-      const bill = await this.billAccess.findUndeletedById(billId);
-      await this.deleteOldBill(bill);
+    const bill = await this.billAccess.findUndeletedById(billId);
+    await this.deleteOldBill(bill);
 
-      await this.dbAccess.commitTransaction();
+    const billShares = await this.vBillShareAccess.findByBillId(billId);
 
-      const billShares = await this.vBillShareAccess.findByBillId(billId);
-
-      return {
-        members: await this.getMemberByBook(bookId),
-        transaction: this.handleBill(billShares)[0],
-      };
-    } catch (e) {
-      await this.dbAccess.rollbackTransaction();
-      throw e;
-    }
+    return {
+      members: await this.getMemberByBook(bookId),
+      transaction: this.handleBill(billShares)[0],
+    };
   }
 
   public async addTransfer(
@@ -987,43 +925,33 @@ export class BookService {
   ): Promise<PostBookTransferResponse> {
     await this.checkDeviceHasBook(deviceId, id);
 
-    try {
-      await this.dbAccess.startTransaction();
+    const transfer = new TransferEntity();
+    transfer.ver = '1';
+    transfer.bookId = id;
+    transfer.date = data.date;
+    transfer.amount = data.amount;
+    transfer.srcMemberId = data.srcMemberId;
+    transfer.dstMemberId = data.dstMemberId;
+    transfer.memo = data.memo ?? null;
+    transfer.currencyId =
+      data.currencyId ?? (await this.currencyAccess.findPrimaryByBookId(id)).id;
 
-      const transfer = new TransferEntity();
-      transfer.ver = '1';
-      transfer.bookId = id;
-      transfer.date = data.date;
-      transfer.amount = data.amount;
-      transfer.srcMemberId = data.srcMemberId;
-      transfer.dstMemberId = data.dstMemberId;
-      transfer.memo = data.memo ?? null;
-      transfer.currencyId =
-        data.currencyId ??
-        (await this.currencyAccess.findPrimaryByBookId(id)).id;
+    const newTransfer = await this.transferAccess.save(transfer);
+    await this.updateMember(
+      data.srcMemberId,
+      newTransfer.currencyId,
+      bn(data.amount)
+    );
+    await this.updateMember(
+      data.dstMemberId,
+      newTransfer.currencyId,
+      bn(data.amount).negated()
+    );
 
-      const newTransfer = await this.transferAccess.save(transfer);
-      await this.updateMember(
-        data.srcMemberId,
-        newTransfer.currencyId,
-        bn(data.amount)
-      );
-      await this.updateMember(
-        data.dstMemberId,
-        newTransfer.currencyId,
-        bn(data.amount).negated()
-      );
-
-      await this.dbAccess.commitTransaction();
-
-      return {
-        members: await this.getMemberByBook(id),
-        transaction: { ...newTransfer, type: 'transfer', history: [] },
-      };
-    } catch (e) {
-      await this.dbAccess.rollbackTransaction();
-      throw e;
-    }
+    return {
+      members: await this.getMemberByBook(id),
+      transaction: { ...newTransfer, type: 'transfer', history: [] },
+    };
   }
 
   public async updateTransfer(
@@ -1034,64 +962,54 @@ export class BookService {
   ): Promise<PutBookTransferResponse> {
     await this.checkDeviceHasBook(deviceId, bookId);
 
-    try {
-      await this.dbAccess.startTransaction();
-      const oldTransfer = await this.transferAccess.findUndeletedById(
-        transferId
-      );
+    const oldTransfer = await this.transferAccess.findUndeletedById(transferId);
 
-      await this.transferAccess.update({
-        ...oldTransfer,
-        dateDeleted: new Date().toISOString(),
-      });
-      await this.updateMember(
-        oldTransfer.srcMemberId,
-        oldTransfer.currencyId,
-        bn(oldTransfer.amount).negated()
-      );
-      await this.updateMember(
-        oldTransfer.dstMemberId,
-        oldTransfer.currencyId,
-        bn(oldTransfer.amount)
-      );
+    await this.transferAccess.update({
+      ...oldTransfer,
+      dateDeleted: new Date().toISOString(),
+    });
+    await this.updateMember(
+      oldTransfer.srcMemberId,
+      oldTransfer.currencyId,
+      bn(oldTransfer.amount).negated()
+    );
+    await this.updateMember(
+      oldTransfer.dstMemberId,
+      oldTransfer.currencyId,
+      bn(oldTransfer.amount)
+    );
 
-      const transfer = new TransferEntity();
-      transfer.id = transferId;
-      transfer.ver = bn(oldTransfer.ver).plus(1).toString();
-      transfer.bookId = bookId;
-      transfer.date = data.date;
-      transfer.amount = data.amount;
-      transfer.srcMemberId = data.srcMemberId;
-      transfer.dstMemberId = data.dstMemberId;
-      transfer.memo = data.memo ?? null;
-      transfer.currencyId =
-        data.currencyId ??
-        (await this.currencyAccess.findPrimaryByBookId(bookId)).id;
+    const transfer = new TransferEntity();
+    transfer.id = transferId;
+    transfer.ver = bn(oldTransfer.ver).plus(1).toString();
+    transfer.bookId = bookId;
+    transfer.date = data.date;
+    transfer.amount = data.amount;
+    transfer.srcMemberId = data.srcMemberId;
+    transfer.dstMemberId = data.dstMemberId;
+    transfer.memo = data.memo ?? null;
+    transfer.currencyId =
+      data.currencyId ??
+      (await this.currencyAccess.findPrimaryByBookId(bookId)).id;
 
-      const newTransfer = await this.transferAccess.save(transfer);
-      await this.updateMember(
-        data.srcMemberId,
-        newTransfer.currencyId,
-        bn(data.amount)
-      );
-      await this.updateMember(
-        data.dstMemberId,
-        newTransfer.currencyId,
-        bn(data.amount).negated()
-      );
+    const newTransfer = await this.transferAccess.save(transfer);
+    await this.updateMember(
+      data.srcMemberId,
+      newTransfer.currencyId,
+      bn(data.amount)
+    );
+    await this.updateMember(
+      data.dstMemberId,
+      newTransfer.currencyId,
+      bn(data.amount).negated()
+    );
 
-      await this.dbAccess.commitTransaction();
+    const transfers = await this.transferAccess.findById(transferId);
 
-      const transfers = await this.transferAccess.findById(transferId);
-
-      return {
-        members: await this.getMemberByBook(bookId),
-        transaction: this.handleTransfer(transfers)[0],
-      };
-    } catch (e) {
-      await this.dbAccess.rollbackTransaction();
-      throw e;
-    }
+    return {
+      members: await this.getMemberByBook(bookId),
+      transaction: this.handleTransfer(transfers)[0],
+    };
   }
 
   public async deleteTransfer(
@@ -1101,37 +1019,29 @@ export class BookService {
   ): Promise<DeleteBookTransferResponse> {
     await this.checkDeviceHasBook(deviceId, bookId);
 
-    try {
-      await this.dbAccess.startTransaction();
-      const transfer = await this.transferAccess.findUndeletedById(transferId);
+    const transfer = await this.transferAccess.findUndeletedById(transferId);
 
-      await this.updateMember(
-        transfer.srcMemberId,
-        transfer.currencyId,
-        bn(transfer.amount).negated()
-      );
-      await this.updateMember(
-        transfer.dstMemberId,
-        transfer.currencyId,
-        bn(transfer.amount)
-      );
-      await this.transferAccess.update({
-        ...transfer,
-        dateDeleted: new Date().toISOString(),
-      });
+    await this.updateMember(
+      transfer.srcMemberId,
+      transfer.currencyId,
+      bn(transfer.amount).negated()
+    );
+    await this.updateMember(
+      transfer.dstMemberId,
+      transfer.currencyId,
+      bn(transfer.amount)
+    );
+    await this.transferAccess.update({
+      ...transfer,
+      dateDeleted: new Date().toISOString(),
+    });
 
-      await this.dbAccess.commitTransaction();
+    const transfers = await this.transferAccess.findById(transferId);
 
-      const transfers = await this.transferAccess.findById(transferId);
-
-      return {
-        members: await this.getMemberByBook(bookId),
-        transaction: this.handleTransfer(transfers)[0],
-      };
-    } catch (e) {
-      await this.dbAccess.rollbackTransaction();
-      throw e;
-    }
+    return {
+      members: await this.getMemberByBook(bookId),
+      transaction: this.handleTransfer(transfers)[0],
+    };
   }
 
   public async addCurrency(
@@ -1141,38 +1051,29 @@ export class BookService {
   ): Promise<PostBookCurrencyResponse> {
     await this.checkDeviceHasBook(deviceId, id);
 
-    try {
-      await this.dbAccess.startTransaction();
+    const currency = new CurrencyEntity();
+    currency.bookId = id;
+    currency.name = data.name;
+    currency.symbol = data.symbol;
+    currency.exchangeRate = data.exchangeRate;
+    currency.isPrimary = false;
+    currency.deletable = true;
 
-      const currency = new CurrencyEntity();
-      currency.bookId = id;
-      currency.name = data.name;
-      currency.symbol = data.symbol;
-      currency.exchangeRate = data.exchangeRate;
-      currency.isPrimary = false;
-      currency.deletable = true;
+    const newCurrency = await this.currencyAccess.save(currency);
+    const members = await this.memberAccess.findByBookId(id);
+    await Promise.all(
+      members.map((v) => {
+        const membersettlement = new MemberSettlementEntity();
+        membersettlement.memberId = v.id;
+        membersettlement.currencyId = newCurrency.id;
+        membersettlement.balance = 0;
+        membersettlement.total = 0;
 
-      const newCurrency = await this.currencyAccess.save(currency);
-      const members = await this.memberAccess.findByBookId(id);
-      await Promise.all(
-        members.map((v) => {
-          const membersettlement = new MemberSettlementEntity();
-          membersettlement.memberId = v.id;
-          membersettlement.currencyId = newCurrency.id;
-          membersettlement.balance = 0;
-          membersettlement.total = 0;
+        return this.memberSettlementAccess.save(membersettlement);
+      })
+    );
 
-          return this.memberSettlementAccess.save(membersettlement);
-        })
-      );
-
-      await this.dbAccess.commitTransaction();
-
-      return newCurrency;
-    } catch (e) {
-      await this.dbAccess.rollbackTransaction();
-      throw e;
-    }
+    return newCurrency;
   }
 
   public async updateCurrency(
@@ -1215,33 +1116,24 @@ export class BookService {
   ) {
     await this.checkDeviceHasBook(deviceId, bookId);
 
-    try {
-      await this.dbAccess.startTransaction();
+    const currency = await this.currencyAccess.findById(currencyId);
+    if (currency.bookId !== bookId) throw new BadRequestError('bad request');
+    if (currency.deletable === false)
+      throw new BadRequestError('not deletable');
 
-      const currency = await this.currencyAccess.findById(currencyId);
-      if (currency.bookId !== bookId) throw new BadRequestError('bad request');
-      if (currency.deletable === false)
-        throw new BadRequestError('not deletable');
+    const isDeletable = await this.checkCurrencyIsDeletable(currencyId);
+    if (!isDeletable) throw new BadRequestError('not deletable');
 
-      const isDeletable = await this.checkCurrencyIsDeletable(currencyId);
-      if (!isDeletable) throw new BadRequestError('not deletable');
+    const memberSettlements =
+      await this.memberSettlementAccess.findByCurrencyId(currencyId);
 
-      const memberSettlements =
-        await this.memberSettlementAccess.findByCurrencyId(currencyId);
+    await Promise.all(
+      memberSettlements.map((v) =>
+        this.memberSettlementAccess.hardDeleteById(v.id)
+      )
+    );
 
-      await Promise.all(
-        memberSettlements.map((v) =>
-          this.memberSettlementAccess.hardDeleteById(v.id)
-        )
-      );
-
-      await this.currencyAccess.hardDeleteById(currencyId);
-
-      await this.dbAccess.commitTransaction();
-    } catch (e) {
-      await this.dbAccess.rollbackTransaction();
-      throw e;
-    }
+    await this.currencyAccess.hardDeleteById(currencyId);
   }
 
   public async reviseCurrencyPrimary(
@@ -1251,61 +1143,53 @@ export class BookService {
   ): Promise<PutBookCurrencyPrimaryResponse> {
     await this.checkDeviceHasBook(deviceId, bookId);
 
-    try {
-      await this.dbAccess.startTransaction();
+    const currencies = await this.currencyAccess.findByBookId(bookId);
+    const newPrimaryCurrency = currencies.find((v) => v.id === currencyId);
+    const oldPrimaryCurrency = currencies.find((v) => v.isPrimary === true);
+    if (
+      newPrimaryCurrency === undefined ||
+      oldPrimaryCurrency === undefined ||
+      newPrimaryCurrency.exchangeRate === null
+    )
+      throw new InternalServerError('something works unexpected');
 
-      const currencies = await this.currencyAccess.findByBookId(bookId);
-      const newPrimaryCurrency = currencies.find((v) => v.id === currencyId);
-      const oldPrimaryCurrency = currencies.find((v) => v.isPrimary === true);
-      if (
-        newPrimaryCurrency === undefined ||
-        oldPrimaryCurrency === undefined ||
-        newPrimaryCurrency.exchangeRate === null
-      )
-        throw new InternalServerError('something works unexpected');
-
-      const newCurrencies: Currency[] = [];
-      for (const currency of currencies) {
-        const temp = { ...currency };
-        // is old primary and set as secondary
-        if (temp.id === oldPrimaryCurrency.id) {
-          temp.isPrimary = false;
-          temp.deletable = await this.checkCurrencyIsDeletable(temp.id);
-          temp.exchangeRate = bn(1)
-            .div(newPrimaryCurrency.exchangeRate)
-            .dp(6)
-            .toNumber();
-        }
-        // is new primary and set as primary
-        else if (temp.id === newPrimaryCurrency.id) {
-          temp.isPrimary = true;
-          temp.deletable = false;
-          temp.exchangeRate = null;
-        }
-        // is still secondary
-        else {
-          if (temp.exchangeRate === null)
-            throw new InternalServerError('exchange rate should be not null');
-          temp.exchangeRate = bn(temp.exchangeRate)
-            .div(newPrimaryCurrency.exchangeRate)
-            .dp(6)
-            .toNumber();
-        }
-        // to avoid extreme value
-        if (temp.exchangeRate === 0) temp.exchangeRate = 0.000001;
-        newCurrencies.push(temp);
+    const newCurrencies: Currency[] = [];
+    for (const currency of currencies) {
+      const temp = { ...currency };
+      // is old primary and set as secondary
+      if (temp.id === oldPrimaryCurrency.id) {
+        temp.isPrimary = false;
+        temp.deletable = await this.checkCurrencyIsDeletable(temp.id);
+        temp.exchangeRate = bn(1)
+          .div(newPrimaryCurrency.exchangeRate)
+          .dp(6)
+          .toNumber();
       }
-
-      await Promise.all(newCurrencies.map((v) => this.currencyAccess.save(v)));
-      await this.dbAccess.commitTransaction();
-
-      return {
-        currencies: newCurrencies.sort(compare('dateCreated')),
-        members: await this.getMemberByBook(bookId),
-      };
-    } catch (e) {
-      await this.dbAccess.rollbackTransaction();
-      throw e;
+      // is new primary and set as primary
+      else if (temp.id === newPrimaryCurrency.id) {
+        temp.isPrimary = true;
+        temp.deletable = false;
+        temp.exchangeRate = null;
+      }
+      // is still secondary
+      else {
+        if (temp.exchangeRate === null)
+          throw new InternalServerError('exchange rate should be not null');
+        temp.exchangeRate = bn(temp.exchangeRate)
+          .div(newPrimaryCurrency.exchangeRate)
+          .dp(6)
+          .toNumber();
+      }
+      // to avoid extreme value
+      if (temp.exchangeRate === 0) temp.exchangeRate = 0.000001;
+      newCurrencies.push(temp);
     }
+
+    await Promise.all(newCurrencies.map((v) => this.currencyAccess.save(v)));
+
+    return {
+      currencies: newCurrencies.sort(compare('dateCreated')),
+      members: await this.getMemberByBook(bookId),
+    };
   }
 }

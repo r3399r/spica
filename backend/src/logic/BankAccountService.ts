@@ -1,7 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { BankAccess } from 'src/access/BankAccess';
 import { BankAccountAccess } from 'src/access/BankAccountAccess';
-import { DbAccess } from 'src/access/DbAccess';
 import {
   DeleteBankAccountResponse,
   GetBankAccountBankResponse,
@@ -18,18 +17,11 @@ import { BankAccountEntity } from 'src/model/entity/BankAccountEntity';
  */
 @injectable()
 export class BankAccountService {
-  @inject(DbAccess)
-  private readonly dbAccess!: DbAccess;
-
   @inject(BankAccountAccess)
   private readonly bankAccountAccess!: BankAccountAccess;
 
   @inject(BankAccess)
   private readonly bankAccess!: BankAccess;
-
-  public async cleanup() {
-    await this.dbAccess.cleanup();
-  }
 
   public async getBankAccount(
     deviceId: string

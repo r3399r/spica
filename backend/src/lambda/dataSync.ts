@@ -5,42 +5,30 @@ import {
   PostDataSyncRequest,
 } from 'src/model/api/DataSync';
 import { BadRequestError, InternalServerError } from 'src/model/error';
-import { LambdaContext, LambdaEvent, LambdaOutput } from 'src/model/Lambda';
-import { errorOutput, successOutput } from 'src/util/LambdaOutput';
+import { LambdaContext, LambdaEvent } from 'src/model/Lambda';
+
+let event: LambdaEvent;
+let service: DataSyncService;
 
 export async function dataSync(
-  event: LambdaEvent,
+  lambdaEvent: LambdaEvent,
   _context?: LambdaContext
-): Promise<LambdaOutput> {
-  let service: DataSyncService | null = null;
-  try {
-    service = bindings.get(DataSyncService);
+) {
+  event = lambdaEvent;
+  service = bindings.get(DataSyncService);
 
-    let res: unknown;
-
-    switch (event.resource) {
-      case '/api/dataSync':
-        res = await apiDataSync(event, service);
-        break;
-      case '/api/dataSync/bind':
-        res = await apiDataSyncBind(event, service);
-        break;
-      case '/api/dataSync/unbind':
-        res = await apiDataSyncUnbind(event, service);
-        break;
-      default:
-        throw new InternalServerError('unknown resource');
-    }
-
-    return successOutput(res);
-  } catch (e) {
-    return errorOutput(e);
-  } finally {
-    await service?.cleanup();
+  switch (event.resource) {
+    case '/api/dataSync':
+      return await apiDataSync();
+    case '/api/dataSync/bind':
+      return await apiDataSyncBind();
+    case '/api/dataSync/unbind':
+      return await apiDataSyncUnbind();
   }
+  throw new InternalServerError('unknown resource');
 }
 
-async function apiDataSync(event: LambdaEvent, service: DataSyncService) {
+async function apiDataSync() {
   if (event.headers === null)
     throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
@@ -57,7 +45,7 @@ async function apiDataSync(event: LambdaEvent, service: DataSyncService) {
   }
 }
 
-async function apiDataSyncBind(event: LambdaEvent, service: DataSyncService) {
+async function apiDataSyncBind() {
   if (event.headers === null)
     throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
@@ -74,7 +62,7 @@ async function apiDataSyncBind(event: LambdaEvent, service: DataSyncService) {
   }
 }
 
-async function apiDataSyncUnbind(event: LambdaEvent, service: DataSyncService) {
+async function apiDataSyncUnbind() {
   if (event.headers === null)
     throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {

@@ -1,7 +1,6 @@
 import { SES } from 'aws-sdk';
 import { inject, injectable } from 'inversify';
 import { v4 as uuidv4 } from 'uuid';
-import { DbAccess } from 'src/access/DbAccess';
 import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
 import { SyncCodeAccess } from 'src/access/SyncCodeAccess';
 import { ErrorMessage } from 'src/constant/ErrorMessage';
@@ -24,18 +23,11 @@ export class DataSyncService {
   @inject(SES)
   private readonly ses!: SES;
 
-  @inject(DbAccess)
-  private readonly dbAccess!: DbAccess;
-
   @inject(SyncCodeAccess)
   private readonly syncCodeAccess!: SyncCodeAccess;
 
   @inject(DeviceBookAccess)
   private readonly deviceBookAccess!: DeviceBookAccess;
-
-  public async cleanup() {
-    await this.dbAccess.cleanup();
-  }
 
   private getEmailBody(language: string, code: string) {
     switch (language) {
