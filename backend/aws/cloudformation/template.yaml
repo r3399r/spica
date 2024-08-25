@@ -1901,7 +1901,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Architectures: [arm64]
-      Handler: index.dbClean
+      Handler: index.eventBridgeDbClean
       Runtime: nodejs18.x
       FunctionName: !Sub ${Project}-${TargetEnvr}-dbClean
       Role: !GetAtt ExecutionRole.Arn
@@ -1927,7 +1927,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Architectures: [arm64]
-      Handler: index.bank
+      Handler: index.eventBridgebank
       Runtime: nodejs18.x
       FunctionName: !Sub ${Project}-${TargetEnvr}-bank
       Role: !GetAtt ExecutionRole.Arn
