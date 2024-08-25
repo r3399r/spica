@@ -1906,7 +1906,7 @@ Resources:
       FunctionName: !Sub ${Project}-${TargetEnvr}-dbClean
       Role: !GetAtt ExecutionRole.Arn
       CodeUri: ../../lib/src
-      MemorySize: 256
+      MemorySize: 200
       Layers: [!Ref LambdaLayer]
       Environment:
         Variables:
@@ -1932,7 +1932,7 @@ Resources:
       FunctionName: !Sub ${Project}-${TargetEnvr}-bank
       Role: !GetAtt ExecutionRole.Arn
       CodeUri: ../../lib/src
-      MemorySize: 256
+      MemorySize: 200
       Layers: [!Ref LambdaLayer]
       Environment:
         Variables:
@@ -1958,7 +1958,7 @@ Resources:
       FunctionName: !Sub ${Project}-${TargetEnvr}-api
       Role: !GetAtt ExecutionRole.Arn
       CodeUri: ../../lib/src
-      MemorySize: 256
+      MemorySize: 200
       Layers: [!Ref LambdaLayer]
       Environment:
         Variables:
