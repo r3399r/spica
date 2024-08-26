@@ -4,5 +4,5 @@ export type EmailBind = {
   code: string;
   codeGenerated: string;
   dateCreated: string;
-  dateUpdated: string | null
+  dateUpdated: string | null;
 };

@@ -12,7 +12,7 @@ export class EmailBindEntity implements EmailBind {
   @Column({ type: 'text' })
   code!: string;
 
-  @Column({ type: 'timestamp', name: 'code_generated'})
+  @Column({ type: 'timestamp', name: 'code_generated' })
   codeGenerated!: string;
 
   @Column({ type: 'timestamp', name: 'date_created', default: null })

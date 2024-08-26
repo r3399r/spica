@@ -2,6 +2,7 @@ import { SES } from 'aws-sdk';
 import { inject, injectable } from 'inversify';
 import { v4 as uuidv4 } from 'uuid';
 import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
+import { EmailBindAccess } from 'src/access/EmailBindAccess';
 import { ErrorMessage } from 'src/constant/ErrorMessage';
 import {
   PostDataSyncBindRequest,
@@ -13,7 +14,6 @@ import { DeviceBookEntity } from 'src/model/entity/DeviceBookEntity';
 import { EmailBindEntity } from 'src/model/entity/EmailBindEntity';
 import { BadRequestError } from 'src/model/error';
 import { randomBase10 } from 'src/util/random';
-import { EmailBindAccess } from 'src/access/EmailBindAccess';
 
 /**
  * Service class for DataSync
@@ -60,7 +60,7 @@ export class DataSyncService {
     if (
       emailBind &&
       new Date().getTime() - new Date(emailBind.codeGenerated).getTime() <
-      5 * 60 * 1000
+        10 * 60 * 1000
     )
       throw new BadRequestError(ErrorMessage.TOO_FREQUENT);
 

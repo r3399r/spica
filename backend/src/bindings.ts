@@ -10,9 +10,9 @@ import { CurrencyAccess } from './access/CurrencyAccess';
 import { DbAccess } from './access/DbAccess';
 import { DeviceBookAccess } from './access/DeviceBookAccess';
 import { DeviceTokenAccess } from './access/DeviceTokenAccess';
+import { EmailBindAccess } from './access/EmailBindAccess';
 import { MemberAccess } from './access/MemberAccess';
 import { MemberSettlementAccess } from './access/MemberSettlementAccess';
-import { EmailBindAccess } from './access/EmailBindAccess';
 import { TransferAccess } from './access/TransferAccess';
 import { ViewBillShareAccess } from './access/ViewBillShareAccess';
 import { ViewBookAccess } from './access/ViewBookAccess';
@@ -32,6 +32,7 @@ import { BookEntity } from './model/entity/BookEntity';
 import { CurrencyEntity } from './model/entity/CurrencyEntity';
 import { DeviceBookEntity } from './model/entity/DeviceBookEntity';
 import { DeviceTokenEntity } from './model/entity/DeviceTokenEntity';
+import { EmailBindEntity } from './model/entity/EmailBindEntity';
 import { MemberEntity } from './model/entity/MemberEntity';
 import { MemberSettlementEntity } from './model/entity/MemberSettlementEntity';
 import { TransferEntity } from './model/entity/TransferEntity';
@@ -40,7 +41,6 @@ import { ViewBookEntity } from './model/viewEntity/ViewBookEntity';
 import { ViewDeviceBookEntity } from './model/viewEntity/ViewDeviceBookEntity';
 import { ViewTransactionEntity } from './model/viewEntity/ViewTransactionEntity';
 import { Database, dbEntitiesBindingId } from './util/Database';
-import { EmailBindEntity } from './model/entity/EmailBindEntity';
 
 const container: Container = new Container();
 

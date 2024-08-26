@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import Button from 'src/component/Button';
 import Form from 'src/component/Form';
 import FormInput from 'src/component/FormInput';
-import Input from 'src/component/Input';
 import NavbarVanilla from 'src/component/NavbarVanilla';
 import Body from 'src/component/typography/Body';
 import H2 from 'src/component/typography/H2';
@@ -39,7 +38,15 @@ const DataSync = () => {
         </Body>
         {emailBinded ? (
           <div className="relative">
-            <Input value={emailBinded} label={t('dataSync.label')} />
+            <div>
+              <Body className="mb-[5px]">{t('dataSync.label')}</Body>
+              <Body
+                size="l"
+                className="rounded-[4px] border border-navy-900/30 bg-grey-200 p-2 text-navy-300"
+              >
+                {emailBinded}
+              </Body>
+            </div>
             <img
               src={IcUnbind}
               className="absolute bottom-2 right-2 cursor-pointer"

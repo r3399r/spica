@@ -211,7 +211,7 @@
   },
   "error": {
     "default": "エラーが発生しました。再試行してください。状況が続く場合は、お問い合わせください、ありがとうございます。",
-    "tooFrequent": "We've sent you the code. If you want to resend email, please wait for 5 minutes.",
+    "tooFrequent": "We've sent you the code. Please check your email or try again 10 minutes later.",
     "invalidCode": "Invalid code"
   }
 }

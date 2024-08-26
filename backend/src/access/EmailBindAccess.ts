@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
 import { FindOneOptions } from 'typeorm';
+import { EmailBind } from 'src/model/entity/EmailBind';
 import { EmailBindEntity } from 'src/model/entity/EmailBindEntity';
 import { Database } from 'src/util/Database';
-import { EmailBind } from 'src/model/entity/EmailBind';
 
 /**
  * Access class for EmailBind model.
