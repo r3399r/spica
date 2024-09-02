@@ -29,17 +29,102 @@ export class DataSyncService {
   @inject(DeviceBookAccess)
   private readonly deviceBookAccess!: DeviceBookAccess;
 
-  private getEmailBody(language: string, code: string) {
+  private getEmailBody(code: string, language: string) {
+    let title = '';
+    let dearUser = '';
+    let hello = '';
+    let contactUs = '';
+    let url = '';
     switch (language) {
-      case 'jp':
-        return `こんにちは! このコードは ${code} です。`;
       case 'zh-TW':
-        return `你好! 這是您的驗證碼 ${code}。`;
+        title = '綁定裝置';
+        dearUser = '親愛的使用者';
+        hello = '您好！綁定裝置的驗證碼為';
+        contactUs = '聯絡我們';
+        url =
+          'https://docs.google.com/forms/d/e/1FAIpQLSdaWAnpxINF4m1msJQT-Qr9yAyukZHlUQSoEpZktv0ZId0n0Q/viewform?usp=sf_link';
+        break;
       case 'zh-CN':
-        return `你好! 这是您的验证码 ${code}。`;
+        title = '绑定装置';
+        dearUser = '亲爱的使用者';
+        hello = '您好！绑定装置的验证码为';
+        contactUs = '联络我们';
+        url =
+          'https://docs.google.com/forms/d/e/1FAIpQLSeUk9z9zevegaKzu1zuUlElWyZnRRPo798Z16QCBRJ17x8wxg/viewform?usp=sf_link';
+        break;
       default:
-        return `Hi! This is your code, ${code}.`;
+        title = 'Bind Your Device';
+        dearUser = 'Dear user,';
+        hello = 'Hello! Your verification code is,';
+        contactUs = 'Contact Us';
+        url =
+          'https://docs.google.com/forms/d/e/1FAIpQLSe1KgW43gWaH1FDuu3DeD67t5UJExvAr7DmLnGO54mRaMMMLg/viewform?usp=sf_link';
+        break;
     }
+
+    return {
+      text: `${dearUser}\n${hello} ${code}`,
+      html: `<html>
+        <head>
+            <style type="text/css">
+                body {
+                    max-width: 600px;
+                    padding: 16px 10px;
+                }
+                p {
+                    margin: 0 0 5px 0;
+                }
+                .card {
+                    background-color: #f7f9f9;
+                    color: #13284b;
+                    padding: 24px 16px 40px 16px;
+                    margin: 16px 0;
+                }
+                .title {
+                    font-size: 24px;
+                    font-weight: bold;
+                    text-align: center;
+                }
+                .horizon {
+                    margin: 24px 0;
+                    background-color: #e3e5e5;
+                    height: 1px;
+                }
+                .code {
+                    font-weight: bold;
+                    color: black;
+                    margin: 24px 0;
+                }
+                .contact {
+                    font-size: 14px;
+                    text-decoration: underline;
+                }
+                .org {
+                    color: #567196;
+                    font-size: 14px;
+                    text-align: center;
+                }
+            </style>
+        </head>
+        <body>
+            <img src="https://yue-public-bucket.s3.ap-southeast-1.amazonaws.com/spica-email-logo.png"></img>
+            <div class="card">
+                <div class="title">${title}</div>
+                <div class="horizon"></div>
+                <div class="content">
+                    <p>${dearUser}</p>
+                    <p>${hello}</p>
+                    <div class="code">${code}</div>
+                    <p>Bunny Bill</p>
+                    <p class="contact"></p><a
+                        href="${url}"
+                        target="_blank">${contactUs}</a></p>
+                </div>
+            </div>
+            <div class="org">© Celetial Studio 2022 - ${new Date().getFullYear()}</div>
+        </body>
+        </html>`,
+    };
   }
 
   private getEmailSubject(language: string) {
@@ -86,7 +171,12 @@ export class DataSyncService {
         Message: {
           Body: {
             Text: {
-              Data: this.getEmailBody(data.language, code),
+              Charset: 'UTF-8',
+              Data: this.getEmailBody(code, data.language).text,
+            },
+            Html: {
+              Charset: 'UTF-8',
+              Data: this.getEmailBody(code, data.language).html,
             },
           },
           Subject: {
