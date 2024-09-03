@@ -79,6 +79,7 @@ export class DataSyncService {
                     color: #13284b;
                     padding: 24px 16px 40px 16px;
                     margin: 16px 0;
+                    border-radius: 10px;
                 }
                 .title {
                     font-size: 24px;
