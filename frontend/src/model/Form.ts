@@ -58,3 +58,11 @@ export type PaymentForm = {
   code: string;
   account: string;
 };
+
+export type DataSyncForm = {
+  email: string;
+};
+
+export type DataSyncCodeForm = {
+  code: string;
+};

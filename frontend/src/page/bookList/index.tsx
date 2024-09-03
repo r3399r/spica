@@ -13,6 +13,7 @@ import IcAdd from 'src/image/ic-add.svg';
 import IcBook from 'src/image/ic-book.svg';
 import IcConfigActive from 'src/image/ic-config-active.svg';
 import IcConfig from 'src/image/ic-config.svg';
+import IcSync from 'src/image/ic-sync.svg';
 import PicBookHero from 'src/image/pic-book-hero.svg';
 import { RootState } from 'src/redux/store';
 import { setTxPageScroll } from 'src/redux/uiSlice';
@@ -41,7 +42,13 @@ const BookList = () => {
     <>
       <div className="fixed top-0 h-[calc(100%-104px)] w-full overflow-y-auto">
         <div className="mx-[15px] max-w-[640px] sm:mx-auto">
-          <div className="float-right">
+          <div className="flex items-center justify-between">
+            <Img
+              src={IcSync}
+              className="cursor-pointer"
+              onClick={() => navigate(`${Page.Setting}/sync`)}
+            />
+            <H5 className="mb-[10px] mt-[15px] text-center text-navy-500">{t('appName')}</H5>
             <Img
               src={IcConfig}
               srcActive={IcConfigActive}
@@ -49,7 +56,6 @@ const BookList = () => {
               onClick={() => navigate(Page.Setting)}
             />
           </div>
-          <H5 className="mb-[10px] mt-[15px] text-center text-navy-500">{t('appName')}</H5>
           <div>
             <a target="_blank" href={DonateLink} rel="noreferrer">
               <img src={PicBookHero} className="w-full" />

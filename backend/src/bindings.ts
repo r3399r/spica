@@ -1,5 +1,6 @@
-import { Container } from 'inversify';
 import 'reflect-metadata';
+import { SES } from 'aws-sdk';
+import { Container } from 'inversify';
 import { BankAccess } from './access/BankAccess';
 import { BankAccountAccess } from './access/BankAccountAccess';
 import { BillAccess } from './access/BillAccess';
@@ -9,6 +10,7 @@ import { CurrencyAccess } from './access/CurrencyAccess';
 import { DbAccess } from './access/DbAccess';
 import { DeviceBookAccess } from './access/DeviceBookAccess';
 import { DeviceTokenAccess } from './access/DeviceTokenAccess';
+import { EmailBindAccess } from './access/EmailBindAccess';
 import { MemberAccess } from './access/MemberAccess';
 import { MemberSettlementAccess } from './access/MemberSettlementAccess';
 import { TransferAccess } from './access/TransferAccess';
@@ -19,6 +21,7 @@ import { ViewTransactionAccess } from './access/ViewTransactionAccess';
 import { BankAccountService } from './logic/BankAccountService';
 import { BankService } from './logic/BankService';
 import { BookService } from './logic/BookService';
+import { DataSyncService } from './logic/DataSyncService';
 import { DbCleanService } from './logic/DbCleanService';
 import { TransferService } from './logic/TransferService';
 import { BankAccountEntity } from './model/entity/BankAccountEntity';
@@ -29,6 +32,7 @@ import { BookEntity } from './model/entity/BookEntity';
 import { CurrencyEntity } from './model/entity/CurrencyEntity';
 import { DeviceBookEntity } from './model/entity/DeviceBookEntity';
 import { DeviceTokenEntity } from './model/entity/DeviceTokenEntity';
+import { EmailBindEntity } from './model/entity/EmailBindEntity';
 import { MemberEntity } from './model/entity/MemberEntity';
 import { MemberSettlementEntity } from './model/entity/MemberSettlementEntity';
 import { TransferEntity } from './model/entity/TransferEntity';
@@ -55,6 +59,7 @@ container.bind<Function>(dbEntitiesBindingId).toFunction(MemberEntity);
 container
   .bind<Function>(dbEntitiesBindingId)
   .toFunction(MemberSettlementEntity);
+container.bind<Function>(dbEntitiesBindingId).toFunction(EmailBindEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(TransferEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(ViewDeviceBookEntity);
 container.bind<Function>(dbEntitiesBindingId).toFunction(ViewBillShareEntity);
@@ -74,6 +79,7 @@ container.bind<DeviceTokenAccess>(DeviceTokenAccess).toSelf();
 container.bind<MemberAccess>(MemberAccess).toSelf();
 container.bind<MemberSettlementAccess>(MemberSettlementAccess).toSelf();
 container.bind<TransferAccess>(TransferAccess).toSelf();
+container.bind<EmailBindAccess>(EmailBindAccess).toSelf();
 container.bind<ViewDeviceBookAccess>(ViewDeviceBookAccess).toSelf();
 container.bind<ViewBillShareAccess>(ViewBillShareAccess).toSelf();
 container.bind<ViewBookAccess>(ViewBookAccess).toSelf();
@@ -82,8 +88,12 @@ container.bind<ViewTransactionAccess>(ViewTransactionAccess).toSelf();
 // service
 container.bind<BookService>(BookService).toSelf();
 container.bind<DbCleanService>(DbCleanService).toSelf();
+container.bind<DataSyncService>(DataSyncService).toSelf();
 container.bind<TransferService>(TransferService).toSelf();
 container.bind<BankAccountService>(BankAccountService).toSelf();
 container.bind<BankService>(BankService).toSelf();
+
+// AWS
+container.bind<SES>(SES).toDynamicValue(() => new SES());
 
 export { container as bindings };

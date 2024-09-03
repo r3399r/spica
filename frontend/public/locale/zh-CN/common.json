@@ -1,7 +1,6 @@
 {
   "appName": "Bunny Bill",
   "language": "简体中文",
-  "error": "发生错误，请重新再试，若状况持续，请联繫我们，谢谢！",
   "act": {
     "confirm": "确认",
     "cancel": "取消",
@@ -48,7 +47,7 @@
     "language": "语言设定",
     "myId": "我的 ID",
     "myPaymentAccount": "我的收款帐户",
-    "dataTransfer": "资料转移",
+    "dataSync": "资料同步",
     "add2HomeScreen": "加入手机主画面",
     "contactUs": "联络我们"
   },
@@ -67,20 +66,18 @@
     "notBank": "非银行帐户",
     "deleteHint": "要删除这个收款帐户吗？"
   },
-  "transfer": {
-    "back": "回系统设定",
-    "head": "资料转移",
-    "outHead": "资料转出",
-    "outHint": "将密钥输入其他装置，可将此装置上的资料拷贝到新的装置上",
-    "outBtn": "产生密钥",
-    "inHead": "资料汇入",
-    "inHint": "输入其他装置的密钥即可汇入资料",
-    "inBtn": "输入密钥",
-    "modalOutHead": "密钥",
-    "modalOutHint": "此密钥将于 24 小时后失效",
-    "modalOutClose": "关闭",
-    "modalOutCopy": "複製密钥",
-    "modalInLabel": "输入密钥"
+  "dataSync": {
+    "back": "回上一页",
+    "head": "资料同步",
+    "hint": "绑定同一个 E-mail 可让不同装置的资料同步",
+    "label": "绑定的 E-mail",
+    "receiveCode": "获得验证码",
+    "bindHint": "验证码已寄出，请至填写的信箱查看",
+    "bindPlaceholder": "验证码",
+    "bindSuccess": "E-mail绑定成功，资料已同步",
+    "unbind": "解除绑定",
+    "unbindHead": "解除绑定的 E-mail",
+    "unbindHint": "解除绑定之后在此装置新增的资料不会与其他装置同步，直到再度绑定为止。"
   },
   "add2HomeScreen": {
     "back": "回系统设定",
@@ -211,5 +208,10 @@
     "head": "选择你的暱称",
     "hint": "也可之后再前往「帐本成员」新增属于你的暱称",
     "skip": "跳过"
+  },
+  "error": {
+    "default": "发生错误，请重新再试，若状况持续，请联繫我们，谢谢！",
+    "tooFrequent": "验证码已寄送，请至信箱查看。或是于 10 分钟后再试一次。",
+    "invalidCode": "无效的验证码"
   }
 }

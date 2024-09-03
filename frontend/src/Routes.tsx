@@ -5,6 +5,7 @@ import BookDetail from './page/bookDetail';
 import BookList from './page/bookList';
 import BookSetting from './page/bookSetting';
 import CurrencySetting from './page/currencySetting';
+import DataSync from './page/dataSync';
 import EditPayment from './page/editPayment';
 import EidtTransaction from './page/editTransaction';
 import Landing from './page/landing';
@@ -15,7 +16,6 @@ import Settlement from './page/settlement';
 import Share from './page/share';
 import SystemSetting from './page/systemSetting';
 import Transaction from './page/transaction';
-import Transfer from './page/transfer';
 
 const AppRoutes = () => (
   <Routes>
@@ -24,7 +24,7 @@ const AppRoutes = () => (
     <Route path={Page.Setting} element={<SystemSetting />} />
     <Route path={`${Page.Setting}/payment`} element={<Payment />} />
     <Route path={`${Page.Setting}/payment/edit`} element={<EditPayment />} />
-    <Route path={`${Page.Setting}/transfer`} element={<Transfer />} />
+    <Route path={`${Page.Setting}/sync`} element={<DataSync />} />
     <Route path={`${Page.Setting}/a2hs`} element={<Add2HomeScreen />} />
     <Route path={`${Page.Book}/:id`} element={<BookDetail />} />
     <Route path={`${Page.Book}/:id/tx`} element={<EidtTransaction />} />

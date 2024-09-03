@@ -6,11 +6,7 @@ Description: spica deployment cloudformation script
 Globals:
   Function:
       Timeout: 30  # in seconds
-Parameters: 
-  LambdaExecutionRole:
-    Type: String
-    Default: celestial-service-execution-role
-    Description: The primary role in that gives the Lambda function permission to do its work.
+Parameters:
   Project:
     Type: String
   TargetEnvr:
@@ -23,6 +19,27 @@ Parameters:
 Conditions: 
   IsProd: !Equals [ !Ref TargetEnvr, prod ]
 Resources:
+  ##########################################
+  ##### AWS IAM Role to execute lambda #####
+  ##########################################
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      RoleName: !Sub ${Project}-${TargetEnvr}-lambda-execution-role
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess
+        - arn:aws:iam::aws:policy/AmazonSESFullAccess
   ##############################################
   ##### API Gateway and associated Lambdas #####
   ##############################################
@@ -61,7 +78,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-manifest/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -104,7 +121,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-bankAccount/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -155,7 +172,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-bankAccount/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -213,7 +230,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-bankAccount/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -259,7 +276,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-bankAccount/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -295,7 +312,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-bankAccount/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -338,7 +355,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -389,7 +406,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -437,7 +454,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -493,7 +510,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -539,7 +556,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -585,7 +602,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -643,7 +660,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -706,7 +723,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -757,7 +774,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -815,7 +832,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -878,7 +895,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -929,7 +946,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -982,7 +999,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -1040,7 +1057,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -1103,7 +1120,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -1154,7 +1171,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -1207,7 +1224,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -1249,7 +1266,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -1307,7 +1324,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -1370,7 +1387,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -1421,7 +1438,156 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-book/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
+                  "responses": {
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                      }
+                    }
+                  },
+                  "passthroughBehavior": "when_no_match",
+                  "contentHandling": "CONVERT_TO_TEXT"
+                }
+              }
+            },
+            "/api/dataSync": {
+              "post": {
+                "parameters": [{
+                  "name": "x-api-device",
+                  "in": "header",
+                  "required": true,
+                  "schema": {"type": "string"}
+                }],
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/postDataSync"
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "headers": {
+                      "Access-Control-Allow-Origin": {
+                        "schema": {"type": "string"}
+                      }
+                    },
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/Empty"
+                        }
+                      }
+                    }
+                  }
+                },
+                "x-amazon-apigateway-request-validator" : "Validate query string parameters and headers",
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
+                  "responses": {
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                      }
+                    }
+                  },
+                  "passthroughBehavior": "when_no_match",
+                  "contentHandling": "CONVERT_TO_TEXT"
+                }
+              }
+            },
+            "/api/dataSync/bind": {
+              "post": {
+                "parameters": [{
+                  "name": "x-api-device",
+                  "in": "header",
+                  "required": true,
+                  "schema": {"type": "string"}
+                }],
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/postDataSyncBind"
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "headers": {
+                      "Access-Control-Allow-Origin": {
+                        "schema": {"type": "string"}
+                      }
+                    },
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/Empty"
+                        }
+                      }
+                    }
+                  }
+                },
+                "x-amazon-apigateway-request-validator" : "Validate query string parameters and headers",
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
+                  "responses": {
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                      }
+                    }
+                  },
+                  "passthroughBehavior": "when_no_match",
+                  "contentHandling": "CONVERT_TO_TEXT"
+                }
+              }
+            },
+            "/api/dataSync/unbind": {
+              "post": {
+                "parameters": [{
+                  "name": "x-api-device",
+                  "in": "header",
+                  "required": true,
+                  "schema": {"type": "string"}
+                }],
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "headers": {
+                      "Access-Control-Allow-Origin": {
+                        "schema": {"type": "string"}
+                      }
+                    },
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/Empty"
+                        }
+                      }
+                    }
+                  }
+                },
+                "x-amazon-apigateway-request-validator" : "Validate query string parameters and headers",
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -1464,7 +1630,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-transfer/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -1515,7 +1681,7 @@ Resources:
                 "x-amazon-apigateway-integration": {
                   "type": "aws_proxy",
                   "httpMethod": "POST",
-                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-transfer/invocations",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
                   "responses": {
                     "default": {
                       "statusCode": "200",
@@ -1697,6 +1863,21 @@ Resources:
               },
               "required": ["date","amount","srcMemberId","dstMemberId"]
             },
+            "postDataSync": {
+              "type": "object",
+              "properties": {
+                "email": {"type": "string"}
+              },
+              "required": ["email"]
+            },
+            "postDataSyncBind": {
+              "type": "object",
+              "properties": {
+                "email": {"type": "string"},
+                "code": {"type": "string"}
+              },
+              "required": ["email", "code"]
+            },
             "putTransfer": {
               "type": "object",
               "properties": {
@@ -1716,112 +1897,17 @@ Resources:
             }
           }
         }
-  LambdaManifest:
-    Type: AWS::Serverless::Function
-    Properties:
-      Architectures: [arm64]
-      Handler: index.manifest
-      Runtime: nodejs18.x
-      FunctionName: !Sub ${Project}-${TargetEnvr}-manifest
-      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
-      CodeUri: ../../dist/webpack/lambda
-      MemorySize: 128
-      Environment:
-        Variables:
-          PROJECT: !Sub ${Project}
-  InvokePermissionManifest:
-    Type: AWS::Lambda::Permission
-    DependsOn: [ServerlessApi, LambdaManifest]
-    Properties:
-      FunctionName: !Sub ${Project}-${TargetEnvr}-manifest
-      Action: 'lambda:InvokeFunction'
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ServerlessApi}/*
-  LambdaBook:
-    Type: AWS::Serverless::Function
-    Properties:
-      Architectures: [arm64]
-      Handler: index.book
-      Runtime: nodejs18.x
-      FunctionName: !Sub ${Project}-${TargetEnvr}-book
-      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
-      CodeUri: ../../dist/webpack/lambda
-      MemorySize: 128
-      Environment:
-        Variables:
-          PROJECT: !Sub ${Project}
-          DB_CLUSTER: !Sub '{{resolve:ssm:${TargetEnvr}-db-cluster:1}}'
-          DB_HOST: !Sub '{{resolve:ssm:${TargetEnvr}-db-host:1}}'
-          DB_PWD: !Sub '{{resolve:ssm:${TargetEnvr}-db-pwd:1}}'
-          DB_USER: !Sub '{{resolve:ssm:${TargetEnvr}-db-user:1}}'
-  InvokePermissionBook:
-    Type: AWS::Lambda::Permission
-    DependsOn: [ServerlessApi, LambdaBook]
-    Properties:
-      FunctionName: !Sub ${Project}-${TargetEnvr}-book
-      Action: 'lambda:InvokeFunction'
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ServerlessApi}/*
-  LambdaTransfer:
-    Type: AWS::Serverless::Function
-    Properties:
-      Architectures: [arm64]
-      Handler: index.transfer
-      Runtime: nodejs18.x
-      FunctionName: !Sub ${Project}-${TargetEnvr}-transfer
-      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
-      CodeUri: ../../dist/webpack/lambda
-      MemorySize: 128
-      Environment:
-        Variables:
-          PROJECT: !Sub ${Project}
-          DB_CLUSTER: !Sub '{{resolve:ssm:${TargetEnvr}-db-cluster:1}}'
-          DB_HOST: !Sub '{{resolve:ssm:${TargetEnvr}-db-host:1}}'
-          DB_PWD: !Sub '{{resolve:ssm:${TargetEnvr}-db-pwd:1}}'
-          DB_USER: !Sub '{{resolve:ssm:${TargetEnvr}-db-user:1}}'
-  InvokePermissionTransfer:
-    Type: AWS::Lambda::Permission
-    DependsOn: [ServerlessApi, LambdaTransfer]
-    Properties:
-      FunctionName: !Sub ${Project}-${TargetEnvr}-transfer
-      Action: 'lambda:InvokeFunction'
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ServerlessApi}/*
-  LambdaBankAccount:
-    Type: AWS::Serverless::Function
-    Properties:
-      Architectures: [arm64]
-      Handler: index.bankAccount
-      Runtime: nodejs18.x
-      FunctionName: !Sub ${Project}-${TargetEnvr}-bankAccount
-      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
-      CodeUri: ../../dist/webpack/lambda
-      MemorySize: 128
-      Environment:
-        Variables:
-          PROJECT: !Sub ${Project}
-          DB_CLUSTER: !Sub '{{resolve:ssm:${TargetEnvr}-db-cluster:1}}'
-          DB_HOST: !Sub '{{resolve:ssm:${TargetEnvr}-db-host:1}}'
-          DB_PWD: !Sub '{{resolve:ssm:${TargetEnvr}-db-pwd:1}}'
-          DB_USER: !Sub '{{resolve:ssm:${TargetEnvr}-db-user:1}}'
-  InvokePermissionBankAccount:
-    Type: AWS::Lambda::Permission
-    DependsOn: [ServerlessApi, LambdaBankAccount]
-    Properties:
-      FunctionName: !Sub ${Project}-${TargetEnvr}-bankAccount
-      Action: 'lambda:InvokeFunction'
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ServerlessApi}/*
   LambdaDbClean:
     Type: AWS::Serverless::Function
     Properties:
       Architectures: [arm64]
-      Handler: index.dbClean
+      Handler: index.eventBridgeDbClean
       Runtime: nodejs18.x
       FunctionName: !Sub ${Project}-${TargetEnvr}-dbClean
-      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
-      CodeUri: ../../dist/webpack/lambda
-      MemorySize: 128
+      Role: !GetAtt ExecutionRole.Arn
+      CodeUri: ../../lib/src
+      MemorySize: 200
+      Layers: [!Ref LambdaLayer]
       Environment:
         Variables:
           PROJECT: !Sub ${Project}
@@ -1841,12 +1927,13 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Architectures: [arm64]
-      Handler: index.bank
+      Handler: index.eventBridgebank
       Runtime: nodejs18.x
       FunctionName: !Sub ${Project}-${TargetEnvr}-bank
-      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LambdaExecutionRole}"
-      CodeUri: ../../dist/webpack/lambda
-      MemorySize: 128
+      Role: !GetAtt ExecutionRole.Arn
+      CodeUri: ../../lib/src
+      MemorySize: 200
+      Layers: [!Ref LambdaLayer]
       Environment:
         Variables:
           PROJECT: !Sub ${Project}
@@ -1862,6 +1949,40 @@ Resources:
       Action: 'lambda:InvokeFunction'
       Principal: events.amazonaws.com
       SourceArn: !GetAtt EventBridgeSyncBank.Arn
+  LambdaApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Architectures: [arm64]
+      Handler: index.api
+      Runtime: nodejs18.x
+      FunctionName: !Sub ${Project}-${TargetEnvr}-api
+      Role: !GetAtt ExecutionRole.Arn
+      CodeUri: ../../lib/src
+      MemorySize: 200
+      Layers: [!Ref LambdaLayer]
+      Environment:
+        Variables:
+          PROJECT: !Sub ${Project}
+          DB_CLUSTER: !Sub '{{resolve:ssm:${TargetEnvr}-db-cluster:1}}'
+          DB_HOST: !Sub '{{resolve:ssm:${TargetEnvr}-db-host:1}}'
+          DB_PWD: !Sub '{{resolve:ssm:${TargetEnvr}-db-pwd:1}}'
+          DB_USER: !Sub '{{resolve:ssm:${TargetEnvr}-db-user:1}}'
+  InvokePermissionLambdaApi:
+    Type: AWS::Lambda::Permission
+    DependsOn: [ServerlessApi, LambdaApiFunction]
+    Properties:
+      FunctionName: !Sub ${Project}-${TargetEnvr}-api
+      Action: 'lambda:InvokeFunction'
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ServerlessApi}/*
+  LambdaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: !Sub ${Project}-${TargetEnvr}-layer
+      CompatibleArchitectures: [arm64]
+      CompatibleRuntimes: [nodejs18.x]
+      ContentUri: ../../dist
+      RetentionPolicy: Delete
   #########################################
   ##### Cloudfront and Route53 config #####
   #########################################

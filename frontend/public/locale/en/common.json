@@ -1,7 +1,6 @@
 {
   "appName": "Bunny Bill",
   "language": "English",
-  "error": "Something went wrong, please try again later or contact us to fix it.",
   "act": {
     "confirm": "Confirm",
     "cancel": "Cancel",
@@ -48,7 +47,7 @@
     "language": "Language",
     "myId": "My ID",
     "myPaymentAccount": "My Payment Account",
-    "dataTransfer": "Data Transfer",
+    "dataSync": "Data Sync",
     "add2HomeScreen": "Add to Home Screen",
     "contactUs": "Contact Us"
   },
@@ -67,20 +66,18 @@
     "notBank": "Not Bank Account",
     "deleteHint": "Delete this payment account?"
   },
-  "transfer": {
+  "dataSync": {
     "back": "Back",
-    "head": "Data Transfer",
-    "outHead": "Transfer Out",
-    "outHint": "Enter the key into other devices to copy the data on this device to the new device.",
-    "outBtn": "Gen. Key",
-    "inHead": "Transfer In",
-    "inHint": "Enter the key from another device to import data.",
-    "inBtn": "Enter",
-    "modalOutHead": "Key",
-    "modalOutHint": "The key will be expired in 24 hours",
-    "modalOutClose": "Close",
-    "modalOutCopy": "Copy Key",
-    "modalInLabel": "Enter Key"
+    "head": "Data Sync",
+    "hint": "Bind your devices with an E-mail address to sync data.",
+    "label": "E-mail to bind",
+    "receiveCode": "Receive Code",
+    "bindHint": "The code has sent to your email, please check.",
+    "bindPlaceholder": "Code",
+    "bindSuccess": "Data sync successfully",
+    "unbind": "Unbind",
+    "unbindHead": "Unbind E-mail",
+    "unbindHint": "After unbinding, data added on this device will not be synchronized with other devices until the device is bound again."
   },
   "add2HomeScreen": {
     "back": "Back",
@@ -211,5 +208,10 @@
     "head": "Select your nickname",
     "hint": "You can also add your nickname later",
     "skip": "Skip"
+  },
+  "error": {
+    "default": "Something went wrong, please try again later or contact us to fix it.",
+    "tooFrequent": "We've sent you the code. Please check your email or try again 10 minutes later.",
+    "invalidCode": "Invalid code"
   }
 }
