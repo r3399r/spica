@@ -7,7 +7,7 @@ export const check = (members: Member[]): Check[] => {
   const res: Check[] = [];
 
   let sortedMember = [...members].filter((v) => v.balance !== 0).sort(compare('balance', 'asc'));
-  while (sortedMember.length > 0) {
+  while (sortedMember.length > 1) {
     const former = sortedMember[sortedMember.length - 1];
     const latter = sortedMember[0];
     res.push({

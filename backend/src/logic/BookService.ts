@@ -452,20 +452,20 @@ export class BookService {
           (prev, current) =>
             bn(current.balance)
               .times(current.currency.exchangeRate ?? 1)
-              .dp(2)
               .plus(prev),
           bn(0)
         )
+        .dp(2)
         .toNumber();
       const total = settles
         .reduce(
           (prev, current) =>
             bn(current.total)
               .times(current.currency.exchangeRate ?? 1)
-              .dp(2)
               .plus(prev),
           bn(0)
         )
+        .dp(2)
         .toNumber();
       res.push({
         ...member,
