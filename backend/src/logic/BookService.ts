@@ -482,7 +482,9 @@ export class BookService {
       res = [...res]
         .sort(compare('balance', 'desc'))
         .map((v, i) =>
-          i === 0 ? { ...v, balance: sumBalance.minus(v.balance).toNumber() } : v
+          i === 0
+            ? { ...v, balance: bn(v.balance).minus(sumBalance).toNumber() }
+            : v
         );
 
     return res.sort(compare('dateCreated'));
