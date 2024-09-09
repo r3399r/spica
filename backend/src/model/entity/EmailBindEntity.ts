@@ -15,6 +15,9 @@ export class EmailBindEntity implements EmailBind {
   @Column({ type: 'timestamp', name: 'code_generated' })
   codeGenerated!: string;
 
+  @Column({ type: 'int8' })
+  count!: string;
+
   @Column({ type: 'timestamp', name: 'date_created', default: null })
   dateCreated!: string;
 
