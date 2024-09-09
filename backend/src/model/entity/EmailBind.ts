@@ -3,6 +3,7 @@ export type EmailBind = {
   deviceId: string;
   code: string;
   codeGenerated: string;
+  count: string;
   dateCreated: string;
   dateUpdated: string | null;
 };

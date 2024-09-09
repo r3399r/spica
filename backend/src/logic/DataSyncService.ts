@@ -13,6 +13,7 @@ import {
 import { DeviceBookEntity } from 'src/model/entity/DeviceBookEntity';
 import { EmailBindEntity } from 'src/model/entity/EmailBindEntity';
 import { BadRequestError } from 'src/model/error';
+import { bn } from 'src/util/bignumber';
 import { randomBase10 } from 'src/util/random';
 
 /**
@@ -157,6 +158,7 @@ export class DataSyncService {
       newEmailBind.deviceId = deviceId;
       newEmailBind.code = code;
       newEmailBind.codeGenerated = new Date().toISOString();
+      newEmailBind.count = '0';
       await this.emailBindAccess.save(newEmailBind);
     } else {
       emailBind.code = code;
@@ -196,6 +198,8 @@ export class DataSyncService {
     const emailBind = await this.emailBindAccess.findOneOrFail({
       where: { email: data.email },
     });
+    emailBind.count = bn(emailBind.count).plus(1).toString();
+    await this.emailBindAccess.save(emailBind);
 
     if (emailBind.code !== data.code)
       throw new BadRequestError(ErrorMessage.INVALID_CODE);
@@ -222,6 +226,13 @@ export class DataSyncService {
   public async unbindDevice(
     deviceId: string
   ): Promise<PostDataSyncUnbindResponse> {
+    const emailBind = await this.emailBindAccess.findOneOrFail({
+      where: { deviceId },
+    });
+    const count = bn(emailBind.count).minus(1);
+    emailBind.count = count.lt(0) ? '0' : count.toString();
+    await this.emailBindAccess.save(emailBind);
+
     const newDeviceId = uuidv4();
     const deviceBooks = await this.deviceBookAccess.findByDeviceId(deviceId);
 

@@ -444,7 +444,8 @@ export class BookService {
       where: { currency: { bookId: id } },
     });
 
-    const res: Member[] = [];
+    let res: Member[] = [];
+    let sumBalance = bn(0);
     for (const member of members) {
       const settles = memberSettles.filter((v) => v.memberId === member.id);
       const balance = settles
@@ -457,6 +458,8 @@ export class BookService {
         )
         .dp(2)
         .toNumber();
+      sumBalance = sumBalance.plus(balance);
+
       const total = settles
         .reduce(
           (prev, current) =>
@@ -473,6 +476,14 @@ export class BookService {
         total,
       });
     }
+
+    // non-zero sumBalance means that "Should Receive" is not equal to "Should Pay"
+    if (!sumBalance.eq(0))
+      res = [...res]
+        .sort(compare('balance', 'desc'))
+        .map((v, i) =>
+          i === 0 ? { ...v, balance: sumBalance.plus(v.balance).toNumber() } : v
+        );
 
     return res.sort(compare('dateCreated'));
   }
