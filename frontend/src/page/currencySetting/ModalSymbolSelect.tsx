@@ -16,6 +16,7 @@ const symbols = [
   { id: 'euro', label: '€' },
   { id: 'pound', label: '£' },
   { id: 'piso', label: '₱' },
+  { id: 'dong', label: '₫' },
 ];
 
 const ModalSymbolSelect = ({ open, onClose, value, setValue }: Props) => {

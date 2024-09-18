@@ -130,7 +130,7 @@ export class BookService {
 
     const currency = new CurrencyEntity();
     currency.bookId = newBook.id;
-    currency.name = 'TWD';
+    currency.name = 'USD';
     currency.symbol = '$';
     currency.isPrimary = true;
     currency.deletable = false;
