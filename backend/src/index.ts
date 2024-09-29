@@ -62,6 +62,13 @@ export const api = async (
       .sendMessage({
         MessageBody: JSON.stringify({
           project: process.env.PROJECT ?? '',
+          resource: event.resource,
+          path: event.path,
+          httpMethod: event.httpMethod,
+          queryStringParameters: event.queryStringParameters
+            ? JSON.stringify(event.queryStringParameters)
+            : null,
+          body: event.body,
           elapsedTime: Date.now() - startTime,
           statusCode: output.statusCode,
           dateRequested: new Date().toISOString(),

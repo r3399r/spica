@@ -10,6 +10,7 @@ export type LambdaContext = {
 
 export type LambdaEvent = {
   resource: string;
+  path: string;
   httpMethod: string;
   headers: { [key: string]: string } | null;
   body: string | null;
