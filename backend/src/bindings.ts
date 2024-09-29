@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { SES } from 'aws-sdk';
+import { SES, SQS } from 'aws-sdk';
 import { Container } from 'inversify';
 import { BankAccess } from './access/BankAccess';
 import { BankAccountAccess } from './access/BankAccountAccess';
@@ -95,5 +95,6 @@ container.bind<BankService>(BankService).toSelf();
 
 // AWS
 container.bind<SES>(SES).toDynamicValue(() => new SES());
+container.bind<SQS>(SQS).toDynamicValue(() => new SQS());
 
 export { container as bindings };
