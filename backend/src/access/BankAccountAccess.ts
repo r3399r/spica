@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import { FindManyOptions, FindOneOptions } from 'typeorm';
 import { BankAccount } from 'src/model/entity/BankAccount';
 import { BankAccountEntity } from 'src/model/entity/BankAccountEntity';
-import { BadRequestError } from 'src/model/error';
+import { InternalServerError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -42,6 +42,6 @@ export class BankAccountAccess {
 
     const res = await qr.manager.delete(BankAccountEntity.name, id);
 
-    if (res.affected === 0) throw new BadRequestError('nothing happened.');
+    if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 }

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
-import { BadRequestError } from 'src/model/error';
+import { InternalServerError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -41,7 +41,7 @@ export class MemberAccess {
 
     const res = await qr.manager.update(MemberEntity, member.id, entity);
 
-    if (res.affected === 0) throw new BadRequestError('nothing happened.');
+    if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 
   public async hardDeleteById(id: string) {
@@ -49,7 +49,7 @@ export class MemberAccess {
 
     const res = await qr.manager.delete(MemberEntity.name, id);
 
-    if (res.affected === 0) throw new BadRequestError('nothing happened.');
+    if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 
   public async hardDeleteByBookId(id: string) {
