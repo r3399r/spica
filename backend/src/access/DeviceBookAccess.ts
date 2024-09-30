@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { DeviceBook } from 'src/model/entity/DeviceBook';
 import { DeviceBookEntity } from 'src/model/entity/DeviceBookEntity';
-import { BadRequestError } from 'src/model/error';
+import { InternalServerError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -27,7 +27,7 @@ export class DeviceBookAccess {
 
     const res = await qr.manager.update(DeviceBookEntity, input.id, entity);
 
-    if (res.affected === 0) throw new BadRequestError('nothing happened.');
+    if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 
   public async hardDeleteByDeviceIdAndBookId(deviceId: string, bookId: string) {

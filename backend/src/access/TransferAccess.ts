@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import { In, IsNull } from 'typeorm';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
-import { BadRequestError } from 'src/model/error';
+import { InternalServerError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -66,7 +66,7 @@ export class TransferAccess {
       entity
     );
 
-    if (res.affected === 0) throw new BadRequestError('nothing happened.');
+    if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 
   public async hardDeleteByBookId(id: string) {

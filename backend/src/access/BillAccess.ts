@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import { IsNull } from 'typeorm';
 import { Bill } from 'src/model/entity/Bill';
 import { BillEntity } from 'src/model/entity/BillEntity';
-import { BadRequestError } from 'src/model/error';
+import { InternalServerError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -41,7 +41,7 @@ export class BillAccess {
       entity
     );
 
-    if (res.affected === 0) throw new BadRequestError('nothing happened.');
+    if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 
   public async findByBookId(bookId: string) {

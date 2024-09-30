@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import { FindManyOptions, FindOneOptions } from 'typeorm';
 import { MemberSettlement } from 'src/model/entity/MemberSettlement';
 import { MemberSettlementEntity } from 'src/model/entity/MemberSettlementEntity';
-import { BadRequestError } from 'src/model/error';
+import { InternalServerError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -60,6 +60,6 @@ export class MemberSettlementAccess {
 
     const res = await qr.manager.delete(MemberSettlementEntity.name, id);
 
-    if (res.affected === 0) throw new BadRequestError('nothing happened.');
+    if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 }

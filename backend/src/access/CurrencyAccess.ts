@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Currency } from 'src/model/entity/Currency';
 import { CurrencyEntity } from 'src/model/entity/CurrencyEntity';
-import { BadRequestError } from 'src/model/error';
+import { InternalServerError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -49,7 +49,7 @@ export class CurrencyAccess {
 
     const res = await qr.manager.delete(CurrencyEntity.name, id);
 
-    if (res.affected === 0) throw new BadRequestError('nothing happened.');
+    if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 
   public async hardDeleteByBookId(id: string) {
@@ -57,6 +57,6 @@ export class CurrencyAccess {
 
     const res = await qr.manager.delete(CurrencyEntity.name, { bookId: id });
 
-    if (res.affected === 0) throw new BadRequestError('nothing happened.');
+    if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 }

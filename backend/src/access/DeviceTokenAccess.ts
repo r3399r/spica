@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import { Raw } from 'typeorm';
 import { DeviceToken } from 'src/model/entity/DeviceToken';
 import { DeviceTokenEntity } from 'src/model/entity/DeviceTokenEntity';
-import { BadRequestError } from 'src/model/error';
+import { InternalServerError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -26,7 +26,7 @@ export class DeviceTokenAccess {
 
     const res = await qr.manager.delete(DeviceTokenEntity.name, id);
 
-    if (res.affected === 0) throw new BadRequestError('nothing happened.');
+    if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 
   public async findByDeviceId(deviceId: string) {

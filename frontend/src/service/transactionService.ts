@@ -232,6 +232,9 @@ const addBill = async (bookId: string) => {
             members: res.data.members,
             transactions: [res.data.transaction, ...(v.transactions ?? [])],
             txCount: v.txCount ? v.txCount + 1 : 1,
+            currencies: (v.currencies ?? []).map((o) =>
+              o.id === res.data.transaction.currencyId ? { ...o, deletable: false } : o,
+            ),
           }
         : v,
     );
@@ -305,6 +308,9 @@ const addTransfer = async (bookId: string) => {
             members: res.data.members,
             transactions: [res.data.transaction, ...(v.transactions ?? [])],
             txCount: v.txCount ? v.txCount + 1 : 1,
+            currencies: (v.currencies ?? []).map((o) =>
+              o.id === res.data.transaction.currencyId ? { ...o, deletable: false } : o,
+            ),
           }
         : v,
     );
