@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import { FindManyOptions } from 'typeorm';
 import { BillShare } from 'src/model/entity/BillShare';
 import { BillShareEntity } from 'src/model/entity/BillShareEntity';
 import { Database } from 'src/util/Database';
@@ -28,9 +29,9 @@ export class BillShareAccess {
     });
   }
 
-  public async hardDeleteByBillId(id: string) {
+  public async hardDelete(options: FindManyOptions<BillShare>) {
     const qr = await this.database.getQueryRunner();
-
-    await qr.manager.delete(BillShareEntity.name, { billId: id });
+    const res = await qr.manager.find(BillShareEntity.name, options);
+    await qr.manager.remove(res);
   }
 }

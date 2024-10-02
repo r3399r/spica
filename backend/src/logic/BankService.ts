@@ -13,8 +13,7 @@ export class BankService {
 
   public async syncBankData() {
     // clean existing bank
-    const banks = await this.bankAccess.find();
-    await this.bankAccess.hardDeleteMany(banks.map((v) => ({ id: v.id })));
+    await this.bankAccess.hardDeleteAll();
 
     // get bank list and save
     const response = await axios.get<string>(

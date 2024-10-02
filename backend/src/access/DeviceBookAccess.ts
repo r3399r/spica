@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import { FindManyOptions } from 'typeorm';
 import { DeviceBook } from 'src/model/entity/DeviceBook';
 import { DeviceBookEntity } from 'src/model/entity/DeviceBookEntity';
 import { InternalServerError } from 'src/model/error';
@@ -30,18 +31,6 @@ export class DeviceBookAccess {
     if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 
-  public async hardDeleteByDeviceIdAndBookId(deviceId: string, bookId: string) {
-    const qr = await this.database.getQueryRunner();
-
-    await qr.manager.delete(DeviceBookEntity.name, { deviceId, bookId });
-  }
-
-  public async hardDeleteByBookId(bookId: string) {
-    const qr = await this.database.getQueryRunner();
-
-    await qr.manager.delete(DeviceBookEntity.name, { bookId });
-  }
-
   public async findByDeviceId(deviceId: string) {
     const qr = await this.database.getQueryRunner();
 
@@ -56,5 +45,11 @@ export class DeviceBookAccess {
     return await qr.manager.findOne<DeviceBook>(DeviceBookEntity.name, {
       where: { deviceId, bookId },
     });
+  }
+
+  public async hardDelete(options: FindManyOptions<DeviceBook>) {
+    const qr = await this.database.getQueryRunner();
+    const res = await qr.manager.find(DeviceBookEntity.name, options);
+    await qr.manager.remove(res);
   }
 }

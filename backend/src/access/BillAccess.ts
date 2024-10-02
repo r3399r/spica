@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { IsNull } from 'typeorm';
+import { FindManyOptions, IsNull } from 'typeorm';
 import { Bill } from 'src/model/entity/Bill';
 import { BillEntity } from 'src/model/entity/BillEntity';
 import { InternalServerError } from 'src/model/error';
@@ -60,9 +60,9 @@ export class BillAccess {
     });
   }
 
-  public async hardDeleteByBookId(id: string) {
+  public async hardDelete(options: FindManyOptions<Bill>) {
     const qr = await this.database.getQueryRunner();
-
-    await qr.manager.delete(BillEntity.name, { bookId: id });
+    const res = await qr.manager.find(BillEntity.name, options);
+    await qr.manager.remove(res);
   }
 }
