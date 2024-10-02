@@ -1933,7 +1933,7 @@ Resources:
       FunctionName: !Sub ${Project}-${TargetEnvr}-bank
       Role: !GetAtt ExecutionRole.Arn
       CodeUri: ../../lib/src
-      MemorySize: 200
+      MemorySize: 180
       Layers: [!Ref LambdaLayer]
       Environment:
         Variables:

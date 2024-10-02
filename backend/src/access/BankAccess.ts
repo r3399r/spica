@@ -13,12 +13,10 @@ export class BankAccess {
   @inject(Database)
   private readonly database!: Database;
 
-  public async save(bank: Bank) {
+  public async saveMany(bank: Bank[]) {
     const qr = await this.database.getQueryRunner();
-    const entity = new BankEntity();
-    Object.assign(entity, bank);
 
-    return await qr.manager.save(entity);
+    return await qr.manager.save(bank);
   }
 
   public async find(options?: FindManyOptions<Bank>) {
@@ -29,10 +27,9 @@ export class BankAccess {
     });
   }
 
-  public async hardDeleteById(id: string) {
+  public async hardDeleteMany(criteria: Partial<Bank>[]) {
     const qr = await this.database.getQueryRunner();
-
-    const res = await qr.manager.delete(BankEntity.name, id);
+    const res = await qr.manager.delete(BankEntity.name, criteria);
 
     if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
