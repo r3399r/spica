@@ -1,8 +1,7 @@
 import { inject, injectable } from 'inversify';
-import { Raw } from 'typeorm';
+import { FindManyOptions, Raw } from 'typeorm';
 import { DeviceToken } from 'src/model/entity/DeviceToken';
 import { DeviceTokenEntity } from 'src/model/entity/DeviceTokenEntity';
-import { InternalServerError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -21,12 +20,10 @@ export class DeviceTokenAccess {
     return await qr.manager.save(entity);
   }
 
-  public async hardDeleteById(id: string) {
+  public async hardDelete(options: FindManyOptions<DeviceToken>) {
     const qr = await this.database.getQueryRunner();
-
-    const res = await qr.manager.delete(DeviceTokenEntity.name, id);
-
-    if (res.affected === 0) throw new InternalServerError('nothing happened.');
+    const res = await qr.manager.find(DeviceTokenEntity.name, options);
+    await qr.manager.remove(res);
   }
 
   public async findByDeviceId(deviceId: string) {

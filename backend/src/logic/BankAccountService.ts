@@ -74,7 +74,7 @@ export class BankAccountService {
   ): Promise<DeleteBankAccountResponse> {
     // check bank account exists and is owned by device
     await this.bankAccountAccess.findOneOrFail({ where: { id, deviceId } });
-    await this.bankAccountAccess.hardDeleteById(id);
+    await this.bankAccountAccess.hardDelete({ where: { id } });
 
     return await this.getBankAccount(deviceId);
   }

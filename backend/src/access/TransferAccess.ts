@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { In, IsNull } from 'typeorm';
+import { FindManyOptions, In, IsNull } from 'typeorm';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
 import { InternalServerError } from 'src/model/error';
@@ -69,9 +69,9 @@ export class TransferAccess {
     if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 
-  public async hardDeleteByBookId(id: string) {
+  public async hardDelete(options: FindManyOptions<Transfer>) {
     const qr = await this.database.getQueryRunner();
-
-    await qr.manager.delete(TransferEntity.name, { bookId: id });
+    const res = await qr.manager.find(TransferEntity.name, options);
+    await qr.manager.remove(res);
   }
 }

@@ -570,7 +570,7 @@ export class BookService {
   }
 
   public async deleteDeviceBook(id: string, deviceId: string) {
-    await this.deviceBookAccess.hardDeleteByDeviceIdAndBookId(deviceId, id);
+    await this.deviceBookAccess.hardDelete({ where: { deviceId, bookId: id } });
   }
 
   public async setDeviceBookShowDelete(
@@ -668,7 +668,8 @@ export class BookService {
     if (member.bookId !== bid) throw new BadRequestError('bad request');
     if (member.deletable === false) throw new BadRequestError('not deletable');
 
-    await this.memberAccess.hardDeleteById(mid);
+    await this.memberSettlementAccess.hardDelete({ where: { memberId: mid } });
+    await this.memberAccess.hardDelete({ where: { id: mid } });
   }
 
   public async reviseMemberSelf(
@@ -1137,16 +1138,8 @@ export class BookService {
     const isDeletable = await this.checkCurrencyIsDeletable(currencyId);
     if (!isDeletable) throw new BadRequestError('not deletable');
 
-    const memberSettlements =
-      await this.memberSettlementAccess.findByCurrencyId(currencyId);
-
-    await Promise.all(
-      memberSettlements.map((v) =>
-        this.memberSettlementAccess.hardDeleteById(v.id)
-      )
-    );
-
-    await this.currencyAccess.hardDeleteById(currencyId);
+    await this.memberSettlementAccess.hardDelete({ where: { currencyId } });
+    await this.currencyAccess.hardDelete({ where: { id: currencyId } });
   }
 
   public async reviseCurrencyPrimary(

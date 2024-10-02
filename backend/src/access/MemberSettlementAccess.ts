@@ -2,7 +2,6 @@ import { inject, injectable } from 'inversify';
 import { FindManyOptions, FindOneOptions } from 'typeorm';
 import { MemberSettlement } from 'src/model/entity/MemberSettlement';
 import { MemberSettlementEntity } from 'src/model/entity/MemberSettlementEntity';
-import { InternalServerError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -55,11 +54,9 @@ export class MemberSettlementAccess {
     );
   }
 
-  public async hardDeleteById(id: string) {
+  public async hardDelete(options: FindManyOptions<MemberSettlement>) {
     const qr = await this.database.getQueryRunner();
-
-    const res = await qr.manager.delete(MemberSettlementEntity.name, id);
-
-    if (res.affected === 0) throw new InternalServerError('nothing happened.');
+    const res = await qr.manager.find(MemberSettlementEntity.name, options);
+    await qr.manager.remove(res);
   }
 }

@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import { In } from 'typeorm';
 import { BillAccess } from 'src/access/BillAccess';
 import { BillShareAccess } from 'src/access/BillShareAccess';
 import { BookAccess } from 'src/access/BookAccess';
@@ -50,40 +51,45 @@ export class DbCleanService {
 
     for (const book of res) {
       // delete member_settlement
-      const settles = await this.memberSettlementAccess.find({
-        where: { currency: { bookId: book.id } },
+      const currencies = await this.currencyAccess.findByBookId(book.id);
+      const currencyIdSet = new Set(currencies.map((v) => v.id));
+      await this.memberSettlementAccess.hardDelete({
+        where: { currencyId: In([...currencyIdSet]) },
       });
-      for (const settle of settles)
-        await this.memberSettlementAccess.hardDeleteById(settle.id);
 
       // delete transfer
-      await this.transferAccess.hardDeleteByBookId(book.id);
+      await this.transferAccess.hardDelete({ where: { bookId: book.id } });
 
       // delete bill -> billShare
       const bills = await this.billAccess.findByBookId(book.id);
-      for (const bill of bills)
-        await this.billShareAccess.hardDeleteByBillId(bill.id);
-      await this.billAccess.hardDeleteByBookId(book.id);
+      const billIdSet = new Set(bills.map((v) => v.id));
+      await this.billShareAccess.hardDelete({
+        where: { billId: In([...billIdSet]) },
+      });
+      await this.billAccess.hardDelete({ where: { bookId: book.id } });
 
       // delete currency
-      await this.currencyAccess.hardDeleteByBookId(book.id);
+      await this.currencyAccess.hardDelete({ where: { bookId: book.id } });
 
       // delete member
-      await this.memberAccess.hardDeleteByBookId(book.id);
+      await this.memberAccess.hardDelete({ where: { bookId: book.id } });
 
       // delete device book pair
-      await this.deviceBookAccess.hardDeleteByBookId(book.id);
+      await this.deviceBookAccess.hardDelete({ where: { bookId: book.id } });
 
       // delete book
-      await this.bookAccess.hardDeleteById(book.id);
+      await this.bookAccess.hardDelete({ where: { id: book.id } });
     }
   }
 
+  // deprecated
   private async cleanExpiredToken() {
     const res = await this.deviceTokenAccess.findExpired();
 
     for (const deviceToken of res)
-      await this.deviceTokenAccess.hardDeleteById(deviceToken.id);
+      await this.deviceTokenAccess.hardDelete({
+        where: { id: deviceToken.id },
+      });
   }
 
   public async cleanExpired() {

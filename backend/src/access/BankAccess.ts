@@ -2,7 +2,6 @@ import { inject, injectable } from 'inversify';
 import { FindManyOptions } from 'typeorm';
 import { Bank } from 'src/model/entity/Bank';
 import { BankEntity } from 'src/model/entity/BankEntity';
-import { InternalServerError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -13,12 +12,10 @@ export class BankAccess {
   @inject(Database)
   private readonly database!: Database;
 
-  public async save(bank: Bank) {
+  public async saveMany(bank: Bank[]) {
     const qr = await this.database.getQueryRunner();
-    const entity = new BankEntity();
-    Object.assign(entity, bank);
 
-    return await qr.manager.save(entity);
+    return await qr.manager.save(bank);
   }
 
   public async find(options?: FindManyOptions<Bank>) {
@@ -29,11 +26,9 @@ export class BankAccess {
     });
   }
 
-  public async hardDeleteById(id: string) {
+  public async hardDeleteAll(options?: FindManyOptions<Bank>) {
     const qr = await this.database.getQueryRunner();
-
-    const res = await qr.manager.delete(BankEntity.name, id);
-
-    if (res.affected === 0) throw new InternalServerError('nothing happened.');
+    const res = await qr.manager.find(BankEntity.name, options);
+    await qr.manager.remove(res);
   }
 }

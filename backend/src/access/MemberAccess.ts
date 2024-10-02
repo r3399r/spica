@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import { FindManyOptions } from 'typeorm';
 import { Member } from 'src/model/entity/Member';
 import { MemberEntity } from 'src/model/entity/MemberEntity';
 import { InternalServerError } from 'src/model/error';
@@ -44,17 +45,9 @@ export class MemberAccess {
     if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 
-  public async hardDeleteById(id: string) {
+  public async hardDelete(options: FindManyOptions<Member>) {
     const qr = await this.database.getQueryRunner();
-
-    const res = await qr.manager.delete(MemberEntity.name, id);
-
-    if (res.affected === 0) throw new InternalServerError('nothing happened.');
-  }
-
-  public async hardDeleteByBookId(id: string) {
-    const qr = await this.database.getQueryRunner();
-
-    await qr.manager.delete(MemberEntity.name, { bookId: id });
+    const res = await qr.manager.find(MemberEntity.name, options);
+    await qr.manager.remove(res);
   }
 }

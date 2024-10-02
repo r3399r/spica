@@ -2,7 +2,6 @@ import { inject, injectable } from 'inversify';
 import { FindManyOptions, FindOneOptions } from 'typeorm';
 import { BankAccount } from 'src/model/entity/BankAccount';
 import { BankAccountEntity } from 'src/model/entity/BankAccountEntity';
-import { InternalServerError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -37,11 +36,9 @@ export class BankAccountAccess {
     });
   }
 
-  public async hardDeleteById(id: string) {
+  public async hardDelete(options: FindManyOptions<BankAccount>) {
     const qr = await this.database.getQueryRunner();
-
-    const res = await qr.manager.delete(BankAccountEntity.name, id);
-
-    if (res.affected === 0) throw new InternalServerError('nothing happened.');
+    const res = await qr.manager.find(BankAccountEntity.name, options);
+    await qr.manager.remove(res);
   }
 }

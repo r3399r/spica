@@ -13,8 +13,7 @@ export class BankService {
 
   public async syncBankData() {
     // clean existing bank
-    const banks = await this.bankAccess.find();
-    for (const bank of banks) await this.bankAccess.hardDeleteById(bank.id);
+    await this.bankAccess.hardDeleteAll();
 
     // get bank list and save
     const response = await axios.get<string>(
@@ -31,6 +30,7 @@ export class BankService {
     arr.pop();
 
     const bankSet = new Set<string>();
+    const bankEnities: BankEntity[] = [];
 
     for (const data of arr) {
       const bankCode = data.split(',')[0];
@@ -41,8 +41,9 @@ export class BankService {
         const newBank = new BankEntity();
         newBank.code = bankCode;
         newBank.name = bankName;
-        await this.bankAccess.save(newBank);
+        bankEnities.push(newBank);
       }
     }
+    await this.bankAccess.saveMany(bankEnities);
   }
 }

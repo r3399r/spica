@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
+import { FindManyOptions } from 'typeorm';
 import { Currency } from 'src/model/entity/Currency';
 import { CurrencyEntity } from 'src/model/entity/CurrencyEntity';
-import { InternalServerError } from 'src/model/error';
 import { Database } from 'src/util/Database';
 
 /**
@@ -44,19 +44,9 @@ export class CurrencyAccess {
     });
   }
 
-  public async hardDeleteById(id: string) {
+  public async hardDelete(options: FindManyOptions<Currency>) {
     const qr = await this.database.getQueryRunner();
-
-    const res = await qr.manager.delete(CurrencyEntity.name, id);
-
-    if (res.affected === 0) throw new InternalServerError('nothing happened.');
-  }
-
-  public async hardDeleteByBookId(id: string) {
-    const qr = await this.database.getQueryRunner();
-
-    const res = await qr.manager.delete(CurrencyEntity.name, { bookId: id });
-
-    if (res.affected === 0) throw new InternalServerError('nothing happened.');
+    const res = await qr.manager.find(CurrencyEntity.name, options);
+    await qr.manager.remove(res);
   }
 }
