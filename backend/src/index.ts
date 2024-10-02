@@ -97,7 +97,7 @@ export async function eventBridgeDbClean(_event: unknown, _context: unknown) {
   }
 }
 
-export async function eventBridgebank(_event: unknown, _context: unknown) {
+export async function eventBridgeBank(_event: unknown, _context: unknown) {
   const db = bindings.get(DbAccess);
   await db.startTransaction();
   try {
