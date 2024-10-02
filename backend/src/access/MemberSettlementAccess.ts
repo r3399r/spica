@@ -55,11 +55,14 @@ export class MemberSettlementAccess {
     );
   }
 
-  public async hardDeleteById(id: string) {
+  public async hardDelete(criteria: Partial<MemberSettlement>) {
     const qr = await this.database.getQueryRunner();
-
-    const res = await qr.manager.delete(MemberSettlementEntity.name, id);
+    const res = await qr.manager.delete(MemberSettlementEntity.name, criteria);
 
     if (res.affected === 0) throw new InternalServerError('nothing happened.');
+  }
+
+  public async hardDeleteById(id: string) {
+    await this.hardDelete({ id });
   }
 }

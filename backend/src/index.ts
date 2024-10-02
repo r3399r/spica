@@ -89,7 +89,6 @@ export async function eventBridgeDbClean(_event: unknown, _context: unknown) {
   try {
     await dbClean();
     await db.commitTransaction();
-    await db.resetSqlStats();
   } catch (e) {
     console.log(e);
     await db.rollbackTransaction();

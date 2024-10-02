@@ -668,6 +668,7 @@ export class BookService {
     if (member.bookId !== bid) throw new BadRequestError('bad request');
     if (member.deletable === false) throw new BadRequestError('not deletable');
 
+    await this.memberSettlementAccess.hardDelete({ memberId: mid });
     await this.memberAccess.hardDeleteById(mid);
   }
 
