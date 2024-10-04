@@ -8,6 +8,7 @@ import IcSelect from 'src/image/ic-select.svg';
 import { BillForm as Form } from 'src/model/Form';
 import { saveBillFormData, saveTransferFormData } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
+import { bn } from 'src/util/bignumber';
 import CurrencyModal from './CurrencyModal';
 
 const AmountCurrency = () => {
@@ -27,6 +28,7 @@ const AmountCurrency = () => {
       ),
     [book, txFormType, billFormData, transferFormData],
   );
+  const mainCurrency = useMemo(() => book?.currencies?.find((v) => v.isPrimary === true), [book]);
 
   useEffect(() => {
     const primaryCurrency = book?.currencies?.find((v) => v.isPrimary === true);
@@ -70,6 +72,14 @@ const AmountCurrency = () => {
             });
           }}
         />
+        {mainCurrency && currentCurrency && currentCurrency.id !== mainCurrency.id && (
+          <Body size="s" className="mt-[5px] text-navy-300">{`≈${mainCurrency.name}${
+            mainCurrency.symbol
+          }${bn((txFormType === 'bill' ? billFormData.amount : transferFormData.amount) ?? 0)
+            .times(currentCurrency?.exchangeRate ?? 0)
+            .dp(2)
+            .toFormat()}`}</Body>
+        )}
       </div>
       <CurrencyModal open={open} handleClose={() => setOpen(false)} />
     </div>

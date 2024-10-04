@@ -8,7 +8,7 @@ import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
 import { Transaction, TransactionBill, TransactionTransfer } from 'src/model/backend/type/Book';
 import { aggregateTransactions } from 'src/service/bookService';
-import { bnFormat } from 'src/util/bignumber';
+import { bn, bnFormat } from 'src/util/bignumber';
 
 const TransactionList = () => {
   const { id } = useParams();
@@ -60,8 +60,11 @@ const TransactionList = () => {
 
   const items = (item: Transaction) => {
     const isMultiple = (book?.currencies?.length ?? 0) > 1;
-    const currency = book?.currencies?.find((v) => v.id === item.currencyId);
-    const currencyDisplay = isMultiple ? `${currency?.name}${currency?.symbol}` : currency?.symbol;
+    const currentCurrency = book?.currencies?.find((v) => v.id === item.currencyId);
+    const mainCurrency = book?.currencies?.find((v) => v.isPrimary === true);
+    const currencyDisplay = isMultiple
+      ? `${currentCurrency?.name}${currentCurrency?.symbol}`
+      : currentCurrency?.symbol;
 
     if (item.type !== 'transfer')
       return (
@@ -86,9 +89,19 @@ const TransactionList = () => {
               className={classNames({ 'opacity-30': item.dateDeleted })}
             >{`${currencyDisplay}${bnFormat(item.amount)}`}</Body>
           </div>
-          <Body size="s" className="text-[12px] leading-[18px] text-teal-500">
-            {billNote(item, currencyDisplay)}
-          </Body>
+          <div className="flex justify-between">
+            <Body size="s" className="text-teal-500">
+              {billNote(item, currencyDisplay)}
+            </Body>
+            {mainCurrency && currentCurrency && mainCurrency.id !== currentCurrency.id && (
+              <Body size="s" className="text-teal-500">{`≈${mainCurrency.name}${
+                mainCurrency.symbol
+              }${bn(item.amount)
+                .times(currentCurrency.exchangeRate ?? 0)
+                .dp(2)
+                .toFormat()}`}</Body>
+            )}
+          </div>
         </div>
       );
 
@@ -114,9 +127,19 @@ const TransactionList = () => {
             className={classNames({ 'opacity-30': item.dateDeleted })}
           >{`${currencyDisplay}${bnFormat(item.amount)}`}</Body>
         </div>
-        <Body size="s" className="text-[12px] leading-[18px] text-teal-500">
-          {transferNote(item, currencyDisplay)}
-        </Body>
+        <div className="flex justify-between">
+          <Body size="s" className="text-teal-500">
+            {transferNote(item, currencyDisplay)}
+          </Body>
+          {mainCurrency && currentCurrency && mainCurrency.id !== currentCurrency.id && (
+            <Body size="s" className="text-teal-500">{`≈${mainCurrency.name}${
+              mainCurrency.symbol
+            }${bn(item.amount)
+              .times(currentCurrency.exchangeRate ?? 0)
+              .dp(2)
+              .toFormat()}`}</Body>
+          )}
+        </div>
       </div>
     );
   };
