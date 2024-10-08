@@ -90,13 +90,17 @@ const TransactionList = () => {
             >{`${currencyDisplay}${bnFormat(item.amount)}`}</Body>
           </div>
           <div className="flex justify-between">
-            <Body size="s" className="text-teal-500">
+            <Body
+              size="s"
+              className={classNames('text-teal-500', { 'opacity-60': item.dateDeleted })}
+            >
               {billNote(item, currencyDisplay)}
             </Body>
             {mainCurrency && currentCurrency && mainCurrency.id !== currentCurrency.id && (
-              <Body size="s" className="text-teal-500">{`≈${mainCurrency.name}${
-                mainCurrency.symbol
-              }${bn(item.amount)
+              <Body
+                size="s"
+                className={classNames('text-teal-500', { 'opacity-60': item.dateDeleted })}
+              >{`≈${mainCurrency.name}${mainCurrency.symbol}${bn(item.amount)
                 .times(currentCurrency.exchangeRate ?? 0)
                 .dp(2)
                 .toFormat()}`}</Body>
@@ -128,13 +132,17 @@ const TransactionList = () => {
           >{`${currencyDisplay}${bnFormat(item.amount)}`}</Body>
         </div>
         <div className="flex justify-between">
-          <Body size="s" className="text-teal-500">
+          <Body
+            size="s"
+            className={classNames('text-teal-500', { 'opacity-60': item.dateDeleted })}
+          >
             {transferNote(item, currencyDisplay)}
           </Body>
           {mainCurrency && currentCurrency && mainCurrency.id !== currentCurrency.id && (
-            <Body size="s" className="text-teal-500">{`≈${mainCurrency.name}${
-              mainCurrency.symbol
-            }${bn(item.amount)
+            <Body
+              size="s"
+              className={classNames('text-teal-500', { 'opacity-60': item.dateDeleted })}
+            >{`≈${mainCurrency.name}${mainCurrency.symbol}${bn(item.amount)
               .times(currentCurrency.exchangeRate ?? 0)
               .dp(2)
               .toFormat()}`}</Body>
