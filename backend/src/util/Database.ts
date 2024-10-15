@@ -54,4 +54,10 @@ export class Database {
     if (this.dataSource !== undefined && !this.dataSource.isInitialized)
       await this.dataSource.destroy();
   }
+
+  public async getQueryBuilder() {
+    const ds = await this.getDataSource();
+
+    return ds.createQueryBuilder();
+  }
 }

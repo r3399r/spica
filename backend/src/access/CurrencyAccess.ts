@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { FindManyOptions } from 'typeorm';
+import { FindManyOptions, ObjectLiteral } from 'typeorm';
 import { Currency } from 'src/model/entity/Currency';
 import { CurrencyEntity } from 'src/model/entity/CurrencyEntity';
 import { Database } from 'src/util/Database';
@@ -44,9 +44,22 @@ export class CurrencyAccess {
     });
   }
 
-  public async hardDelete(options: FindManyOptions<Currency>) {
+  public async remove(options: FindManyOptions<Currency>) {
     const qr = await this.database.getQueryRunner();
     const res = await qr.manager.find(CurrencyEntity.name, options);
     await qr.manager.remove(res);
+  }
+
+  private async executeDelete(where: string, parameters?: ObjectLiteral) {
+    const qb = await this.database.getQueryBuilder();
+    await qb
+      .delete()
+      .from(CurrencyEntity.name)
+      .where(where, parameters)
+      .execute();
+  }
+
+  public async hardDeleteByBookId(id: string) {
+    await this.executeDelete('book_id = :id', { id });
   }
 }

@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { FindManyOptions } from 'typeorm';
+import { ObjectLiteral } from 'typeorm';
 import { Book } from 'src/model/entity/Book';
 import { BookEntity } from 'src/model/entity/BookEntity';
 import { InternalServerError } from 'src/model/error';
@@ -31,9 +31,12 @@ export class BookAccess {
     if (res.affected === 0) throw new InternalServerError('nothing happened.');
   }
 
-  public async hardDelete(options: FindManyOptions<Book>) {
-    const qr = await this.database.getQueryRunner();
-    const res = await qr.manager.find(BookEntity.name, options);
-    await qr.manager.remove(res);
+  private async executeDelete(where: string, parameters?: ObjectLiteral) {
+    const qb = await this.database.getQueryBuilder();
+    await qb.delete().from(BookEntity.name).where(where, parameters).execute();
+  }
+
+  public async hardDeleteById(id: string) {
+    await this.executeDelete('id = :id', { id });
   }
 }

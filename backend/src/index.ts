@@ -10,6 +10,7 @@ import { dbClean } from './lambda/dbClean';
 import { manifest } from './lambda/manifest';
 import { transfer } from './lambda/transfer';
 import { errorOutput, successOutput } from './util/LambdaOutput';
+import { exportPdf } from './lambda/exportPdf';
 
 export const api = async (
   event: LambdaEvent,
@@ -42,6 +43,9 @@ export const api = async (
         break;
       case 'bankAccount':
         res = await bankAccount(event);
+        break;
+      case 'exportPdf':
+        res = await exportPdf(event);
         break;
     }
 

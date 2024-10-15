@@ -1,5 +1,6 @@
 import format from 'date-fns/format';
 import bookEndpoint from 'src/api/bookEndpoint';
+import exportPdfEndpoint from 'src/api/exportPdfEndpoint';
 import { PostBookRequest } from 'src/model/backend/api/Book';
 import { Transaction } from 'src/model/backend/type/Book';
 import { appendBook, setBooks } from 'src/redux/bookSlice';
@@ -220,6 +221,9 @@ export const exportPersonalPdf = async (id: string, userId: string) => {
     const user = savedBook?.members?.find((v) => v.id === userId);
     if (savedBook === undefined || user === undefined) return;
 
+    const deviceId = getLocalDeviceId();
+    await exportPdfEndpoint.patchExportPdfIdMemberMid(id, userId, deviceId);
+
     await exportPdf('pdf-personal-content', `${savedBook.name}-${user.nickname}.pdf`);
   } finally {
     dispatch(finishWaiting());
@@ -232,6 +236,9 @@ export const exportOverallPdf = async (id: string) => {
     const { books } = getState().book;
     const savedBook = books?.find((v) => v.id === id);
     if (savedBook === undefined) return;
+
+    const deviceId = getLocalDeviceId();
+    await exportPdfEndpoint.patchExportPdfId(id, deviceId);
 
     await exportPdf('pdf-overall-content', `${savedBook.name}.pdf`);
   } finally {
