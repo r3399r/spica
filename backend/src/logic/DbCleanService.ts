@@ -1,11 +1,9 @@
 import { inject, injectable } from 'inversify';
-import { In } from 'typeorm';
 import { BillAccess } from 'src/access/BillAccess';
 import { BillShareAccess } from 'src/access/BillShareAccess';
 import { BookAccess } from 'src/access/BookAccess';
 import { CurrencyAccess } from 'src/access/CurrencyAccess';
 import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
-import { DeviceTokenAccess } from 'src/access/DeviceTokenAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { MemberSettlementAccess } from 'src/access/MemberSettlementAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
@@ -43,8 +41,8 @@ export class DbCleanService {
   @inject(DeviceBookAccess)
   private readonly deviceBookAccess!: DeviceBookAccess;
 
-  @inject(DeviceTokenAccess)
-  private readonly deviceTokenAccess!: DeviceTokenAccess;
+  // @inject(DeviceTokenAccess)
+  // private readonly deviceTokenAccess!: DeviceTokenAccess;
 
   private async cleanExpiredBook() {
     const res = await this.vBookAccess.findExpired();
@@ -53,47 +51,45 @@ export class DbCleanService {
       // delete member_settlement
       const currencies = await this.currencyAccess.findByBookId(book.id);
       const currencyIdSet = new Set(currencies.map((v) => v.id));
-      await this.memberSettlementAccess.hardDelete({
-        where: { currencyId: In([...currencyIdSet]) },
-      });
+      await this.memberSettlementAccess.hardDeleteByCurrencyIds([
+        ...currencyIdSet,
+      ]);
 
       // delete transfer
-      await this.transferAccess.hardDelete({ where: { bookId: book.id } });
+      await this.transferAccess.hardDeleteByBookId(book.id);
 
       // delete bill -> billShare
       const bills = await this.billAccess.findByBookId(book.id);
       const billIdSet = new Set(bills.map((v) => v.id));
-      await this.billShareAccess.hardDelete({
-        where: { billId: In([...billIdSet]) },
-      });
-      await this.billAccess.hardDelete({ where: { bookId: book.id } });
+      await this.billShareAccess.hardDeleteByBillIds([...billIdSet]);
+      await this.billAccess.hardDeleteByBookId(book.id);
 
       // delete currency
-      await this.currencyAccess.hardDelete({ where: { bookId: book.id } });
+      await this.currencyAccess.hardDeleteByBookId(book.id);
 
       // delete member
-      await this.memberAccess.hardDelete({ where: { bookId: book.id } });
+      await this.memberAccess.hardDeleteByBookId(book.id);
 
       // delete device book pair
-      await this.deviceBookAccess.hardDelete({ where: { bookId: book.id } });
+      await this.deviceBookAccess.hardDeleteByBookId(book.id);
 
       // delete book
-      await this.bookAccess.hardDelete({ where: { id: book.id } });
+      await this.bookAccess.hardDeleteById(book.id);
     }
   }
 
-  // deprecated
-  private async cleanExpiredToken() {
-    const res = await this.deviceTokenAccess.findExpired();
+  // deprecated // comment out to observe usage until 2025
+  // private async cleanExpiredToken() {
+  //   const res = await this.deviceTokenAccess.findExpired();
 
-    for (const deviceToken of res)
-      await this.deviceTokenAccess.hardDelete({
-        where: { id: deviceToken.id },
-      });
-  }
+  //   for (const deviceToken of res)
+  //     await this.deviceTokenAccess.hardDelete({
+  //       where: { id: deviceToken.id },
+  //     });
+  // }
 
   public async cleanExpired() {
     await this.cleanExpiredBook();
-    await this.cleanExpiredToken();
+    // await this.cleanExpiredToken();
   }
 }

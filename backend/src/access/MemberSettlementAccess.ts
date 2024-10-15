@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { FindManyOptions, FindOneOptions } from 'typeorm';
+import { FindManyOptions, FindOneOptions, ObjectLiteral } from 'typeorm';
 import { MemberSettlement } from 'src/model/entity/MemberSettlement';
 import { MemberSettlementEntity } from 'src/model/entity/MemberSettlementEntity';
 import { Database } from 'src/util/Database';
@@ -54,9 +54,22 @@ export class MemberSettlementAccess {
     );
   }
 
-  public async hardDelete(options: FindManyOptions<MemberSettlement>) {
+  public async remove(options: FindManyOptions<MemberSettlement>) {
     const qr = await this.database.getQueryRunner();
     const res = await qr.manager.find(MemberSettlementEntity.name, options);
     await qr.manager.remove(res);
+  }
+
+  private async executeDelete(where: string, parameters?: ObjectLiteral) {
+    const qb = await this.database.getQueryBuilder();
+    await qb
+      .delete()
+      .from(MemberSettlementEntity.name)
+      .where(where, parameters)
+      .execute();
+  }
+
+  public async hardDeleteByCurrencyIds(ids: string[]) {
+    await this.executeDelete('currency_id IN (:...ids)', { ids });
   }
 }

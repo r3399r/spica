@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { FindManyOptions } from 'typeorm';
+import { FindManyOptions, ObjectLiteral } from 'typeorm';
 import { DeviceBook } from 'src/model/entity/DeviceBook';
 import { DeviceBookEntity } from 'src/model/entity/DeviceBookEntity';
 import { InternalServerError } from 'src/model/error';
@@ -47,9 +47,22 @@ export class DeviceBookAccess {
     });
   }
 
-  public async hardDelete(options: FindManyOptions<DeviceBook>) {
+  public async remove(options: FindManyOptions<DeviceBook>) {
     const qr = await this.database.getQueryRunner();
     const res = await qr.manager.find(DeviceBookEntity.name, options);
     await qr.manager.remove(res);
+  }
+
+  private async executeDelete(where: string, parameters?: ObjectLiteral) {
+    const qb = await this.database.getQueryBuilder();
+    await qb
+      .delete()
+      .from(DeviceBookEntity.name)
+      .where(where, parameters)
+      .execute();
+  }
+
+  public async hardDeleteByBookId(id: string) {
+    await this.executeDelete('book_id = :id', { id });
   }
 }

@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { FindManyOptions } from 'typeorm';
+import { ObjectLiteral } from 'typeorm';
 import { BillShare } from 'src/model/entity/BillShare';
 import { BillShareEntity } from 'src/model/entity/BillShareEntity';
 import { Database } from 'src/util/Database';
@@ -29,9 +29,16 @@ export class BillShareAccess {
     });
   }
 
-  public async hardDelete(options: FindManyOptions<BillShare>) {
-    const qr = await this.database.getQueryRunner();
-    const res = await qr.manager.find(BillShareEntity.name, options);
-    await qr.manager.remove(res);
+  private async executeDelete(where: string, parameters?: ObjectLiteral) {
+    const qb = await this.database.getQueryBuilder();
+    await qb
+      .delete()
+      .from(BillShareEntity.name)
+      .where(where, parameters)
+      .execute();
+  }
+
+  public async hardDeleteByBillIds(ids: string[]) {
+    await this.executeDelete('bill_id IN (:...ids)', { ids });
   }
 }
