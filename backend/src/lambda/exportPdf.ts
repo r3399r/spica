@@ -25,7 +25,7 @@ async function apiExportPdfId() {
     throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
     case 'PATCH':
-      return
+      return;
     default:
       throw new InternalServerError('unknown http method');
   }
@@ -38,7 +38,7 @@ async function apiExportPdfIdMemberMid() {
     throw new BadRequestError('headers should not be empty');
   switch (event.httpMethod) {
     case 'PATCH':
-      return
+      return;
     default:
       throw new InternalServerError('unknown http method');
   }

@@ -7,10 +7,10 @@ import { bankAccount } from './lambda/bankAccount';
 import { book } from './lambda/book';
 import { dataSync } from './lambda/dataSync';
 import { dbClean } from './lambda/dbClean';
+import { exportPdf } from './lambda/exportPdf';
 import { manifest } from './lambda/manifest';
 import { transfer } from './lambda/transfer';
 import { errorOutput, successOutput } from './util/LambdaOutput';
-import { exportPdf } from './lambda/exportPdf';
 
 export const api = async (
   event: LambdaEvent,
