@@ -1,4 +1,4 @@
-import html2pdf from 'html2pdf.js';
+import html2pdf from 'html3pdf';
 
 export const exportPdf = async (elementId: string, filename: string) => {
   const input = document.getElementById(elementId);
