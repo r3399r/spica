@@ -8,6 +8,7 @@ import {
   PostBookBillResponse,
   PostBookCurrencyRequest,
   PostBookCurrencyResponse,
+  PostBookIdRequest,
   PostBookMemberRequest,
   PostBookMemberResponse,
   PostBookRequest,
@@ -27,7 +28,6 @@ import {
   PutBookTransferRequest,
   PutBookTransferResponse,
 } from 'src/model/backend/api/Book';
-import { PostBookIdRequest } from 'src/model/backend/model/api/Book';
 import http from 'src/util/http';
 
 const getBook = async (deviceId: string) =>
