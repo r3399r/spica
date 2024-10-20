@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios';
 import { t } from 'i18next';
+import packageJson from '../../package.json'; // eslint-disable-line
 import { ErrorMessage } from 'src/constant/backend/ErrorMessage';
 
 // eslint-disable-next-line
@@ -17,6 +18,7 @@ const defaultConfig: AxiosRequestConfig = {
 const defaultHeader: RawAxiosRequestHeaders = {
   'Content-type': 'application/json',
   Accept: 'application/json',
+  'x-api-version': packageJson.version,
 };
 
 // eslint-disable-next-line
@@ -42,6 +44,7 @@ const request = async <T>(config: AxiosRequestConfig<any>) => {
     // eslint-disable-next-line
     return await axios.request<T, AxiosResponse<T, any>, any>(config);
   } catch (e) {
+    console.log(e);
     if (axios.isAxiosError(e))
       switch (e.response?.data.message) {
         case ErrorMessage.TOO_FREQUENT:
@@ -49,6 +52,9 @@ const request = async <T>(config: AxiosRequestConfig<any>) => {
           break;
         case ErrorMessage.INVALID_CODE:
           alert(t('error.invalidCode'));
+          break;
+        case ErrorMessage.INVALID_EMAIL:
+          alert(t('error.invalidEmail'));
           break;
         default:
           alert(t('error.default'));

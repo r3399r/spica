@@ -8,7 +8,6 @@ import {
   PostBookBillResponse,
   PostBookCurrencyRequest,
   PostBookCurrencyResponse,
-  PostBookIdResponse,
   PostBookMemberRequest,
   PostBookMemberResponse,
   PostBookRequest,
@@ -28,6 +27,7 @@ import {
   PutBookTransferRequest,
   PutBookTransferResponse,
 } from 'src/model/backend/api/Book';
+import { PostBookIdRequest } from 'src/model/backend/model/api/Book';
 import http from 'src/util/http';
 
 const getBook = async (deviceId: string) =>
@@ -42,8 +42,9 @@ const getBookId = async (id: string, deviceId: string, params?: GetBookIdParams)
     params,
   });
 
-const postBookId = async (id: string, deviceId: string) =>
-  await http.post<PostBookIdResponse>(`book/${id}`, {
+const postBookId = async (id: string, deviceId: string, data: PostBookIdRequest) =>
+  await http.post<void, PostBookIdRequest>(`book/${id}`, {
+    data,
     headers: { 'x-api-device': deviceId },
   });
 

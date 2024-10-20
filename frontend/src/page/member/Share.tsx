@@ -44,7 +44,7 @@ const Share = () => {
             onClick={() => setOpen(true)}
             appearance="default"
           >
-            {t('member.inputId')}
+            {t('member.inputEmail')}
           </Button>
         </div>
       </div>

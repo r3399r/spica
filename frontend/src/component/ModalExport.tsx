@@ -8,9 +8,10 @@ type Props = {
   open: boolean;
   handleClose: () => void;
   onExport: () => Promise<void>;
+  txCount: number;
 };
 
-const ModalExport = ({ open, handleClose, onExport }: Props) => {
+const ModalExport = ({ open, handleClose, onExport, txCount }: Props) => {
   const { t } = useTranslation();
   const { id } = useParams();
 
@@ -30,7 +31,7 @@ const ModalExport = ({ open, handleClose, onExport }: Props) => {
       onConfirm={onConfirm}
     >
       <Body className="flex-1" size="l">
-        {t('desc.exportHint')}
+        {txCount > 50 ? t('desc.exportHintMore', { n: txCount }) : t('desc.exportHint')}
       </Body>
     </ModalVanilla>
   );
