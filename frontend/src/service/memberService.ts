@@ -111,13 +111,14 @@ export const setMemberAsSelf = async (bookId: string, memberId: string) => {
 
 export const getDeviceId = () => getLocalDeviceId();
 
-export const addFriendIntoBook = async (bookId: string, friendId: string) => {
+export const addFriendIntoBook = async (bookId: string, email: string) => {
   try {
     dispatch(startWaiting());
+    const deviceId = getLocalDeviceId();
     const { books } = getState().book;
     const book = books?.find((v) => v.id === bookId);
     if (book === undefined) return;
-    await bookEndpoint.postBookId(bookId, friendId);
+    await bookEndpoint.postBookId(bookId, deviceId, { email });
   } finally {
     dispatch(finishWaiting());
   }

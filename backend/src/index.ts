@@ -76,6 +76,9 @@ export const api = async (
           elapsedTime: Date.now() - startTime,
           statusCode: output.statusCode,
           dateRequested: new Date().toISOString(),
+          version: event.headers
+            ? event.headers['x-api-version'] ?? null
+            : null,
         }),
         QueueUrl: process.env.LOGGER_QUEUE_URL ?? '',
       })

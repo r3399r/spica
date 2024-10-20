@@ -4,7 +4,8 @@ import { useParams } from 'react-router-dom';
 import FormInput from 'src/component/FormInput';
 import ModalForm from 'src/component/ModalForm';
 import Body from 'src/component/typography/Body';
-import IcConfig from 'src/image/ic-config.svg';
+import IcSync from 'src/image/ic-sync.svg';
+import IcWarning from 'src/image/ic-warning.svg';
 import { FriendForm } from 'src/model/Form';
 import { addFriendIntoBook } from 'src/service/memberService';
 
@@ -24,9 +25,9 @@ const ModalFriend = ({ open, handleClose }: Props) => {
   };
 
   const onSubmit = (data: FriendForm) => {
-    addFriendIntoBook(id ?? 'xx', data.id)
+    addFriendIntoBook(id ?? 'xx', data.email)
       .then(onClose)
-      .catch(() => methods.setError('id', {}));
+      .catch(() => methods.setError('email', {}));
   };
 
   return (
@@ -39,11 +40,27 @@ const ModalFriend = ({ open, handleClose }: Props) => {
       confirmBtn={t('act.submit')}
     >
       <>
-        <div className="mb-[30px] flex items-center gap-1">
-          <Body size="l">{t('member.friendHint')}</Body>
-          <img src={IcConfig} />
+        <Body size="l">{t('member.friendHint')}</Body>
+        <div className="my-[15px] rounded-[15px] bg-beige-300 p-[10px]">
+          <div className="flex justify-center">
+            <img src={IcWarning} />
+          </div>
+          <Body size="l" className="pb-[6px]" bold>
+            {t('member.warning1')}
+          </Body>
+          <div className="gap-[5px]">
+            <Body className="inline">{t('member.warning2')}</Body>
+            <img className="mx-[5px] inline" src={IcSync} />
+            <Body className="inline">{t('member.warning3')}</Body>
+          </div>
         </div>
-        <FormInput name="id" placeholder={t('member.friendPlaceholder')} autoFocus required />
+        <FormInput
+          type="email"
+          name="email"
+          placeholder={t('member.emailPlaceholder')}
+          autoFocus
+          required
+        />
       </>
     </ModalForm>
   );

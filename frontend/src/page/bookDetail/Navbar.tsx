@@ -60,6 +60,7 @@ const Navbar = () => {
         open={openExport}
         handleClose={() => setOpenExport(false)}
         onExport={() => exportOverallPdf(id ?? 'x')}
+        txCount={book?.txCount ?? 0}
       />
     </div>
   );

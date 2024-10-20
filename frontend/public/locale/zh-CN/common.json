@@ -23,7 +23,8 @@
     "memo": "备註",
     "copy": "複製成功！",
     "exportTitle": "汇出",
-    "exportHint": "将收支明细汇出成一个 pdf 档"
+    "exportHint": "将收支明细汇出成一个 pdf 档",
+    "exportHintMore": "将收支明细汇出成一个 pdf 档。此帐本中有 {{n}} 笔纪录，建议使用电脑汇出。"
   },
   "landing": {
     "title": "Bunny Bill",
@@ -160,14 +161,17 @@
     "shareWithFriend": "与好友共享帐本",
     "shareText": "与你共享帐本「{{book}}」，请点击连结",
     "shareLink": "分享连结",
-    "inputId": "输入好友 ID",
+    "inputEmail": "输入好友Email",
     "edit": "编辑资料",
     "deleteHint": "要删除「{{nickname}}」吗？",
     "self": "我",
     "selfHint1": "将「{{nickname}}」设定为我的暱称",
     "selfHint2": "「{{nickname}}」不再是我的暱称",
-    "friendPlaceholder": "好友 ID",
-    "friendHint": "使用者ID显示在系统设定"
+    "emailPlaceholder": "aaa@xxxmail.com",
+    "friendHint": "使用者ID显示在系统设定",
+    "warning1": "注意：好友的Email 须先在他的装置进行绑定",
+    "warning2": "可在「系统设定」的「资料同步」中，或从",
+    "warning3": "进行绑定。"
   },
   "share": {
     "join": "加入此帐本？",
@@ -212,6 +216,7 @@
   "error": {
     "default": "发生错误，请重新再试，若状况持续，请联繫我们，谢谢！",
     "tooFrequent": "验证码已寄送，请至信箱查看。或是于 10 分钟后再试一次。",
-    "invalidCode": "无效的验证码"
+    "invalidCode": "无效的验证码",
+    "invalidEmail": "此Email尚未绑定于任何装置"
   }
 }

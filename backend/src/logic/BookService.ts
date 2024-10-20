@@ -5,6 +5,7 @@ import { BillShareAccess } from 'src/access/BillShareAccess';
 import { BookAccess } from 'src/access/BookAccess';
 import { CurrencyAccess } from 'src/access/CurrencyAccess';
 import { DeviceBookAccess } from 'src/access/DeviceBookAccess';
+import { EmailBindAccess } from 'src/access/EmailBindAccess';
 import { MemberAccess } from 'src/access/MemberAccess';
 import { MemberSettlementAccess } from 'src/access/MemberSettlementAccess';
 import { TransferAccess } from 'src/access/TransferAccess';
@@ -13,6 +14,7 @@ import { ViewBookAccess } from 'src/access/ViewBookAccess';
 import { ViewDeviceBookAccess } from 'src/access/ViewDeviceBookAccess';
 import { ViewTransactionAccess } from 'src/access/ViewTransactionAccess';
 import { BillType } from 'src/constant/Book';
+import { ErrorMessage } from 'src/constant/ErrorMessage';
 import {
   DeleteBookBillResponse,
   DeleteBookTransferResponse,
@@ -23,7 +25,7 @@ import {
   PostBookBillResponse,
   PostBookCurrencyRequest,
   PostBookCurrencyResponse,
-  PostBookIdResponse,
+  PostBookIdRequest,
   PostBookMemberRequest,
   PostBookMemberResponse,
   PostBookRequest,
@@ -111,6 +113,9 @@ export class BookService {
 
   @inject(ViewDeviceBookAccess)
   private readonly vDeviceBookAccess!: ViewDeviceBookAccess;
+
+  @inject(EmailBindAccess)
+  private readonly emailBindAccess!: EmailBindAccess;
 
   public async createBook(
     data: PostBookRequest,
@@ -555,18 +560,24 @@ export class BookService {
 
   public async addDeviceBook(
     id: string,
+    data: PostBookIdRequest,
     deviceId: string
-  ): Promise<Pagination<PostBookIdResponse>> {
-    const book = await this.vBookAccess.findById(id);
+  ): Promise<void> {
+    const book = await this.checkDeviceHasBook(deviceId, id);
+
+    const emailBind = await this.emailBindAccess.findOne({
+      where: { email: data.email },
+    });
+
+    if (emailBind === null)
+      throw new BadRequestError(ErrorMessage.INVALID_EMAIL);
 
     const deviceBook = new DeviceBookEntity();
-    deviceBook.deviceId = deviceId;
+    deviceBook.deviceId = emailBind.deviceId;
     deviceBook.bookId = book.id;
     deviceBook.showDelete = false;
 
     await this.deviceBookAccess.save(deviceBook);
-
-    return await this.getBookDetail(book);
   }
 
   public async deleteDeviceBook(id: string, deviceId: string) {
