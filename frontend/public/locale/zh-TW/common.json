@@ -168,7 +168,7 @@
     "selfHint1": "將「{{nickname}}」設定為我的暱稱",
     "selfHint2": "「{{nickname}}」不再是我的暱稱",
     "emailPlaceholder": "aaa@xxxmail.com",
-    "friendHint": "使用者ID顯示在系統設定",
+    "friendHint": "請輸入好友的綁定Email",
     "warning1": "注意：好友的Email 須先在他的裝置進行綁定",
     "warning2": "可在「系統設定」的「資料同步」中，或從",
     "warning3": "進行綁定。"
