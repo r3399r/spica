@@ -57,7 +57,11 @@ import { MemberSettlement } from 'src/model/entity/MemberSettlement';
 import { MemberSettlementEntity } from 'src/model/entity/MemberSettlementEntity';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
-import { BadRequestError, InternalServerError } from 'src/model/error';
+import {
+  BadRequestError,
+  InternalServerError,
+  NotFoundError,
+} from 'src/model/error';
 import { Pagination, PaginationParams } from 'src/model/Pagination';
 import {
   BookDetail,
@@ -541,6 +545,7 @@ export class BookService {
     params: GetBookIdParams | null
   ): Promise<Pagination<GetBookIdResponse>> {
     const book = await this.vBookAccess.findById(id);
+    if (book === null) throw new NotFoundError(ErrorMessage.BOOK_NOT_FOUND);
 
     const oldDeviceBook = await this.deviceBookAccess.findByDeviceIdAndBookId(
       deviceId,

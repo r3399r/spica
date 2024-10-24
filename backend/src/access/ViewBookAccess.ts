@@ -27,8 +27,8 @@ export class ViewBookAccess {
   public async findById(id: string) {
     const qr = await this.database.getQueryRunner();
 
-    return await qr.manager.findOneByOrFail<ViewBook>(ViewBookEntity.name, {
-      id,
+    return await qr.manager.findOne<ViewBook>(ViewBookEntity.name, {
+      where: { id },
     });
   }
 
