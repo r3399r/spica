@@ -56,6 +56,9 @@ const request = async <T>(config: AxiosRequestConfig<any>) => {
         case ErrorMessage.INVALID_EMAIL:
           alert(t('error.invalidEmail'));
           break;
+        case ErrorMessage.BOOK_NOT_FOUND:
+          alert(t('error.bookNotFound'));
+          break;
         default:
           alert(t('error.default'));
       }

@@ -26,7 +26,7 @@ const ModalMember = ({ open, handleClose }: Props) => {
 
   const onSubmit = (data: MemberSelectForm) => {
     if (!book) return;
-    if (data.id === null) onClose();
+    if (!data.id) onClose();
     else setMemberAsSelf(book.id, data.id).then(onClose);
   };
 

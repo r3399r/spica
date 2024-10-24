@@ -217,6 +217,7 @@
     "default": "エラーが発生しました。再試行してください。状況が続く場合は、お問い合わせください、ありがとうございます。",
     "tooFrequent": "We've sent you the code. Please check your email or try again 10 minutes later.",
     "invalidCode": "Invalid code",
-    "invalidEmail": "This Email is not synced by any device"
+    "invalidEmail": "This Email is not synced by any device",
+    "bookNotFound": "Book is not found"
   }
 }
