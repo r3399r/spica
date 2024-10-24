@@ -141,8 +141,9 @@ export class DataSyncService {
   }
 
   public async sendEmail(data: PostDataSyncRequest, deviceId: string) {
+    const email = data.email.toLowerCase();
     const emailBind = await this.emailBindAccess.findOne({
-      where: { email: data.email },
+      where: { email },
     });
     if (
       emailBind &&
@@ -154,7 +155,7 @@ export class DataSyncService {
     const code = randomBase10(6);
     if (emailBind === null) {
       const newEmailBind = new EmailBindEntity();
-      newEmailBind.email = data.email;
+      newEmailBind.email = email;
       newEmailBind.deviceId = deviceId;
       newEmailBind.code = code;
       newEmailBind.codeGenerated = new Date().toISOString();
@@ -169,7 +170,7 @@ export class DataSyncService {
     await this.ses
       .sendEmail({
         Destination: {
-          ToAddresses: [data.email],
+          ToAddresses: [email],
         },
         Message: {
           Body: {
@@ -195,8 +196,9 @@ export class DataSyncService {
     data: PostDataSyncBindRequest,
     deviceId: string
   ): Promise<PostDataSyncBindResponse> {
+    const email = data.email.toLowerCase();
     const emailBind = await this.emailBindAccess.findOneOrFail({
-      where: { email: data.email },
+      where: { email },
     });
     emailBind.count = bn(emailBind.count).plus(1).toString();
     await this.emailBindAccess.save(emailBind);
