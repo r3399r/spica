@@ -6,6 +6,7 @@ export type LambdaOutput = {
 
 export type LambdaContext = {
   awsRequestId: string;
+  getRemainingTimeInMillis: () => number;
 };
 
 export type LambdaEvent = {

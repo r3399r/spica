@@ -10,19 +10,12 @@ import { dbClean } from './lambda/dbClean';
 import { exportPdf } from './lambda/exportPdf';
 import { manifest } from './lambda/manifest';
 import { transfer } from './lambda/transfer';
+import { GatewayTimeoutError } from './model/error/5XX/GatewayTimeoutError';
 import { errorOutput, successOutput } from './util/LambdaOutput';
 
-export const api = async (
-  event: LambdaEvent,
-  _context?: LambdaContext
-): Promise<LambdaOutput> => {
-  console.log(event);
+const apiProcess = async (event: LambdaEvent): Promise<LambdaOutput> => {
   const db = bindings.get(DbAccess);
-  const sqs = bindings.get(SQS);
-
   let output: LambdaOutput;
-  const startTime = Date.now();
-
   await db.startTransaction();
   try {
     let res: unknown;
@@ -60,7 +53,29 @@ export const api = async (
     await db.cleanup();
   }
 
+  return output;
+};
+
+export const api = async (
+  event: LambdaEvent,
+  context: LambdaContext
+): Promise<LambdaOutput> => {
+  console.log(event);
+
+  const startTime = Date.now();
+
+  const output = await Promise.race([
+    apiProcess(event),
+    new Promise<LambdaOutput>((resolve) =>
+      setTimeout(
+        () => resolve(errorOutput(new GatewayTimeoutError('Gateway Timeout'))),
+        context.getRemainingTimeInMillis() - 2000
+      )
+    ),
+  ]);
+
   // logger sqs
+  const sqs = bindings.get(SQS);
   try {
     await sqs
       .sendMessage({
