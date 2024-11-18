@@ -19,11 +19,11 @@ const ModalDonate = ({ open, handleClose }: Props) => {
     <ModalVanilla
       open={open}
       handleClose={onClose}
-      title={t('bookDetail.donateTitle')}
+      title={t('desc.donateTitle')}
       confirmBtn={t('act.confirm')}
       onConfirm={() => window.open(DonateLink, '_blank')}
     >
-      <Body size="l">{t('bookDetail.donateNote')}</Body>
+      <Body size="l">{t('desc.donateNote')}</Body>
     </ModalVanilla>
   );
 };

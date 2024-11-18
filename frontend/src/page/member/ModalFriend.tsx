@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import FormInput from 'src/component/FormInput';
 import ModalForm from 'src/component/ModalForm';
@@ -7,6 +8,7 @@ import Body from 'src/component/typography/Body';
 import IcSync from 'src/image/ic-sync.svg';
 import IcWarning from 'src/image/ic-warning.svg';
 import { FriendForm } from 'src/model/Form';
+import { setSnackbarMessage } from 'src/redux/uiSlice';
 import { addFriendIntoBook } from 'src/service/memberService';
 
 type Props = {
@@ -18,6 +20,7 @@ const ModalFriend = ({ open, handleClose }: Props) => {
   const { id } = useParams();
   const { t } = useTranslation();
   const methods = useForm<FriendForm>();
+  const dispatch = useDispatch();
 
   const onClose = () => {
     handleClose();
@@ -26,7 +29,10 @@ const ModalFriend = ({ open, handleClose }: Props) => {
 
   const onSubmit = (data: FriendForm) => {
     addFriendIntoBook(id ?? 'xx', data.email)
-      .then(onClose)
+      .then(() => {
+        dispatch(setSnackbarMessage(t('member.shareSuccess')));
+        onClose();
+      })
       .catch(() => methods.setError('email', {}));
   };
 

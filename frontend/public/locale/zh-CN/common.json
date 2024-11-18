@@ -24,7 +24,9 @@
     "copy": "複製成功！",
     "exportTitle": "汇出",
     "exportHint": "将收支明细汇出成一个 pdf 档",
-    "exportHintMore": "将收支明细汇出成一个 pdf 档。此帐本中有 {{n}} 笔纪录，建议使用电脑汇出。"
+    "exportHintMore": "将收支明细汇出成一个 pdf 档。此帐本中有 {{n}} 笔纪录，建议使用电脑汇出。",
+    "donateTitle": "支持我们",
+    "donateNote": "感谢您使用Bunny Bill！如果您喜欢我们目前的成果，可以通过贊助让我们提供更完善的服务。"
   },
   "landing": {
     "title": "Bunny Bill",
@@ -102,12 +104,10 @@
     "billOutNote": "{{member}} 支付了 {{symbol}}{{amount}}",
     "billInNote": "{{member}} 收取了 {{symbol}}{{amount}}",
     "transferNote": "{{srcMember}} 转帐 {{symbol}}{{amount}} 给 {{dstMember}}",
-    "settlement": "个人收支 / 结帐",
+    "settlement": "个人收支 / 结帐建议",
     "shouldReceive": "需收款",
     "shouldPay": "需还款",
-    "deleted": "已删除",
-    "donateTitle": "支持我们",
-    "donateNote": "感谢您使用Bunny Bill！如果您喜欢我们目前的成果，可以通过贊助让我们提供更完善的服务。"
+    "deleted": "已删除"
   },
   "bookSetting": {
     "back": "回帐本",
@@ -171,7 +171,8 @@
     "friendHint": "请输入好友的绑定Email",
     "warning1": "注意：好友的Email 须先在他的装置进行绑定",
     "warning2": "可在「系统设定」的「资料同步」中，或从",
-    "warning3": "进行绑定。"
+    "warning3": "进行绑定。",
+    "shareSuccess": "分享成功！好友已可进入此帐本"
   },
   "share": {
     "join": "加入此帐本？",
@@ -203,7 +204,7 @@
   },
   "settlement": {
     "back": "回帐本",
-    "check": "结帐",
+    "check": "结帐建议",
     "balance": "个人收支",
     "shouldPay": "需支付",
     "isCleared": "所有款项已结清"

@@ -571,11 +571,17 @@ export class BookService {
     const book = await this.checkDeviceHasBook(deviceId, id);
 
     const emailBind = await this.emailBindAccess.findOne({
-      where: { email: data.email },
+      where: { email: data.email.toLowerCase() },
     });
 
     if (emailBind === null)
       throw new BadRequestError(ErrorMessage.INVALID_EMAIL);
+
+    const oldDeviceBook = await this.deviceBookAccess.findByDeviceIdAndBookId(
+      emailBind.deviceId,
+      id
+    );
+    if (oldDeviceBook !== null) return;
 
     const deviceBook = new DeviceBookEntity();
     deviceBook.deviceId = emailBind.deviceId;
