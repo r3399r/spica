@@ -1,7 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios';
-import { t } from 'i18next';
+import axios, { AxiosRequestConfig, RawAxiosRequestHeaders } from 'axios';
 import packageJson from '../../package.json'; // eslint-disable-line
-import { ErrorMessage } from 'src/constant/backend/ErrorMessage';
 
 // eslint-disable-next-line
 type Options<D = any, P = any> = {
@@ -39,50 +37,20 @@ const publicRequestConfig = <D = unknown, P = any>(
 });
 
 // eslint-disable-next-line
-const request = async <T>(config: AxiosRequestConfig<any>) => {
-  try {
-    // eslint-disable-next-line
-    return await axios.request<T, AxiosResponse<T, any>, any>(config);
-  } catch (e) {
-    console.log(e);
-    if (axios.isAxiosError(e))
-      switch (e.response?.data.message) {
-        case ErrorMessage.TOO_FREQUENT:
-          alert(t('error.tooFrequent'));
-          break;
-        case ErrorMessage.INVALID_CODE:
-          alert(t('error.invalidCode'));
-          break;
-        case ErrorMessage.INVALID_EMAIL:
-          alert(t('error.invalidEmail'));
-          break;
-        case ErrorMessage.BOOK_NOT_FOUND:
-          alert(t('error.bookNotFound'));
-          break;
-        default:
-          alert(t('error.default'));
-      }
-    else alert(t('error.default'));
-
-    throw new Error(String(e));
-  }
-};
-
-// eslint-disable-next-line
 const get = async <T, P = any>(url: string, options?: Options<any, P>) =>
-  await request<T>(publicRequestConfig<unknown, P>('get', url, options));
+  await axios.request<T>(publicRequestConfig<unknown, P>('get', url, options));
 
 const post = async <T, D = unknown>(url: string, options?: Options<D>) =>
-  await request<T>(publicRequestConfig<D>('post', url, options));
+  await axios.request<T>(publicRequestConfig<D>('post', url, options));
 
 const put = async <T, D = unknown>(url: string, options?: Options<D>) =>
-  await request<T>(publicRequestConfig<D>('put', url, options));
+  await axios.request<T>(publicRequestConfig<D>('put', url, options));
 
 const patch = async <T, D = unknown>(url: string, options?: Options<D>) =>
-  await request<T>(publicRequestConfig<D>('patch', url, options));
+  await axios.request<T>(publicRequestConfig<D>('patch', url, options));
 
 const sendDelete = async <T, D = unknown>(url: string, options?: Options<D>) =>
-  await request<T>(publicRequestConfig<D>('delete', url, options));
+  await axios.request<T>(publicRequestConfig<D>('delete', url, options));
 
 export default {
   get,
