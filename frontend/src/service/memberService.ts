@@ -123,3 +123,16 @@ export const addFriendIntoBook = async (bookId: string, email: string) => {
     dispatch(finishWaiting());
   }
 };
+
+export const inviteFriend = async (bookId: string, email: string, language: string) => {
+  try {
+    dispatch(startWaiting());
+    const deviceId = getLocalDeviceId();
+    const { books } = getState().book;
+    const book = books?.find((v) => v.id === bookId);
+    if (book === undefined) return;
+    await bookEndpoint.postBookIdInvite(bookId, deviceId, { email, language });
+  } finally {
+    dispatch(finishWaiting());
+  }
+};

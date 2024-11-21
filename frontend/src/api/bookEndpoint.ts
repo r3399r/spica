@@ -11,6 +11,7 @@ import {
   PostBookBillResponse,
   PostBookCurrencyRequest,
   PostBookCurrencyResponse,
+  PostBookIdInviteRequest,
   PostBookIdRequest,
   PostBookMemberRequest,
   PostBookMemberResponse,
@@ -76,8 +77,20 @@ const postBookId = async (id: string, deviceId: string, data: PostBookIdRequest)
     });
   } catch (e) {
     if (axios.isAxiosError(e) && e.response?.data.message === ErrorMessage.INVALID_EMAIL)
-      alert(t('error.invalidEmail'));
+      throw ErrorMessage.INVALID_EMAIL;
     else alert(t('error.default'));
+    throw e;
+  }
+};
+
+const postBookIdInvite = async (id: string, deviceId: string, data: PostBookIdInviteRequest) => {
+  try {
+    return await http.post<void, PostBookIdInviteRequest>(`book/${id}/invite`, {
+      data,
+      headers: { 'x-api-device': deviceId },
+    });
+  } catch (e) {
+    alert(t('error.default'));
     throw e;
   }
 };
@@ -301,6 +314,7 @@ export default {
   postBook,
   getBookId,
   postBookId,
+  postBookIdInvite,
   putBookId,
   deleteBookId,
   postBookIdBill,

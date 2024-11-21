@@ -3,6 +3,7 @@
   "language": "繁體中文",
   "act": {
     "confirm": "確認",
+    "ok": "好",
     "cancel": "取消",
     "submit": "送出",
     "delete": "刪除",
@@ -172,7 +173,10 @@
     "warning1": "注意：好友的Email 須先在他的裝置進行綁定",
     "warning2": "可在「系統設定」的「資料同步」中，或從",
     "warning3": "進行綁定。",
-    "shareSuccess": "分享成功！好友已可進入此帳本"
+    "shareSuccess": "分享成功！好友已可進入此帳本",
+    "invite1": "此Email尚未綁定在任何裝置中。",
+    "invite2": "寄送邀請連結到 {{email}} 嗎？",
+    "inviteSuccess": "邀請已寄出"
   },
   "share": {
     "join": "加入此帳本？",
@@ -218,7 +222,6 @@
     "default": "發生錯誤，請重新再試，若狀況持續，請聯繫我們，謝謝！",
     "tooFrequent": "驗證碼已寄送，請至信箱查看。或是於 10 分鐘後再試一次。",
     "invalidCode": "無效的驗證碼",
-    "invalidEmail": "此Email尚未綁定於任何裝置",
     "bookNotFound": "找不到帳本"
   }
 }

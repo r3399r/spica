@@ -1,3 +1,4 @@
+import { SES } from 'aws-sdk';
 import { BigNumber } from 'bignumber.js';
 import { inject, injectable } from 'inversify';
 import { BillAccess } from 'src/access/BillAccess';
@@ -25,6 +26,7 @@ import {
   PostBookBillResponse,
   PostBookCurrencyRequest,
   PostBookCurrencyResponse,
+  PostBookIdInviteRequest,
   PostBookIdRequest,
   PostBookMemberRequest,
   PostBookMemberResponse,
@@ -82,6 +84,9 @@ import { differenceBy, intersectionBy } from 'src/util/setTheory';
  */
 @injectable()
 export class BookService {
+  @inject(SES)
+  private readonly ses!: SES;
+  
   @inject(DeviceBookAccess)
   private readonly deviceBookAccess!: DeviceBookAccess;
 
@@ -1219,5 +1224,143 @@ export class BookService {
       currencies: newCurrencies.sort(compare('dateCreated')),
       members: await this.getMemberByBook(bookId),
     };
+  }
+
+  private getEmailBody(bookId: string, language: string) {
+    const shareLink=`https://bunnybill.celestialstudio.net/book/${bookId}?a=1`
+    let title = '';
+    let dearUser = '';
+    let hello = '';
+    let contactUs = '';
+    let url=''
+    switch (language) {
+      case 'zh-TW':
+        title = '邀請與您共享帳本';
+        dearUser = '親愛的使用者';
+        hello = '您好！您的好友邀請您共享此帳本';
+        contactUs = '聯絡我們';
+        url =
+          'https://docs.google.com/forms/d/e/1FAIpQLSdaWAnpxINF4m1msJQT-Qr9yAyukZHlUQSoEpZktv0ZId0n0Q/viewform?usp=sf_link';
+        break;
+      case 'zh-CN':
+        title = '绑定装置';
+        dearUser = '亲爱的使用者';
+        hello = '您好！绑定装置的验证码为';
+        contactUs = '联络我们';
+        url =
+          'https://docs.google.com/forms/d/e/1FAIpQLSeUk9z9zevegaKzu1zuUlElWyZnRRPo798Z16QCBRJ17x8wxg/viewform?usp=sf_link';
+        break;
+      default:
+        title = 'Invite you to share the bill';
+        dearUser = 'Dear user,';
+        hello = 'Hello! Your friend invite you to share the bill';
+        contactUs = 'Contact Us';
+        url =
+          'https://docs.google.com/forms/d/e/1FAIpQLSe1KgW43gWaH1FDuu3DeD67t5UJExvAr7DmLnGO54mRaMMMLg/viewform?usp=sf_link';
+        break;
+    }
+
+    return {
+      text: `${dearUser}\n${hello} ${shareLink}`,
+      html: `<html>
+        <head>
+            <style type="text/css">
+                body {
+                    max-width: 600px;
+                    padding: 16px 10px;
+                }
+                p {
+                    margin: 0 0 5px 0;
+                }
+                .card {
+                    background-color: #f7f9f9;
+                    color: #13284b;
+                    padding: 24px 16px 40px 16px;
+                    margin: 16px 0;
+                    border-radius: 10px;
+                }
+                .title {
+                    font-size: 24px;
+                    font-weight: bold;
+                    text-align: center;
+                }
+                .horizon {
+                    margin: 24px 0;
+                    background-color: #e3e5e5;
+                    height: 1px;
+                }
+                .link {
+                    margin: 24px 0;
+                }
+                .contact {
+                    font-size: 14px;
+                    text-decoration: underline;
+                }
+                .org {
+                    color: #567196;
+                    font-size: 14px;
+                    text-align: center;
+                }
+            </style>
+        </head>
+        <body>
+            <img src="https://yue-public-bucket.s3.ap-southeast-1.amazonaws.com/spica-email-logo.png"></img>
+            <div class="card">
+                <div class="title">${title}</div>
+                <div class="horizon"></div>
+                <div class="content">
+                    <p>${dearUser}</p>
+                    <p>${hello}</p>
+                    <p class="link">${shareLink}</p>
+                    <p>Bunny Bill</p>
+                    <p class="contact"><a
+                        href="${url}"
+                        target="_blank">${contactUs}</a></p>
+                </div>
+            </div>
+            <div class="org">© Celetial Studio 2022 - ${new Date().getFullYear()}</div>
+        </body>
+        </html>`,
+    };
+  }
+
+  private getEmailSubject(language: string) {
+    switch (language) {
+      case 'zh-TW':
+        return 'BunnyBill - 邀請與您共享帳本';
+      case 'zh-CN':
+        return 'BunnyBill - 邀请与您共享帐本';
+      default:
+        return 'BunnyBill - Invite you to share the bill';
+    }
+  }
+
+  public async sendInvitationByEmail(bookId:string,data: PostBookIdInviteRequest, deviceId: string) {
+    await this.checkDeviceHasBook(deviceId, bookId);
+    const email = data.email.toLowerCase();
+
+    await this.ses
+      .sendEmail({
+        Destination: {
+          ToAddresses: [email],
+        },
+        Message: {
+          Body: {
+            Text: {
+              Charset: 'UTF-8',
+              Data: this.getEmailBody(bookId, data.language).text,
+            },
+            Html: {
+              Charset: 'UTF-8',
+              Data: this.getEmailBody(bookId, data.language).html,
+            },
+          },
+          Subject: {
+            Data: this.getEmailSubject(data.language),
+          },
+        },
+        Source: 'bunnybill-noreply@celestialstudio.net',
+      })
+      .promise();
   }
 }
