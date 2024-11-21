@@ -1234,12 +1234,16 @@ export class BookService {
     let hello = '';
     let contactUs = '';
     let url = '';
+    let click = '';
+    let gotoText = '';
     switch (language) {
       case 'zh-TW':
         title = '邀請與您共享帳本';
         dearUser = '親愛的使用者';
-        hello = '您好！您的好友邀請您共享此帳本，有任何疑問懇請聯絡我們，謝謝';
+        hello = '您好！您的好友邀請您共享此帳本。有任何疑問懇請聯絡我們，謝謝';
         contactUs = '聯絡我們';
+        click = '点击连结';
+        gotoText = '以進入帳本';
         url =
           'https://docs.google.com/forms/d/e/1FAIpQLSdaWAnpxINF4m1msJQT-Qr9yAyukZHlUQSoEpZktv0ZId0n0Q/viewform?usp=sf_link';
         break;
@@ -1248,6 +1252,8 @@ export class BookService {
         dearUser = '亲爱的使用者';
         hello = '您好！您的好友邀请您共享此帐本，有任何疑问恳请联络我们，谢谢';
         contactUs = '联络我们';
+        click = '点击连结';
+        gotoText = '以进入帐本';
         url =
           'https://docs.google.com/forms/d/e/1FAIpQLSeUk9z9zevegaKzu1zuUlElWyZnRRPo798Z16QCBRJ17x8wxg/viewform?usp=sf_link';
         break;
@@ -1257,6 +1263,8 @@ export class BookService {
         hello =
           'Hello! Your friend invite you to share the bill. If there is any question, please contact us.';
         contactUs = 'Contact Us';
+        click = 'Click';
+        gotoText = 'to access the book';
         url =
           'https://docs.google.com/forms/d/e/1FAIpQLSe1KgW43gWaH1FDuu3DeD67t5UJExvAr7DmLnGO54mRaMMMLg/viewform?usp=sf_link';
         break;
@@ -1292,7 +1300,6 @@ export class BookService {
                     height: 1px;
                 }
                 .link {
-                    font-weight: bold;
                     margin: 24px 0;
                 }
                 .contact {
@@ -1316,7 +1323,9 @@ export class BookService {
                     <p>${hello}</p>
                     <p class="link"><a
                         href="${shareLink}"
-                        target="_blank">${book?.name}</a></p>
+                        target="_blank">${click}<a/>${gotoText} ${
+        book?.name
+      }</p>
                     <p>Bunny Bill</p>
                     <p class="contact"><a
                         href="${url}"
