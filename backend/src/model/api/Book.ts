@@ -30,7 +30,7 @@ export type GetBookIdResponse = BookDetail;
 
 export type PostBookIdRequest = { email: string };
 
-export type PostBookIdInviteRequest = { email: string,language:string };
+export type PostBookIdInviteRequest = { email: string; language: string };
 
 export type PutBookResponse = Book;
 

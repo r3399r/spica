@@ -86,7 +86,7 @@ import { differenceBy, intersectionBy } from 'src/util/setTheory';
 export class BookService {
   @inject(SES)
   private readonly ses!: SES;
-  
+
   @inject(DeviceBookAccess)
   private readonly deviceBookAccess!: DeviceBookAccess;
 
@@ -1226,18 +1226,19 @@ export class BookService {
     };
   }
 
-  private getEmailBody(bookId: string, language: string) {
-    const shareLink=`https://bunnybill.celestialstudio.net/book/${bookId}?a=1`
+  private async getEmailBody(bookId: string, language: string) {
+    const shareLink = `https://bunnybill.celestialstudio.net/book/${bookId}?a=1`;
+    const book = await this.vBookAccess.findById(bookId);
     let title = '';
     let dearUser = '';
     let hello = '';
     let contactUs = '';
-    let url=''
+    let url = '';
     switch (language) {
       case 'zh-TW':
         title = '邀請與您共享帳本';
         dearUser = '親愛的使用者';
-        hello = '您好！您的好友邀請您共享此帳本';
+        hello = '您好！您的好友邀請您共享此帳本，有任何疑問懇請聯絡我們，謝謝';
         contactUs = '聯絡我們';
         url =
           'https://docs.google.com/forms/d/e/1FAIpQLSdaWAnpxINF4m1msJQT-Qr9yAyukZHlUQSoEpZktv0ZId0n0Q/viewform?usp=sf_link';
@@ -1245,7 +1246,7 @@ export class BookService {
       case 'zh-CN':
         title = '绑定装置';
         dearUser = '亲爱的使用者';
-        hello = '您好！绑定装置的验证码为';
+        hello = '您好！您的好友邀请您共享此帐本，有任何疑问恳请联络我们，谢谢';
         contactUs = '联络我们';
         url =
           'https://docs.google.com/forms/d/e/1FAIpQLSeUk9z9zevegaKzu1zuUlElWyZnRRPo798Z16QCBRJ17x8wxg/viewform?usp=sf_link';
@@ -1253,7 +1254,8 @@ export class BookService {
       default:
         title = 'Invite you to share the bill';
         dearUser = 'Dear user,';
-        hello = 'Hello! Your friend invite you to share the bill';
+        hello =
+          'Hello! Your friend invite you to share the bill. If there is any question, please contact us.';
         contactUs = 'Contact Us';
         url =
           'https://docs.google.com/forms/d/e/1FAIpQLSe1KgW43gWaH1FDuu3DeD67t5UJExvAr7DmLnGO54mRaMMMLg/viewform?usp=sf_link';
@@ -1261,7 +1263,7 @@ export class BookService {
     }
 
     return {
-      text: `${dearUser}\n${hello} ${shareLink}`,
+      text: `${dearUser}\n${hello}`,
       html: `<html>
         <head>
             <style type="text/css">
@@ -1290,6 +1292,7 @@ export class BookService {
                     height: 1px;
                 }
                 .link {
+                    font-weight: bold;
                     margin: 24px 0;
                 }
                 .contact {
@@ -1311,7 +1314,9 @@ export class BookService {
                 <div class="content">
                     <p>${dearUser}</p>
                     <p>${hello}</p>
-                    <p class="link">${shareLink}</p>
+                    <p class="link"><a
+                        href="${shareLink}"
+                        target="_blank">${book?.name}</a></p>
                     <p>Bunny Bill</p>
                     <p class="contact"><a
                         href="${url}"
@@ -1335,9 +1340,14 @@ export class BookService {
     }
   }
 
-  public async sendInvitationByEmail(bookId:string,data: PostBookIdInviteRequest, deviceId: string) {
+  public async sendInvitationByEmail(
+    bookId: string,
+    data: PostBookIdInviteRequest,
+    deviceId: string
+  ) {
     await this.checkDeviceHasBook(deviceId, bookId);
     const email = data.email.toLowerCase();
+    const emailBody = await this.getEmailBody(bookId, data.language);
 
     await this.ses
       .sendEmail({
@@ -1348,11 +1358,11 @@ export class BookService {
           Body: {
             Text: {
               Charset: 'UTF-8',
-              Data: this.getEmailBody(bookId, data.language).text,
+              Data: emailBody.text,
             },
             Html: {
               Charset: 'UTF-8',
-              Data: this.getEmailBody(bookId, data.language).html,
+              Data: emailBody.html,
             },
           },
           Subject: {
