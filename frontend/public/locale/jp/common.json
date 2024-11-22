@@ -3,6 +3,7 @@
   "language": "日本語",
   "act": {
     "confirm": "確認",
+    "ok": "Ok",
     "cancel": "キャンセル",
     "submit": "送出",
     "delete": "削除",
@@ -105,9 +106,7 @@
     "settlement": "決済",
     "shouldReceive": "収受",
     "shouldPay": "返済",
-    "deleted": "削除された",
-    "donateTitle": "Donate Us",
-    "donateNote": "Thanks for using Bunny Bill! If you like our current results, you can donate us to provide better services."
+    "deleted": "削除された"
   },
   "bookSetting": {
     "back": "戻る",
@@ -171,7 +170,11 @@
     "friendHint": "Please input your friend's email",
     "warning1": "Note: Your friend's email must be synced to his/her device first",
     "warning2": "You can bind it in System Settings or find",
-    "warning3": "from book list page."
+    "warning3": "from book list page.",
+    "shareSuccess": "Share Succeeded! Your Friend can access to this book",
+    "invite1": "This Email is not synced by any device.",
+    "invite2": "Do you want to send the inviation to {{email}}?",
+    "inviteSuccess": "The invitation was sent"
   },
   "share": {
     "join": "帳簿に参加しますか？",
@@ -213,11 +216,16 @@
     "hint": "後で「帳簿メンバー」にニックネームを追加することもできます。",
     "skip": "スキップ"
   },
+  "donateModal": {
+    "title": "Donate Us",
+    "note": "Thanks for using Bunny Bill! If you like our current results, you can donate us to provide better services.",
+    "paypal": "Paypal",
+    "ecpay": "ECPay"
+  },
   "error": {
     "default": "エラーが発生しました。再試行してください。状況が続く場合は、お問い合わせください、ありがとうございます。",
     "tooFrequent": "We've sent you the code. Please check your email or try again 10 minutes later.",
     "invalidCode": "Invalid code",
-    "invalidEmail": "This Email is not synced by any device",
     "bookNotFound": "Book is not found"
   }
 }

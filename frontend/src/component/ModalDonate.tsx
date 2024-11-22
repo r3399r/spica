@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import ModalVanilla from 'src/component/ModalVanilla';
 import Body from 'src/component/typography/Body';
-import { DonateLink } from 'src/constant/Page';
+import { ECPayLink, PaypalLink } from 'src/constant/Page';
 
 type Props = {
   open: boolean;
@@ -19,11 +19,13 @@ const ModalDonate = ({ open, handleClose }: Props) => {
     <ModalVanilla
       open={open}
       handleClose={onClose}
-      title={t('bookDetail.donateTitle')}
-      confirmBtn={t('act.confirm')}
-      onConfirm={() => window.open(DonateLink, '_blank')}
+      title={t('donateModal.title')}
+      deleteBtn={t('donateModal.paypal')}
+      confirmBtn={t('donateModal.ecpay')}
+      onDelete={() => window.open(PaypalLink, '_blank')}
+      onConfirm={() => window.open(ECPayLink, '_blank')}
     >
-      <Body size="l">{t('bookDetail.donateNote')}</Body>
+      <Body size="l">{t('donateModal.note')}</Body>
     </ModalVanilla>
   );
 };

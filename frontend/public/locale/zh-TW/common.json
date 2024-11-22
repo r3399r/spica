@@ -3,6 +3,7 @@
   "language": "繁體中文",
   "act": {
     "confirm": "確認",
+    "ok": "好",
     "cancel": "取消",
     "submit": "送出",
     "delete": "刪除",
@@ -102,12 +103,10 @@
     "billOutNote": "{{member}} 支付了 {{symbol}}{{amount}}",
     "billInNote": "{{member}} 收取了 {{symbol}}{{amount}}",
     "transferNote": "{{srcMember}} 轉帳 {{symbol}}{{amount}} 給 {{dstMember}}",
-    "settlement": "個人收支 / 結帳",
+    "settlement": "個人收支 / 結帳建議",
     "shouldReceive": "需收款",
     "shouldPay": "需還款",
-    "deleted": "已刪除",
-    "donateTitle": "支持我們",
-    "donateNote": "感謝您使用 Bunny Bill！如果您喜歡我們目前的成果，可以通過贊助讓我們提供更完善的服務。"
+    "deleted": "已刪除"
   },
   "bookSetting": {
     "back": "回帳本",
@@ -171,7 +170,11 @@
     "friendHint": "請輸入好友的綁定Email",
     "warning1": "注意：好友的Email 須先在他的裝置進行綁定",
     "warning2": "可在「系統設定」的「資料同步」中，或從",
-    "warning3": "進行綁定。"
+    "warning3": "進行綁定。",
+    "shareSuccess": "分享成功！好友已可進入此帳本",
+    "invite1": "此Email尚未綁定在任何裝置中。",
+    "invite2": "寄送邀請連結到 {{email}} 嗎？",
+    "inviteSuccess": "邀請已寄出"
   },
   "share": {
     "join": "加入此帳本？",
@@ -203,7 +206,7 @@
   },
   "settlement": {
     "back": "回帳本",
-    "check": "結帳",
+    "check": "結帳建議",
     "balance": "個人收支",
     "shouldPay": "需支付",
     "isCleared": "所有款項已結清"
@@ -213,11 +216,16 @@
     "hint": "也可之後再前往「帳本成員」新增屬於你的暱稱",
     "skip": "跳過"
   },
+  "donateModal": {
+    "title": "支持我們",
+    "note": "感謝您使用 Bunny Bill！如果您喜歡我們目前的成果，可以通過贊助讓我們提供更完善的服務。",
+    "paypal": "Paypal",
+    "ecpay": "綠界"
+  },
   "error": {
     "default": "發生錯誤，請重新再試，若狀況持續，請聯繫我們，謝謝！",
     "tooFrequent": "驗證碼已寄送，請至信箱查看。或是於 10 分鐘後再試一次。",
     "invalidCode": "無效的驗證碼",
-    "invalidEmail": "此Email尚未綁定於任何裝置",
     "bookNotFound": "找不到帳本"
   }
 }

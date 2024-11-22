@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import BackButton from 'src/component/BackButton';
 import Img from 'src/component/Img';
+import ModalDonate from 'src/component/ModalDonate';
 import ModalExport from 'src/component/ModalExport';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
@@ -16,7 +17,6 @@ import IcSetting from 'src/image/ic-setting.svg';
 import IcShare from 'src/image/ic-share.svg';
 import { setSnackbarMessage } from 'src/redux/uiSlice';
 import { exportOverallPdf } from 'src/service/bookService';
-import ModalDonate from './ModalDonate';
 
 const Navbar = () => {
   const { id } = useParams();

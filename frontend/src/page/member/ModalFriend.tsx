@@ -1,13 +1,18 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import FormInput from 'src/component/FormInput';
 import ModalForm from 'src/component/ModalForm';
 import Body from 'src/component/typography/Body';
+import { ErrorMessage } from 'src/constant/backend/ErrorMessage';
 import IcSync from 'src/image/ic-sync.svg';
 import IcWarning from 'src/image/ic-warning.svg';
 import { FriendForm } from 'src/model/Form';
+import { setSnackbarMessage } from 'src/redux/uiSlice';
 import { addFriendIntoBook } from 'src/service/memberService';
+import ModalInvite from './ModalInvite';
 
 type Props = {
   open: boolean;
@@ -18,6 +23,8 @@ const ModalFriend = ({ open, handleClose }: Props) => {
   const { id } = useParams();
   const { t } = useTranslation();
   const methods = useForm<FriendForm>();
+  const dispatch = useDispatch();
+  const [inviteOpen, setInviteOpen] = useState<boolean>(false);
 
   const onClose = () => {
     handleClose();
@@ -26,8 +33,14 @@ const ModalFriend = ({ open, handleClose }: Props) => {
 
   const onSubmit = (data: FriendForm) => {
     addFriendIntoBook(id ?? 'xx', data.email)
-      .then(onClose)
-      .catch(() => methods.setError('email', {}));
+      .then(() => {
+        dispatch(setSnackbarMessage(t('member.shareSuccess')));
+        onClose();
+      })
+      .catch((e) => {
+        if (e === ErrorMessage.INVALID_EMAIL) setInviteOpen(true);
+        else methods.setError('email', {});
+      });
   };
 
   return (
@@ -60,6 +73,14 @@ const ModalFriend = ({ open, handleClose }: Props) => {
           placeholder={t('member.emailPlaceholder')}
           autoFocus
           required
+        />
+        <ModalInvite
+          open={inviteOpen}
+          handleClose={(closeParent: boolean) => {
+            setInviteOpen(false);
+            if (closeParent) onClose();
+          }}
+          email={methods.getValues('email')}
         />
       </>
     </ModalForm>

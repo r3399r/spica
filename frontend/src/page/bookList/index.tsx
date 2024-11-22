@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from 'src/component/Button';
 import Img from 'src/component/Img';
+import ModalDonate from 'src/component/ModalDonate';
 import Body from 'src/component/typography/Body';
 import H2 from 'src/component/typography/H2';
 import H5 from 'src/component/typography/H5';
-import { DonateLink, Page } from 'src/constant/Page';
+import { Page } from 'src/constant/Page';
 import IcAdd from 'src/image/ic-add.svg';
 import IcBook from 'src/image/ic-book.svg';
 import IcConfigActive from 'src/image/ic-config-active.svg';
@@ -28,7 +29,8 @@ const BookList = () => {
     book: { books },
     ui: { isDeviceReady },
   } = useSelector((rootState: RootState) => rootState);
-  const [open, setOpen] = useState<boolean>(false);
+  const [openNewBook, setOpenNewBook] = useState<boolean>(false);
+  const [openDonate, setOpenDonate] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(setTxPageScroll(0));
@@ -56,11 +58,11 @@ const BookList = () => {
               onClick={() => navigate(Page.Setting)}
             />
           </div>
-          <div>
-            <a target="_blank" href={DonateLink} rel="noreferrer">
-              <img src={PicBookHero} className="w-full" />
-            </a>
-          </div>
+          <img
+            src={PicBookHero}
+            className="w-full cursor-pointer"
+            onClick={() => setOpenDonate(true)}
+          />
           <H2 className="mx-[25px] mb-5 mt-[30px]">{t('bookList.bookList')}</H2>
           {books?.length === 0 ? (
             <Body className="flex justify-center py-[30px] text-navy-300">
@@ -93,7 +95,7 @@ const BookList = () => {
       </div>
       <div className="fixed bottom-0 h-[104px] w-full">
         <div className="mx-auto w-fit">
-          <Button className="mt-5 h-12 w-64" onClick={() => setOpen(true)}>
+          <Button className="mt-5 h-12 w-64" onClick={() => setOpenNewBook(true)}>
             <div className="flex justify-center">
               <img src={IcAdd} />
               <Body size="l" bold className="text-white">
@@ -103,7 +105,8 @@ const BookList = () => {
           </Button>
         </div>
       </div>
-      <ModalNewBook open={open} handleClose={() => setOpen(false)} />
+      <ModalNewBook open={openNewBook} handleClose={() => setOpenNewBook(false)} />
+      <ModalDonate open={openDonate} handleClose={() => setOpenDonate(false)} />
     </>
   );
 };

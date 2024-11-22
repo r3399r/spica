@@ -536,6 +536,16 @@ Resources:
                   "required": true,
                   "schema": {"type": "string"}
                 }],
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/postBookId"
+                      }
+                    }
+                  },
+                  "required": true
+                },
                 "responses": {
                   "200": {
                     "description": "200 response",
@@ -582,6 +592,64 @@ Resources:
                   "required": true,
                   "schema": {"type": "string"}
                 }],
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "headers": {
+                      "Access-Control-Allow-Origin": {
+                        "schema": {"type": "string"}
+                      }
+                    },
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/Empty"
+                        }
+                      }
+                    }
+                  }
+                },
+                "x-amazon-apigateway-request-validator" : "Validate query string parameters and headers",
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
+                  "responses": {
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                      }
+                    }
+                  },
+                  "passthroughBehavior": "when_no_match",
+                  "contentHandling": "CONVERT_TO_TEXT"
+                }
+              }
+            },
+            "/api/book/{id}/invite": {
+              "post": {
+                "parameters": [{
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "string"}
+                },{
+                  "name": "x-api-device",
+                  "in": "header",
+                  "required": true,
+                  "schema": {"type": "string"}
+                }],
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/postBookIdInvite"
+                      }
+                    }
+                  },
+                  "required": true
+                },
                 "responses": {
                   "200": {
                     "description": "200 response",
@@ -1833,6 +1901,21 @@ Resources:
                 "symbol": {"type": "string"}
               }
             },
+            "postBookId": {
+              "type": "object",
+              "properties": {
+                "email": {"type": "string"}
+              },
+              "required": ["email"]
+            },
+            "postBookIdInvite": {
+              "type": "object",
+              "properties": {
+                "email": {"type": "string"},
+                "language": {"type": "string"},
+              },
+              "required": ["email", "language"]
+            },
             "postBookBill": {
               "type": "object",
               "properties": {
@@ -1968,9 +2051,10 @@ Resources:
             "postDataSync": {
               "type": "object",
               "properties": {
-                "email": {"type": "string"}
+                "email": {"type": "string"},
+                "language": {"type": "string"}
               },
-              "required": ["email"]
+              "required": ["email", "language"]
             },
             "postDataSyncBind": {
               "type": "object",

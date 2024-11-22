@@ -4,6 +4,7 @@ import {
   GetBookIdParams,
   PostBookBillRequest,
   PostBookCurrencyRequest,
+  PostBookIdInviteRequest,
   PostBookIdRequest,
   PostBookMemberRequest,
   PostBookRequest,
@@ -29,6 +30,8 @@ export async function book(lambdaEvent: LambdaEvent, _context?: LambdaContext) {
       return await apiBook();
     case '/api/book/{id}':
       return await apiBookId();
+    case '/api/book/{id}/invite':
+      return await apiBookIdInvite();
     case '/api/book/{id}/bill':
       return await apiBookIdBill();
     case '/api/book/{id}/bill/{billId}':
@@ -107,6 +110,26 @@ async function apiBookId() {
     case 'DELETE':
       return service.deleteDeviceBook(
         event.pathParameters.id,
+        event.headers['x-api-device']
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdInvite() {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  if (event.headers === null)
+    throw new BadRequestError('headers should not be empty');
+  switch (event.httpMethod) {
+    case 'POST':
+      if (event.body === null)
+        throw new BadRequestError('body should not be empty');
+
+      return service.sendInvitationByEmail(
+        event.pathParameters.id,
+        JSON.parse(event.body) as PostBookIdInviteRequest,
         event.headers['x-api-device']
       );
     default:

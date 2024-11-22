@@ -118,7 +118,7 @@ export class DataSyncService {
                     <p>${hello}</p>
                     <div class="code">${code}</div>
                     <p>Bunny Bill</p>
-                    <p class="contact"></p><a
+                    <p class="contact"><a
                         href="${url}"
                         target="_blank">${contactUs}</a></p>
                 </div>
