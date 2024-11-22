@@ -1242,7 +1242,7 @@ export class BookService {
         dearUser = '親愛的使用者';
         hello = '您好！您的好友邀請您共享此帳本。有任何疑問懇請聯絡我們，謝謝';
         contactUs = '聯絡我們';
-        click = '点击连结';
+        click = '點擊連結';
         gotoText = '以進入帳本';
         url =
           'https://docs.google.com/forms/d/e/1FAIpQLSdaWAnpxINF4m1msJQT-Qr9yAyukZHlUQSoEpZktv0ZId0n0Q/viewform?usp=sf_link';
@@ -1263,7 +1263,7 @@ export class BookService {
         hello =
           'Hello! Your friend invite you to share the bill. If there is any question, please contact us.';
         contactUs = 'Contact Us';
-        click = 'Click';
+        click = 'Click this link';
         gotoText = 'to access the book';
         url =
           'https://docs.google.com/forms/d/e/1FAIpQLSe1KgW43gWaH1FDuu3DeD67t5UJExvAr7DmLnGO54mRaMMMLg/viewform?usp=sf_link';

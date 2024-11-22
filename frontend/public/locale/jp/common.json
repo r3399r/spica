@@ -25,9 +25,7 @@
     "copy": "コピー成功！",
     "exportTitle": "エクスポート",
     "exportHint": "取引明細をPDFファイルにエクスポートする",
-    "exportHintMore": "Export the transaction list into a pdf. There are {{n}} records in this book. It is recommeded to export pdf with computer.",
-    "donateTitle": "Donate Us",
-    "donateNote": "Thanks for using Bunny Bill! If you like our current results, you can donate us to provide better services."
+    "exportHintMore": "Export the transaction list into a pdf. There are {{n}} records in this book. It is recommeded to export pdf with computer."
   },
   "landing": {
     "title": "Bunny Bill",
@@ -217,6 +215,12 @@
     "head": "ニックネームを選ぶ",
     "hint": "後で「帳簿メンバー」にニックネームを追加することもできます。",
     "skip": "スキップ"
+  },
+  "donateModal": {
+    "title": "Donate Us",
+    "note": "Thanks for using Bunny Bill! If you like our current results, you can donate us to provide better services.",
+    "paypal": "Paypal",
+    "ecpay": "ECPay"
   },
   "error": {
     "default": "エラーが発生しました。再試行してください。状況が続く場合は、お問い合わせください、ありがとうございます。",

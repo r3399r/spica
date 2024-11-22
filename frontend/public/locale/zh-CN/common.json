@@ -25,9 +25,7 @@
     "copy": "複製成功！",
     "exportTitle": "汇出",
     "exportHint": "将收支明细汇出成一个 pdf 档",
-    "exportHintMore": "将收支明细汇出成一个 pdf 档。此帐本中有 {{n}} 笔纪录，建议使用电脑汇出。",
-    "donateTitle": "支持我们",
-    "donateNote": "感谢您使用Bunny Bill！如果您喜欢我们目前的成果，可以通过贊助让我们提供更完善的服务。"
+    "exportHintMore": "将收支明细汇出成一个 pdf 档。此帐本中有 {{n}} 笔纪录，建议使用电脑汇出。"
   },
   "landing": {
     "title": "Bunny Bill",
@@ -217,6 +215,12 @@
     "head": "选择你的暱称",
     "hint": "也可之后再前往「帐本成员」新增属于你的暱称",
     "skip": "跳过"
+  },
+  "donateModal": {
+    "title": "支持我们",
+    "note": "感谢您使用Bunny Bill！如果您喜欢我们目前的成果，可以通过贊助让我们提供更完善的服务。",
+    "paypal": "Paypal",
+    "ecpay": "ECPay"
   },
   "error": {
     "default": "发生错误，请重新再试，若状况持续，请联繫我们，谢谢！",

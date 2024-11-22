@@ -25,9 +25,7 @@
     "copy": "複製成功！",
     "exportTitle": "匯出",
     "exportHint": "將收支明細匯出成一個 pdf 檔",
-    "exportHintMore": "將收支明細匯出成一個 pdf 檔。此帳本中有 {{n}} 筆紀錄，建議使用電腦匯出。",
-    "donateTitle": "支持我們",
-    "donateNote": "感謝您使用 Bunny Bill！如果您喜歡我們目前的成果，可以通過贊助讓我們提供更完善的服務。"
+    "exportHintMore": "將收支明細匯出成一個 pdf 檔。此帳本中有 {{n}} 筆紀錄，建議使用電腦匯出。"
   },
   "landing": {
     "title": "Bunny Bill",
@@ -217,6 +215,12 @@
     "head": "選擇你的暱稱",
     "hint": "也可之後再前往「帳本成員」新增屬於你的暱稱",
     "skip": "跳過"
+  },
+  "donateModal": {
+    "title": "支持我們",
+    "note": "感謝您使用 Bunny Bill！如果您喜歡我們目前的成果，可以通過贊助讓我們提供更完善的服務。",
+    "paypal": "Paypal",
+    "ecpay": "綠界"
   },
   "error": {
     "default": "發生錯誤，請重新再試，若狀況持續，請聯繫我們，謝謝！",

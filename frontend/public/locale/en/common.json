@@ -25,9 +25,7 @@
     "copy": "Copied!",
     "exportTitle": "Export",
     "exportHint": "Export the transaction list into a pdf",
-    "exportHintMore": "Export the transaction list into a pdf. There are {{n}} records in this book. It is recommeded to export pdf with computer.",
-    "donateTitle": "Donate Us",
-    "donateNote": "Thanks for using Bunny Bill! If you like our current results, you can donate us to provide better services."
+    "exportHintMore": "Export the transaction list into a pdf. There are {{n}} records in this book. It is recommeded to export pdf with computer."
   },
   "landing": {
     "title": "Bunny Bill",
@@ -217,6 +215,12 @@
     "head": "Select your nickname",
     "hint": "You can also add your nickname later",
     "skip": "Skip"
+  },
+  "donateModal": {
+    "title": "Donate Us",
+    "note": "Thanks for using Bunny Bill! If you like our current results, you can donate us to provide better services.",
+    "paypal": "Paypal",
+    "ecpay": "ECPay"
   },
   "error": {
     "default": "Something went wrong, please try again later or contact us to fix it.",
