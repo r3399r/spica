@@ -209,7 +209,10 @@
     "check": "決済",
     "balance": "バランス",
     "shouldPay": "支払う",
-    "isCleared": "すべての支払いが決済しました"
+    "isCleared": "すべての支払いが決済しました",
+    "switch": "スイッチ",
+    "minimumPaymentMode": "最低返済回数",
+    "intuitionMode": "返済のみ"
   },
   "memberModal": {
     "head": "ニックネームを選ぶ",

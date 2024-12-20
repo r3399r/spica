@@ -209,7 +209,10 @@
     "check": "Check",
     "balance": "Balance",
     "shouldPay": "Should pay",
-    "isCleared": "All bills are cleared"
+    "isCleared": "All bills are cleared",
+    "switch": "Switch",
+    "minimumPaymentMode": "Minimum times of payment",
+    "intuitionMode": "Only pay for those who owe"
   },
   "memberModal": {
     "head": "Select your nickname",
