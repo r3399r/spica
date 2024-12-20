@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import Button from 'src/component/Button';
 import Divider from 'src/component/Divider';
 import Body from 'src/component/typography/Body';
 import { Page } from 'src/constant/Page';
@@ -20,7 +21,8 @@ const Check = () => {
   const navigate = useNavigate();
   const book = useBook();
   const members = useMemo(() => book?.members ?? [], [book]);
-  const checkResult = useMemo(() => check(members), [members]);
+  const [mode, setMode] = useState<0 | 1>(1);
+  const checkResult = useMemo(() => check(members, mode), [members, mode]);
   const currencyDisplay = useMemo(() => {
     const primary = book?.currencies?.find((v) => v.isPrimary);
     if (primary === undefined) return '';
@@ -45,7 +47,20 @@ const Check = () => {
     return <Body className="text-center text-navy-300">{t('settlement.isCleared')}</Body>;
 
   return (
-    <>
+    <div>
+      <div className="flex items-center justify-between border-t border-t-grey-300 py-[17px]">
+        <Body size="l" bold>
+          {mode === 0 ? t('settlement.intuitionMode') : t('settlement.minimumPaymentMode')}
+        </Body>
+        <Button
+          appearance="default"
+          className="!px-[10px] !py-[5px]"
+          type="button"
+          onClick={() => setMode(mode === 0 ? 1 : 0)}
+        >
+          {t('settlement.switch')}
+        </Button>
+      </div>
       {checkResult.map((v, i) => (
         <div
           key={i}
@@ -79,7 +94,7 @@ const Check = () => {
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 

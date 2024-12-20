@@ -209,7 +209,10 @@
     "check": "結帳建議",
     "balance": "個人收支",
     "shouldPay": "需支付",
-    "isCleared": "所有款項已結清"
+    "isCleared": "所有款項已結清",
+    "switch": "切換",
+    "minimumPaymentMode": "最少還款次數",
+    "intuitionMode": "只還款給直接欠款的人"
   },
   "memberModal": {
     "head": "選擇你的暱稱",
