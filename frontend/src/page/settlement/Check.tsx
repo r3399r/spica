@@ -21,7 +21,7 @@ const Check = () => {
   const navigate = useNavigate();
   const book = useBook();
   const members = useMemo(() => book?.members ?? [], [book]);
-  const [mode, setMode] = useState<0 | 1>(1);
+  const [mode, setMode] = useState<0 | 1>(0);
   const checkResult = useMemo(() => check(members, mode), [members, mode]);
   const currencyDisplay = useMemo(() => {
     const primary = book?.currencies?.find((v) => v.isPrimary);
