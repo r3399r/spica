@@ -94,6 +94,7 @@ export const api = async (
           version: event.headers
             ? event.headers['x-api-version'] ?? null
             : null,
+          ip: event.requestContext.identity.sourceIp,
         }),
         QueueUrl: process.env.LOGGER_QUEUE_URL ?? '',
       })

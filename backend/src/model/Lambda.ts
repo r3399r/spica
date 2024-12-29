@@ -18,6 +18,20 @@ export type LambdaEvent = {
   pathParameters: { [key: string]: string } | null;
   queryStringParameters: { [key: string]: string } | null;
   requestContext: {
+    identity: {
+      cognitoIdentityPoolId: null;
+      accountId: null;
+      cognitoIdentityId: null;
+      caller: null;
+      sourceIp: string;
+      principalOrgId: null;
+      accessKey: null;
+      cognitoAuthenticationType: null;
+      cognitoAuthenticationProvider: null;
+      userArn: null;
+      userAgent: 'Amazon CloudFront';
+      user: null;
+    };
     authorizer?: {
       claims: {
         sub: string;
