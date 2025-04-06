@@ -116,7 +116,7 @@
     "deleteBook": "Delete Book",
     "showDeleted": "Show Deleted Transactions",
     "systemDeleteDate": "System Clean up Date",
-    "systemDeleteHint": "If there is no any update for 100 days, the book would be removed by system.",
+    "systemDeleteHint": "If there is no any update for 1 year, the book would be removed by system.",
     "rename": "Rename",
     "deleteHint": "Note that this action would only delete the book in this device. It would not affect others' devices."
   },

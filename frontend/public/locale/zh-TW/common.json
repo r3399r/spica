@@ -116,7 +116,7 @@
     "deleteBook": "刪除帳本",
     "showDeleted": "顯示已刪除帳目",
     "systemDeleteDate": "系統移除日期",
-    "systemDeleteHint": "若此帳本累積 100 天未更新，則系統將自動移除此帳本所有資料。",
+    "systemDeleteHint": "若此帳本累積 1 年未更新，則系統將自動移除此帳本所有資料。",
     "rename": "重新命名",
     "deleteHint": "此處僅能刪除這台裝置當中的記錄，其他裝置的記錄不受影響"
   },
