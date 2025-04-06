@@ -9,7 +9,7 @@ const SystemHint = () => {
   const { t } = useTranslation();
   const book = useBook();
   const dateExpired = useMemo(
-    () => (book ? format(add(new Date(book.lastDateUpdated), { days: 100 }), 'yyyy-MM-dd') : '-'),
+    () => (book ? format(add(new Date(book.lastDateUpdated), { years: 1 }), 'yyyy-MM-dd') : '-'),
     [book],
   );
 
