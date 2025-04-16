@@ -48,14 +48,14 @@
     "head": "システム設定",
     "language": "表示言語",
     "myId": "マイID",
-    "myPaymentAccount": "私の支払いアカウント",
+    "myPaymentAccount": "マイ支払いアカウント",
     "dataSync": "データ同期",
     "add2HomeScreen": "ホーム画面に追加する",
     "contactUs": "お問い合わせ"
   },
   "payment": {
     "back": "戻る",
-    "head": "私の支払いアカウント",
+    "head": "マイ支払いアカウント",
     "create": "アカウントを追加",
     "noPayment": "支払いアカウントがない",
     "userPayment": "{{ name }} の支払いアカウント"
@@ -170,7 +170,7 @@
     "friendHint": "友達のメール入力してください。",
     "warning1": "注意：友達のメールは端末で連携する必要がある",
     "warning2": "「システム設定」の「データ同期」で連携できます、または",
-    "warning3": "あああああ",
+    "warning3": "から連携する",
     "shareSuccess": "共有しました！友だちがこの帳簿を使えるようになりました。",
     "invite1": "このメールは未連携です。",
     "invite2": "{{email}} に招待リンクを送信しますか？",
