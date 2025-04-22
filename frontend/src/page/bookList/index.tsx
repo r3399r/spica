@@ -58,11 +58,15 @@ const BookList = () => {
               onClick={() => navigate(Page.Setting)}
             />
           </div>
-          <img
-            src={PicBookHero}
-            className="w-full cursor-pointer"
-            onClick={() => setOpenDonate(true)}
-          />
+          <div className="relative cursor-pointer">
+            <img src={PicBookHero} className="w-full" onClick={() => setOpenDonate(true)} />
+            <Body
+              size="s"
+              className="absolute right-[4.9%] top-[81.1%] flex h-[16.8%] items-center justify-end text-[#b0784e]"
+            >
+              {t('bookList.donate')}
+            </Body>
+          </div>
           <H2 className="mx-[25px] mb-5 mt-[30px]">{t('bookList.bookList')}</H2>
           {books?.length === 0 ? (
             <Body className="flex justify-center py-[30px] text-navy-300">

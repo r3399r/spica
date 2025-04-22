@@ -41,7 +41,8 @@
     "noBook": "No Book",
     "bookName": "Book Name*",
     "nickname": "my nickname",
-    "nicknameHelper": "optional, can add member later"
+    "nicknameHelper": "optional, can add member later",
+    "donate": "Donate us"
   },
   "systemSetting": {
     "back": "Back",

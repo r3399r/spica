@@ -41,7 +41,8 @@
     "noBook": "尚未建立帐本",
     "bookName": "帐本名称*",
     "nickname": "我的暱称",
-    "nicknameHelper": "可先不填，之后再去「成员」中新增"
+    "nicknameHelper": "可先不填，之后再去「成员」中新增",
+    "donate": "支持我们"
   },
   "systemSetting": {
     "back": "回帐本清单",
@@ -221,7 +222,7 @@
   },
   "donateModal": {
     "title": "支持我们",
-    "note": "感谢您使用Bunny Bill！如果您喜欢我们目前的成果，可以通过贊助让我们提供更完善的服务。",
+    "note": "感谢您使用Bunny Bill！如果您喜欢我们目前的成果，可以透过贊助让我们提供更完善的服务。",
     "paypal": "Paypal",
     "ecpay": "ECPay"
   },

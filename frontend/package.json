@@ -1,6 +1,6 @@
 {
   "name": "spica-frontend",
-  "version": "1.8.10",
+  "version": "1.8.11",
   "private": true,
   "scripts": {
     "start": "cross-env WATCHPACK_POLLING=true BROWSER=none PORT=3000 react-scripts start",
@@ -86,9 +86,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "engines": {
-    "node": "^18.0.0",
-    "npm": ">=9.0.0"
   }
 }

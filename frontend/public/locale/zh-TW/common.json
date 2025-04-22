@@ -41,7 +41,8 @@
     "noBook": "尚未建立帳本",
     "bookName": "帳本名稱*",
     "nickname": "我的暱稱",
-    "nicknameHelper": "可先不填，之後再去「成員」中新增"
+    "nicknameHelper": "可先不填，之後再去「成員」中新增",
+    "donate": "支持我們"
   },
   "systemSetting": {
     "back": "回帳本清單",
@@ -221,7 +222,7 @@
   },
   "donateModal": {
     "title": "支持我們",
-    "note": "感謝您使用 Bunny Bill！如果您喜歡我們目前的成果，可以通過贊助讓我們提供更完善的服務。",
+    "note": "感謝您使用 Bunny Bill！如果您喜歡我們目前的成果，可以透過贊助讓我們提供更完善的服務。",
     "paypal": "Paypal",
     "ecpay": "綠界"
   },
