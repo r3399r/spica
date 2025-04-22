@@ -60,7 +60,10 @@ const BookList = () => {
           </div>
           <div className="relative cursor-pointer">
             <img src={PicBookHero} className="w-full" onClick={() => setOpenDonate(true)} />
-            <Body className="absolute right-[4.9%] top-[80.9%] flex h-[16.8%] items-center justify-end">
+            <Body
+              size="s"
+              className="absolute right-[4.9%] top-[81.1%] flex h-[16.8%] items-center justify-end text-[#b0784e]"
+            >
               {t('bookList.donate')}
             </Body>
           </div>
