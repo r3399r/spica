@@ -41,7 +41,8 @@
     "noBook": "帳簿がない",
     "bookName": "帳簿名*",
     "nickname": "ニックネーム",
-    "nicknameHelper": "オプション、後でメンバーを追加できます"
+    "nicknameHelper": "オプション、後でメンバーを追加できます",
+    "donate": "サポート"
   },
   "systemSetting": {
     "back": "帳簿リスト",

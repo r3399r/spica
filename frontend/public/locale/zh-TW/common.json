@@ -41,7 +41,8 @@
     "noBook": "尚未建立帳本",
     "bookName": "帳本名稱*",
     "nickname": "我的暱稱",
-    "nicknameHelper": "可先不填，之後再去「成員」中新增"
+    "nicknameHelper": "可先不填，之後再去「成員」中新增",
+    "donate": "支持我們"
   },
   "systemSetting": {
     "back": "回帳本清單",
