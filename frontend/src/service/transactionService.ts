@@ -46,36 +46,41 @@ export const deleteTx = async (bookId: string, type: 'in' | 'out' | 'transfer', 
   }
 };
 
-export const isTxSubmittable = () => {
+export const isTxSubmittable = (): string | null => {
   const { txFormType, billFormData, transferFormData } = getState().form;
   if (txFormType === 'bill') {
-    if (!billFormData.descr) return false;
-    if (!billFormData.amount) return false;
+    if (!billFormData.descr) return 'editTx.validate.descRequired';
+    if (!billFormData.amount) return 'editTx.validate.amountRequired';
     if (
       !billFormData.former ||
       !billFormData.former
         .reduce((prev, current) => prev.plus(current.amount), bn(0))
         .eq(billFormData.amount)
     )
-      return false;
+      return billFormData.type === BillType.Out
+        ? 'editTx.validate.payerInsufficient'
+        : 'editTx.validate.receiverInsufficient';
     if (
       !billFormData.latter ||
       !billFormData.latter
         .reduce((prev, current) => prev.plus(current.amount), bn(0))
         .eq(billFormData.amount)
     )
-      return false;
+      return 'editTx.validate.sharerInsufficient';
+    if (billFormData.former.find((v) => v.amount === 0))
+      return billFormData.type === BillType.Out
+        ? 'editTx.validate.payerIncludeZero'
+        : 'editTx.validate.receiverIncludeZero';
+    if (billFormData.latter.find((v) => v.amount === 0)) return 'editTx.validate.sharerIncludeZero';
   } else {
-    if (!transferFormData.amount) return false;
-    if (
-      !transferFormData.srcMemberId ||
-      !transferFormData.dstMemberId ||
-      transferFormData.srcMemberId === transferFormData.dstMemberId
-    )
-      return false;
+    if (!transferFormData.amount) return 'editTx.validate.amountRequired';
+    if (!transferFormData.srcMemberId) return 'editTx.validate.srcMemberRequired';
+    if (!transferFormData.dstMemberId) return 'editTx.validate.dstMemberRequired';
+    if (transferFormData.srcMemberId === transferFormData.dstMemberId)
+      return 'editTx.validate.srcDstSame';
   }
 
-  return true;
+  return null;
 };
 
 export const calculateAmount = (total: number, detail: Detail[]): ShareDetail[] => {

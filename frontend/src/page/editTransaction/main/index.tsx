@@ -11,6 +11,7 @@ import { BillType } from 'src/constant/backend/Book';
 import { Page } from 'src/constant/Page';
 import { saveBillFormData, saveTransferFormData, setTxFormType } from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
+import { setSnackbarMessage } from 'src/redux/uiSlice';
 import { loadBookById } from 'src/service/bookService';
 import { addTransaction, isTxSubmittable, reviseTransaction } from 'src/service/transactionService';
 import BillForm from './BillForm';
@@ -25,7 +26,6 @@ const Main = () => {
   const { txFormType, billFormData, transferFormData } = useSelector(
     (rootState: RootState) => rootState.form,
   );
-  const disabled = useMemo(() => !isTxSubmittable(), [txFormType, billFormData, transferFormData]);
   const state = location.state as { txId: string } | null;
   const isEdit = useMemo(() => state !== null, [location.state]);
   const date = useMemo(() => {
@@ -57,6 +57,12 @@ const Main = () => {
   };
 
   const onSubmit = () => {
+    const submittableMessage = isTxSubmittable();
+    if (submittableMessage !== null) {
+      dispatch(setSnackbarMessage(t(submittableMessage)));
+
+      return;
+    }
     if (isEdit) reviseTransaction(id ?? 'xx', state?.txId ?? 'yy').then(() => navigate(-1));
     else
       addTransaction(id ?? 'xx').then((res) =>
@@ -97,7 +103,7 @@ const Main = () => {
       </div>
       <div className="fixed bottom-0 h-[104px] w-full">
         <div className="mx-auto w-fit">
-          <Button className="mt-5 h-12 w-64 text-base" disabled={disabled} onClick={onSubmit}>
+          <Button className="mt-5 h-12 w-64 text-base" onClick={onSubmit}>
             {t('act.submit')}
           </Button>
         </div>
