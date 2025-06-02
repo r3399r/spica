@@ -203,7 +203,20 @@
     "unitPct": "%",
     "modalTitle": "{{nickname}}の割当",
     "currency": "通貨",
-    "currencyHint": "他の通貨を追加したいたり、帳簿設定ページに移動してください"
+    "currencyHint": "他の通貨を追加したいたり、帳簿設定ページに移動してください",
+    "validate": {
+      "descRequired": "Item is required",
+      "amountRequired": "Amount is required",
+      "payerInsufficient": "Insufficient split for payer",
+      "receiverInsufficient": "Insufficient split for receiver",
+      "sharerInsufficient": "Insufficient split for sharer",
+      "payerIncludeZero": "Amount for any payer must not be zero",
+      "receiverIncludeZero": "Amount for any receiver must not be zero",
+      "sharerIncludeZero": "Amount for any sharer must not be zero",
+      "srcMemberRequired": "Sender is required",
+      "dstMemberRequired": "Receiver is required",
+      "srcDstSame": "Sender and receiver must not be the same"
+    }
   },
   "settlement": {
     "back": "戻る",

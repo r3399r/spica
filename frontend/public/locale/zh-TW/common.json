@@ -203,7 +203,20 @@
     "unitPct": "%",
     "modalTitle": "{{nickname}}的分配",
     "currency": "幣別",
-    "currencyHint": "欲新增不同貨幣請至帳本設定頁。"
+    "currencyHint": "欲新增不同貨幣請至帳本設定頁。",
+    "validate": {
+      "descRequired": "請填寫項目",
+      "amountRequired": "請填寫金額",
+      "payerInsufficient": "付款者分配金額有誤",
+      "receiverInsufficient": "收款者分配金額有誤",
+      "sharerInsufficient": "分攤者分配金額有誤",
+      "payerIncludeZero": "任一付款者分配金額不能為零",
+      "receiverIncludeZero": "任一收款者分配金額不能為零",
+      "sharerIncludeZero": "任一分攤者分配金額不能為零",
+      "srcMemberRequired": "請選擇匯款者",
+      "dstMemberRequired": "請選擇收款者",
+      "srcDstSame": "匯款者與收款者不能為同一人"
+    }
   },
   "settlement": {
     "back": "回帳本",
