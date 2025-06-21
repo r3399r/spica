@@ -1,10 +1,9 @@
-import { ModalUnstyled, ModalUnstyledProps } from '@mui/base';
+import { ModalProps, Modal as MuiModal } from '@mui/material';
 import classNames from 'classnames';
 import { twMerge } from 'tailwind-merge';
 import IcClose from 'src/image/ic-close.svg';
-import Backdrop from './Backdrop';
 
-type Props = ModalUnstyledProps & {
+type Props = ModalProps & {
   handleClose: () => void;
   showClose?: boolean;
   px?: boolean;
@@ -18,9 +17,8 @@ const Modal = ({
   className,
   ...props
 }: Props) => (
-  <ModalUnstyled
+  <MuiModal
     className="fixed inset-0 z-10 flex items-center justify-center"
-    slots={{ backdrop: Backdrop }}
     onClose={() => handleClose()}
     {...props}
   >
@@ -46,7 +44,7 @@ const Modal = ({
         {children}
       </div>
     </div>
-  </ModalUnstyled>
+  </MuiModal>
 );
 
 export default Modal;
