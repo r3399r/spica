@@ -146,7 +146,7 @@ export class BookService {
     await this.deviceBookAccess.save(deviceBook);
 
     const ipResult = await axios.get<Ip>(
-      `http://ip-api.com/json/${ipAddress}`
+      `http://ip-api.com/json/${ipAddress}?fields=8515583`
     );
 
     const currency = new CurrencyEntity();
