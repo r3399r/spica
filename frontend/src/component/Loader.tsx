@@ -7,7 +7,7 @@ const Loader = () => {
   const { workload } = useSelector((rootState: RootState) => rootState.ui);
 
   return (
-    <Backdrop open={workload > 0}>
+    <Backdrop open={workload > 0} className="z-[1400]">
       <div className="w-20 outline-none">
         <img src={IcLoader} />
       </div>
