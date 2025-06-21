@@ -70,7 +70,8 @@ async function apiBook() {
 
       return service.createBook(
         JSON.parse(event.body) as PostBookRequest,
-        event.headers['x-api-device']
+        event.headers['x-api-device'],
+        event.requestContext.identity.sourceIp
       );
     default:
       throw new InternalServerError('unknown http method');

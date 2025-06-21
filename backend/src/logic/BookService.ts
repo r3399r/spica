@@ -1,4 +1,5 @@
 import { SES } from 'aws-sdk';
+import axios from 'axios';
 import { BigNumber } from 'bignumber.js';
 import { inject, injectable } from 'inversify';
 import { BillAccess } from 'src/access/BillAccess';
@@ -64,6 +65,7 @@ import {
   InternalServerError,
   NotFoundError,
 } from 'src/model/error';
+import { Ip } from 'src/model/Ip';
 import { Pagination, PaginationParams } from 'src/model/Pagination';
 import {
   BookDetail,
@@ -128,7 +130,8 @@ export class BookService {
 
   public async createBook(
     data: PostBookRequest,
-    deviceId: string
+    deviceId: string,
+    ipAddress: string
   ): Promise<PostBookResponse> {
     const book = new BookEntity();
     book.name = data.bookName;
@@ -142,9 +145,14 @@ export class BookService {
     deviceBook.showDelete = false;
     await this.deviceBookAccess.save(deviceBook);
 
+    const ipResult = await axios.get<Ip>(
+      `http://ip-api.com/json/${ipAddress}`
+    );
+
     const currency = new CurrencyEntity();
     currency.bookId = newBook.id;
-    currency.name = 'USD';
+    currency.name =
+      ipResult.data.status === 'fail' ? 'USD' : ipResult.data.currency;
     currency.symbol = '$';
     currency.isPrimary = true;
     currency.deletable = false;
