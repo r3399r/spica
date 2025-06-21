@@ -1,12 +1,13 @@
-import { LocalizationProvider, StaticDateTimePicker } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  renderTimeViewClock,
+  StaticDateTimePicker,
+} from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import format from 'date-fns/format';
+import { format } from 'date-fns';
 import { useState } from 'react';
-import IcCalendar from 'src/image/ic-calendar.svg';
-import IcClock from 'src/image/ic-clock.svg';
 import IcSelect from 'src/image/ic-select.svg';
 import Button from './Button';
-import Input from './Input';
 import Modal from './Modal';
 
 type Props = {
@@ -45,14 +46,14 @@ const DatetimePicker = ({ label, initDate, onChange, cancelTxt, confirmTxt }: Pr
             onChange={(v) => {
               v && onDateChange(v);
             }}
-            renderInput={({ inputProps }) => <Input {...inputProps} />}
-            ampm={false}
-            componentsProps={{
+            slotProps={{
               actionBar: { actions: [] },
             }}
-            dateRangeIcon={<img src={IcCalendar} />}
-            timeIcon={<img src={IcClock} />}
-            inputFormat="yyyy/MM/dd HH:mm"
+            viewRenderers={{
+              hours: renderTimeViewClock,
+              minutes: renderTimeViewClock,
+              seconds: renderTimeViewClock,
+            }}
           />
           <div className="mb-4 mr-3 flex justify-end gap-[15px]">
             <Button
