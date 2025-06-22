@@ -1,9 +1,9 @@
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { registerSW } from 'virtual:pwa-register';
 import App from './App';
 import { configStore } from './redux/store';
-// import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import './style/index.css';
 import './util/i18n';
 
@@ -19,7 +19,8 @@ root.render(
   </Provider>,
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://cra.link/PWA
-// serviceWorkerRegistration.register();
+const updateSW = registerSW({
+  onNeedRefresh() {
+    updateSW(true); // auto update without asking
+  },
+});

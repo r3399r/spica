@@ -64,6 +64,7 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-expressions': 'off',
       'react-hooks/rules-of-hooks': 'off',
+      'import/no-unresolved': 'warn',
     },
   },
 );
