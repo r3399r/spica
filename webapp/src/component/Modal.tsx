@@ -26,7 +26,7 @@ const Modal = ({
       {showClose && (
         <div className="relative h-[34px]">
           <img
-            className="absolute bottom-0 right-[10px] cursor-pointer"
+            className="absolute right-[10px] bottom-0 cursor-pointer"
             src={IcClose}
             onClick={handleClose}
           />

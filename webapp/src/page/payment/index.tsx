@@ -39,12 +39,12 @@ const Payment = () => {
     <>
       <div
         className={classNames('overflow-y-auto', {
-          'fixed top-0 w-full h-[calc(100%-104px)]': !state,
+          'fixed top-0 h-[calc(100%-104px)] w-full': !state,
         })}
       >
         <div className="mx-[15px] max-w-[640px] sm:mx-auto">
           <NavbarVanilla text={t('payment.back')} />
-          <H2 className="mb-4 mt-5">
+          <H2 className="mt-5 mb-4">
             {state ? t('payment.userPayment', { name: state.user.nickname }) : t('payment.head')}
           </H2>
           {paymentList?.length === 0 && (

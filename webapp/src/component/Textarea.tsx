@@ -12,7 +12,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, Props>(
     <div>
       {label && (
         <div
-          className={classNames('text-[14px] leading-normal text-navy-700 mb-[5px]', {
+          className={classNames('mb-[5px] text-[14px] leading-normal text-navy-700', {
             'opacity-30': disabled,
           })}
         >
@@ -21,7 +21,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, Props>(
       )}
       <textarea
         className={classNames(
-          'rounded bg-grey-200 outline-none p-2 h-16 w-full border-solid border-[1px] focus:border-solid focus:border-teal-500 leading-normal',
+          'h-16 w-full rounded border-[1px] border-solid bg-grey-200 p-2 leading-normal outline-none focus:border-solid focus:border-teal-500',
           {
             'border-tomato-500': !!error,
             'border-grey-200': !error,

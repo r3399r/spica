@@ -37,7 +37,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="mb-5 mt-[15px] flex justify-between">
+    <div className="mt-[15px] mb-5 flex justify-between">
       <BackButton text={t('bookDetail.back')} />
       <div className="flex gap-[15px]">
         <div className="cursor-pointer" onClick={() => setOpenDonate(true)}>

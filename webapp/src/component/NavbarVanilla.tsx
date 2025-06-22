@@ -5,7 +5,7 @@ type Props = {
 };
 
 const NavbarVanilla = ({ text }: Props) => (
-  <div className="mb-5 mt-[15px]">
+  <div className="mt-[15px] mb-5">
     <BackButton text={text} />
   </div>
 );

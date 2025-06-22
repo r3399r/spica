@@ -55,7 +55,7 @@ const DatetimePicker = ({ label, initDate, onChange, cancelTxt, confirmTxt }: Pr
               seconds: renderTimeViewClock,
             }}
           />
-          <div className="mb-4 mr-3 flex justify-end gap-[15px]">
+          <div className="mr-3 mb-4 flex justify-end gap-[15px]">
             <Button
               appearance="secondary"
               onClick={() => {

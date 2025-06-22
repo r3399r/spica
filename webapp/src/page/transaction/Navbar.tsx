@@ -57,10 +57,10 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="relative mb-5 mt-[15px]">
+      <div className="relative mt-[15px] mb-5">
         <BackButton text={t('transaction.back')} />
         {tx && (
-          <div className="absolute right-0 top-0">
+          <div className="absolute top-0 right-0">
             {tx.dateDeleted === null ? (
               <div className="flex gap-[15px]">
                 <Img

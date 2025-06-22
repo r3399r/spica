@@ -34,7 +34,7 @@ const ModalInvite = ({ open, handleClose, email }: Props) => {
     >
       <>
         <Body size="l">{t('member.invite1')}</Body>
-        <Body size="l" className="mb-5 mt-[15px]">
+        <Body size="l" className="mt-[15px] mb-5">
           {t('member.invite2', { email })}
         </Body>
       </>

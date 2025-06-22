@@ -59,7 +59,7 @@ const PersonalBalance = () => {
         >
           <Body
             size="s"
-            className={classNames('py-[3px] px-1 bg-grey-200', {
+            className={classNames('bg-grey-200 px-1 py-[3px]', {
               'text-tomato-700': item.type === 'out',
               'text-green-700': item.type === 'in',
             })}
@@ -87,7 +87,7 @@ const PersonalBalance = () => {
       <div className="flex items-center justify-between gap-[10px] pt-5">
         <Body
           size="s"
-          className={classNames('py-[3px] px-1 bg-grey-200', {
+          className={classNames('bg-grey-200 px-1 py-[3px]', {
             'text-tomato-700': member?.total && member.total < 0,
             'text-green-700': member?.total && member.total >= 0,
           })}

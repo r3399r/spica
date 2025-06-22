@@ -66,7 +66,7 @@ const EditPayment = () => {
           <H2 className="mt-5">{t('editPayment.head')}</H2>
           {bank && (
             <>
-              <div className="mb-4 mt-5">
+              <div className="mt-5 mb-4">
                 <Select
                   label={t('editPayment.bank')}
                   onChange={onSelect}

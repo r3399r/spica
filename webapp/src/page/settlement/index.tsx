@@ -27,12 +27,12 @@ const Settlement = () => {
   return (
     <div className="mx-[15px] max-w-[640px] sm:mx-auto">
       <NavbarVanilla text={t('settlement.back')} />
-      <div className="mb-[25px] mt-5 flex gap-[10px]">
+      <div className="mt-5 mb-[25px] flex gap-[10px]">
         <Body
           bold
-          className={classNames('w-full text-center py-1 rounded-[4px] cursor-pointer', {
+          className={classNames('w-full cursor-pointer rounded-[4px] py-1 text-center', {
             'bg-tan-300 text-navy-700': tab === 'balance',
-            'bg-grey-200 text-navy-900 text-opacity-30': tab === 'check',
+            'text-opacity-30 bg-grey-200 text-navy-900': tab === 'check',
           })}
           onClick={() => dispatch(setSettlementTab('balance'))}
         >
@@ -40,9 +40,9 @@ const Settlement = () => {
         </Body>
         <Body
           bold
-          className={classNames('w-full text-center py-1 rounded-[4px] cursor-pointer', {
+          className={classNames('w-full cursor-pointer rounded-[4px] py-1 text-center', {
             'bg-tan-300 text-navy-700': tab === 'check',
-            'bg-grey-200 text-navy-900 text-opacity-30': tab === 'balance',
+            'text-opacity-30 bg-grey-200 text-navy-900': tab === 'balance',
           })}
           onClick={() => dispatch(setSettlementTab('check'))}
         >

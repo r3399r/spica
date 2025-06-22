@@ -58,7 +58,7 @@ const SplitMixModal = ({ open, onClose, member, mode }: Props) => {
         <div className="mb-[15px] flex gap-[10px]">
           <div
             className={classNames(
-              'h-[30px] w-full rounded-[4px] flex justify-center items-center cursor-pointer',
+              'flex h-[30px] w-full cursor-pointer items-center justify-center rounded-[4px]',
               {
                 'bg-tan-300': tab === 'weight',
                 'bg-grey-200': tab !== 'weight',
@@ -70,7 +70,7 @@ const SplitMixModal = ({ open, onClose, member, mode }: Props) => {
           </div>
           <div
             className={classNames(
-              'h-[30px] w-full rounded-[4px] flex justify-center items-center cursor-pointer',
+              'flex h-[30px] w-full cursor-pointer items-center justify-center rounded-[4px]',
               {
                 'bg-tan-300': tab === 'pct',
                 'bg-grey-200': tab !== 'pct',
@@ -89,7 +89,7 @@ const SplitMixModal = ({ open, onClose, member, mode }: Props) => {
             required
             label={tab === 'weight' ? t('editTx.weight') : t('editTx.pct')}
           />
-          <Body size="l" className="absolute bottom-2 right-2 text-navy-500">
+          <Body size="l" className="absolute right-2 bottom-2 text-navy-500">
             {tab === 'weight' ? t('editTx.unitWeight') : t('editTx.unitPct')}
           </Body>
         </div>

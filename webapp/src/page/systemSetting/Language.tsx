@@ -14,7 +14,7 @@ const Language = () => {
   return (
     <>
       <div
-        className="cursor-pointer border-b border-b-grey-300 pb-4 pt-5"
+        className="cursor-pointer border-b border-b-grey-300 pt-5 pb-4"
         onClick={() => setOpen(true)}
       >
         <div className="mb-[5px] flex justify-between">

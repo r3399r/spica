@@ -17,7 +17,7 @@ const History = () => {
     const currency = book?.currencies?.find((v) => v.id === currencyId);
     const isMultiple = (book?.currencies?.length ?? 0) > 1;
 
-    return isMultiple ? `${currency?.name}${currency?.symbol}` : currency?.symbol ?? '';
+    return isMultiple ? `${currency?.name}${currency?.symbol}` : (currency?.symbol ?? '');
   };
 
   const getDisplayText = useCallback(
