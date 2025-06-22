@@ -1,10 +1,44 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" translate="no">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <link rel="icon" type="image/png" href="/logo/icon-android-72.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="description"
+      content="你是否很常時與好友們一同出遊呢？如果是的話，你應該在尋找一個跟朋友分帳的方法吧！Bunny Bill 是個非常實用的分帳程式，同儕出遊輕鬆分帳無負擔，免註冊登入，不用下載安裝，只要有瀏覽器就可以使用，很輕易的與朋友分享帳本，帳目清晰，介面易懂，快來跟朋友一起使用這個 Bunny Bill 分帳程式吧！"
+    />
+    <meta name="agd-partner-manual-verification" />
+    <link rel="apple-touch-icon" href="/logo/icon-ios-180.png" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-E553HS837T"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-E553HS837T');
+    </script>
+    <!-- Google AdSense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3051999847338334"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('./service-worker.js')
+            .then((reg) => console.log('Success: ', reg.scope))
+            .catch((err) => console.log('Failure: ', err));
+        });
+      }
+    </script>
+    <title>Bunny Bill :: An easy way to split bills | Celestial Studio</title>
   </head>
   <body>
     <div id="root"></div>
