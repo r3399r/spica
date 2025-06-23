@@ -128,6 +128,20 @@ export class BookService {
   @inject(EmailBindAccess)
   private readonly emailBindAccess!: EmailBindAccess;
 
+  private async getCurrencyByIp(ip: string) {
+    try {
+      const result = await axios.get<Ip>(
+        `http://ip-api.com/json/${ip}?fields=8515583`
+      );
+      if (result.data.status === 'fail')
+        throw new InternalServerError('ip-api failed');
+
+      return result.data.currency;
+    } catch (e) {
+      return 'USD';
+    }
+  }
+
   public async createBook(
     data: PostBookRequest,
     deviceId: string,
@@ -145,14 +159,9 @@ export class BookService {
     deviceBook.showDelete = false;
     await this.deviceBookAccess.save(deviceBook);
 
-    const ipResult = await axios.get<Ip>(
-      `http://ip-api.com/json/${ipAddress}?fields=8515583`
-    );
-
     const currency = new CurrencyEntity();
     currency.bookId = newBook.id;
-    currency.name =
-      ipResult.data.status === 'fail' ? 'USD' : ipResult.data.currency;
+    currency.name = await this.getCurrencyByIp(ipAddress);
     currency.symbol = '$';
     currency.isPrimary = true;
     currency.deletable = false;
@@ -1332,8 +1341,8 @@ export class BookService {
                     <p class="link"><a
                         href="${shareLink}"
                         target="_blank">${click}<a/>${gotoText} ${
-        book?.name
-      }</p>
+                          book?.name
+                        }</p>
                     <p>Bunny Bill</p>
                     <p class="contact"><a
                         href="${url}"
