@@ -100,7 +100,7 @@ const Main = () => {
           <Body size="s" className="text-navy-300">
             {t('desc.memo')}
           </Body>
-          {tx.memo && <Body className="mt-[5px] whitespace-pre pl-[10px]">{tx.memo}</Body>}
+          {tx.memo && <Body className="mt-[5px] pl-[10px] whitespace-pre">{tx.memo}</Body>}
         </div>
       </>
     );
@@ -162,7 +162,7 @@ const Main = () => {
         <Body size="s" className="text-navy-300">
           {t('desc.memo')}
         </Body>
-        {tx.memo && <Body className="mt-[5px] whitespace-pre pl-[10px]">{tx.memo}</Body>}
+        {tx.memo && <Body className="mt-[5px] pl-[10px] whitespace-pre">{tx.memo}</Body>}
       </div>
     </>
   );

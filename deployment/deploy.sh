@@ -22,10 +22,10 @@ echo ===========================================================================
 
 echo prepare frontend files...
 npm run compile
-rm -rf ../webapp/src/model/backend
-rm -rf ../webapp/src/constant/backend
-cp -R lib/src/model ../webapp/src/model/backend
-cp -R src/constant ../webapp/src/constant/backend
+rm -rf ../frontend/src/model/backend
+rm -rf ../frontend/src/constant/backend
+cp -R lib/src/model ../frontend/src/model/backend
+cp -R src/constant ../frontend/src/constant/backend
 echo ====================================================================================
 
 # echo prepare api document...
@@ -35,7 +35,7 @@ echo ===========================================================================
 # echo ====================================================================================
 
 echo deploy frontend to S3...
-cd ../webapp
+cd ../frontend
 npm i
 npm run pre:deploy
 # mkdir -p ./dist/doc

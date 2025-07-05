@@ -48,7 +48,7 @@ const ModalBind = ({ open, handleClose, email }: Props) => {
           autoFocus
           required
           placeholder={t('dataSync.bindPlaceholder')}
-          className="mb-5 mt-4"
+          className="mt-4 mb-5"
         />
       </>
     </ModalForm>

@@ -131,7 +131,7 @@ const BillFormer = () => {
             <div key={v.id} className="flex h-[60px] items-center gap-3">
               <div className="flex flex-1 items-center">
                 <Checkbox id={v.id} checked={v.checked} onChange={onCheck(v.id)} />
-                <label htmlFor={v.id} className="w-full break-all pl-3">
+                <label htmlFor={v.id} className="w-full pl-3 break-all">
                   {v.nickname}
                 </label>
               </div>

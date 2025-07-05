@@ -50,7 +50,7 @@ const BookList = () => {
               className="cursor-pointer"
               onClick={() => navigate(`${Page.Setting}/sync`)}
             />
-            <H5 className="mb-[10px] mt-[15px] text-center text-navy-500">{t('appName')}</H5>
+            <H5 className="mt-[15px] mb-[10px] text-center text-navy-500">{t('appName')}</H5>
             <Img
               src={IcConfig}
               srcActive={IcConfigActive}
@@ -62,12 +62,12 @@ const BookList = () => {
             <img src={PicBookHero} className="w-full" />
             <Body
               size="s"
-              className="absolute right-[4.9%] top-[81.1%] flex h-[16.8%] items-center justify-end text-[#b0784e]"
+              className="absolute top-[81.1%] right-[4.9%] flex h-[16.8%] items-center justify-end text-[#b0784e]"
             >
               {t('bookList.donate')}
             </Body>
           </div>
-          <H2 className="mx-[25px] mb-5 mt-[30px]">{t('bookList.bookList')}</H2>
+          <H2 className="mx-[25px] mt-[30px] mb-5">{t('bookList.bookList')}</H2>
           {books?.length === 0 ? (
             <Body className="flex justify-center py-[30px] text-navy-300">
               {t('bookList.noBook')}
@@ -78,7 +78,7 @@ const BookList = () => {
                 <div
                   key={v.id}
                   className={classNames(
-                    'min-h-[100px] w-[calc(50%-5px)] rounded-[15px] px-[10px] pt-[10px] pb-2 sm:w-[140px] cursor-pointer',
+                    'min-h-[100px] w-[calc(50%-5px)] cursor-pointer rounded-[15px] px-[10px] pt-[10px] pb-2 sm:w-[140px]',
                     {
                       'bg-beige-300': i % 3 === 0,
                       'bg-green-300': i % 3 === 1,

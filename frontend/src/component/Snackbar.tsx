@@ -9,7 +9,7 @@ const Snackbar = () => {
   const dispatch = useDispatch();
   const { snackbarMessage } = useSelector((rootState: RootState) => rootState.ui);
 
-  const onClose = (event: SyntheticEvent | Event, reason?: string) => {
+  const onClose = (_event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') return;
     dispatch(setSnackbarMessage(undefined));
   };

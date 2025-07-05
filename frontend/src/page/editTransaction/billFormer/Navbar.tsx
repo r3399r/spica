@@ -14,7 +14,7 @@ const Navbar = ({ onCancel }: Props) => {
   const { billFormData } = useSelector((rootState: RootState) => rootState.form);
 
   return (
-    <div className="mb-5 mt-[15px] flex justify-between">
+    <div className="mt-[15px] mb-5 flex justify-between">
       <H5>{billFormData.type === 'out' ? t('desc.payer') : t('desc.receiver')}</H5>
       <div className="flex cursor-pointer" onClick={onCancel}>
         <img src={IcCross} />

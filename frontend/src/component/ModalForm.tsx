@@ -33,7 +33,7 @@ const ModalForm = <T extends FieldValues>({
       {title && <H2 className="mb-[15px]">{title}</H2>}
       <div>{children}</div>
       {(cancelBtn || confirmBtn) && (
-        <div className="flex flex-wrap justify-end gap-[15px] pb-[30px] pt-[10px]">
+        <div className="flex flex-wrap justify-end gap-[15px] pt-[10px] pb-[30px]">
           {cancelBtn && (
             <Button appearance="secondary" onClick={handleClose} type="button">
               {cancelBtn}

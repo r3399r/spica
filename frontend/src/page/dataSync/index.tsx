@@ -33,7 +33,7 @@ const DataSync = () => {
       <div className="mx-[15px] max-w-[640px] sm:mx-auto">
         <NavbarVanilla text={t('dataSync.back')} />
         <H2 className="mt-5">{t('dataSync.head')}</H2>
-        <Body className="mb-4 mt-2 text-navy-300" size="l">
+        <Body className="mt-2 mb-4 text-navy-300" size="l">
           {t('dataSync.hint')}
         </Body>
         {emailBinded ? (
@@ -49,7 +49,7 @@ const DataSync = () => {
             </div>
             <img
               src={IcUnbind}
-              className="absolute bottom-2 right-2 cursor-pointer"
+              className="absolute right-2 bottom-2 cursor-pointer"
               onClick={() => setOpenModalUnbind(true)}
             />
           </div>
