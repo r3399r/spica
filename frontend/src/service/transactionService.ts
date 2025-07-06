@@ -373,7 +373,7 @@ export const reviseTransaction = async (bookId: string, txId: string) => {
 const getDetail = (shareDetail: ShareDetail): Detail => ({
   id: shareDetail.id,
   method: shareDetail.method,
-  value: shareDetail.method === ShareMethod.Amount ? shareDetail.amount : shareDetail.value ?? 0,
+  value: shareDetail.method === ShareMethod.Amount ? shareDetail.amount : (shareDetail.value ?? 0),
 });
 
 export const addMemberToBillFormer = (memberId: string, detail?: Detail) => {
@@ -442,7 +442,7 @@ export const removeMemberFromBillFormer = (memberId: string) => {
           .map((v) => ({
             id: v.id,
             method: v.method,
-            value: v.method === ShareMethod.Amount ? v.amount : v.value ?? 0,
+            value: v.method === ShareMethod.Amount ? v.amount : (v.value ?? 0),
           })),
       ),
     }),
@@ -464,7 +464,7 @@ export const removeMemberFromBillLatter = (memberId: string, mode?: 'weight' | '
                 .map((v) => ({
                   id: v.id,
                   method: v.method,
-                  value: v.method === ShareMethod.Amount ? v.amount : v.value ?? 0,
+                  value: v.method === ShareMethod.Amount ? v.amount : (v.value ?? 0),
                 })),
             )
           : calculateAmount(
@@ -474,7 +474,7 @@ export const removeMemberFromBillLatter = (memberId: string, mode?: 'weight' | '
                 .map((v) => ({
                   id: v.id,
                   method: v.method,
-                  value: v.method === ShareMethod.Amount ? v.amount : v.value ?? 0,
+                  value: v.method === ShareMethod.Amount ? v.amount : (v.value ?? 0),
                 })),
             ),
     }),

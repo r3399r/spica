@@ -14,12 +14,12 @@ const StepIos = () => {
         {t('add2HomeScreen.iosStep1')}
       </Body>
       <img src={PicStep1} className="mx-auto" />
-      <H4 className="mb-[5px] mt-[30px] text-center">2</H4>
+      <H4 className="mt-[30px] mb-[5px] text-center">2</H4>
       <Body className="mb-[10px] text-center" size="l">
         {t('add2HomeScreen.iosStep2')}
       </Body>
       <img src={PicStep2} className="mx-auto" />
-      <H4 className="mb-[5px] mt-[30px] text-center">3</H4>
+      <H4 className="mt-[30px] mb-[5px] text-center">3</H4>
       <Body className="mb-10 text-center" size="l">
         {t('add2HomeScreen.iosStep3')}
       </Body>

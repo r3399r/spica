@@ -26,7 +26,7 @@ const ModalUnbind = ({ open, handleClose }: Props) => {
     >
       <>
         <H2>{t('dataSync.unbindHead')}</H2>
-        <Body size="l" className="mb-5 mt-4">
+        <Body size="l" className="mt-4 mb-5">
           {t('dataSync.unbindHint')}
         </Body>
       </>

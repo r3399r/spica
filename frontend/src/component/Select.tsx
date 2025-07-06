@@ -38,7 +38,7 @@ const Select = ({
   const options = useMemo(
     () =>
       (Array.isArray(children) ? children : [children]).map((child) =>
-        isValidElement(child) ? child.props : null,
+        isValidElement(child) ? (child.props as { value: string; children: ReactNode }) : null,
       ),
     [],
   );
@@ -55,7 +55,7 @@ const Select = ({
       <div className="w-full">
         {label && (
           <div
-            className={classNames('text-[14px] leading-normal text-navy-700 mb-[5px]', {
+            className={classNames('mb-[5px] text-[14px] leading-normal text-navy-700', {
               'opacity-30': disabled,
             })}
           >
@@ -64,7 +64,7 @@ const Select = ({
         )}
         <div
           className={classNames(
-            'rounded bg-grey-200 outline-none p-2 h-[40px] flex justify-between items-center',
+            'flex h-[40px] items-center justify-between rounded bg-grey-200 p-2 outline-none',
             {
               'cursor-pointer': !disabled,
               'cursor-not-allowed': !!disabled,
@@ -78,7 +78,7 @@ const Select = ({
               'text-navy-900': !disabled,
             })}
           >
-            {options.find((v) => v.value === (controlledSelectedValue ?? selected))?.children}
+            {options.find((v) => v && v.value === (controlledSelectedValue ?? selected))?.children}
           </div>
           <div>{disabled ? <img src={IcSelectDisabled} /> : <img src={IcSelect} />}</div>
         </div>

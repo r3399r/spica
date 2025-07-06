@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard-ts';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -36,7 +36,7 @@ const SystemSetting = () => {
       <H2>{t('systemSetting.head')}</H2>
       <Language />
       <CopyToClipboard text={deviceId} onCopy={() => dispatch(setSnackbarMessage(t('desc.copy')))}>
-        <div className="cursor-pointer border-b border-b-grey-300 pb-4 pt-5">
+        <div className="cursor-pointer border-b border-b-grey-300 pt-5 pb-4">
           <div className="mb-[5px] flex justify-between">
             <H4>{t('systemSetting.myId')}</H4>
             <Img src={IcCopy} srcActive={IcCopyActive} />
@@ -47,21 +47,21 @@ const SystemSetting = () => {
         </div>
       </CopyToClipboard>
       <div
-        className="flex cursor-pointer justify-between border-b border-b-grey-300 pb-4 pt-5"
+        className="flex cursor-pointer justify-between border-b border-b-grey-300 pt-5 pb-4"
         onClick={() => navigate(`${Page.Setting}/payment`)}
       >
         <H4>{t('systemSetting.myPaymentAccount')}</H4>
         <img src={IcGo} />
       </div>
       <div
-        className="flex cursor-pointer justify-between border-b border-b-grey-300 pb-4 pt-5"
+        className="flex cursor-pointer justify-between border-b border-b-grey-300 pt-5 pb-4"
         onClick={() => navigate(`${Page.Setting}/sync`)}
       >
         <H4>{t('systemSetting.dataSync')}</H4>
         <img src={IcGo} />
       </div>
       <div
-        className="flex cursor-pointer justify-between border-b border-b-grey-300 pb-4 pt-5"
+        className="flex cursor-pointer justify-between border-b border-b-grey-300 pt-5 pb-4"
         onClick={() => navigate(`${Page.Setting}/a2hs`)}
       >
         <H4>{t('systemSetting.add2HomeScreen')}</H4>
@@ -70,7 +70,7 @@ const SystemSetting = () => {
       <a
         target="_blank"
         href={href}
-        className="flex justify-between border-b border-b-grey-300 pb-4 pt-5"
+        className="flex justify-between border-b border-b-grey-300 pt-5 pb-4"
         rel="noreferrer"
       >
         <H4>{t('systemSetting.contactUs')}</H4>

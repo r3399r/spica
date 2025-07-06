@@ -5,7 +5,7 @@ type Props = HTMLAttributes<HTMLHeadingElement>;
 
 const H6 = ({ className, ...props }: Props) => (
   <h6
-    className={classNames('font-bold text-[0.875rem] leading-normal m-0', className)}
+    className={classNames('m-0 text-[0.875rem] leading-normal font-bold', className)}
     {...props}
   />
 );

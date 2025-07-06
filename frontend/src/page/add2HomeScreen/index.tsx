@@ -20,7 +20,7 @@ const Add2HomeScreen = () => {
       <div className="flex gap-[10px]">
         <div
           className={classNames(
-            'h-[30px] w-full rounded-[4px] flex justify-center items-center cursor-pointer',
+            'flex h-[30px] w-full cursor-pointer items-center justify-center rounded-[4px]',
             {
               'bg-tan-300': tab === 'ios',
               'bg-grey-200': tab !== 'ios',
@@ -32,7 +32,7 @@ const Add2HomeScreen = () => {
         </div>
         <div
           className={classNames(
-            'h-[30px] w-full rounded-[4px] flex justify-center items-center cursor-pointer',
+            'flex h-[30px] w-full cursor-pointer items-center justify-center rounded-[4px]',
             {
               'bg-tan-300': tab === 'android',
               'bg-grey-200': tab !== 'android',

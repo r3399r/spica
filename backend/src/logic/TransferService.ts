@@ -33,9 +33,8 @@ export class TransferService {
   }
 
   public async getToken(deviceId: string): Promise<PostTransferResponse> {
-    const unexpiredDeviceToken = await this.deviceTokenAccess.findByDeviceId(
-      deviceId
-    );
+    const unexpiredDeviceToken =
+      await this.deviceTokenAccess.findByDeviceId(deviceId);
 
     return unexpiredDeviceToken ?? this.generateToken(deviceId);
   }
@@ -47,9 +46,8 @@ export class TransferService {
     const srcDeviceBookPairs = await this.deviceBookAccess.findByDeviceId(
       deviceToken.deviceId
     );
-    const dstDeviceBookParis = await this.deviceBookAccess.findByDeviceId(
-      deviceId
-    );
+    const dstDeviceBookParis =
+      await this.deviceBookAccess.findByDeviceId(deviceId);
 
     const diff = differenceBy(srcDeviceBookPairs, dstDeviceBookParis, 'bookId');
     for (const pair of diff) {

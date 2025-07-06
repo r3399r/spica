@@ -1,4 +1,4 @@
-import format from 'date-fns/format';
+import { format } from 'date-fns';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -17,7 +17,7 @@ const History = () => {
     const currency = book?.currencies?.find((v) => v.id === currencyId);
     const isMultiple = (book?.currencies?.length ?? 0) > 1;
 
-    return isMultiple ? `${currency?.name}${currency?.symbol}` : currency?.symbol ?? '';
+    return isMultiple ? `${currency?.name}${currency?.symbol}` : (currency?.symbol ?? '');
   };
 
   const getDisplayText = useCallback(

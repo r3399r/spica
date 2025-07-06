@@ -37,7 +37,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
       <div>
         {label && (
           <div
-            className={classNames('text-[14px] leading-normal text-navy-700 mb-[5px]', {
+            className={classNames('mb-[5px] text-[14px] leading-normal text-navy-700', {
               'opacity-30': disabled,
             })}
           >
@@ -46,7 +46,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
         )}
         <input
           className={classNames(
-            'rounded bg-grey-200 outline-none p-2 h-[40px] w-full border-solid border-[1px] focus:border-solid focus:border-teal-500',
+            'h-[40px] w-full rounded border-[1px] border-solid bg-grey-200 p-2 outline-none focus:border-solid focus:border-teal-500',
             className,
             {
               'border-tomato-500': !!error,

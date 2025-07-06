@@ -1,4 +1,4 @@
-import format from 'date-fns/format';
+import { format } from 'date-fns';
 import bookEndpoint from 'src/api/bookEndpoint';
 import exportPdfEndpoint from 'src/api/exportPdfEndpoint';
 import { PostBookRequest } from 'src/model/backend/api/Book';

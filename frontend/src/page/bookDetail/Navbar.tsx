@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard-ts';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -37,7 +37,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="mb-5 mt-[15px] flex justify-between">
+    <div className="mt-[15px] mb-5 flex justify-between">
       <BackButton text={t('bookDetail.back')} />
       <div className="flex gap-[15px]">
         <div className="cursor-pointer" onClick={() => setOpenDonate(true)}>

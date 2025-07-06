@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard-ts';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -39,12 +39,12 @@ const Payment = () => {
     <>
       <div
         className={classNames('overflow-y-auto', {
-          'fixed top-0 w-full h-[calc(100%-104px)]': !state,
+          'fixed top-0 h-[calc(100%-104px)] w-full': !state,
         })}
       >
         <div className="mx-[15px] max-w-[640px] sm:mx-auto">
           <NavbarVanilla text={t('payment.back')} />
-          <H2 className="mb-4 mt-5">
+          <H2 className="mt-5 mb-4">
             {state ? t('payment.userPayment', { name: state.user.nickname }) : t('payment.head')}
           </H2>
           {paymentList?.length === 0 && (

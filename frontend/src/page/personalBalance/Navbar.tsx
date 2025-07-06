@@ -16,7 +16,7 @@ const Navbar = () => {
   const book = useBook();
 
   return (
-    <div className="mb-5 mt-[15px] flex items-center justify-between">
+    <div className="mt-[15px] mb-5 flex items-center justify-between">
       <BackButton text={t('bookDetail.back')} />
       <div className="cursor-pointer" onClick={() => setOpen(true)}>
         <Img src={IcExport} srcActive={IcExportActive} />

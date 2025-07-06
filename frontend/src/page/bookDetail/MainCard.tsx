@@ -50,7 +50,7 @@ const MainCard = () => {
         </div>
         <div>
           <div
-            className="flex cursor-pointer gap-[5px] rounded-md bg-teal-500 p-[5px] text-white active:bg-teal-400 disabled:bg-teal-300 disabled:text-opacity-70"
+            className="disabled:text-opacity-70 flex cursor-pointer gap-[5px] rounded-md bg-teal-500 p-[5px] text-white active:bg-teal-400 disabled:bg-teal-300"
             onClick={() => navigate(`${Page.Book}/${id}/member`)}
           >
             <img src={IcMember} />

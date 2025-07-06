@@ -92,7 +92,7 @@ export const api = async (
           statusCode: output.statusCode,
           dateRequested: new Date().toISOString(),
           version: event.headers
-            ? event.headers['x-api-version'] ?? null
+            ? (event.headers['x-api-version'] ?? null)
             : null,
           ip: event.requestContext.identity.sourceIp,
         }),

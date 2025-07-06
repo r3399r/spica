@@ -14,12 +14,12 @@ const StepAndroid = () => {
         {t('add2HomeScreen.androidStep1')}
       </Body>
       <img src={PicStep1} className="mx-auto" />
-      <H4 className="mb-[5px] mt-[30px] text-center">2</H4>
+      <H4 className="mt-[30px] mb-[5px] text-center">2</H4>
       <Body className="mb-[10px] text-center" size="l">
         {t('add2HomeScreen.androidStep2')}
       </Body>
       <img src={PicStep2} className="mx-auto" />
-      <H4 className="mb-[5px] mt-[30px] text-center">3</H4>
+      <H4 className="mt-[30px] mb-[5px] text-center">3</H4>
       <Body className="mb-10 text-center" size="l">
         {t('add2HomeScreen.androidStep3')}
       </Body>
