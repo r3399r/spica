@@ -2154,7 +2154,8 @@ Resources:
           DB_HOST: !Sub '{{resolve:ssm:${TargetEnvr}-db-host:1}}'
           DB_PWD: !Sub '{{resolve:ssm:${TargetEnvr}-db-pwd:1}}'
           DB_USER: !Sub '{{resolve:ssm:${TargetEnvr}-db-user:1}}'
-          LOGGER_QUEUE_URL: !Sub https://sqs.ap-east-2.amazonaws.com/${AWS::AccountId}/polaris-${TargetEnvr}-logger-queue
+          LOGGER_QUEUE_URL:
+            Fn::ImportValue: !Sub polaris-${TargetEnvr}-logger-queue-arn
   InvokePermissionLambdaApi:
     Type: AWS::Lambda::Permission
     DependsOn: [ServerlessApi, LambdaApiFunction]
