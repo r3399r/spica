@@ -2155,7 +2155,7 @@ Resources:
           DB_PWD: !Sub '{{resolve:ssm:${TargetEnvr}-db-pwd:1}}'
           DB_USER: !Sub '{{resolve:ssm:${TargetEnvr}-db-user:1}}'
           LOGGER_QUEUE_URL:
-            Fn::ImportValue: !Sub polaris-${TargetEnvr}-logger-queue-arn
+            Fn::ImportValue: !Sub polaris-${TargetEnvr}-logger-queue-url
   InvokePermissionLambdaApi:
     Type: AWS::Lambda::Permission
     DependsOn: [ServerlessApi, LambdaApiFunction]
