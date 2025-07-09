@@ -50,7 +50,7 @@ const BookList = () => {
               className="cursor-pointer"
               onClick={() => navigate(`${Page.Setting}/sync`)}
             />
-            <H5 className="mt-[15px] mb-[10px] text-center text-navy-500">{t('appName')}</H5>
+            <H5 className="mt-[15px] mb-[10px] text-center text-navy-500">{t('appName')}-test</H5>
             <Img
               src={IcConfig}
               srcActive={IcConfigActive}

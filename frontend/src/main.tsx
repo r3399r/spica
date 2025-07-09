@@ -19,8 +19,40 @@ root.render(
   </Provider>,
 );
 
-const updateSW = registerSW({
-  onNeedRefresh() {
-    updateSW(true); // auto update without asking
-  },
-});
+// Migration step: unregister old CRA service workers
+if ('serviceWorker' in navigator)
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    let foundOldCRA = false;
+
+    registrations.forEach((reg) => {
+      // CRA service workers usually have this path
+      if (reg.active?.scriptURL.includes('/service-worker.js')) {
+        foundOldCRA = true;
+        reg.unregister().then(() => {
+          console.log('[PWA] Unregistered old CRA service worker');
+        });
+      }
+    });
+
+    // Wait a short time before registering new SW
+    setTimeout(() => {
+      if (!foundOldCRA)
+        // No old SW, safe to register immediately
+        safelyRegisterViteSW();
+      else {
+        // Delay a bit after unregister to let browser clear things
+        console.log('[PWA] Delayed new SW registration after cleanup');
+        setTimeout(() => {
+          safelyRegisterViteSW();
+        }, 1000); // wait 1s after unregister
+      }
+    }, 200);
+  });
+
+function safelyRegisterViteSW() {
+  const updateSW = registerSW({
+    onNeedRefresh() {
+      updateSW(true); // auto update without asking
+    },
+  });
+}
