@@ -18,7 +18,7 @@ const Landing = () => {
   return (
     <>
       <H1 className="mt-10 mb-[10px] text-center font-[900] text-teal-500">{t('landing.title')}</H1>
-      <H4 className="text-center text-teal-500">{t('landing.subtitle')}</H4>
+      <H4 className="text-center text-teal-500">={t('landing.subtitle')}=</H4>
       <div className="mt-5">
         <img src={PicHero} className="mx-auto w-[calc(100%-30px)] sm:w-[640px]" />
       </div>
