@@ -40,5 +40,5 @@ npm i
 npm run pre:deploy
 # mkdir -p ./dist/doc
 # cp -R ../doc/index.* ./dist/doc
-aws s3 sync ./dist s3://$project-$env --delete --cache-control max-age=0
+aws s3 sync ./dist s3://$project-$env --delete --cache-control no-cache
 echo ====================================================================================

@@ -11,6 +11,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'prompt',
       includeAssets: ['favicon.ico', 'apple-touc-icon.png'],
+      filename: 'service-worker.js',
       workbox: {
         cleanupOutdatedCaches: true,
       },
