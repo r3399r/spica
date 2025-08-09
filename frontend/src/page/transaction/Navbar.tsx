@@ -11,7 +11,12 @@ import IcEditActive from 'src/image/ic-edit-active.svg';
 import IcEdit from 'src/image/ic-edit.svg';
 import IcRemoveActive from 'src/image/ic-remove-active.svg';
 import IcRemove from 'src/image/ic-remove.svg';
-import { saveBillFormData, saveTransferFormData, setTxFormType } from 'src/redux/formSlice';
+import {
+  saveBillFormData,
+  saveTransferFormData,
+  setInvolvedMemberIds,
+  setTxFormType,
+} from 'src/redux/formSlice';
 import { bn } from 'src/util/bignumber';
 import ModalDelete from './ModalDelete';
 
@@ -26,7 +31,7 @@ const Navbar = () => {
 
   const onEdit = () => {
     if (!tx) return;
-    if (tx.type === 'in' || tx.type === 'out')
+    if (tx.type === 'in' || tx.type === 'out') {
       dispatch(
         saveBillFormData({
           date: tx.date,
@@ -39,7 +44,8 @@ const Navbar = () => {
           currencyId: tx.currencyId,
         }),
       );
-    else if (tx.type === 'transfer') {
+      dispatch(setInvolvedMemberIds([...tx.former, ...tx.latter].map((v) => v.id)));
+    } else if (tx.type === 'transfer') {
       dispatch(setTxFormType('transfer'));
       dispatch(
         saveTransferFormData({
@@ -51,6 +57,7 @@ const Navbar = () => {
           currencyId: tx.currencyId,
         }),
       );
+      dispatch(setInvolvedMemberIds([tx.srcMemberId, tx.dstMemberId]));
     }
     navigate(`${Page.Book}/${id}/tx`, { state: { txId: tx.id } });
   };

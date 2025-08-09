@@ -8,15 +8,17 @@ import IcCrownActive from 'src/image/ic-crown-active.svg';
 import IcCrown from 'src/image/ic-crown.svg';
 import IcEditActive from 'src/image/ic-edit-active.svg';
 import IcEdit from 'src/image/ic-edit.svg';
+import IcInvisible from 'src/image/ic-invisible.svg';
 import IcRemoveActive from 'src/image/ic-remove-active.svg';
-import IcRemoveDisabled from 'src/image/ic-remove-disabled.svg';
 import IcRemove from 'src/image/ic-remove.svg';
+import IcVisible from 'src/image/ic-visible.svg';
 import { Member } from 'src/model/backend/entity/Member';
 import { RootState } from 'src/redux/store';
 import { getDeviceId } from 'src/service/memberService';
 import ModalDeleteMember from './ModalDeleteMember';
 import ModalEditMember from './ModalEditMember';
 import ModalSelf from './ModalSelf';
+import ModalSetMemberVisible from './ModalSetMemberVisible';
 
 const MemberList = () => {
   const { t } = useTranslation();
@@ -24,6 +26,7 @@ const MemberList = () => {
   const { isDeviceReady } = useSelector((rootState: RootState) => rootState.ui);
   const [selfTarget, setSelfTarget] = useState<Member>();
   const [editTarget, setEditTarget] = useState<Member>();
+  const [visibleTarget, setVisibleTarget] = useState<Member>();
   const [deleteTarget, setDeleteTarget] = useState<Member>();
   const members = useMemo(() => book?.members, [book]);
   const self = useMemo(() => {
@@ -64,15 +67,20 @@ const MemberList = () => {
                   onClick={() => setSelfTarget(v)}
                 />
               )}
-              {v.deletable === true ? (
+              {v.deletable === true && (
                 <Img
                   src={IcRemove}
                   srcActive={IcRemoveActive}
                   className="cursor-pointer"
                   onClick={() => setDeleteTarget(v)}
                 />
-              ) : (
-                <img src={IcRemoveDisabled} />
+              )}
+              {v.deletable === false && (
+                <img
+                  className="cursor-pointer"
+                  src={v.visible === true ? IcVisible : IcInvisible}
+                  onClick={() => setVisibleTarget(v)}
+                />
               )}
               <Img
                 src={IcEdit}
@@ -93,6 +101,11 @@ const MemberList = () => {
         open={!!deleteTarget}
         handleClose={() => setDeleteTarget(undefined)}
         target={deleteTarget}
+      />
+      <ModalSetMemberVisible
+        open={!!visibleTarget}
+        handleClose={() => setVisibleTarget(undefined)}
+        target={visibleTarget}
       />
       <ModalSelf
         open={!!selfTarget}

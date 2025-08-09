@@ -25,9 +25,14 @@ import Navbar from './Navbar';
 const BillFormer = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { billFormData } = useSelector((rootState: RootState) => rootState.form);
+  const { billFormData, involvedMemberIds } = useSelector((rootState: RootState) => rootState.form);
   const book = useBook();
-  const members = useMemo(() => book?.members ?? [], [book]);
+  const members = useMemo(
+    () =>
+      book?.members?.filter((v) => v.visible === true || new Set(involvedMemberIds).has(v.id)) ??
+      [],
+    [book, involvedMemberIds],
+  );
   const [input, setInput] = useState<MemberFormer[]>([]);
   const initialFormer = useMemo(() => billFormData.former, []);
   const remaining = useMemo(

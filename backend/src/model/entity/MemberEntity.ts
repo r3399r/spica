@@ -25,6 +25,9 @@ export class MemberEntity implements Member {
   @Column({ type: 'bool' })
   deletable!: boolean;
 
+  @Column({ type: 'bool' })
+  visible!: boolean;
+
   @Column({ type: 'timestamp', name: 'date_created', default: null })
   dateCreated!: string;
 

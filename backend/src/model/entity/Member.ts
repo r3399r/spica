@@ -6,6 +6,7 @@ export type Member = {
   total: number;
   balance: number;
   deletable: boolean;
+  visible: boolean;
   dateCreated: string | null;
   dateUpdated: string | null;
 };

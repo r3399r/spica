@@ -16,10 +16,13 @@ import Latter from './Latter';
 const BillForm = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { billFormData } = useSelector((rootState: RootState) => rootState.form);
+  const { billFormData, involvedMemberIds } = useSelector((rootState: RootState) => rootState.form);
   const { isDeviceReady } = useSelector((rootState: RootState) => rootState.ui);
   const book = useBook();
-  const members = useMemo(() => book?.members, [book]);
+  const members = useMemo(
+    () => book?.members?.filter((v) => v.visible === true || new Set(involvedMemberIds).has(v.id)),
+    [book, involvedMemberIds],
+  );
   const self = useMemo(() => {
     if (!members || !isDeviceReady) return null;
 

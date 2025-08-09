@@ -164,6 +164,8 @@
     "inputEmail": "Enter friend's Email",
     "edit": "Edit Profile",
     "deleteHint": "Delete \"{{nickname}}\"?",
+    "setVisibleHint": "Set \"{{nickname}}\" as visible?",
+    "setInvisibleHint": "Set \"{{nickname}}\" as invisible?",
     "self": "Me",
     "selfHint1": "set \"{{nickname}}\" as me",
     "selfHint2": "\"{{nickname}}\" is not me",

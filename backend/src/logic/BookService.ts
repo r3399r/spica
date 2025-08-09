@@ -175,6 +175,7 @@ export class BookService {
       member.total = 0;
       member.balance = 0;
       member.deletable = true;
+      member.visible = true;
       const newMember = await this.memberAccess.save(member);
 
       const memberSettlement = new MemberSettlementEntity();
@@ -668,6 +669,7 @@ export class BookService {
     member.total = 0;
     member.balance = 0;
     member.deletable = true;
+    member.visible = true;
 
     const newMember = await this.memberAccess.save(member);
     const currencies = await this.currencyAccess.findByBookId(id);
@@ -729,6 +731,25 @@ export class BookService {
     const newMember: Member = {
       ...oldMember,
       deviceId: oldMember.deviceId === deviceId ? null : deviceId,
+    };
+    await this.memberAccess.update(newMember);
+
+    return newMember;
+  }
+
+  public async reviseMemberVisible(
+    bid: string,
+    mid: string,
+    deviceId: string
+  ): Promise<PutBookMemberResponse> {
+    await this.checkDeviceHasBook(deviceId, bid);
+
+    const oldMember = await this.memberAccess.findById(mid);
+    if (oldMember.bookId !== bid) throw new BadRequestError('bad request');
+
+    const newMember: Member = {
+      ...oldMember,
+      visible: !oldMember.visible,
     };
     await this.memberAccess.update(newMember);
 
