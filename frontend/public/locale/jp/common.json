@@ -227,8 +227,9 @@
     "shouldPay": "支払う",
     "isCleared": "すべての支払いが決済しました",
     "switch": "スイッチ",
-    "minimumPaymentMode": "最低返済回数",
-    "intuitionMode": "返済のみ"
+    "checkHint": "This is an optimized debt relationship, where you may be paying back someone you don't owe money to directly. There are many ways to settle a debt, but here are two common methods.",
+    "minimumPaymentMode": "At most one payment per person",
+    "intuitionMode": "最低返済回数"
   },
   "memberModal": {
     "head": "ニックネームを選ぶ",

@@ -227,8 +227,9 @@
     "shouldPay": "需支付",
     "isCleared": "所有款项已结清",
     "switch": "切换",
-    "minimumPaymentMode": "最少还款次数",
-    "intuitionMode": "只还款给直接欠款的人"
+    "checkHint": "此为优化后的债务关係，您可能还款给一个不是您直接欠款的人。结帐方式不只一种，此处仅提供两种常见的方式。",
+    "minimumPaymentMode": "每人最多还款一次",
+    "intuitionMode": "最少还款次数"
   },
   "memberModal": {
     "head": "选择你的暱称",

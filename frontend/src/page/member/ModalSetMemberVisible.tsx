@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import ModalVanilla from 'src/component/ModalVanilla';
+import Body from 'src/component/typography/Body';
 import { Member } from 'src/model/backend/entity/Member';
 import { setMemberAsVisible } from 'src/service/memberService';
 
@@ -25,11 +26,11 @@ const ModalSetMemberVisible = ({ open, handleClose, target }: Props) => {
       confirmBtn={t('act.confirm')}
       onConfirm={onSetVisible}
     >
-      <div>
+      <Body size="l">
         {t(target?.visible === true ? 'member.setInvisibleHint' : 'member.setVisibleHint', {
           nickname: target?.nickname,
         })}
-      </div>
+      </Body>
     </ModalVanilla>
   );
 };
