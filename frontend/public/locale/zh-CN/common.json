@@ -164,6 +164,8 @@
     "inputEmail": "输入好友Email",
     "edit": "编辑资料",
     "deleteHint": "要删除「{{nickname}}」吗？",
+    "setVisibleHint": "要将「{{nickname}}」取消隐藏吗?",
+    "setInvisibleHint": "要将「{{nickname}}」设为隐藏吗? 设为隐藏的成员将不会显示于分摊的选项中。可随时取消隐藏。",
     "self": "我",
     "selfHint1": "将「{{nickname}}」设定为我的暱称",
     "selfHint2": "「{{nickname}}」不再是我的暱称",

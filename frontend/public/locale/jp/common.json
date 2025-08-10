@@ -164,6 +164,8 @@
     "inputEmail": "友達のメール入力",
     "edit": "メンバー編集",
     "deleteHint": "「{{nickname}}」を削除しますか？",
+    "setVisibleHint": "Set \"{{nickname}}\" back as visible?",
+    "setInvisibleHint": "Set \"{{nickname}}\" as invisible? An insivible member will not be shown in the option of sharer. You can set it back anytime.",
     "self": "私",
     "selfHint1": "「{{nickname}}」がニックネームを設定",
     "selfHint2": "「{{nickname}}」はニックネームではない",
