@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { In, IsNull, ObjectLiteral } from 'typeorm';
+import { FindManyOptions, In, IsNull, ObjectLiteral } from 'typeorm';
 import { Transfer } from 'src/model/entity/Transfer';
 import { TransferEntity } from 'src/model/entity/TransferEntity';
 import { InternalServerError } from 'src/model/error';
@@ -21,18 +21,20 @@ export class TransferAccess {
     return await qr.manager.save(entity);
   }
 
-  public async findById(id: string) {
+  public async find(options?: FindManyOptions<Transfer>) {
     const qr = await this.database.getQueryRunner();
 
     return await qr.manager.find<Transfer>(TransferEntity.name, {
-      where: { id },
+      ...options,
     });
   }
 
-  public async findByIds(ids: string[]) {
-    const qr = await this.database.getQueryRunner();
+  public async findById(id: string) {
+    return await this.find({ where: { id } });
+  }
 
-    return await qr.manager.find<Transfer>(TransferEntity.name, {
+  public async findByIds(ids: string[]) {
+    return await this.find({
       where: { id: In(ids) },
       order: { ver: 'ASC' },
     });
@@ -48,9 +50,7 @@ export class TransferAccess {
   }
 
   public async findByCurrencyId(currencyId: string) {
-    const qr = await this.database.getQueryRunner();
-
-    return await qr.manager.find<Transfer>(TransferEntity.name, {
+    return await this.find({
       where: { currencyId },
     });
   }

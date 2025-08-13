@@ -2,6 +2,7 @@ import { SES } from 'aws-sdk';
 import axios from 'axios';
 import { BigNumber } from 'bignumber.js';
 import { inject, injectable } from 'inversify';
+import { ILike, IsNull } from 'typeorm';
 import { BillAccess } from 'src/access/BillAccess';
 import { BillShareAccess } from 'src/access/BillShareAccess';
 import { BookAccess } from 'src/access/BookAccess';
@@ -22,6 +23,7 @@ import {
   DeleteBookTransferResponse,
   GetBookIdParams,
   GetBookIdResponse,
+  GetBookIdSearchParams,
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
@@ -1419,5 +1421,43 @@ export class BookService {
         Source: 'bunnybill-noreply@celestialstudio.net',
       })
       .promise();
+  }
+
+  public async searchBook(
+    id: string,
+    deviceId: string,
+    params: GetBookIdSearchParams | null
+  ) {
+    if (params === null) throw new BadRequestError('params should not be null');
+    await this.checkDeviceHasBook(deviceId, id);
+
+    const [transfers, billShares] = await Promise.all([
+      this.transferAccess.find({
+        where: {
+          bookId: id,
+          dateDeleted: IsNull(),
+          memo: ILike(`%${params.q}%`),
+        },
+      }),
+      this.vBillShareAccess.find({
+        where: [
+          {
+            bookId: id,
+            dateDeleted: IsNull(),
+            memo: ILike(`%${params.q}%`),
+          },
+          {
+            bookId: id,
+            dateDeleted: IsNull(),
+            descr: ILike(`%${params.q}%`),
+          },
+        ],
+      }),
+    ]);
+
+    return [
+      ...this.handleTransfer(transfers),
+      ...this.handleBill(billShares),
+    ].sort(compare('date', 'desc'));
   }
 }

@@ -2,6 +2,7 @@ import { bindings } from 'src/bindings';
 import { BookService } from 'src/logic/BookService';
 import {
   GetBookIdParams,
+  GetBookIdSearchParams,
   PostBookBillRequest,
   PostBookCurrencyRequest,
   PostBookIdInviteRequest,
@@ -56,6 +57,8 @@ export async function book(lambdaEvent: LambdaEvent, _context?: LambdaContext) {
       return await apiBookIdTransfer();
     case '/api/book/{id}/transfer/{tid}':
       return await apiBookIdTransferId();
+    case '/api/book/{id}/search':
+      return await apiBookIdSearch();
   }
   throw new InternalServerError('unknown resource');
 }
@@ -389,6 +392,23 @@ async function apiBookIdTransferId() {
         event.pathParameters.id,
         event.pathParameters.tid,
         event.headers['x-api-device']
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdSearch() {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  if (event.headers === null)
+    throw new BadRequestError('headers should not be empty');
+  switch (event.httpMethod) {
+    case 'GET':
+      return service.searchBook(
+        event.pathParameters.id,
+        event.headers['x-api-device'],
+        event.queryStringParameters as GetBookIdSearchParams | null
       );
     default:
       throw new InternalServerError('unknown http method');

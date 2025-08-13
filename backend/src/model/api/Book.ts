@@ -109,3 +109,9 @@ export type PutBookCurrencyPrimaryResponse = {
   currencies: Currency[];
   members: Member[];
 };
+
+export type GetBookIdSearchParams = {
+  q: string;
+};
+
+export type GetBookIdSearchResponse = Transaction[];
