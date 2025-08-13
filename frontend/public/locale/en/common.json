@@ -236,6 +236,9 @@
     "hint": "You can also add your nickname later",
     "skip": "Skip"
   },
+  "searchModal": {
+    "placeholder": "Search"
+  },
   "donateModal": {
     "title": "Donate Us",
     "note": "Thanks for using Bunny Bill! If you like our current results, you can donate us to provide better services.",

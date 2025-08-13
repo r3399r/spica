@@ -66,3 +66,7 @@ export type DataSyncForm = {
 export type DataSyncCodeForm = {
   code: string;
 };
+
+export type SearchForm = {
+  q: string;
+};

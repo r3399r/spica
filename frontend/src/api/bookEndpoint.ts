@@ -6,6 +6,8 @@ import {
   DeleteBookTransferResponse,
   GetBookIdParams,
   GetBookIdResponse,
+  GetBookIdSearchParams,
+  GetBookIdSearchResponse,
   GetBookResponse,
   PostBookBillRequest,
   PostBookBillResponse,
@@ -320,6 +322,18 @@ const putBookIdCurrencyPrimary = async (id: string, cid: string, deviceId: strin
   }
 };
 
+const getBookIdSearch = async (id: string, deviceId: string, params: GetBookIdSearchParams) => {
+  try {
+    return await http.get<GetBookIdSearchResponse, GetBookIdSearchParams>(`book/${id}/search`, {
+      headers: { 'x-api-device': deviceId },
+      params,
+    });
+  } catch (e) {
+    alert(t('error.default'));
+    throw e;
+  }
+};
+
 export default {
   getBook,
   postBook,
@@ -344,4 +358,5 @@ export default {
   putBookIdCurrency,
   deleteBookIdCurrency,
   putBookIdCurrencyPrimary,
+  getBookIdSearch,
 };

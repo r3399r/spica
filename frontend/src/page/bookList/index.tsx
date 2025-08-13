@@ -96,11 +96,11 @@ const BookList = () => {
         </div>
       </div>
       <div className="fixed bottom-0 h-[104px] w-full">
-        <div className="mx-auto w-fit">
-          <Button className="mt-5 h-12 w-64" onClick={() => setOpenNewBook(true)}>
-            <div className="flex justify-center">
+        <div className="mx-auto mt-5 w-fit">
+          <Button className="px-[25px] py-3" onClick={() => setOpenNewBook(true)}>
+            <div className="flex justify-center gap-[5px]">
               <img src={IcAdd} />
-              <Body size="l" bold className="text-white">
+              <Body size="l" bold className="pr-[15px] text-white">
                 {t('bookList.newBook')}
               </Body>
             </div>
