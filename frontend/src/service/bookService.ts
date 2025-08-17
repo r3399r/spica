@@ -79,13 +79,7 @@ export const loadBookById = async (id: string) => {
     const books = await loadBookList(id);
 
     const savedBook = books?.find((v) => v.id === id);
-    if (
-      savedBook &&
-      savedBook.members !== null &&
-      savedBook.transactions !== null &&
-      savedBook.members !== null
-    )
-      return;
+    if (savedBook && savedBook.members !== null && savedBook.transactions !== null) return;
 
     const deviceId = getLocalDeviceId();
     const res = await bookEndpoint.getBookId(id, deviceId, { limit: '50', offset: '0' });
@@ -241,6 +235,33 @@ export const exportOverallPdf = async (id: string) => {
     await exportPdfEndpoint.patchExportPdfId(id, deviceId);
 
     await exportPdf('pdf-overall-content', `${savedBook.name}.pdf`);
+  } finally {
+    dispatch(finishWaiting());
+  }
+};
+
+export const loadQueryTransactions = async (id: string, searchQuery: string) => {
+  try {
+    dispatch(startWaiting());
+    const { books } = getState().book;
+    const { searchQueryChanged } = getState().ui;
+    const savedBook = books?.find((v) => v.id === id);
+
+    if (savedBook && !!savedBook.queriedTransactions && searchQueryChanged === false) return;
+
+    const deviceId = getLocalDeviceId();
+    const res = await bookEndpoint.getBookIdSearch(id, deviceId, { q: searchQuery });
+
+    const index = books?.findIndex((v) => v.id === id) ?? -1;
+    if (books === null || index === -1) throw new Error('unexpected');
+    else {
+      const tmp = [...books];
+      tmp[index] = {
+        ...tmp[index],
+        queriedTransactions: res.data,
+      };
+      dispatch(setBooks(tmp));
+    }
   } finally {
     dispatch(finishWaiting());
   }

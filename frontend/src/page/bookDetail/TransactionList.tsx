@@ -1,12 +1,14 @@
 import classNames from 'classnames';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import LoadMore from 'src/component/LoadMore';
 import Body from 'src/component/typography/Body';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
 import { Transaction, TransactionBill, TransactionTransfer } from 'src/model/backend/type/Book';
+import { RootState } from 'src/redux/store';
 import { aggregateTransactions } from 'src/service/bookService';
 import { bn, bnFormat } from 'src/util/bignumber';
 
@@ -15,10 +17,15 @@ const TransactionList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const book = useBook();
-  const transactions = useMemo(
-    () => (book?.transactions ? aggregateTransactions(book.id, book.transactions) : null),
-    [book],
-  );
+  const { searchQuery } = useSelector((root: RootState) => root.ui);
+  const transactions = useMemo(() => {
+    if (searchQuery === null && book?.transactions)
+      return aggregateTransactions(book.id, book.transactions);
+    else if (book?.queriedTransactions)
+      return aggregateTransactions(book.id, book.queriedTransactions);
+
+    return null;
+  }, [book, searchQuery]);
   const billNote = useCallback(
     (transaction: TransactionBill, currencyDisplay?: string) => {
       const { type, amount, former } = transaction;

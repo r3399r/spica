@@ -1,25 +1,27 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import Input from 'src/component/Input';
+import { useSelector } from 'react-redux';
+import FormInput from 'src/component/FormInput';
 import ModalForm from 'src/component/ModalForm';
 import { SearchForm } from 'src/model/Form';
+import { RootState } from 'src/redux/store';
 
 type Props = {
   open: boolean;
   handleClose: () => void;
-  defaultQuery?: string;
   onSearch: (query: string) => void;
 };
 
-const ModalSearch = ({ open, handleClose, defaultQuery, onSearch }: Props) => {
+const ModalSearch = ({ open, handleClose, onSearch }: Props) => {
   const { t } = useTranslation();
   const methods = useForm<SearchForm>();
+  const { searchQuery } = useSelector((root: RootState) => root.ui);
 
   useEffect(() => {
-    if (defaultQuery) methods.setValue('q', defaultQuery);
+    if (searchQuery) methods.setValue('q', searchQuery);
     else methods.reset();
-  }, [defaultQuery]);
+  }, [searchQuery]);
 
   const onClose = () => {
     handleClose();
@@ -41,7 +43,13 @@ const ModalSearch = ({ open, handleClose, defaultQuery, onSearch }: Props) => {
       confirmBtn={t('act.submit')}
     >
       <div className="mt-[10px] mb-5">
-        <Input placeholder={t('searchModal.placeholder')} autoFocus {...methods.register('q')} />
+        <FormInput
+          placeholder={t('searchModal.placeholder')}
+          autoFocus
+          name="q"
+          required
+          defaultValue={searchQuery ?? ''}
+        />
       </div>
     </ModalForm>
   );

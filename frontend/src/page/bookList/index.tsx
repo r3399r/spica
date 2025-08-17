@@ -17,7 +17,7 @@ import IcConfig from 'src/image/ic-config.svg';
 import IcSync from 'src/image/ic-sync.svg';
 import PicBookHero from 'src/image/pic-book-hero.svg';
 import { RootState } from 'src/redux/store';
-import { setTxPageScroll } from 'src/redux/uiSlice';
+import { setSearchQuery, setTxPageScroll } from 'src/redux/uiSlice';
 import { loadBookList } from 'src/service/bookService';
 import ModalNewBook from './ModalNewBook';
 
@@ -32,6 +32,7 @@ const BookList = () => {
 
   useEffect(() => {
     dispatch(setTxPageScroll(0));
+    dispatch(setSearchQuery(null));
   }, []);
 
   useEffect(() => {

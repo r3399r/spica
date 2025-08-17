@@ -12,6 +12,8 @@ export type UiState = {
   paymentList: BankAccount[] | null;
   bankList: Bank[] | null;
   emailBinded: string | null;
+  searchQuery: string | null;
+  searchQueryChanged: boolean;
 };
 
 const initialState: UiState = {
@@ -24,6 +26,8 @@ const initialState: UiState = {
   paymentList: null,
   bankList: null,
   emailBinded: null,
+  searchQuery: null,
+  searchQueryChanged: false,
 };
 
 export const uiSlice = createSlice({
@@ -60,6 +64,12 @@ export const uiSlice = createSlice({
     setEmailBinded: (state: UiState, action: PayloadAction<string | null>) => {
       state.emailBinded = action.payload;
     },
+    setSearchQuery: (state: UiState, action: PayloadAction<string | null>) => {
+      if (state.searchQuery !== action.payload) state.searchQueryChanged = true;
+      else state.searchQueryChanged = false;
+
+      state.searchQuery = action.payload;
+    },
   },
 });
 
@@ -74,6 +84,7 @@ export const {
   setPaymentList,
   setBankList,
   setEmailBinded,
+  setSearchQuery,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

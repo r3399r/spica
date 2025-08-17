@@ -14,8 +14,8 @@ import IcClose from 'src/image/ic-close.svg';
 import IcSearch from 'src/image/ic-search.svg';
 import IcSearchComponent from 'src/image/ic-search.svg?react';
 import { RootState } from 'src/redux/store';
-import { setTxPageScroll } from 'src/redux/uiSlice';
-import { loadBookById } from 'src/service/bookService';
+import { setSearchQuery, setTxPageScroll } from 'src/redux/uiSlice';
+import { loadBookById, loadQueryTransactions } from 'src/service/bookService';
 import BalanceCard from './BalanceCard';
 import MainCard from './MainCard';
 import ModalMember from './ModalMember';
@@ -29,10 +29,11 @@ const BookDetail = () => {
   const { a: isShared } = useQuery();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { txPageScroll, isDeviceReady } = useSelector((rootState: RootState) => rootState.ui);
+  const { txPageScroll, isDeviceReady, searchQuery } = useSelector(
+    (rootState: RootState) => rootState.ui,
+  );
   const [openMember, setOpenMember] = useState<boolean>(false);
   const [openSearch, setOpenSearch] = useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useState<string>();
   const book = useBook();
   const noMember = useMemo(() => book?.members?.length === 0, [book]);
   const showAd = useMemo(
@@ -49,6 +50,11 @@ const BookDetail = () => {
     if (id === undefined || !isDeviceReady) return;
     loadBookById(id).catch(() => navigate(Page.Book, { replace: true }));
   }, [id, isDeviceReady]);
+
+  useEffect(() => {
+    if (!id || searchQuery === null) return;
+    loadQueryTransactions(id, searchQuery);
+  }, [searchQuery]);
 
   useEffect(() => {
     if (!id) return;
@@ -91,7 +97,7 @@ const BookDetail = () => {
       </div>
       {book !== undefined && !noMember && (
         <div className="fixed bottom-0 h-[104px] w-full">
-          {searchQuery === undefined && (
+          {searchQuery === null && (
             <div className="relative mx-auto mt-5 w-fit">
               <Button
                 className="px-[25px] py-3"
@@ -106,12 +112,12 @@ const BookDetail = () => {
               </Button>
               <img
                 src={IcSearch}
-                className="absolute top-1/2 -right-[54px] -translate-y-1/2 cursor-pointer"
+                className="absolute top-1/2 -left-[54px] -translate-y-1/2 cursor-pointer"
                 onClick={() => setOpenSearch(true)}
               />
             </div>
           )}
-          {searchQuery !== undefined && (
+          {searchQuery !== null && (
             <div className="relative mx-auto mt-5 w-full max-w-[640px]">
               <div
                 className="mx-3 flex cursor-pointer gap-[10px] rounded-[10px] p-[10px] shadow-md"
@@ -123,7 +129,7 @@ const BookDetail = () => {
                   src={IcClose}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSearchQuery(undefined);
+                    dispatch(setSearchQuery(null));
                   }}
                 />
               </div>
@@ -134,8 +140,7 @@ const BookDetail = () => {
       <ModalMember open={openMember} handleClose={handleClose} />
       <ModalSearch
         open={openSearch}
-        defaultQuery={searchQuery}
-        onSearch={(q) => setSearchQuery(q)}
+        onSearch={(q) => dispatch(setSearchQuery(q))}
         handleClose={() => setOpenSearch(false)}
       />
     </>
