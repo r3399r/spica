@@ -7,14 +7,17 @@ export class BookEntity implements Book {
   @Generated('uuid')
   id!: string;
 
-  @Column({ type: 'text' })
-  code!: string;
+  @Column({ type: 'text', default: null })
+  code: string | null = null;
 
   @Column({ type: 'text' })
   name!: string;
 
   @Column({ type: 'text' })
   symbol!: string;
+
+  @Column({ type: 'bool', name: 'is_pro', default: false })
+  isPro: boolean = false;
 
   @Column({ type: 'timestamp', name: 'date_created', default: null })
   dateCreated!: string;

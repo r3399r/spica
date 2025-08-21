@@ -421,6 +421,53 @@ Resources:
                 }
               }
             },
+            "/api/book/subscribe": {
+              "post": {
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/postBookSubscribe"
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "headers": {
+                      "Access-Control-Allow-Origin": {
+                        "schema": {"type": "string"}
+                      }
+                    },
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/Empty"
+                        }
+                      }
+                    }
+                  }
+                },
+                "x-amazon-apigateway-request-validator" : "Validate body, query string parameters, and headers",
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
+                  "responses": {
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                      }
+                    }
+                  },
+                  "passthroughBehavior": "when_no_match",
+                  "contentHandling": "CONVERT_TO_TEXT"
+                }
+              }
+            },
             "/api/book/{id}": {
               "get": {
                 "parameters": [{
@@ -1622,6 +1669,54 @@ Resources:
                 }
               }
             },
+            "/api/book/{id}/code": {
+              "post": {
+                "parameters": [{
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "string"}
+                },{
+                  "name": "x-api-device",
+                  "in": "header",
+                  "required": true,
+                  "schema": {"type": "string"}
+                }],
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "headers": {
+                      "Access-Control-Allow-Origin": {
+                        "schema": {"type": "string"}
+                      }
+                    },
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/Empty"
+                        }
+                      }
+                    }
+                  }
+                },
+                "x-amazon-apigateway-request-validator" : "Validate query string parameters and headers",
+                "x-amazon-apigateway-integration": {
+                  "type": "aws_proxy",
+                  "httpMethod": "POST",
+                  "uri": !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Project}-${TargetEnvr}-api/invocations",
+                  "responses": {
+                    "default": {
+                      "statusCode": "200",
+                      "responseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'"
+                      }
+                    }
+                  },
+                  "passthroughBehavior": "when_no_match",
+                  "contentHandling": "CONVERT_TO_TEXT"
+                }
+              }
+            },
             "/api/dataSync": {
               "post": {
                 "parameters": [{
@@ -2002,6 +2097,14 @@ Resources:
                 "symbol": {"type": "string"}
               }
             },
+            "postBookSubscribe": {
+              "type": "object",
+              "properties": {
+                "verification_token": {"type": "string"},
+                "message": {"type": "string"}
+              },
+              "required": ["verification_token", "message"]
+            },
             "postBookId": {
               "type": "object",
               "properties": {
@@ -2256,6 +2359,7 @@ Resources:
           DB_PWD: !Sub '{{resolve:ssm:${TargetEnvr}-db-pwd:1}}'
           DB_USER: !Sub '{{resolve:ssm:${TargetEnvr}-db-user:1}}'
           LOGGER_QUEUE_URL: !Sub https://sqs.ap-east-2.amazonaws.com/${AWS::AccountId}/polaris-${TargetEnvr}-logger-queue
+          KOFI_VERIFICATION_TOKEN: 155ea8a8-cd45-4a8f-bc7d-29b64b79c286
   InvokePermissionLambdaApi:
     Type: AWS::Lambda::Permission
     DependsOn: [ServerlessApi, LambdaApiFunction]

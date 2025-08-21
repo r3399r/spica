@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { ObjectLiteral } from 'typeorm';
+import { FindOneOptions, ObjectLiteral } from 'typeorm';
 import { Book } from 'src/model/entity/Book';
 import { BookEntity } from 'src/model/entity/BookEntity';
 import { InternalServerError } from 'src/model/error';
@@ -38,5 +38,21 @@ export class BookAccess {
 
   public async hardDeleteById(id: string) {
     await this.executeDelete('id = :id', { id });
+  }
+
+  public async findOne(options?: FindOneOptions<Book>) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.findOne<Book>(BookEntity.name, {
+      ...options,
+    });
+  }
+
+  public async findOneOrFail(options?: FindOneOptions<Book>) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.findOneOrFail<Book>(BookEntity.name, {
+      ...options,
+    });
   }
 }

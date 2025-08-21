@@ -49,6 +49,7 @@ import {
   PutBookShowDeleteResponse,
   PutBookTransferResponse,
 } from 'src/model/api/Book';
+import { KofiEvent } from 'src/model/api/Kofi';
 import { Bill } from 'src/model/entity/Bill';
 import { BillEntity } from 'src/model/entity/BillEntity';
 import { BillShareEntity } from 'src/model/entity/BillShareEntity';
@@ -151,7 +152,6 @@ export class BookService {
   ): Promise<PostBookResponse> {
     const book = new BookEntity();
     book.name = data.bookName;
-    book.code = randomBase10(6);
     book.symbol = '$';
     const newBook = await this.bookAccess.save(book);
 
@@ -1459,5 +1459,43 @@ export class BookService {
       ...this.handleTransfer(transfers),
       ...this.handleBill(billShares),
     ].sort(compare('date', 'desc'));
+  }
+
+  public async subscribe(body: KofiEvent) {
+    console.log(JSON.stringify(body));
+    if (body.verification_token !== process.env.KOFI_VERIFICATION_TOKEN)
+      throw new BadRequestError('Invalid verification token');
+
+    const book = await this.bookAccess.findOne({
+      where: { code: body.message },
+    });
+    if (book === null) {
+      console.log('code of book not found by message:', body.message);
+
+      return;
+    }
+
+    book.isPro = true;
+    await this.bookAccess.save(book);
+  }
+
+  public async genCode(bookId: string, deviceId: string) {
+    await this.checkDeviceHasBook(deviceId, bookId);
+    const book = await this.bookAccess.findOneOrFail({ where: { id: bookId } });
+    if (book.code !== null) throw new BadRequestError('Code already exists');
+
+    let digit = 3;
+    let code = '';
+    let exists = true;
+
+    while (exists) {
+      code = randomBase10(digit);
+      const found = await this.bookAccess.findOne({ where: { code } });
+      exists = found !== null;
+      if (exists) digit++;
+    }
+
+    book.code = code;
+    await this.bookAccess.save(book);
   }
 }

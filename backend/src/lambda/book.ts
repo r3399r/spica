@@ -16,6 +16,7 @@ import {
   PutBookRequest,
   PutBookTransferRequest,
 } from 'src/model/api/Book';
+import { KofiEvent } from 'src/model/api/Kofi';
 import { BadRequestError, InternalServerError } from 'src/model/error';
 import { LambdaContext, LambdaEvent } from 'src/model/Lambda';
 
@@ -29,6 +30,8 @@ export async function book(lambdaEvent: LambdaEvent, _context?: LambdaContext) {
   switch (event.resource) {
     case '/api/book':
       return await apiBook();
+    case '/api/book/subscribe':
+      return await apiBookSubscribe();
     case '/api/book/{id}':
       return await apiBookId();
     case '/api/book/{id}/invite':
@@ -59,6 +62,8 @@ export async function book(lambdaEvent: LambdaEvent, _context?: LambdaContext) {
       return await apiBookIdTransferId();
     case '/api/book/{id}/search':
       return await apiBookIdSearch();
+    case '/api/book/{id}/code':
+      return await apiBookIdCode();
   }
   throw new InternalServerError('unknown resource');
 }
@@ -409,6 +414,43 @@ async function apiBookIdSearch() {
         event.pathParameters.id,
         event.headers['x-api-device'],
         event.queryStringParameters as GetBookIdSearchParams | null
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookSubscribe() {
+  if (event.body === null)
+    throw new BadRequestError('body should not be empty');
+  if (event.headers === null)
+    throw new BadRequestError('headers should not be empty');
+  if (event.headers['Content-Type'] !== 'application/x-www-form-urlencoded')
+    throw new BadRequestError(
+      'Content-Type should be application/x-www-form-urlencoded'
+    );
+  switch (event.httpMethod) {
+    case 'POST':
+      return service.subscribe(
+        JSON.parse(
+          Object.fromEntries(new URLSearchParams(event.body)).data
+        ) as KofiEvent
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdCode() {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  if (event.headers === null)
+    throw new BadRequestError('headers should not be empty');
+  switch (event.httpMethod) {
+    case 'POST':
+      return service.genCode(
+        event.pathParameters.id,
+        event.headers['x-api-device']
       );
     default:
       throw new InternalServerError('unknown http method');

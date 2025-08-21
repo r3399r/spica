@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { In, Raw } from 'typeorm';
+import { FindManyOptions, FindOneOptions, In, Raw } from 'typeorm';
 import { ViewBook } from 'src/model/viewEntity/ViewBook';
 import { ViewBookEntity } from 'src/model/viewEntity/ViewBookEntity';
 import { Database } from 'src/util/Database';
@@ -12,10 +12,24 @@ export class ViewBookAccess {
   @inject(Database)
   private readonly database!: Database;
 
-  public async findExpired() {
+  private async findOne(options?: FindOneOptions<ViewBook>) {
+    const qr = await this.database.getQueryRunner();
+
+    return await qr.manager.findOne<ViewBook>(ViewBookEntity.name, {
+      ...options,
+    });
+  }
+
+  private async find(options?: FindManyOptions<ViewBook>) {
     const qr = await this.database.getQueryRunner();
 
     return await qr.manager.find<ViewBook>(ViewBookEntity.name, {
+      ...options,
+    });
+  }
+
+  public async findExpired() {
+    return await this.find({
       where: {
         lastDateUpdated: Raw((alias) => `${alias} < NOW() - interval '1 year'`),
       },
@@ -23,17 +37,13 @@ export class ViewBookAccess {
   }
 
   public async findById(id: string) {
-    const qr = await this.database.getQueryRunner();
-
-    return await qr.manager.findOne<ViewBook>(ViewBookEntity.name, {
+    return await this.findOne({
       where: { id },
     });
   }
 
   public async findByIds(ids: string[]) {
-    const qr = await this.database.getQueryRunner();
-
-    return await qr.manager.find<ViewBook>(ViewBookEntity.name, {
+    return await this.find({
       where: { id: In(ids) },
     });
   }
