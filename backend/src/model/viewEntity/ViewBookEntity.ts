@@ -10,7 +10,7 @@ export class ViewBookEntity implements ViewBook {
   name!: string;
 
   @ViewColumn()
-  code!: string;
+  code!: string | null;
 
   @ViewColumn()
   symbol!: string;
