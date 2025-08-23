@@ -16,6 +16,7 @@ import Settlement from './page/settlement';
 import Share from './page/share';
 import SystemSetting from './page/systemSetting';
 import Transaction from './page/transaction';
+import Upgrade from './page/upgrade';
 
 const AppRoutes = () => (
   <Routes>
@@ -27,6 +28,7 @@ const AppRoutes = () => (
     <Route path={`${Page.Setting}/sync`} element={<DataSync />} />
     <Route path={`${Page.Setting}/a2hs`} element={<Add2HomeScreen />} />
     <Route path={`${Page.Book}/:id`} element={<BookDetail />} />
+    <Route path={`${Page.Book}/:id/upgrade`} element={<Upgrade />} />
     <Route path={`${Page.Book}/:id/tx`} element={<EidtTransaction />} />
     <Route path={`${Page.Book}/:id/tx/:tid`} element={<Transaction />} />
     <Route path={`${Page.Book}/:id/member`} element={<Member />} />

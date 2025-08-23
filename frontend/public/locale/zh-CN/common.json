@@ -231,10 +231,29 @@
     "minimumPaymentMode": "每人最多还款一次",
     "intuitionMode": "最少还款次数"
   },
+  "upgrade": {
+    "back": "Back",
+    "head": "Upgrade",
+    "hintDesc": "贊助我們 (至少 $1 USD)，升級此帳本，可以取得下列功能：",
+    "hintHead": "在這本帳本中",
+    "hint1": "無廣告",
+    "hint2": "帳本可永遠存在，不受停止更新1年後被系統移除的限制",
+    "hint3": "支援搜尋功能",
+    "warningHead": "注意事項",
+    "warningDesc": "以上功能僅限在單一帳本之中，因此請在訊息欄中填入帳本的ID，我們才能準確找到帳本進行升級作業！",
+    "codeHead": "帳本「ss」的ID",
+    "codeHint1": "若轉帳之後帳本未升級，或是忘記填寫帳本ID，請至",
+    "codeHint2": "聯絡我們-升級帳本問題",
+    "codeHint3": "告知我們。",
+    "goToUpgrade": "前往升級"
+  },
   "memberModal": {
     "head": "选择你的暱称",
     "hint": "也可之后再前往「帐本成员」新增属于你的暱称",
     "skip": "跳过"
+  },
+  "searchModal": {
+    "placeholder": "Search"
   },
   "donateModal": {
     "title": "支持我们",
