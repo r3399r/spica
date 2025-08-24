@@ -266,3 +266,26 @@ export const loadQueryTransactions = async (id: string, searchQuery: string) => 
     dispatch(finishWaiting());
   }
 };
+
+export const generateUpgradeCode = async (id: string) => {
+  try {
+    dispatch(startWaiting());
+
+    const deviceId = getLocalDeviceId();
+    const res = await bookEndpoint.postBookIdCode(id, deviceId);
+
+    const { books } = getState().book;
+    const index = books?.findIndex((v) => v.id === id) ?? -1;
+    if (books === null || index === -1) throw new Error('unexpected');
+    else {
+      const tmp = [...books];
+      tmp[index] = {
+        ...tmp[index],
+        code: res.data.code,
+      };
+      dispatch(setBooks(tmp));
+    }
+  } finally {
+    dispatch(finishWaiting());
+  }
+};

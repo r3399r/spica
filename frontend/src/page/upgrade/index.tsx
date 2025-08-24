@@ -1,14 +1,36 @@
+import { useEffect } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard-ts';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'src/component/Button';
 import NavbarVanilla from 'src/component/NavbarVanilla';
 import Body from 'src/component/typography/Body';
 import H2 from 'src/component/typography/H2';
 import H4 from 'src/component/typography/H4';
+import { Page } from 'src/constant/Page';
+import useBook from 'src/hook/useBook';
 import IcCopy from 'src/image/ic-copy.svg';
 import IcWarning from 'src/image/ic-warning.svg';
+import { setSnackbarMessage } from 'src/redux/uiSlice';
+import { generateUpgradeCode, loadBookById } from 'src/service/bookService';
 
 const Upgrade = () => {
+  const { id } = useParams();
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const book = useBook();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (id === undefined) return;
+    loadBookById(id).catch(() => navigate(Page.Book, { replace: true }));
+  }, [id]);
+
+  useEffect(() => {
+    if (!book) return;
+    if (book.code === null) generateUpgradeCode(book.id);
+  }, [book?.code]);
 
   return (
     <div className="mx-[15px] max-w-[640px] sm:mx-auto">
@@ -19,7 +41,7 @@ const Upgrade = () => {
         <Body size="l" className="mt-4">
           {t('upgrade.hintHead')}
         </Body>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-base">
+        <ul className="mt-2 list-disc space-y-1 pl-5 text-base font-bold">
           <li>{t('upgrade.hint1')}</li>
           <li>{t('upgrade.hint2')}</li>
           <li>{t('upgrade.hint3')}</li>
@@ -32,11 +54,16 @@ const Upgrade = () => {
           <Body size="l" className="mt-[10px]">
             {t('upgrade.warningDesc')}
           </Body>
-          <Body className="mt-[26px]">{t('upgrade.codeHead')}</Body>
-          <div className="mt-1 mb-4 flex gap-[5px] rounded-sm border border-navy-900/30 p-2">
-            <Body className="flex-1 text-navy-300">aa</Body>
-            <img src={IcCopy} className="cursor-pointer" />
-          </div>
+          <Body className="mt-[26px]">{t('upgrade.codeHead', { name: book?.name })}</Body>
+          <CopyToClipboard
+            text={book?.code ?? ''}
+            onCopy={() => dispatch(setSnackbarMessage(t('desc.copy')))}
+          >
+            <div className="mt-1 mb-4 flex cursor-pointer gap-[5px] rounded-sm border border-navy-900/30 p-2">
+              <Body className="flex-1 text-navy-300">{book?.code}</Body>
+              <img src={IcCopy} />
+            </div>
+          </CopyToClipboard>
         </div>
         <Body className="mt-4 mb-5 text-navy-300">
           {t('upgrade.codeHint1')}{' '}

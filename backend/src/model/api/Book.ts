@@ -115,3 +115,5 @@ export type GetBookIdSearchParams = {
 };
 
 export type GetBookIdSearchResponse = Transaction[];
+
+export type PostBookIdCodeResponse = Book;

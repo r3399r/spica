@@ -29,6 +29,7 @@ import {
   PostBookBillResponse,
   PostBookCurrencyRequest,
   PostBookCurrencyResponse,
+  PostBookIdCodeResponse,
   PostBookIdInviteRequest,
   PostBookIdRequest,
   PostBookMemberRequest,
@@ -1479,10 +1480,13 @@ export class BookService {
     await this.bookAccess.save(book);
   }
 
-  public async genCode(bookId: string, deviceId: string) {
+  public async genCode(
+    bookId: string,
+    deviceId: string
+  ): Promise<PostBookIdCodeResponse> {
     await this.checkDeviceHasBook(deviceId, bookId);
     const book = await this.bookAccess.findOneOrFail({ where: { id: bookId } });
-    if (book.code !== null) throw new BadRequestError('Code already exists');
+    if (book.code !== null) return book;
 
     let digit = 3;
     let code = '';
@@ -1497,5 +1501,7 @@ export class BookService {
 
     book.code = code;
     await this.bookAccess.save(book);
+
+    return book;
   }
 }

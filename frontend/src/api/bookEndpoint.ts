@@ -13,6 +13,7 @@ import {
   PostBookBillResponse,
   PostBookCurrencyRequest,
   PostBookCurrencyResponse,
+  PostBookIdCodeResponse,
   PostBookIdInviteRequest,
   PostBookIdRequest,
   PostBookMemberRequest,
@@ -334,6 +335,17 @@ const getBookIdSearch = async (id: string, deviceId: string, params: GetBookIdSe
   }
 };
 
+const postBookIdCode = async (id: string, deviceId: string) => {
+  try {
+    return await http.post<PostBookIdCodeResponse>(`book/${id}/code`, {
+      headers: { 'x-api-device': deviceId },
+    });
+  } catch (e) {
+    alert(t('error.default'));
+    throw e;
+  }
+};
+
 export default {
   getBook,
   postBook,
@@ -359,4 +371,5 @@ export default {
   deleteBookIdCurrency,
   putBookIdCurrencyPrimary,
   getBookIdSearch,
+  postBookIdCode,
 };
