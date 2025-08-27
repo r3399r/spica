@@ -10,6 +10,7 @@ export type SavedBook = Omit<BookDetail, 'members' | 'transactions' | 'currencie
   queriedTransactions?: Transaction[];
   currencies: Currency[] | null;
   txCount: number | null;
+  isPro: boolean;
 };
 
 export type Detail = {

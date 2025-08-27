@@ -3,6 +3,7 @@ export type ViewBook = {
   name: string;
   code: string | null;
   symbol: string;
+  isPro: boolean;
   dateCreated: string | null;
   lastDateUpdated: string;
 };

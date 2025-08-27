@@ -206,6 +206,7 @@ export class BookService {
       name: deviceBook.name,
       code: deviceBook.code,
       symbol: deviceBook.symbol,
+      isPro: deviceBook.isPro,
       dateCreated: deviceBook.dateCreated,
       lastDateUpdated: deviceBook.lastDateUpdated,
     };

@@ -15,6 +15,9 @@ export class ViewBookEntity implements ViewBook {
   @ViewColumn()
   symbol!: string;
 
+  @ViewColumn({ name: 'is_pro' })
+  isPro!: boolean;
+
   @ViewColumn({ name: 'date_created' })
   dateCreated!: string;
 

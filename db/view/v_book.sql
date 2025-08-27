@@ -4,6 +4,7 @@ select
 	b.name,
 	b.code,
 	b.symbol,
+	b.is_pro,
 	b.date_created,
 	greatest(b.date_created, b.date_updated, tmp2.tmp_date_created, tmp_date_updated) as last_date_updated
 from

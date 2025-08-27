@@ -77,7 +77,7 @@ const BookList = () => {
                 <div
                   key={v.id}
                   className={classNames(
-                    'min-h-[100px] w-[calc(50%-5px)] cursor-pointer rounded-[15px] px-[10px] pt-[10px] pb-2 sm:w-[140px]',
+                    'relative min-h-[100px] w-[calc(50%-5px)] cursor-pointer rounded-[15px] px-[10px] pt-[10px] pb-2 sm:w-[140px]',
                     {
                       'bg-beige-300': i % 3 === 0,
                       'bg-green-300': i % 3 === 1,
@@ -90,6 +90,14 @@ const BookList = () => {
                     <img src={IcBook} />
                   </div>
                   <Body className="break-words text-navy-700">{v.name}</Body>
+                  {v.isPro && (
+                    <Body
+                      size="s"
+                      className="absolute top-0 right-0 rounded-tr-[15px] rounded-bl-[22px] bg-teal-500 px-2 py-1 text-white"
+                    >
+                      PRO
+                    </Body>
+                  )}
                 </div>
               ))}
             </div>

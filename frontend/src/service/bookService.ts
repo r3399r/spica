@@ -28,6 +28,7 @@ export const loadBookList = async (id?: string) => {
         name: v.name,
         code: v.code,
         symbol: v.symbol,
+        isPro: v.isPro,
         showDelete: v.showDelete,
         dateCreated: v.dateCreated,
         lastDateUpdated: v.lastDateUpdated,

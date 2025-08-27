@@ -21,6 +21,9 @@ export class ViewDeviceBookEntity implements ViewDeviceBook {
   @ViewColumn()
   symbol!: string;
 
+  @ViewColumn({ name: 'is_pro' })
+  isPro!: boolean;
+
   @ViewColumn({ name: 'show_delete' })
   showDelete!: boolean;
 
