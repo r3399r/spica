@@ -263,6 +263,9 @@
     "paypal": "Paypal",
     "ecpay": "ECPay"
   },
+  "adsense": {
+    "remove": "Remove Ads"
+  },
   "error": {
     "default": "Something went wrong, please try again later or contact us to fix it.",
     "tooFrequent": "We've sent you the code. Please check your email or try again 10 minutes later.",

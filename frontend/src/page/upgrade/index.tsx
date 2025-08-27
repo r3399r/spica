@@ -32,6 +32,10 @@ const Upgrade = () => {
     if (book.code === null) generateUpgradeCode(book.id);
   }, [book?.code]);
 
+  useEffect(() => {
+    if (book?.isPro === true) navigate(`${Page.Book}/${book?.id}`);
+  }, [book?.isPro]);
+
   return (
     <div className="mx-[15px] max-w-[640px] sm:mx-auto">
       <NavbarVanilla text={t('upgrade.back')} />
@@ -70,7 +74,12 @@ const Upgrade = () => {
           <span className="cursor-pointer font-bold text-teal-500">{t('upgrade.codeHint2')}</span>{' '}
           {t('upgrade.codeHint3')}
         </Body>
-        <Button appearance="default">{t('upgrade.goToUpgrade')}</Button>
+        <Button
+          appearance="default"
+          onClick={() => window.open('https://ko-fi.com/bunnybill', '_blank')}
+        >
+          {t('upgrade.goToUpgrade')}
+        </Button>
       </div>
     </div>
   );

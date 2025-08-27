@@ -41,7 +41,8 @@ const BookDetail = () => {
       book?.members &&
       book.members.length > 0 &&
       book?.transactions &&
-      book.transactions.length > 0,
+      book.transactions.length > 0 &&
+      book?.isPro === false,
     [book],
   );
   const ref = useRef<HTMLDivElement>(null);
@@ -73,6 +74,11 @@ const BookDetail = () => {
     setOpenMember(false);
   };
 
+  const onSearchClick = () => {
+    if (book?.isPro) setOpenSearch(true);
+    else navigate(`${Page.Book}/${book?.id}/upgrade`);
+  };
+
   return (
     <>
       <div
@@ -86,7 +92,7 @@ const BookDetail = () => {
           <Navbar />
           <MainCard />
           <BalanceCard />
-          {showAd && <AdSense />}
+          {showAd && <AdSense onClick={() => navigate(`${Page.Book}/${book?.id}/upgrade`)} />}
           <TransactionList />
           {noMember && (
             <Body className="mt-[30px] px-[46px] text-center text-navy-300">
@@ -113,7 +119,7 @@ const BookDetail = () => {
               <img
                 src={IcSearch}
                 className="absolute top-1/2 -left-[54px] -translate-y-1/2 cursor-pointer"
-                onClick={() => setOpenSearch(true)}
+                onClick={onSearchClick}
               />
             </div>
           )}
