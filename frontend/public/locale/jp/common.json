@@ -119,7 +119,9 @@
     "systemDeleteDate": "帳簿削除された日付",
     "systemDeleteHint": "この帳簿が 1 年間更新されなかった場合、この帳簿のすべてのデータを自動的に削除します。",
     "rename": "名の変更",
-    "deleteHint": "ここで削除できるのはこのデバイス上の記録のみであり、他のデバイス上の記録は影響を受けません。"
+    "deleteHint": "ここで削除できるのはこのデバイス上の記録のみであり、他のデバイス上の記録は影響を受けません。",
+    "buttonUpgrade": "Permanatly preserve",
+    "permanent": "Permanently Preserved"
   },
   "currencySetting": {
     "back": "戻る",
@@ -231,6 +233,22 @@
     "minimumPaymentMode": "At most one payment per person",
     "intuitionMode": "最低返済回数"
   },
+  "upgrade": {
+    "back": "Back",
+    "head": "Upgrade",
+    "hintDesc": "Donate to us (at least $1 USD) to upgrade this account and gain access to the following features:",
+    "hintHead": "In this account",
+    "hint1": "No ads",
+    "hint2": "The account will exist forever and will not be removed by the system after 1 year of inactivity",
+    "hint3": "Supports search functionality",
+    "warningHead": "Notes",
+    "warningDesc": "The above features are limited to a single account. Please enter your account's unique code in the message field so we can accurately locate the account for the upgrade!",
+    "codeHead": "Unique code for account \"{{name}}\"",
+    "codeHint1": "If your account hasn't been upgraded after the transfer, or if you forgot to enter your account ID, please go to",
+    "codeHint2": "Contact Us - Account Upgrade Issues",
+    "codeHint3": "to let us know.",
+    "goToUpgrade": "Upgrade"
+  },
   "memberModal": {
     "head": "ニックネームを選ぶ",
     "hint": "後で「帳簿メンバー」にニックネームを追加することもできます。",
@@ -244,6 +262,9 @@
     "note": "Bunny Billをご利用いただきありがとうございます。製品を気に入っていただけたら、ご支援でサービス向上につながります。",
     "paypal": "Paypal",
     "ecpay": "ECPay"
+  },
+  "adsense": {
+    "remove": "Remove Ads"
   },
   "error": {
     "default": "エラーが発生しました。再試行してください。状況が続く場合は、お問い合わせください、ありがとうございます。",
