@@ -31,6 +31,7 @@ export class ViewBookAccess {
   public async findExpired() {
     return await this.find({
       where: {
+        isPro: false,
         lastDateUpdated: Raw((alias) => `${alias} < NOW() - interval '1 year'`),
       },
     });
