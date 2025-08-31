@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard-ts';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -8,6 +8,7 @@ import NavbarVanilla from 'src/component/NavbarVanilla';
 import Body from 'src/component/typography/Body';
 import H2 from 'src/component/typography/H2';
 import H4 from 'src/component/typography/H4';
+import { Language as Lang } from 'src/constant/Language';
 import { Page } from 'src/constant/Page';
 import useBook from 'src/hook/useBook';
 import IcCopy from 'src/image/ic-copy.svg';
@@ -17,10 +18,11 @@ import { generateUpgradeCode, loadBookById } from 'src/service/bookService';
 
 const Upgrade = () => {
   const { id } = useParams();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const book = useBook();
   const dispatch = useDispatch();
+  const href = useMemo(() => Lang.find((v) => v.code === i18n.language)?.form, [i18n.language]);
 
   useEffect(() => {
     if (id === undefined) return;
@@ -71,7 +73,9 @@ const Upgrade = () => {
         </div>
         <Body className="mt-4 mb-5 text-navy-300">
           {t('upgrade.codeHint1')}{' '}
-          <span className="cursor-pointer font-bold text-teal-500">{t('upgrade.codeHint2')}</span>{' '}
+          <a className="font-bold text-teal-500" target="_blank" href={href} rel="noreferrer">
+            {t('upgrade.codeHint2')}
+          </a>{' '}
           {t('upgrade.codeHint3')}
         </Body>
         <Button

@@ -244,9 +244,9 @@
     "warningHead": "Notes",
     "warningDesc": "The above features are limited to a single account. Please enter your account's unique code in the message field so we can accurately locate the account for the upgrade!",
     "codeHead": "Unique code for account \"{{name}}\"",
-    "codeHint1": "If your account hasn't been upgraded after the transfer, or if you forgot to enter your account ID, please go to",
-    "codeHint2": "Contact Us - Account Upgrade Issues",
-    "codeHint3": "to let us know.",
+    "codeHint1": "If your account hasn't been upgraded after the payment, or if you forgot to enter your account ID, please go to",
+    "codeHint2": "Contact Us - Encountered Problems",
+    "codeHint3": "to let us know. We would get back to you as soon as possible.",
     "goToUpgrade": "Upgrade"
   },
   "memberModal": {

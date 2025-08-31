@@ -244,9 +244,9 @@
     "warningHead": "注意事项",
     "warningDesc": "以上功能仅限在单一帐本之中，因此请在讯息栏中填入帐本的专属码，我们才能准确找到帐本进行升级作业！",
     "codeHead": "帐本「{{name}}」的专属码",
-    "codeHint1": "若转帐之后帐本未升级，或是忘记填写帐本ID，请至",
-    "codeHint2": "联络我们-升级帐本问题",
-    "codeHint3": "告知我们。",
+    "codeHint1": "若付款之后帐本未升级，或是忘记填写帐本ID，请至",
+    "codeHint2": "联络我们-遇到使用上的问题",
+    "codeHint3": "告知我们，我们会儘速与您联络。",
     "goToUpgrade": "升级"
   },
   "memberModal": {

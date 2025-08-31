@@ -244,9 +244,9 @@
     "warningHead": "注意事項",
     "warningDesc": "以上功能僅限在單一帳本之中，因此請在訊息欄中填入帳本的專屬碼，我們才能準確找到帳本進行升級作業！",
     "codeHead": "帳本「{{name}}」的專屬碼",
-    "codeHint1": "若轉帳之後帳本未升級，或是忘記填寫帳本ID，請至",
-    "codeHint2": "聯絡我們-升級帳本問題",
-    "codeHint3": "告知我們。",
+    "codeHint1": "若付款之後帳本未升級，或是忘記填寫帳本ID，請至",
+    "codeHint2": "聯絡我們-遇到使用上的問題",
+    "codeHint3": "告知我們，我們會儘速與您聯絡。",
     "goToUpgrade": "升級"
   },
   "memberModal": {
