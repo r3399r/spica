@@ -12,40 +12,35 @@ import { exportPdf } from 'src/util/pdfHelper';
 
 export const loadBookList = async (id?: string) => {
   const { books } = getState().book;
-  const loading = books?.find((v) => v.id === id) === undefined;
-  if (id && books !== null && !loading) return books;
-  try {
-    if (loading) dispatch(startWaiting());
+  const hasSavedBook = books?.find((v) => v.id === id) !== undefined;
+  if (id && books !== null && hasSavedBook) return books;
 
-    const deviceId = getLocalDeviceId();
+  const deviceId = getLocalDeviceId();
 
-    const res = await bookEndpoint.getBook(deviceId);
-    const updatedBooks = res.data.map((v) => {
-      const savedBook = books?.find((o) => o.id === v.bookId);
+  const res = await bookEndpoint.getBook(deviceId);
+  const updatedBooks = res.data.map((v) => {
+    const savedBook = books?.find((o) => o.id === v.bookId);
 
-      return {
-        id: v.bookId,
-        name: v.name,
-        code: v.code,
-        symbol: v.symbol,
-        isPro: v.isPro,
-        showDelete: v.showDelete,
-        dateCreated: v.dateCreated,
-        lastDateUpdated: v.lastDateUpdated,
-        members: null,
-        transactions: null,
-        currencies: null,
-        txCount: null,
-        ...savedBook,
-      };
-    });
+    return {
+      id: v.bookId,
+      name: v.name,
+      code: v.code,
+      symbol: v.symbol,
+      isPro: v.isPro,
+      showDelete: v.showDelete,
+      dateCreated: v.dateCreated,
+      lastDateUpdated: v.lastDateUpdated,
+      members: null,
+      transactions: null,
+      currencies: null,
+      txCount: null,
+      ...savedBook,
+    };
+  });
 
-    dispatch(setBooks(updatedBooks));
+  dispatch(setBooks(updatedBooks));
 
-    return updatedBooks;
-  } finally {
-    if (loading) dispatch(finishWaiting());
-  }
+  return updatedBooks;
 };
 
 export const createBook = async (data: PostBookRequest) => {
