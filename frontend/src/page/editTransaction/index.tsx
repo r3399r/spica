@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetBillFormData, resetTransferFormData, setTxFormType } from 'src/redux/formSlice';
+import {
+  resetBillFormData,
+  resetInvolvedMemberIds,
+  resetTransferFormData,
+  setTxFormType,
+} from 'src/redux/formSlice';
 import { RootState } from 'src/redux/store';
 import { setTxState } from 'src/redux/uiSlice';
 import BillFormer from './billFormer';
@@ -15,6 +20,7 @@ const EidtTransaction = () => {
     () => () => {
       dispatch(resetBillFormData());
       dispatch(resetTransferFormData());
+      dispatch(resetInvolvedMemberIds());
       dispatch(setTxState('main'));
       dispatch(setTxFormType('bill'));
     },

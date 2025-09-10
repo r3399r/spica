@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import ModalVanilla from 'src/component/ModalVanilla';
+import Body from 'src/component/typography/Body';
 import { Member } from 'src/model/backend/entity/Member';
 import { deleteMember } from 'src/service/memberService';
 
@@ -25,7 +26,7 @@ const ModalDeleteMember = ({ open, handleClose, target }: Props) => {
       deleteBtn={t('act.delete')}
       onDelete={onDelete}
     >
-      <div>{t('member.deleteHint', { nickname: target?.nickname })}</div>
+      <Body size="l">{t('member.deleteHint', { nickname: target?.nickname })}</Body>
     </ModalVanilla>
   );
 };

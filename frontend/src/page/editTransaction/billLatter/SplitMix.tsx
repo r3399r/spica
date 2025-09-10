@@ -17,9 +17,14 @@ type Props = { mode: 'weight' | 'pct' };
 
 const SplitMixed = ({ mode }: Props) => {
   const { t } = useTranslation();
-  const { billFormData } = useSelector((rootState: RootState) => rootState.form);
+  const { billFormData, involvedMemberIds } = useSelector((rootState: RootState) => rootState.form);
   const book = useBook();
-  const members = useMemo(() => book?.members ?? [], [book]);
+  const members = useMemo(
+    () =>
+      book?.members?.filter((v) => v.visible === true || new Set(involvedMemberIds).has(v.id)) ??
+      [],
+    [book, involvedMemberIds],
+  );
   const [input, setInput] = useState<MemberLatter[]>([]);
   const [targetId, setTargetId] = useState<string>();
   const symbol = useMemo(

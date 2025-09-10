@@ -25,10 +25,8 @@ const BookList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {
-    book: { books },
-    ui: { isDeviceReady },
-  } = useSelector((rootState: RootState) => rootState);
+  const { books } = useSelector((rootState: RootState) => rootState.book);
+  const { isDeviceReady } = useSelector((rootState: RootState) => rootState.ui);
   const [openNewBook, setOpenNewBook] = useState<boolean>(false);
   const [openDonate, setOpenDonate] = useState<boolean>(false);
 

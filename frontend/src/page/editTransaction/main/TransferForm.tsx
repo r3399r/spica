@@ -16,10 +16,17 @@ import MemberSelectModal from './MemberSelectModal';
 const TransferForm = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { transferFormData } = useSelector((rootState: RootState) => rootState.form);
+  const { transferFormData, involvedMemberIds } = useSelector(
+    (rootState: RootState) => rootState.form,
+  );
   const { isDeviceReady } = useSelector((rootState: RootState) => rootState.ui);
   const book = useBook();
-  const members = useMemo(() => book?.members ?? [], [book]);
+  const members = useMemo(
+    () =>
+      book?.members?.filter((v) => v.visible === true || new Set(involvedMemberIds).has(v.id)) ??
+      [],
+    [book, involvedMemberIds],
+  );
   const [side, setSide] = useState<'src' | 'dst'>();
   const self = useMemo(() => {
     if (!members || !isDeviceReady) return null;

@@ -25,9 +25,14 @@ const BillLatter = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [tab, setTab] = useState<'weight' | 'pct' | 'pm'>('weight');
-  const { billFormData } = useSelector((rootState: RootState) => rootState.form);
+  const { billFormData, involvedMemberIds } = useSelector((rootState: RootState) => rootState.form);
   const book = useBook();
-  const members = useMemo(() => book?.members ?? [], [book]);
+  const members = useMemo(
+    () =>
+      book?.members?.filter((v) => v.visible === true || new Set(involvedMemberIds).has(v.id)) ??
+      [],
+    [book, involvedMemberIds],
+  );
   const initialLatter = useMemo(() => billFormData.latter, []);
   const remaining = useMemo(
     () => remainingAmount(billFormData.amount ?? 0, billFormData.latter ?? []),

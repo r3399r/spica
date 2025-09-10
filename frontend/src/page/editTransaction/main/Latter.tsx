@@ -15,9 +15,12 @@ import { bn } from 'src/util/bignumber';
 const Latter = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { billFormData } = useSelector((rootState: RootState) => rootState.form);
+  const { billFormData, involvedMemberIds } = useSelector((rootState: RootState) => rootState.form);
   const book = useBook();
-  const members = useMemo(() => book?.members, [book]);
+  const members = useMemo(
+    () => book?.members?.filter((v) => v.visible === true || new Set(involvedMemberIds).has(v.id)),
+    [book, involvedMemberIds],
+  );
   const isAllShare =
     members?.length ===
     billFormData.latter?.filter((v) => v.method === ShareMethod.Weight && v.value === 1).length;

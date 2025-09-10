@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 import importPlugin from 'eslint-plugin-import';
 
 export default tseslint.config(
-  { ignores: ['dist', 'src/model/backend/*'] },
+  { ignores: ['dist', 'dev-dist', 'src/model/backend/*'] },
   {
     extends: [
       js.configs.recommended,

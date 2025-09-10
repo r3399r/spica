@@ -6,6 +6,7 @@ export type FormState = {
   txFormType: 'bill' | 'transfer';
   billFormData: Partial<BillForm>;
   transferFormData: Partial<TransferForm>;
+  involvedMemberIds: string[];
 };
 
 const initialState: FormState = {
@@ -14,6 +15,7 @@ const initialState: FormState = {
     type: BillType.Out,
   },
   transferFormData: {},
+  involvedMemberIds: [],
 };
 
 export const formSlice = createSlice({
@@ -35,6 +37,12 @@ export const formSlice = createSlice({
     resetTransferFormData: (state: FormState) => {
       state.transferFormData = initialState.transferFormData;
     },
+    setInvolvedMemberIds: (state: FormState, action: PayloadAction<string[]>) => {
+      state.involvedMemberIds = Array.from(new Set(action.payload));
+    },
+    resetInvolvedMemberIds: (state: FormState) => {
+      state.involvedMemberIds = [];
+    },
   },
 });
 
@@ -44,6 +52,8 @@ export const {
   resetBillFormData,
   saveTransferFormData,
   resetTransferFormData,
+  setInvolvedMemberIds,
+  resetInvolvedMemberIds,
 } = formSlice.actions;
 
 export default formSlice.reducer;

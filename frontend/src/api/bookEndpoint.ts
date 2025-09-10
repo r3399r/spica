@@ -207,6 +207,17 @@ const putBookIdMemberSelf = async (id: string, mid: string, deviceId: string) =>
   }
 };
 
+const putBookIdMemberVisible = async (id: string, mid: string, deviceId: string) => {
+  try {
+    return await http.put<PutBookMemberResponse>(`book/${id}/member/${mid}/visible`, {
+      headers: { 'x-api-device': deviceId },
+    });
+  } catch (e) {
+    alert(t('error.default'));
+    throw e;
+  }
+};
+
 const putBookIdShowDelete = async (id: string, deviceId: string) => {
   try {
     return await http.put<PutBookShowDeleteResponse>(`book/${id}/showDelete`, {
@@ -324,6 +335,7 @@ export default {
   putBookIdMember,
   deleteBookIdMember,
   putBookIdMemberSelf,
+  putBookIdMemberVisible,
   putBookIdShowDelete,
   postBookIdTransfer,
   putBookIdTransfer,

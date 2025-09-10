@@ -48,6 +48,8 @@ export async function book(lambdaEvent: LambdaEvent, _context?: LambdaContext) {
       return await apiBookIdMemberId();
     case '/api/book/{id}/member/{mid}/self':
       return await apiBookIdMemberIdSelf();
+    case '/api/book/{id}/member/{mid}/visible':
+      return await apiBookIdMemberIdVisible();
     case '/api/book/{id}/showDelete':
       return await apiBookIdShowDelete();
     case '/api/book/{id}/transfer':
@@ -304,6 +306,23 @@ async function apiBookIdMemberIdSelf() {
   switch (event.httpMethod) {
     case 'PUT':
       return service.reviseMemberSelf(
+        event.pathParameters.id,
+        event.pathParameters.mid,
+        event.headers['x-api-device']
+      );
+    default:
+      throw new InternalServerError('unknown http method');
+  }
+}
+
+async function apiBookIdMemberIdVisible() {
+  if (event.pathParameters === null)
+    throw new BadRequestError('pathParameters should not be empty');
+  if (event.headers === null)
+    throw new BadRequestError('headers should not be empty');
+  switch (event.httpMethod) {
+    case 'PUT':
+      return service.reviseMemberVisible(
         event.pathParameters.id,
         event.pathParameters.mid,
         event.headers['x-api-device']

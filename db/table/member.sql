@@ -6,6 +6,7 @@ CREATE TABLE member (
 	total FLOAT NOT NULL,
 	balance FLOAT NOT NULL,
 	deletable BOOLEAN NOT NULL,
+	visible BOOLEAN NOT NULL DEFAULT TRUE,
 	date_created TIMESTAMP NULL,
 	date_updated TIMESTAMP NULL,
 	PRIMARY KEY (id ASC),

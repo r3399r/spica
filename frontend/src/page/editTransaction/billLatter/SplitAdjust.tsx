@@ -13,9 +13,14 @@ import { bn } from 'src/util/bignumber';
 
 const SplitAdjust = () => {
   const { t } = useTranslation();
-  const { billFormData } = useSelector((rootState: RootState) => rootState.form);
+  const { billFormData, involvedMemberIds } = useSelector((rootState: RootState) => rootState.form);
   const book = useBook();
-  const members = useMemo(() => book?.members ?? [], [book]);
+  const members = useMemo(
+    () =>
+      book?.members?.filter((v) => v.visible === true || new Set(involvedMemberIds).has(v.id)) ??
+      [],
+    [book, involvedMemberIds],
+  );
   const [input, setInput] = useState<MemberAdjust[]>([]);
   const symbol = useMemo(
     () => book?.currencies?.find((v) => v.id === billFormData.currencyId)?.symbol,

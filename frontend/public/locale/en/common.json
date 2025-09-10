@@ -164,6 +164,8 @@
     "inputEmail": "Enter friend's Email",
     "edit": "Edit Profile",
     "deleteHint": "Delete \"{{nickname}}\"?",
+    "setVisibleHint": "Set \"{{nickname}}\" back as visible?",
+    "setInvisibleHint": "Set \"{{nickname}}\" as invisible? An insivible member will not be shown in the option of sharer. You can set it back anytime.",
     "self": "Me",
     "selfHint1": "set \"{{nickname}}\" as me",
     "selfHint2": "\"{{nickname}}\" is not me",
@@ -225,8 +227,9 @@
     "shouldPay": "Should pay",
     "isCleared": "All bills are cleared",
     "switch": "Switch",
-    "minimumPaymentMode": "Minimum times of payment",
-    "intuitionMode": "Only pay for those who owe"
+    "checkHint": "This is an optimized debt relationship, where you may be paying back someone you don't owe money to directly. There are many ways to settle a debt, but here are two common methods.",
+    "minimumPaymentMode": "At most one payment per person",
+    "intuitionMode": "Minimum times of payment"
   },
   "memberModal": {
     "head": "Select your nickname",

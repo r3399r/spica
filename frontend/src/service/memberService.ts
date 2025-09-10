@@ -109,6 +109,33 @@ export const setMemberAsSelf = async (bookId: string, memberId: string) => {
   }
 };
 
+export const setMemberAsVisible = async (bookId: string, memberId: string) => {
+  try {
+    dispatch(startWaiting());
+
+    const deviceId = getLocalDeviceId();
+    const res = await bookEndpoint.putBookIdMemberVisible(bookId, memberId, deviceId);
+
+    const { books } = getState().book;
+    const updatedBooks = (books ?? []).map((v) => {
+      if (v.id === bookId) {
+        const updatedMembers = (v.members ?? []).map((o) => (o.id === memberId ? res.data : o));
+
+        return {
+          ...v,
+          members: updatedMembers,
+        };
+      }
+
+      return v;
+    });
+
+    dispatch(setBooks(updatedBooks));
+  } finally {
+    dispatch(finishWaiting());
+  }
+};
+
 export const getDeviceId = () => getLocalDeviceId();
 
 export const addFriendIntoBook = async (bookId: string, email: string) => {
