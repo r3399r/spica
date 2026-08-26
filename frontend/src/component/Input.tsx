@@ -7,6 +7,7 @@ export type Props = InputHTMLAttributes<HTMLInputElement> & {
   error?: boolean | string;
   regex?: RegExp;
   startsWith?: string;
+  normalize?: (value: string) => string;
 };
 
 const Input = forwardRef<HTMLInputElement, Props>(
@@ -21,13 +22,15 @@ const Input = forwardRef<HTMLInputElement, Props>(
       defaultValue,
       className,
       startsWith,
+      normalize,
       ...props
     },
     ref,
   ) => {
     const [value, setValue] = useState<string>((defaultValue as string) ?? '');
     const onInput = (v: ChangeEvent<HTMLInputElement>) => {
-      const input = startsWith ? v.target.value.substring(startsWith.length) : v.target.value;
+      const raw = startsWith ? v.target.value.substring(startsWith.length) : v.target.value;
+      const input = normalize ? normalize(raw) : raw;
       if (regex !== undefined && regex.test(input) === false) return;
       setValue(input);
       onChange && onChange({ ...v, target: { ...v.target, value: input } });

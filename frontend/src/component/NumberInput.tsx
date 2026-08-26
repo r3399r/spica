@@ -16,6 +16,7 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(
       }
       ref={ref}
       inputMode="decimal"
+      normalize={(v) => v.replace(/,/g, '.')}
       {...props}
     />
   ),
