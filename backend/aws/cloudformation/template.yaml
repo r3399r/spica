@@ -2141,7 +2141,7 @@ Resources:
     Properties:
       Architectures: [arm64]
       Handler: index.eventBridgeDbClean
-      Runtime: nodejs20.x
+      Runtime: nodejs22.x
       FunctionName: !Sub ${Project}-${TargetEnvr}-dbClean
       Role: !GetAtt ExecutionRole.Arn
       CodeUri: ../../lib/src
@@ -2168,7 +2168,7 @@ Resources:
     Properties:
       Architectures: [arm64]
       Handler: index.eventBridgeBank
-      Runtime: nodejs20.x
+      Runtime: nodejs22.x
       FunctionName: !Sub ${Project}-${TargetEnvr}-bank
       Role: !GetAtt ExecutionRole.Arn
       CodeUri: ../../lib/src
@@ -2194,7 +2194,7 @@ Resources:
     Properties:
       Architectures: [arm64]
       Handler: index.api
-      Runtime: nodejs20.x
+      Runtime: nodejs22.x
       FunctionName: !Sub ${Project}-${TargetEnvr}-api
       Role: !GetAtt ExecutionRole.Arn
       CodeUri: ../../lib/src
@@ -2221,7 +2221,7 @@ Resources:
     Properties:
       LayerName: !Sub ${Project}-${TargetEnvr}-layer
       CompatibleArchitectures: [arm64]
-      CompatibleRuntimes: [nodejs20.x]
+      CompatibleRuntimes: [nodejs22.x]
       ContentUri: ../../dist
       RetentionPolicy: Delete
   #########################################
