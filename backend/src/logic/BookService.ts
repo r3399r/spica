@@ -522,6 +522,14 @@ export class BookService {
     return res.sort(compare('dateCreated'));
   }
 
+  private async getSingleMemberByBook(bid: string, mid: string): Promise<Member> {
+    const members = await this.getMemberByBook(bid);
+    const member = members.find((v) => v.id === mid);
+    if (member === undefined) throw new NotFoundError('member not found');
+
+    return member;
+  }
+
   private async getBookDetail(
     book: ViewBook,
     paginate?: PaginationParams | null
@@ -705,7 +713,7 @@ export class BookService {
     };
     await this.memberAccess.update(newMember);
 
-    return newMember;
+    return await this.getSingleMemberByBook(bid, mid);
   }
 
   public async deleteMember(bid: string, mid: string, deviceId: string) {
@@ -734,7 +742,7 @@ export class BookService {
     };
     await this.memberAccess.update(newMember);
 
-    return newMember;
+    return await this.getSingleMemberByBook(bid, mid);
   }
 
   public async reviseMemberVisible(
@@ -753,7 +761,7 @@ export class BookService {
     };
     await this.memberAccess.update(newMember);
 
-    return newMember;
+    return await this.getSingleMemberByBook(bid, mid);
   }
 
   private validateDetail(amount: number, data: ShareDetail[]) {
