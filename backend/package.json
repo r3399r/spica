@@ -1,6 +1,6 @@
 {
   "name": "spica-backend",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "author": "Yue Chang",
   "scripts": {
     "lint:es": "eslint -c ./eslint.json src",

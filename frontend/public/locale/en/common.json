@@ -128,7 +128,9 @@
     "createCurrency": "Create Currency",
     "name": "Name",
     "symbol": "Symbol",
-    "exchangeRate": "Exchange Rate"
+    "exchangeRate": "Exchange Rate",
+    "custom": "Custom",
+    "customSymbol": "Enter custom symbol"
   },
   "transaction": {
     "back": "Back",
