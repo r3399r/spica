@@ -128,7 +128,9 @@
     "createCurrency": "通貨入力",
     "name": "名",
     "symbol": "記号",
-    "exchangeRate": "為替レート"
+    "exchangeRate": "為替レート",
+    "custom": "カスタム",
+    "customSymbol": "カスタム記号を入力"
   },
   "transaction": {
     "back": "戻る",

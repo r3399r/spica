@@ -128,7 +128,9 @@
     "createCurrency": "新增币别",
     "name": "名称",
     "symbol": "符号",
-    "exchangeRate": "汇率"
+    "exchangeRate": "汇率",
+    "custom": "自定义",
+    "customSymbol": "输入自定义符号"
   },
   "transaction": {
     "back": "回帐本",
